@@ -1,0 +1,22 @@
+pkgname=qtutilities
+pkgver=1.0.4
+pkgrel=1
+arch=('i686' 'x86_64')
+pkgdesc="Collection of Qt related utility classes and functions used by Tageditor, Video downloader and Password manager."
+license=('GPL')
+depends=('c++utilities')
+makedepends=
+url="http://martchus.netai.net/"
+source=("$pkgname.tar.gz")
+md5sums=('cee38afc5eb60b2da4eba64107628ed7')
+# head end
+build() {
+    cd $srcdir/$pkgname
+    INSTALL_ROOT=$pkgdir/usr/ qmake-qt5 "$pkgname.pro" -r -spec linux-g++
+    make
+}
+
+package() {
+    cd $srcdir/$pkgname
+    make install
+}

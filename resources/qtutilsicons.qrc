@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qtutilities">
+        <file>icons/hicolor/16x16/actions/edit-clear.png</file>
+        <file>icons/hicolor/16x16/actions/edit-menu.png</file>
+    </qresource>
+</RCC>
