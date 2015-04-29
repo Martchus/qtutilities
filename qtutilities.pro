@@ -50,7 +50,7 @@ contains(DEFINES, GUI_QTWIDGETS) {
 }
 
 HEADERS += resources/resources.h \
-        models/checklistmodel.h \
+    models/checklistmodel.h \
     resources/qtconfigarguments.h
 
 contains(DEFINES, GUI_QTWIDGETS) {
