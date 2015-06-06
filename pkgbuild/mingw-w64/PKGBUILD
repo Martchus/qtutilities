@@ -1,6 +1,6 @@
 _name=qtutilities
 pkgname=mingw-w64-qtutilities
-pkgver=1.0.4
+pkgver=1.0.6
 pkgrel=1
 arch=('any')
 pkgdesc="Common Qt related C++ classes and routines used by my
