@@ -47,7 +47,7 @@ void cleanup()
 namespace TranslationFiles {
 
 /*!
- * \brief Loads and installs the appropriate Qt translation file.
+ * \brief Loads and installs the appropriate Qt translation file for the current locale.
  */
 void loadQtTranslationFile()
 {
@@ -64,7 +64,7 @@ void loadQtTranslationFile()
 }
 
 /*!
- * \brief Loads and installs the appropriate application translation file.
+ * \brief Loads and installs the appropriate application translation file for the current locale.
  * \param applicationName Specifies the name of the application.
  * \remarks Translation files have to be placed in one of the following
  *          locations:
@@ -75,15 +75,35 @@ void loadQtTranslationFile()
  */
 void loadApplicationTranslationFile(const QString &applicationName)
 {
-    QLocale locale;
+    loadApplicationTranslationFile(applicationName, QLocale().name());
+}
+
+/*!
+ * \brief Loads and installs the appropriate application translation file for the specified locale.
+ * \param applicationName Specifies the name of the application.
+ * \param localName Specifies the name of the locale.
+ * \remarks Translation files have to be placed in one of the following
+ *          locations:
+ *           - /usr/share/$application/translations
+ *           - ./translations
+ *          Translation files must be named using the following scheme:
+ *           - $application_$language.qm
+ */
+void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
+{
     QTranslator *appTranslator = new QTranslator;
-    QString fileName = QStringLiteral("%1_%2").arg(applicationName, locale.name());
+    QString fileName = QStringLiteral("%1_%2").arg(applicationName, localeName);
     if(appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if(appTranslator->load(fileName, QStringLiteral("/usr/share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
     } else {
-        cout << "Unable to load application translation file for the language " << locale.name().toStdString() << "." << endl;
+        if(localeName != QStringLiteral("en_US")) {
+            cout << "Unable to load application translation file for the language \"" << localeName.toStdString() << "\", falling back to language \"en_US\"." << endl;
+            loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
+        } else {
+            cout << "Unable to load application translation file for the language \"" << localeName.toStdString() << "\"." << endl;
+        }
     }
 }
 

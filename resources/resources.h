@@ -21,6 +21,7 @@ namespace TranslationFiles {
 
 LIB_EXPORT void loadQtTranslationFile();
 LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName);
+LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
 
 }
 
