@@ -1,4 +1,5 @@
 projectname = qtutilities
+VERSION = 1.0.6
 
 # include ../../common.pri when building as part of a subdirs project; otherwise include general.pri
 !include(../../common.pri) {
