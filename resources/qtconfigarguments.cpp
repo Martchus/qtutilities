@@ -82,6 +82,8 @@ QtConfigArguments::QtConfigArguments() :
     });
     m_qtWidgetsGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg});
     m_qtQuickGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg});
+    m_qtWidgetsGuiArg.setDenotesOperation(true);
+    m_qtQuickGuiArg.setDenotesOperation(true);
 #if defined GUI_QTWIDGETS
     m_qtWidgetsGuiArg.setDefault(true);
 #elif defined GUI_QTQUICK
