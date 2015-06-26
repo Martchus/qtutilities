@@ -72,9 +72,7 @@ contains(DEFINES, GUI_QTWIDGETS) {
 
 OTHER_FILES += \
     README.md \
-    LICENSE \
-    pkgbuild/default/PKGBUILD \
-    pkgbuild/mingw-w64/PKGBUILD
+    LICENSE
 
 # libs and includepath
 CONFIG(debug, debug|release) {
