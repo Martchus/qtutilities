@@ -28,7 +28,8 @@ contains(DEFINES, PLATFORM_SPECIFIC_CAPSLOCK_DETECTION) {
 
 SOURCES += resources/resources.cpp \
         models/checklistmodel.cpp \
-    resources/qtconfigarguments.cpp
+    resources/qtconfigarguments.cpp \
+    misc/dialogutils.cpp
 
 contains(DEFINES, GUI_QTWIDGETS) {
     SOURCES += aboutdialog/aboutdialog.cpp \
@@ -52,7 +53,8 @@ contains(DEFINES, GUI_QTWIDGETS) {
 
 HEADERS += resources/resources.h \
     models/checklistmodel.h \
-    resources/qtconfigarguments.h
+    resources/qtconfigarguments.h \
+    misc/dialogutils.h
 
 contains(DEFINES, GUI_QTWIDGETS) {
     HEADERS += aboutdialog/aboutdialog.h \
