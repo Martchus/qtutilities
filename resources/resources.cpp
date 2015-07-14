@@ -58,6 +58,7 @@ void loadQtTranslationFile()
                           QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
             QCoreApplication::installTranslator(qtTranslator);
         } else {
+            delete qtTranslator;
             cout << "Unable to load Qt translation file for the language " << locale.name().toStdString() << "." << endl;
         }
     }
@@ -98,6 +99,7 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
     } else if(appTranslator->load(fileName, QStringLiteral("/usr/share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
     } else {
+        delete appTranslator;
         if(localeName != QStringLiteral("en_US")) {
             cout << "Unable to load application translation file for the language \"" << localeName.toStdString() << "\", falling back to language \"en_US\"." << endl;
             loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
