@@ -5,7 +5,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStyle>
-#include <QMessageBox>
 
 /*!
     \namespace Dialogs
