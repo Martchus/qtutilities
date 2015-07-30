@@ -25,6 +25,8 @@ QString generateWindowTitle(DocumentStatus documentStatus, const QString &docume
         }
     case DocumentStatus::NoDocument:
         return QCoreApplication::applicationName();
+    default:
+        return QString(); // to suppress warning: "control reaches end of non-void function"
     }
 }
 
