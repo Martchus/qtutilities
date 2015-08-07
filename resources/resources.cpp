@@ -46,6 +46,8 @@ void cleanup()
 
 namespace TranslationFiles {
 
+bool hasEnglishTranslator = false;
+
 /*!
  * \brief Loads and installs the appropriate Qt translation file for the current locale.
  */
@@ -76,6 +78,10 @@ void loadQtTranslationFile()
  */
 void loadApplicationTranslationFile(const QString &applicationName)
 {
+    // load English translation files as fallback
+    loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
+    hasEnglishTranslator = true;
+    // load translation files for current locale
     loadApplicationTranslationFile(applicationName, QLocale().name());
 }
 
@@ -96,13 +102,18 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
     QString fileName = QStringLiteral("%1_%2").arg(applicationName, localeName);
     if(appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);
+    } else if(appTranslator->load(fileName, QStringLiteral("./projects/%1/translations").arg(applicationName))) {
+        QCoreApplication::installTranslator(appTranslator);
     } else if(appTranslator->load(fileName, QStringLiteral("/usr/share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
     } else {
         delete appTranslator;
         if(localeName != QStringLiteral("en_US")) {
             cout << "Unable to load application translation file for the language \"" << localeName.toStdString() << "\", falling back to language \"en_US\"." << endl;
-            loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
+            if(!hasEnglishTranslator) {
+                loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
+                hasEnglishTranslator = true;
+            }
         } else {
             cout << "Unable to load application translation file for the language \"" << localeName.toStdString() << "\"." << endl;
         }
