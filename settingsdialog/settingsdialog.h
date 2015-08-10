@@ -32,14 +32,14 @@ public:
     OptionCategory *category(int categoryIndex) const;
     OptionPage *page(int categoryIndex, int pageIndex) const;
 
-signals:
+Q_SIGNALS:
     void applied();
     void resetted();
 
 protected:
     void showEvent(QShowEvent *event);
 
-private slots:
+private Q_SLOTS:
     void currentCategoryChanged(const QModelIndex &index);
     void updateTabWidget();
 

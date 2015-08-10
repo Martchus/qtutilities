@@ -48,7 +48,7 @@ protected:
     bool event(QEvent *event);
     bool eventFilter(QObject *sender, QEvent *event);
 
-private slots:
+private Q_SLOTS:
     void updateShowPassword();
     void confirm();
     void abort();

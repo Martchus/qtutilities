@@ -23,7 +23,7 @@ public:
     ~ClearLineEdit();
     bool isCleared() const;
     
-private slots:
+private Q_SLOTS:
     void handleTextChanged(const QString &text);
     void handleClearButtonClicked();
 };

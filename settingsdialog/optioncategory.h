@@ -32,7 +32,7 @@ public:
     void resetAllPages();
     bool matches(const QString &searchKeyWord) const;
     
-signals:
+Q_SIGNALS:
     void displayNameChanged();
     void iconChanged();
     void pagesChanged();

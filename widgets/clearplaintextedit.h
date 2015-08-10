@@ -15,7 +15,7 @@ public:
     ~ClearPlainTextEdit();
     bool isCleared() const;
 
-private slots:
+private Q_SLOTS:
     void handleTextChanged();
     void handleClearButtonClicked();
 

@@ -36,7 +36,7 @@ protected:
     int valueFromText(const QString &text) const;
     QString textFromValue(int val) const;
 
-private slots:
+private Q_SLOTS:
     void handleValueChanged(int value);
     void handleClearButtonClicked();
 
