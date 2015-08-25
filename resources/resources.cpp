@@ -59,6 +59,9 @@ void loadQtTranslationFile()
         if(qtTranslator->load(QStringLiteral("qt_%1").arg(locale.name()),
                           QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
             QCoreApplication::installTranslator(qtTranslator);
+        } else if(qtTranslator->load(QStringLiteral("qt_%1").arg(locale.name()), QStringLiteral("../share/qt/translations"))) {
+            // used in Windows
+            QCoreApplication::installTranslator(qtTranslator);
         } else {
             delete qtTranslator;
             cout << "Unable to load Qt translation file for the language " << locale.name().toStdString() << "." << endl;
@@ -71,8 +74,10 @@ void loadQtTranslationFile()
  * \param applicationName Specifies the name of the application.
  * \remarks Translation files have to be placed in one of the following
  *          locations:
- *           - /usr/share/$application/translations
  *           - ./translations
+ *           - /usr/share/$application/translations (used in UNIX)
+ *           - ../share/$application/translations (used in Windows)
+ *           - ./projects/%1/translations (used during developement with subdirs project)
  *          Translation files must be named using the following scheme:
  *           - $application_$language.qm
  */
@@ -91,8 +96,10 @@ void loadApplicationTranslationFile(const QString &applicationName)
  * \param localName Specifies the name of the locale.
  * \remarks Translation files have to be placed in one of the following
  *          locations:
- *           - /usr/share/$application/translations
  *           - ./translations
+ *           - /usr/share/$application/translations (used in UNIX)
+ *           - ../share/$application/translations (used in Windows)
+ *           - ./projects/%1/translations (used during developement with subdirs project)
  *          Translation files must be named using the following scheme:
  *           - $application_$language.qm
  */
@@ -105,6 +112,8 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
     } else if(appTranslator->load(fileName, QStringLiteral("./projects/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if(appTranslator->load(fileName, QStringLiteral("/usr/share/%1/translations").arg(applicationName))) {
+        QCoreApplication::installTranslator(appTranslator);
+    } else if(appTranslator->load(fileName, QStringLiteral("../share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
     } else {
         delete appTranslator;
