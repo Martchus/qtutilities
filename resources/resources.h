@@ -10,13 +10,13 @@ class QString;
 class QStringList;
 QT_END_NAMESPACE
 
-#define SET_APPLICATION_INFO \
+#define SET_QT_APPLICATION_INFO \
     QCoreApplication::setOrganizationName(QStringLiteral(APP_AUTHOR)); \
     QCoreApplication::setOrganizationDomain(QStringLiteral(APP_URL)); \
     QCoreApplication::setApplicationName(QStringLiteral(APP_NAME)); \
     QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION))
 
-#define LOAD_TRANSLATIONS \
+#define LOAD_QT_TRANSLATIONS \
     TranslationFiles::loadQtTranslationFile(); \
     TranslationFiles::loadApplicationTranslationFile(QStringLiteral(PROJECT_NAME))
 
