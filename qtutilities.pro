@@ -1,5 +1,5 @@
 projectname = qtutilities
-VERSION = 1.0.6
+VERSION = 2.0.0
 
 # include ../../common.pri when building as part of a subdirs project; otherwise include general.pri
 !include(../../common.pri) {
@@ -16,15 +16,7 @@ CONFIG(noplatformspecificcapslockdetection, noplatformspecificcapslockdetection|
     DEFINES += PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 }
 
-win32 {
-    CONFIG += dll
-}
-
-contains(DEFINES, PLATFORM_SPECIFIC_CAPSLOCK_DETECTION) {
-    x11 {
-        LIBS += -lX11
-    }
-}
+CONFIG += shared
 
 SOURCES += resources/resources.cpp \
     models/checklistmodel.cpp \
@@ -76,13 +68,17 @@ OTHER_FILES += \
     README.md \
     LICENSE
 
-# libs and includepath
+# libs
 CONFIG(debug, debug|release) {
-    LIBS += -L../../ -lc++utilitiesd
+    LIBS += -lc++utilitiesd
 } else {
-    LIBS += -L../../ -lc++utilities
+    LIBS += -lc++utilities
 }
-INCLUDEPATH += ../
+contains(DEFINES, PLATFORM_SPECIFIC_CAPSLOCK_DETECTION) {
+    x11 {
+        LIBS += -lX11
+    }
+}
 
 RESOURCES += resources/qtutilsicons.qrc
 
