@@ -75,7 +75,6 @@ void QtConfigArguments::applySettings() const
         }
 #endif
 #ifdef GUI_QTQUICK
-        Q_UNUSED(values)
         cout << "Warning: Can not set a style for the Qt Quick GUI." << endl;
 #endif
     }
