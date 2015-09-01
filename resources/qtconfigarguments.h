@@ -15,6 +15,7 @@ public:
     Argument &languageArg();
 
     bool areQtGuiArgsPresent() const;
+    void applySettings() const;
 
 private:
     Argument m_qtWidgetsGuiArg;
@@ -26,21 +27,33 @@ private:
     Argument m_fontArg;
 };
 
+/*!
+ * \brief Returns the argument for the Qt Widgets GUI.
+ */
 inline Argument &QtConfigArguments::qtWidgetsGuiArg()
 {
     return m_qtWidgetsGuiArg;
 }
 
+/*!
+ * \brief Returns the argument for the Qt Quick GUI.
+ */
 inline Argument &QtConfigArguments::qtQuickGuiArg()
 {
     return m_qtQuickGuiArg;
 }
 
+/*!
+ * \brief Returns the language argument.
+ */
 inline Argument &QtConfigArguments::languageArg()
 {
     return m_lngArg;
 }
 
+/*!
+ * \brief Returns whether at least one of the GUI arguments is present.
+ */
 inline bool QtConfigArguments::areQtGuiArgsPresent() const
 {
     return m_qtWidgetsGuiArg.isPresent() || m_qtQuickGuiArg.isPresent();

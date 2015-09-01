@@ -35,14 +35,6 @@ LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName, c
 
 }
 
-namespace Theme {
-
-#if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
-LIB_EXPORT void setup();
-#endif
-
-}
-
 namespace ApplicationInstances {
 
 #if defined(GUI_QTWIDGETS)

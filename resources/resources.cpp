@@ -131,41 +131,25 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
 
 }
 
-namespace Theme {
-
-/*!
- * \brief Sets the default icon theme.
- */
-#if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
-void setup()
-{
-    if(QIcon::themeName().isEmpty()) {
-        QIcon::setThemeName(QStringLiteral("oxygen"));
-    }
-}
-#endif
-
-}
-
 namespace ApplicationInstances {
 
 #if defined(GUI_QTWIDGETS)
 bool hasWidgetsApp()
 {
-    return qobject_cast<QApplication*>(QCoreApplication::instance()) != nullptr;
+    return qobject_cast<QApplication *>(QCoreApplication::instance()) != nullptr;
 }
 #endif
 
 #if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
 bool hasGuiApp()
 {
-    return qobject_cast<QGuiApplication*>(QCoreApplication::instance()) != nullptr;
+    return qobject_cast<QGuiApplication *>(QCoreApplication::instance()) != nullptr;
 }
 #endif
 
 bool hasCoreApp()
 {
-    return qobject_cast<QCoreApplication*>(QCoreApplication::instance()) != nullptr;
+    return qobject_cast<QCoreApplication *>(QCoreApplication::instance()) != nullptr;
 }
 
 }
