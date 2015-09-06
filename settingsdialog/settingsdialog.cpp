@@ -1,9 +1,11 @@
 #include "settingsdialog.h"
-#include "ui_settingsdialog.h"
+
 #include "optioncategorymodel.h"
 #include "optioncategoryfiltermodel.h"
 #include "optioncategory.h"
 #include "optionpage.h"
+
+#include "gui/ui_settingsdialog.h"
 
 #include <QItemSelectionModel>
 #include <QShowEvent>
