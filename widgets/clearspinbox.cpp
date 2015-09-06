@@ -1,4 +1,4 @@
-#include "clearspinbox.h"
+#include "./clearspinbox.h"
 
 #include <QHBoxLayout>
 #include <QStyle>

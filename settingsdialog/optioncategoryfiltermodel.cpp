@@ -1,6 +1,6 @@
-#include "optioncategoryfiltermodel.h"
-#include "optioncategorymodel.h"
-#include "optioncategory.h"
+#include "./optioncategoryfiltermodel.h"
+#include "./optioncategorymodel.h"
+#include "./optioncategory.h"
 
 namespace Dialogs {
 

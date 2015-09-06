@@ -1,7 +1,7 @@
 #ifndef WIDGETS_TAGFIELDLINEEDIT_H
 #define WIDGETS_TAGFIELDLINEEDIT_H
 
-#include "buttonoverlay.h"
+#include "./buttonoverlay.h"
 
 #include <c++utilities/application/global.h>
 

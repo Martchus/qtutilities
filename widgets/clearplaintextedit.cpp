@@ -1,4 +1,4 @@
-#include "clearplaintextedit.h"
+#include "./clearplaintextedit.h"
 
 #include <QHBoxLayout>
 

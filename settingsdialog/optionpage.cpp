@@ -1,4 +1,4 @@
-#include "optionpage.h"
+#include "./optionpage.h"
 
 #include <QLabel>
 #include <QCheckBox>

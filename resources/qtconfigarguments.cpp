@@ -1,4 +1,4 @@
-#include "qtconfigarguments.h"
+#include "./qtconfigarguments.h"
 
 #include <c++utilities/conversion/stringconversion.h>
 

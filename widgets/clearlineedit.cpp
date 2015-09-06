@@ -1,4 +1,4 @@
-#include "clearlineedit.h"
+#include "./clearlineedit.h"
 
 namespace Widgets {
 

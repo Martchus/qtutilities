@@ -1,4 +1,4 @@
-#include "dialogutils.h"
+#include "./dialogutils.h"
 
 #include <QCoreApplication>
 #include <QFileInfo>

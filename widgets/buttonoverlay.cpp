@@ -1,5 +1,5 @@
-#include "buttonoverlay.h"
-#include "iconbutton.h"
+#include "./buttonoverlay.h"
+#include "./iconbutton.h"
 
 #include <QWidget>
 #include <QHBoxLayout>

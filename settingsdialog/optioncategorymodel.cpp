@@ -1,5 +1,5 @@
-#include "optioncategorymodel.h"
-#include "optioncategory.h"
+#include "./optioncategorymodel.h"
+#include "./optioncategory.h"
 
 namespace Dialogs {
 

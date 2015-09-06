@@ -1,7 +1,7 @@
 #ifndef WIDGETS_CLEARCOMBOBOX_H
 #define WIDGETS_CLEARCOMBOBOX_H
 
-#include "buttonoverlay.h"
+#include "./buttonoverlay.h"
 
 #include <c++utilities/application/global.h>
 

@@ -1,4 +1,4 @@
-#include "checklistmodel.h"
+#include "./checklistmodel.h"
 
 #include <QSettings>
 

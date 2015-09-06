@@ -1,9 +1,9 @@
-#include "settingsdialog.h"
+#include "./settingsdialog.h"
 
-#include "optioncategorymodel.h"
-#include "optioncategoryfiltermodel.h"
-#include "optioncategory.h"
-#include "optionpage.h"
+#include "./optioncategorymodel.h"
+#include "./optioncategoryfiltermodel.h"
+#include "./optioncategory.h"
+#include "./optionpage.h"
 
 #include "gui/ui_settingsdialog.h"
 

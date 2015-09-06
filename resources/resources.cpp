@@ -1,4 +1,4 @@
-#include "resources.h"
+#include "./resources.h"
 
 #include <QString>
 #include <QLocale>

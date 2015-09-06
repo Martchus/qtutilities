@@ -1,7 +1,7 @@
 #ifndef WIDGETS_CLEARSPINBOX_H
 #define WIDGETS_CLEARSPINBOX_H
 
-#include "buttonoverlay.h"
+#include "./buttonoverlay.h"
 
 #include <c++utilities/application/global.h>
 

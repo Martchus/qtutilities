@@ -1,7 +1,7 @@
 #ifndef WIDGETS_CLEARPLAINTEXTEDIT_H
 #define WIDGETS_CLEARPLAINTEXTEDIT_H
 
-#include "buttonoverlay.h"
+#include "./buttonoverlay.h"
 
 #include <QPlainTextEdit>
 

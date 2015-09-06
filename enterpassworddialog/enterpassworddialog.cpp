@@ -1,4 +1,5 @@
-#include "enterpassworddialog.h"
+#include "./enterpassworddialog.h"
+
 #include "gui/ui_enterpassworddialog.h"
 
 #include <QEvent>

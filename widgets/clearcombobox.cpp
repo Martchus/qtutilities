@@ -1,4 +1,4 @@
-#include "clearcombobox.h"
+#include "./clearcombobox.h"
 
 #include <QHBoxLayout>
 #include <QStyle>
