@@ -4,6 +4,10 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QFile>
+#include <QDir>
+#include <QStringBuilder>
+#include <QSettings>
 #if defined(GUI_QTWIDGETS)
 # include <QApplication>
 # include <QIcon>
@@ -57,7 +61,7 @@ void loadQtTranslationFile()
     if(locale.language() != QLocale::English) {
         QTranslator *qtTranslator = new QTranslator;
         if(qtTranslator->load(QStringLiteral("qt_%1").arg(locale.name()),
-                          QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+                              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
             QCoreApplication::installTranslator(qtTranslator);
         } else if(qtTranslator->load(QStringLiteral("qt_%1").arg(locale.name()), QStringLiteral("../share/qt/translations"))) {
             // used in Windows
@@ -150,6 +154,56 @@ bool hasGuiApp()
 bool hasCoreApp()
 {
     return qobject_cast<QCoreApplication *>(QCoreApplication::instance()) != nullptr;
+}
+
+}
+
+namespace ConfigFile {
+
+QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings)
+{
+    // check whether the file is in the current working directory
+    if(QFile::exists(fileName)) {
+        return fileName;
+    } else {
+        // check whether the file is in the settings directory used by QSettings
+        QString path;
+        if(settings) {
+            path = QFileInfo(settings->fileName()).absoluteDir().absoluteFilePath(fileName);
+            if(QFile::exists(path)) {
+                return path;
+            }
+        }
+        // check whether there is a user created version of the file under /etc/app/
+#if Q_OS_WIN32
+        // use relative paths on Windows
+        path = QStringLiteral("../etc/") % applicationName % QChar('/') % fileName;
+        if(QFile::exists(path)) {
+            return path;
+        } else {
+            // check whether there is the default version of the file under /usr/share/app/
+            path = QStringLiteral("../share/") % applicationName % QChar('/') % fileName;
+            if(QFile::exists(path)) {
+                return path;
+            } else {
+                return QString(); // file is not present
+            }
+        }
+#else
+        path = QStringLiteral("/etc/") % applicationName % QChar('/') % fileName;
+        if(QFile::exists(path)) {
+            return path;
+        } else {
+            // check whether there is the default version of the file under /usr/share/app/
+            path = QStringLiteral("/usr/share/") % applicationName % QChar('/') % fileName;
+            if(QFile::exists(path)) {
+                return path;
+            } else {
+                return QString(); // file is not present
+            }
+        }
+#endif
+    }
 }
 
 }

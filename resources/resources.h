@@ -5,10 +5,9 @@
 
 #include <QtGlobal>
 
-QT_BEGIN_NAMESPACE
-class QString;
-class QStringList;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QString)
+QT_FORWARD_DECLARE_CLASS(QStringList)
+QT_FORWARD_DECLARE_CLASS(QSettings)
 
 #define SET_QT_APPLICATION_INFO \
     QCoreApplication::setOrganizationName(QStringLiteral(APP_AUTHOR)); \
@@ -44,6 +43,12 @@ LIB_EXPORT bool hasWidgetsApp();
 LIB_EXPORT bool hasGuiApp();
 #endif
 LIB_EXPORT bool hasCoreApp();
+
+}
+
+namespace ConfigFile {
+
+LIB_EXPORT QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings = nullptr);
 
 }
 
