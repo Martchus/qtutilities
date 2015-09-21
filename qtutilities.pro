@@ -1,5 +1,8 @@
 projectname = qtutilities
-VERSION = 2.0.0
+appname = "Qt Utilities"
+appauthor = Martchus
+QMAKE_TARGET_DESCRIPTION = "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models."
+VERSION = 2.0.1
 
 # include ../../common.pri when building as part of a subdirs project; otherwise include general.pri
 !include(../../common.pri) {
@@ -8,15 +11,15 @@ VERSION = 2.0.0
     }
 }
 
+TEMPLATE = lib
 QT += core gui
+CONFIG += shared
 
 CONFIG(noplatformspecificcapslockdetection, noplatformspecificcapslockdetection|platformspecificcapslockdetection) {
     DEFINES -= PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 } else {
     DEFINES += PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 }
-
-CONFIG += shared
 
 SOURCES += resources/resources.cpp \
     models/checklistmodel.cpp \
