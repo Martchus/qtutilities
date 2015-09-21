@@ -38,7 +38,7 @@ EnterPasswordDialog::EnterPasswordDialog(QWidget *parent) :
     // setup ui
     m_ui->setupUi(this);
 #ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("* { font: 9pt \"Segoe UI\"; } #mainWidget { color: black; background-color: white; border: none; } #bottomWidget { background-color: #F0F0F0; border-top: 1px solid #DFDFDF; } QMessageBox QLabel, QInputDialog QLabel, #instructionLabel {font-size: 12pt; color: #003399; }"));
+    setStyleSheet(QStringLiteral("#mainWidget { color: black; background-color: white; border: none; } #bottomWidget { background-color: #F0F0F0; border-top: 1px solid #DFDFDF; } QMessageBox QLabel, QInputDialog QLabel, #instructionLabel {font-size: 12pt; color: #003399; }"));
 #else
     setStyleSheet(QStringLiteral("#instructionLabel { font-weight: bold; }"));
 #endif

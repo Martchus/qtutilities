@@ -35,7 +35,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
 {
     m_ui->setupUi(this);
 #ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("* { font: 9pt \"Segoe UI\"; } #mainWidget { color: black; background-color: white; border: none; } #productNameLabel { font-size: 12pt; color: #003399; }"));
+    setStyleSheet(QStringLiteral("#mainWidget { color: black; background-color: white; border: none; } #productNameLabel { font-size: 12pt; color: #003399; }"));
 #else
     setStyleSheet(QStringLiteral("#productNameLabel { font-weight: bold; }"));
 #endif
