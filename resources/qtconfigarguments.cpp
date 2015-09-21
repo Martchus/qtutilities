@@ -78,10 +78,12 @@ void QtConfigArguments::applySettings() const
         cout << "Warning: Can not set a style for the Qt Quick GUI." << endl;
 #endif
     }
+#ifdef Q_OS_WIN32
+    bool searchPathsPresent = false;
+#endif
     if(m_iconThemeArg.isPresent()) {
         auto i = m_iconThemeArg.values().cbegin(), end = m_iconThemeArg.values().end();
         if(i != end) {
-            QIcon::setThemeName(QString::fromLocal8Bit(i->data()));
             if(++i != end) {
                 QStringList searchPaths;
                 searchPaths.reserve(m_iconThemeArg.values().size() - 1);
@@ -89,24 +91,36 @@ void QtConfigArguments::applySettings() const
                     searchPaths << QString::fromLocal8Bit(i->data());
                 }
                 QIcon::setThemeSearchPaths(searchPaths);
-            } else {
 #ifdef Q_OS_WIN32
-                QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral("../share/icons"));
+                searchPathsPresent = !searchPaths.isEmpty();
 #endif
             }
+            QIcon::setThemeName(QString::fromLocal8Bit(i->data()));
         }
     } else {
+        if(qEnvironmentVariableIsSet("ICON_THEME_SEARCH_PATH")) {
+            QString path;
+            path.append(qgetenv("ICON_THEME_SEARCH_PATH"));
+            QIcon::setThemeSearchPaths(QStringList() << path);
+#ifdef Q_OS_WIN32
+            searchPathsPresent = true;
+#endif
+        }
         if(qEnvironmentVariableIsSet("ICON_THEME")) {
             QString themeName;
             themeName.append(qgetenv("ICON_THEME"));
             QIcon::setThemeName(themeName);
         }
-        if(qEnvironmentVariableIsSet("ICON_THEME_SEARCH_PATH")) {
-            QString path;
-            path.append(qgetenv("ICON_THEME_SEARCH_PATH"));
-            QIcon::setThemeSearchPaths(QStringList() << path);
-        }
     }
+#ifdef Q_OS_WIN32
+    // default configuration under Windows
+    if(!searchPathsPresent) {
+        QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral("../share/icons"));
+    }
+    if(QIcon::themeName().isEmpty()) {
+        QIcon::setThemeName(QStringLiteral("default"));
+    }
+#endif
     if(m_fontArg.isPresent()) {
         QFont font;
         font.setFamily(QString::fromLocal8Bit(m_fontArg.values().front().data()));
