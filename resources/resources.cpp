@@ -175,7 +175,7 @@ QString locateConfigFile(const QString &applicationName, const QString &fileName
             }
         }
         // check whether there is a user created version of the file under /etc/app/
-#if Q_OS_WIN32
+#ifdef Q_OS_WIN32
         // use relative paths on Windows
         path = QStringLiteral("../etc/") % applicationName % QChar('/') % fileName;
         if(QFile::exists(path)) {
