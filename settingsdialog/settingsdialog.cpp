@@ -5,6 +5,8 @@
 #include "./optioncategory.h"
 #include "./optionpage.h"
 
+#include "../misc/dialogutils.h"
+
 #include "gui/ui_settingsdialog.h"
 
 #include <QItemSelectionModel>
@@ -31,11 +33,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     m_tabBarAlwaysVisible(true)
 {
     m_ui->setupUi(this);
-#ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("#mainWidget { color: black; background-color: white; border: none; } #bottomWidget { background-color: #F0F0F0; border-top: 1px solid #DFDFDF; } QMessageBox QLabel, QInputDialog QLabel, #instructionLabel {font-size: 12pt; color: #003399; }"));
-#else
-    setStyleSheet(QStringLiteral("#instructionLabel { font-weight: bold; font-size: 12pt; }"));
-#endif
+    makeHeading(m_ui->headingLabel);
+    setStyleSheet(dialogStyle());
     // setup models
     m_categoryFilterModel->setSourceModel(m_categoryModel);
     m_ui->categoriesListView->setModel(m_categoryFilterModel);
@@ -132,11 +131,11 @@ void SettingsDialog::showCategory(OptionCategory *category)
     if(category) {
         if(m_currentCategory != category) {
             m_currentCategory = category;
-            m_ui->instructionLabel->setText(category->displayName());
+            m_ui->headingLabel->setText(category->displayName());
         }
     } else {
         m_currentCategory = nullptr;
-        m_ui->instructionLabel->setText(tr("No category selected"));
+        m_ui->headingLabel->setText(tr("No category selected"));
     }
     updateTabWidget();
 }

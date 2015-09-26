@@ -1,4 +1,5 @@
 #include "./aboutdialog.h"
+#include "../misc/dialogutils.h"
 
 #include "gui/ui_aboutdialog.h"
 
@@ -34,11 +35,8 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
     m_ui(new Ui::AboutDialog)
 {
     m_ui->setupUi(this);
-#ifdef Q_OS_WIN32
-    setStyleSheet(QStringLiteral("#mainWidget { color: black; background-color: white; border: none; } #productNameLabel { font-size: 12pt; color: #003399; }"));
-#else
-    setStyleSheet(QStringLiteral("#productNameLabel { font-weight: bold; }"));
-#endif
+    makeHeading(m_ui->productNameLabel);
+    setStyleSheet(dialogStyle());
     setWindowFlags(Qt::Tool);
     if(!applicationName.isEmpty()) {
         m_ui->productNameLabel->setText(applicationName);

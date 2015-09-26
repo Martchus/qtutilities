@@ -33,7 +33,7 @@
     <widget class="QWidget" name="mainWidget" native="true">
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="1">
-       <widget class="QLabel" name="instructionLabel">
+       <widget class="QLabel" name="headingLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
