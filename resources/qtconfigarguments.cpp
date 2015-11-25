@@ -36,16 +36,21 @@ QtConfigArguments::QtConfigArguments() :
     m_lngArg.setValueNames({"language"});
     m_lngArg.setRequiredValueCount(1);
     m_lngArg.setRequired(false);
+    m_lngArg.setCombinable(true);
     // qml debugger (handled by Qt, just to let the parser know of it)
     m_qmlDebuggerArg.setValueNames({"port:<port_from>[,port_to][,host:<ip address>][,block]"});
     m_qmlDebuggerArg.setRequiredValueCount(1);
+    m_qmlDebuggerArg.setCombinable(true);
     // appearance
     m_styleArg.setValueNames({"style name"});
     m_styleArg.setRequiredValueCount(1);
+    m_styleArg.setCombinable(true);
     m_iconThemeArg.setValueNames({"theme name", "search path 1", "search path 2"});
     m_iconThemeArg.setRequiredValueCount(-1);
+    m_iconThemeArg.setCombinable(true);
     m_fontArg.setValueNames({"name", "size"});
     m_fontArg.setRequiredValueCount(2);
+    m_fontArg.setCombinable(true);
     m_qtWidgetsGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg});
     m_qtQuickGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg});
     m_qtWidgetsGuiArg.setDenotesOperation(true);
