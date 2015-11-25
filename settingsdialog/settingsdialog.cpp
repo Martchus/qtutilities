@@ -194,7 +194,6 @@ bool SettingsDialog::apply()
             if(!page->apply()) {
                 return false;
             }
-            category->applyAllPages();
         }
     }
     emit applied();
