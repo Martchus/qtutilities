@@ -7,7 +7,7 @@
 
 #include "../misc/dialogutils.h"
 
-#include "gui/ui_settingsdialog.h"
+#include "ui_settingsdialog.h"
 
 #include <QItemSelectionModel>
 #include <QShowEvent>

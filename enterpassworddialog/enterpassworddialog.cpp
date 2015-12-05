@@ -1,7 +1,7 @@
 #include "./enterpassworddialog.h"
 #include "../misc/dialogutils.h"
 
-#include "gui/ui_enterpassworddialog.h"
+#include "ui_enterpassworddialog.h"
 
 #include <QEvent>
 #include <QGraphicsPixmapItem>
@@ -301,15 +301,15 @@ void EnterPasswordDialog::confirm()
  * \brief Returns an indication whether the capslock key is pressed using platform specific functions.
  *
  * \remarks - Returns always false for unsupported platforms.
- *          - This method is only avialable if the library is built with
+ *          - This method always returns false when not built with
  *            PLATFORM_SPECIFIC_CAPSLOCK_DETECTION defined.
  *          - This static function will be used internally to detect whether the capslock key is pressed
  *            when initializing the dialog if available.
- *          - The function requires the application to be linked against X11 on Linux/Unix/Max OS X.
+ *          - The function requires the application to be linked against X11 on Linux/Unix.
  */
-#ifdef PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 bool EnterPasswordDialog::isCapslockPressed()
 {
+#ifdef PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
     // platform dependent method of determining if CAPS LOCK is pressed
 # if defined(Q_OS_WIN32)
     return GetKeyState(VK_CAPITAL) == 1;
@@ -325,7 +325,8 @@ bool EnterPasswordDialog::isCapslockPressed()
 # else
     return false;
 # endif
-}
+    return false;
 #endif
+}
 
 }

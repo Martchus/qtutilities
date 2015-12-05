@@ -40,9 +40,7 @@ public:
     void setPasswordRequired(bool value);
     const QString &instruction() const;
     void setInstruction(const QString &value);
-#ifdef PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
     static bool isCapslockPressed();
-#endif
 
 protected:
     bool event(QEvent *event);

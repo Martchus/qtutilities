@@ -1,7 +1,7 @@
 #include "./aboutdialog.h"
 #include "../misc/dialogutils.h"
 
-#include "gui/ui_aboutdialog.h"
+#include "ui_aboutdialog.h"
 
 #include <QGraphicsPixmapItem>
 #include <QApplication>
