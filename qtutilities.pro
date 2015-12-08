@@ -1,3 +1,4 @@
+# meta data
 projectname = qtutilities
 appname = "Qt Utilities"
 appauthor = Martchus
@@ -11,15 +12,23 @@ VERSION = 3.0.1
     }
 }
 
+# basic configuration: shared library
 TEMPLATE = lib
 QT += core gui
 CONFIG += shared
 
+# enable platform specific capslock detection (for password dialog)
 CONFIG(noplatformspecificcapslockdetection, noplatformspecificcapslockdetection|platformspecificcapslockdetection) {
     DEFINES -= PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 } else {
     DEFINES += PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 }
+
+# add project files
+HEADERS += resources/resources.h \
+    models/checklistmodel.h \
+    resources/qtconfigarguments.h \
+    misc/dialogutils.h
 
 SOURCES += resources/resources.cpp \
     models/checklistmodel.cpp \
@@ -27,6 +36,20 @@ SOURCES += resources/resources.cpp \
     misc/dialogutils.cpp
 
 contains(DEFINES, GUI_QTWIDGETS) {
+    HEADERS += aboutdialog/aboutdialog.h \
+        enterpassworddialog/enterpassworddialog.h \
+        settingsdialog/optioncategorymodel.h \
+        settingsdialog/settingsdialog.h \
+        settingsdialog/optioncategory.h \
+        settingsdialog/optionpage.h \
+        settingsdialog/optioncategoryfiltermodel.h \
+        widgets/clearlineedit.h \
+        widgets/iconbutton.h \
+        widgets/buttonoverlay.h \
+        widgets/clearcombobox.h \
+        widgets/clearspinbox.h \
+        widgets/clearplaintextedit.h
+
     SOURCES += aboutdialog/aboutdialog.cpp \
         enterpassworddialog/enterpassworddialog.cpp \
         settingsdialog/optioncategorymodel.cpp \
@@ -46,32 +69,17 @@ contains(DEFINES, GUI_QTWIDGETS) {
         settingsdialog/settingsdialog.ui
 }
 
-HEADERS += resources/resources.h \
-    models/checklistmodel.h \
-    resources/qtconfigarguments.h \
-    misc/dialogutils.h
-
-contains(DEFINES, GUI_QTWIDGETS) {
-    HEADERS += aboutdialog/aboutdialog.h \
-        enterpassworddialog/enterpassworddialog.h \
-        settingsdialog/optioncategorymodel.h \
-        settingsdialog/settingsdialog.h \
-        settingsdialog/optioncategory.h \
-        settingsdialog/optionpage.h \
-        settingsdialog/optioncategoryfiltermodel.h \
-        widgets/clearlineedit.h \
-        widgets/iconbutton.h \
-        widgets/buttonoverlay.h \
-        widgets/clearcombobox.h \
-        widgets/clearspinbox.h \
-        widgets/clearplaintextedit.h
-}
+RESOURCES += resources/qtutilsicons.qrc
 
 OTHER_FILES += \
     README.md \
-    LICENSE
+    LICENSE \
+    CMakeLists.txt \
+    resources/config.h.in \
+    resources/windows.rc.in
 
-# libs
+
+# add libs
 CONFIG(debug, debug|release) {
     LIBS += -lc++utilitiesd
 } else {
@@ -82,8 +90,6 @@ contains(DEFINES, PLATFORM_SPECIFIC_CAPSLOCK_DETECTION) {
         LIBS += -lX11
     }
 }
-
-RESOURCES += resources/qtutilsicons.qrc
 
 # installs
 mingw-w64-install {
@@ -103,4 +109,3 @@ for(dir, $$list(aboutdialog enterpassworddialog models resources settingsdialog 
     inc_$${dir}.files = $${dir}/*.h
     INSTALLS += inc_$${dir}
 }
-
