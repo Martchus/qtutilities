@@ -1,6 +1,11 @@
 #include "./optioncategorymodel.h"
 #include "./optioncategory.h"
 
+#ifdef GUI_QTWIDGETS
+# include <QApplication>
+# include <QStyle>
+#endif
+
 namespace Dialogs {
 
 /*!
@@ -65,9 +70,15 @@ QVariant OptionCategoryModel::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole:
             return m_categories.at(index.row())->displayName();
         case Qt::DecorationRole: {
-            QIcon icon = m_categories.at(index.row())->icon();
+            const QIcon &icon = m_categories.at(index.row())->icon();
             if(!icon.isNull()) {
-                return icon;
+                return icon.pixmap(
+#ifdef GUI_QTWIDGETS
+                            QApplication::style()->pixelMetric(QStyle::PM_LargeIconSize)
+#else
+                            QSize(32, 32)
+#endif
+                            );
             }
             }
         }
