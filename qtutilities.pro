@@ -25,7 +25,8 @@ CONFIG(noplatformspecificcapslockdetection, noplatformspecificcapslockdetection|
 }
 
 # add project files
-HEADERS += resources/resources.h \
+HEADERS += \
+    resources/resources.h \
     models/checklistmodel.h \
     resources/qtconfigarguments.h \
     misc/dialogutils.h
@@ -36,7 +37,8 @@ SOURCES += resources/resources.cpp \
     misc/dialogutils.cpp
 
 contains(DEFINES, GUI_QTWIDGETS) {
-    HEADERS += aboutdialog/aboutdialog.h \
+    HEADERS += \
+        aboutdialog/aboutdialog.h \
         enterpassworddialog/enterpassworddialog.h \
         settingsdialog/optioncategorymodel.h \
         settingsdialog/settingsdialog.h \
@@ -50,7 +52,8 @@ contains(DEFINES, GUI_QTWIDGETS) {
         widgets/clearspinbox.h \
         widgets/clearplaintextedit.h
 
-    SOURCES += aboutdialog/aboutdialog.cpp \
+    SOURCES += \
+        aboutdialog/aboutdialog.cpp \
         enterpassworddialog/enterpassworddialog.cpp \
         settingsdialog/optioncategorymodel.cpp \
         settingsdialog/settingsdialog.cpp \
@@ -64,12 +67,14 @@ contains(DEFINES, GUI_QTWIDGETS) {
         widgets/clearspinbox.cpp \
         widgets/clearplaintextedit.cpp
 
-    FORMS += aboutdialog/aboutdialog.ui \
+    FORMS += \
+        aboutdialog/aboutdialog.ui \
         enterpassworddialog/enterpassworddialog.ui \
         settingsdialog/settingsdialog.ui
 }
 
-RESOURCES += resources/qtutilsicons.qrc
+RESOURCES += \
+    resources/qtutilsicons.qrc
 
 OTHER_FILES += \
     README.md \

@@ -40,6 +40,11 @@ set(SRC_FILES
     widgets/iconbutton.cpp
     resources/qtutilsicons.qrc
 )
+set(WIDGETS_UI_FILES
+    aboutdialog/aboutdialog.ui
+    enterpassworddialog/enterpassworddialog.ui
+    settingsdialog/settingsdialog.ui
+)
 
 # meta data
 set(META_PROJECT_NAME qtutilities)
@@ -112,7 +117,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # executable and linking
-add_library(${META_PROJECT_NAME} SHARED ${HEADER_FILES} ${SRC_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
+add_library(${META_PROJECT_NAME} SHARED ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_UI_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
 if(${CMAKE_SYSTEM_NAME} MATCHES Linux)
     set(EXTRA_LIBS X11)
 endif()
