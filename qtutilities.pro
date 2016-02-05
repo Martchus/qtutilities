@@ -29,12 +29,14 @@ HEADERS += \
     resources/resources.h \
     models/checklistmodel.h \
     resources/qtconfigarguments.h \
-    misc/dialogutils.h
+    misc/dialogutils.h \
+    misc/desktoputils.h
 
 SOURCES += resources/resources.cpp \
     models/checklistmodel.cpp \
     resources/qtconfigarguments.cpp \
-    misc/dialogutils.cpp
+    misc/dialogutils.cpp \
+    misc/desktoputils.cpp
 
 contains(DEFINES, GUI_QTWIDGETS) {
     HEADERS += \

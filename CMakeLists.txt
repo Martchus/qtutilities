@@ -5,6 +5,7 @@ set(HEADER_FILES
     aboutdialog/aboutdialog.h
     enterpassworddialog/enterpassworddialog.h
     misc/dialogutils.h
+    misc/desktoputils.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
@@ -24,6 +25,7 @@ set(SRC_FILES
     aboutdialog/aboutdialog.cpp
     enterpassworddialog/enterpassworddialog.cpp
     misc/dialogutils.cpp
+    misc/desktoputils.cpp
     models/checklistmodel.cpp
     resources/qtconfigarguments.cpp
     resources/resources.cpp
