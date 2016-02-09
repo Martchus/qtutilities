@@ -17,6 +17,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace ConversionUtilities;
 
 namespace ApplicationUtilities {
 
@@ -30,7 +31,8 @@ QtConfigArguments::QtConfigArguments() :
     m_qmlDebuggerArg("qmljsdebugger", "qmljsdebugger", "enables QML debugging (see http://doc.qt.io/qt-5/qtquick-debugging.html)"),
     m_styleArg("style", string(), "sets the Qt widgets style"),
     m_iconThemeArg("icon-theme", string(), "sets the icon theme and additional theme search paths for the Qt GUI"),
-    m_fontArg("font", string(), "sets the font family and size (point) for the Qt GUI")
+    m_fontArg("font", string(), "sets the font family and size (point) for the Qt GUI"),
+    m_libraryPathsArg("library-paths", string(), "sets the list of directories to search when loading libraries (all existing paths will be deleted)")
 {
     // language
     m_lngArg.setValueNames({"language"});
@@ -51,8 +53,11 @@ QtConfigArguments::QtConfigArguments() :
     m_fontArg.setValueNames({"name", "size"});
     m_fontArg.setRequiredValueCount(2);
     m_fontArg.setCombinable(true);
-    m_qtWidgetsGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg});
-    m_qtQuickGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg});
+    m_libraryPathsArg.setValueNames({"path 1", "path 2"});
+    m_libraryPathsArg.setRequiredValueCount(-1);
+    m_libraryPathsArg.setCombinable(true);
+    m_qtWidgetsGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
+    m_qtQuickGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
 #if defined GUI_QTWIDGETS
@@ -130,8 +135,8 @@ void QtConfigArguments::applySettings() const
         QFont font;
         font.setFamily(QString::fromLocal8Bit(m_fontArg.values().front().data()));
         try {
-            font.setPointSize(ConversionUtilities::stringToNumber<int>(m_fontArg.values().back()));
-        } catch(const ConversionUtilities::ConversionException &) {
+            font.setPointSize(stringToNumber<int>(m_fontArg.values().back()));
+        } catch(const ConversionException &) {
             cout << "Warning: The specified font size is no number and will be ignored." << endl;
         }
         QGuiApplication::setFont(font);
@@ -139,6 +144,14 @@ void QtConfigArguments::applySettings() const
 #ifdef Q_OS_WIN32
         QGuiApplication::setFont(QFont(QStringLiteral("Segoe UI"), 9));
 #endif
+    }
+    if(m_libraryPathsArg.isPresent()) {
+        QStringList libraryPaths;
+        libraryPaths.reserve(m_libraryPathsArg.values().size());
+        for(const auto &path : m_libraryPathsArg.values()) {
+            libraryPaths << QString::fromLocal8Bit(path.data());
+        }
+        QCoreApplication::setLibraryPaths(libraryPaths);
     }
 }
 

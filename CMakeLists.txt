@@ -54,9 +54,9 @@ set(META_APP_NAME "Qt Utilities")
 set(META_APP_AUTHOR "Martchus")
 set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models.")
-set(META_VERSION_MAJOR 3)
-set(META_VERSION_MINOR 1)
-set(META_VERSION_PATCH 1)
+set(META_VERSION_MAJOR 4)
+set(META_VERSION_MINOR 0)
+set(META_VERSION_PATCH 0)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 # stringification of meta data
