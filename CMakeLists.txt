@@ -6,6 +6,7 @@ set(HEADER_FILES
     enterpassworddialog/enterpassworddialog.h
     misc/dialogutils.h
     misc/desktoputils.h
+    misc/xmlparsermacros.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
