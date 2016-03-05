@@ -29,7 +29,7 @@ OptionCategory::~OptionCategory()
  */
 bool OptionCategory::applyAllPages()
 {
-    foreach(OptionPage *page, m_pages) {
+    for(OptionPage *page : m_pages) {
         if(!page->apply()) {
             return false;
         }
@@ -43,7 +43,7 @@ bool OptionCategory::applyAllPages()
  */
 void OptionCategory::resetAllPages()
 {
-    foreach(OptionPage *page, m_pages) {
+    for(OptionPage *page : m_pages) {
         page->reset();
     }
 }
@@ -53,7 +53,7 @@ void OptionCategory::resetAllPages()
  */
 bool OptionCategory::matches(const QString &searchKeyWord) const
 {
-    foreach(OptionPage *page, m_pages) {
+    for(OptionPage *page : m_pages) {
         if(page->matches(searchKeyWord)) {
             return true;
         }

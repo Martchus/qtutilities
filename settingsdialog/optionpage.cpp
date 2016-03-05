@@ -68,19 +68,19 @@ bool OptionPage::matches(const QString &searchKeyWord)
             m_widget.reset(setupWidget()); // ensure widget has been created
         }
         // find common subwidgets
-        foreach (const QLabel *label, m_widget->findChildren<QLabel *>())
+        for(const QLabel *label : m_widget->findChildren<QLabel *>())
             m_keywords << label->text();
-        foreach (const QCheckBox *checkbox, m_widget->findChildren<QCheckBox *>())
+        for(const QCheckBox *checkbox : m_widget->findChildren<QCheckBox *>())
             m_keywords << checkbox->text();
-        foreach (const QRadioButton *checkbox, m_widget->findChildren<QRadioButton *>())
+        for(const QRadioButton *checkbox : m_widget->findChildren<QRadioButton *>())
             m_keywords << checkbox->text();
-        foreach (const QPushButton *pushButton, m_widget->findChildren<QPushButton *>())
+        for(const QPushButton *pushButton : m_widget->findChildren<QPushButton *>())
             m_keywords << pushButton->text();
-        foreach (const QGroupBox *groupBox, m_widget->findChildren<QGroupBox *>())
+        for(const QGroupBox *groupBox : m_widget->findChildren<QGroupBox *>())
             m_keywords << groupBox->title();
         m_keywordsInitialized = true;
     }
-    foreach (const QString &keyword, m_keywords)
+    for(const QString &keyword : m_keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return false;

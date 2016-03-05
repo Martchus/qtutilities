@@ -29,7 +29,7 @@ OptionCategoryModel::OptionCategoryModel(const QList<Dialogs::OptionCategory *> 
     QAbstractListModel(parent),
     m_categories(categories)
 {
-    foreach(OptionCategory *category, m_categories) {
+    for(OptionCategory *category : m_categories) {
         category->setParent(this);
     }
 }
@@ -50,7 +50,7 @@ void OptionCategoryModel::setCategories(const QList<OptionCategory *> categories
     beginResetModel();
     qDeleteAll(m_categories);
     m_categories = categories;
-    foreach(OptionCategory *category, m_categories) {
+    for(OptionCategory *category : m_categories) {
         category->setParent(this);
         connect(category, &OptionCategory::displayNameChanged, this, &OptionCategoryModel::categoryChangedName);
         connect(category, &OptionCategory::iconChanged, this, &OptionCategoryModel::categoryChangedIcon);

@@ -105,8 +105,8 @@ OptionPage *SettingsDialog::page(int categoryIndex, int pageIndex) const
 void SettingsDialog::showEvent(QShowEvent *event)
 {
     if(!event->spontaneous()) {
-        foreach(OptionCategory *category, m_categoryModel->categories()) {
-            foreach(OptionPage *page, category->pages()) {
+        for(OptionCategory *category : m_categoryModel->categories()) {
+            for(OptionPage *page : category->pages()) {
                 page->reset();
             }
         }
@@ -149,7 +149,7 @@ void SettingsDialog::updateTabWidget()
         m_ui->pagesTabWidget->setUpdatesEnabled(false);
         QString searchKeyWord = m_ui->filterLineEdit->text();
         int index = 0;
-        foreach(OptionPage *page, m_currentCategory->pages()) {
+        for(OptionPage *page : m_currentCategory->pages()) {
             if(page->matches(searchKeyWord)) {
                 QScrollArea *scrollArea;
                 if(index < m_ui->pagesTabWidget->count()) {
@@ -189,8 +189,8 @@ void SettingsDialog::updateTabWidget()
  */
 bool SettingsDialog::apply()
 {
-    foreach(OptionCategory *category, m_categoryModel->categories()) {
-        foreach(OptionPage *page, category->pages()) {
+    for(OptionCategory *category : m_categoryModel->categories()) {
+        for(OptionPage *page : category->pages()) {
             if(!page->apply()) {
                 return false;
             }
@@ -205,7 +205,7 @@ bool SettingsDialog::apply()
  */
 void SettingsDialog::reset()
 {
-    foreach(OptionCategory *category, m_categoryModel->categories()) {
+    for(OptionCategory *category : m_categoryModel->categories()) {
         category->resetAllPages();
     }
     emit resetted();
