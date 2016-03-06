@@ -7,6 +7,7 @@ set(HEADER_FILES
     misc/dialogutils.h
     misc/desktoputils.h
     misc/xmlparsermacros.h
+    misc/undefxmlparsermacros.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h

@@ -31,7 +31,8 @@ HEADERS += \
     resources/qtconfigarguments.h \
     misc/dialogutils.h \
     misc/desktoputils.h \
-    misc/xmlparsermacros.h
+    misc/xmlparsermacros.h \
+    misc/undefxmlparsermacros.h
 
 SOURCES += resources/resources.cpp \
     models/checklistmodel.cpp \
