@@ -18,6 +18,7 @@ public:
 private Q_SLOTS:
     void handleTextChanged();
     void handleClearButtonClicked();
+    void handleScroll();
 
 };
 

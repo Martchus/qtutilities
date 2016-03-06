@@ -1,6 +1,11 @@
 #include "./clearplaintextedit.h"
 
 #include <QHBoxLayout>
+#include <QScrollBar>
+
+#include <functional>
+
+using namespace std;
 
 namespace Widgets {
 
@@ -14,12 +19,15 @@ namespace Widgets {
  */
 ClearPlainTextEdit::ClearPlainTextEdit(QWidget *parent) :
     QPlainTextEdit(parent),
-    ButtonOverlay(this)
+    ButtonOverlay(viewport())
 {
     // set alignment to show buttons in the bottom right corner
     ButtonOverlay::buttonLayout()->setAlignment(Qt::AlignBottom | Qt::AlignRight);
     ButtonOverlay::setClearButtonEnabled(true);
     connect(document(), &QTextDocument::contentsChanged, this, &ClearPlainTextEdit::handleTextChanged);
+    // ensure button layout is realigned when scrolling
+    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &ClearPlainTextEdit::handleScroll);
+    connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, &ClearPlainTextEdit::handleScroll);
 }
 
 /*!
@@ -42,6 +50,11 @@ void ClearPlainTextEdit::handleClearButtonClicked()
     QTextCursor cursor(document());
     cursor.select(QTextCursor::Document);
     cursor.removeSelectedText();
+}
+
+void ClearPlainTextEdit::handleScroll()
+{
+    buttonLayout()->update();
 }
 
 bool ClearPlainTextEdit::isCleared() const
