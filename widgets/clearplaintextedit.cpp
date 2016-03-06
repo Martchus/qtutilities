@@ -3,8 +3,6 @@
 #include <QHBoxLayout>
 #include <QScrollBar>
 
-#include <functional>
-
 using namespace std;
 
 namespace Widgets {
@@ -24,10 +22,10 @@ ClearPlainTextEdit::ClearPlainTextEdit(QWidget *parent) :
     // set alignment to show buttons in the bottom right corner
     ButtonOverlay::buttonLayout()->setAlignment(Qt::AlignBottom | Qt::AlignRight);
     ButtonOverlay::setClearButtonEnabled(true);
-    connect(document(), &QTextDocument::contentsChanged, this, &ClearPlainTextEdit::handleTextChanged);
+    connect(this, &QPlainTextEdit::textChanged, this, &ClearPlainTextEdit::handleTextChanged);
     // ensure button layout is realigned when scrolling
-    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &ClearPlainTextEdit::handleScroll);
-    connect(this->verticalScrollBar(), &QScrollBar::rangeChanged, this, &ClearPlainTextEdit::handleScroll);
+    connect(verticalScrollBar(), &QScrollBar::actionTriggered, this, &ClearPlainTextEdit::handleScroll);
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &ClearPlainTextEdit::handleScroll);
 }
 
 /*!
