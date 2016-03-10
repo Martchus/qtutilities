@@ -8,6 +8,8 @@ set(HEADER_FILES
     misc/desktoputils.h
     misc/xmlparsermacros.h
     misc/undefxmlparsermacros.h
+    misc/trylocker.h
+    misc/adoptlocker.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h

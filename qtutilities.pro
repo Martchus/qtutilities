@@ -32,7 +32,9 @@ HEADERS += \
     misc/dialogutils.h \
     misc/desktoputils.h \
     misc/xmlparsermacros.h \
-    misc/undefxmlparsermacros.h
+    misc/undefxmlparsermacros.h \
+    misc/trylocker.h \
+    misc/adoptlocker.h
 
 SOURCES += resources/resources.cpp \
     models/checklistmodel.cpp \
