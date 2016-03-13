@@ -45,28 +45,17 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
     } else {
         m_ui->productNameLabel->setText(QApplication::applicationName());
     }
-    if(!creator.isEmpty()) {
-        m_ui->creatorLabel->setText(creator);
-    } else {
-        m_ui->creatorLabel->setText(QApplication::organizationName());
-    }
-    if(!version.isEmpty()) {
-        m_ui->versionLabel->setText(version);
-    } else {
-        m_ui->versionLabel->setText(QApplication::applicationVersion());
-    }
+    m_ui->creatorLabel->setText(tr("developed by %1").arg(
+                                    creator.isEmpty() ? QApplication::organizationName() : creator));
+    m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
+    m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" style=\"text-decoration: underline; color: palette(link);\">project website</a>.").arg(
+                                  website.isEmpty() ? QApplication::organizationDomain() : website));
     m_ui->descLabel->setText(description);
-    if(!website.isEmpty()) {
-        m_ui->websiteLabel->setText(tr("<a href=\"%1\">Website</a>").arg(website));
-    } else {
-        m_ui->websiteLabel->setText(tr("<a href=\"%1\">Website</a>").arg(QApplication::organizationDomain()));
-    }
     m_iconScene = new QGraphicsScene(this);
-    if(!image.isNull()) {
-        m_iconScene->addItem(new QGraphicsPixmapItem(QPixmap::fromImage(image)));
-    } else {
-        m_iconScene->addItem(new QGraphicsPixmapItem(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, this).pixmap(128)));
-    }
+    auto *item = image.isNull()
+            ? new QGraphicsPixmapItem(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, this).pixmap(128))
+            : new QGraphicsPixmapItem(QPixmap::fromImage(image));
+    m_iconScene->addItem(item);
     m_ui->graphicsView->setScene(m_iconScene);
     setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), parentWidget() ? parentWidget()->geometry() : QApplication::desktop()->availableGeometry()));
 }
