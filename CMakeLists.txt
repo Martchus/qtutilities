@@ -136,6 +136,7 @@ set_target_properties(${META_PROJECT_NAME} PROPERTIES
 if(MINGW)
     # enable static library when building with mingw-w64
     add_library(${META_PROJECT_NAME}_static STATIC ${HEADER_FILES} ${SRC_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
+    target_link_libraries(${META_PROJECT_NAME}_static c++utilities Qt5::Core Qt5::Widgets ${EXTRA_LIBS})
     set_target_properties(${META_PROJECT_NAME}_static PROPERTIES
         VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}
         SOVERSION ${META_VERSION_MAJOR}

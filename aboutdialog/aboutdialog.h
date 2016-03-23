@@ -7,9 +7,7 @@
 
 #include <memory>
 
-QT_BEGIN_NAMESPACE
-class QGraphicsScene;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QGraphicsScene)
 
 namespace Dialogs
 {
