@@ -107,7 +107,6 @@ endif(MINGW)
 add_definitions(
     -DGUI_QTWIDGETS
     -DMODEL_UNDO_SUPPORT
-    -DPLATFORM_SPECIFIC_CAPSLOCK_DETECTION
     -D_GLIBCXX_USE_CXX11_ABI=0
 )
 
@@ -124,10 +123,17 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # executable and linking
 add_library(${META_PROJECT_NAME} SHARED ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_UI_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
-if(${CMAKE_SYSTEM_NAME} MATCHES Linux)
-    set(EXTRA_LIBS X11)
+if(WIN32)
+    # WinAPI provides functions required for capslock detection
+    add_definitions(-DPLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+else()
+    # X11 can provide functions required for capslock detection under non-Windows environments
+    find_package(X11)
+    if(X11_FOUND)
+        add_definitions(-DPLATFORM_SPECIFIC_CAPSLOCK_DETECTION -DX_AVAILABLE)
+    endif()
 endif()
-target_link_libraries(${META_PROJECT_NAME} c++utilities Qt5::Core Qt5::Widgets ${EXTRA_LIBS})
+target_link_libraries(${META_PROJECT_NAME} c++utilities Qt5::Core Qt5::Widgets ${X11_LIBRARIES})
 set_target_properties(${META_PROJECT_NAME} PROPERTIES
     VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}
     SOVERSION ${META_VERSION_MAJOR}
@@ -136,7 +142,7 @@ set_target_properties(${META_PROJECT_NAME} PROPERTIES
 if(MINGW)
     # enable static library when building with mingw-w64
     add_library(${META_PROJECT_NAME}_static STATIC ${HEADER_FILES} ${SRC_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
-    target_link_libraries(${META_PROJECT_NAME}_static c++utilities Qt5::Core Qt5::Widgets ${EXTRA_LIBS})
+    target_link_libraries(${META_PROJECT_NAME}_static c++utilities Qt5::Core Qt5::Widgets ${X11_LIBRARIES})
     set_target_properties(${META_PROJECT_NAME}_static PROPERTIES
         VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}
         SOVERSION ${META_VERSION_MAJOR}

@@ -12,7 +12,7 @@
 #ifdef PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 # if defined(Q_OS_WIN32)
 #  include <windows.h>
-# elif defined(Q_OS_UNIX)
+# elif defined(X_AVAILABLE)
 #  include <X11/XKBlib.h>
 #  undef KeyPress
 #  undef KeyRelease
@@ -313,7 +313,7 @@ bool EnterPasswordDialog::isCapslockPressed()
     // platform dependent method of determining if CAPS LOCK is pressed
 # if defined(Q_OS_WIN32)
     return GetKeyState(VK_CAPITAL) == 1;
-# elif defined(Q_OS_UNIX)
+# elif defined(X_AVAILABLE)
     Display *d = XOpenDisplay((char*)0);
     bool caps_state = false;
     if (d) {

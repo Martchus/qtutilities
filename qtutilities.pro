@@ -99,6 +99,7 @@ CONFIG(debug, debug|release) {
 contains(DEFINES, PLATFORM_SPECIFIC_CAPSLOCK_DETECTION) {
     x11 {
         LIBS += -lX11
+        DEFINES += X_AVAILABLE
     }
 }
 
