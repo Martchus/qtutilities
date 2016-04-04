@@ -17,15 +17,16 @@ public:
     virtual ~OptionPage();
 
     QWidget *parentWindow() const;
-    virtual QString displayName() const = 0;
     QWidget *widget();
     bool hasBeenShown() const;
     virtual bool apply() = 0;
     virtual void reset() = 0;
     bool matches(const QString &searchKeyWord);
+    const QStringList &errors() const;
 
 protected:
     virtual QWidget *setupWidget() = 0;
+    QStringList &errors();
 
 private:
     std::unique_ptr<QWidget> m_widget;
@@ -33,6 +34,7 @@ private:
     bool m_shown;
     bool m_keywordsInitialized;
     QStringList m_keywords;
+    QStringList m_errors;
 };
 
 /*!
@@ -52,6 +54,25 @@ inline bool OptionPage::hasBeenShown() const
 }
 
 /*!
+ * \brief Returns the errors which haven been occurred when applying the changes.
+ */
+inline const QStringList &OptionPage::errors() const
+{
+    return m_errors;
+}
+
+/*!
+ * \brief Returns the errors which haven been occurred when applying the changes.
+ *
+ * Error messages should be added when implementing apply() and something goes wrong.
+ * In this case, apply() should return false.
+ */
+inline QStringList &OptionPage::errors()
+{
+    return m_errors;
+}
+
+/*!
  * \class Dialogs::UiFileBasedOptionPage
  * \brief The UiFileBasedOptionPage class is the base class for SettingsDialog pages using UI files
  *        to describe the widget tree.
@@ -65,7 +86,6 @@ public:
     explicit UiFileBasedOptionPage(QWidget *parentWindow = nullptr);
     virtual ~UiFileBasedOptionPage();
 
-    virtual QString displayName() const = 0;
     virtual bool apply() = 0;
     virtual void reset() = 0;
 
@@ -113,5 +133,46 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
 }
 
 }
+
+#define BEGIN_DECLARE_OPTION_PAGE(SomeClass) \
+    class SomeClass : public ::Dialogs::OptionPage \
+    { \
+    public: \
+        explicit SomeClass(QWidget *parentWidget = nullptr); \
+        ~SomeClass(); \
+        bool apply(); \
+        void reset(); \
+    private:
+
+#define BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+    namespace Ui { \
+    class SomeClass; \
+    } \
+    typedef ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> SomeClass ## Base; \
+    class SomeClass : public ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> \
+    { \
+    public: \
+        explicit SomeClass(QWidget *parentWidget = nullptr); \
+        ~SomeClass(); \
+        bool apply(); \
+        void reset(); \
+    private:
+
+#define END_DECLARE_OPTION_PAGE \
+    };
+
+#define DECLARE_SETUP_WIDGETS \
+    protected: \
+        QWidget *setupWidget(); \
+    private:
+
+#define DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+    BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+    END_DECLARE_OPTION_PAGE
+
+#define DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_SETUP(SomeClass) \
+    BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+        DECLARE_SETUP_WIDGETS \
+    END_DECLARE_OPTION_PAGE
 
 #endif // OPTIONSPAGE_H

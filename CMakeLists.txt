@@ -18,12 +18,15 @@ set(HEADER_FILES
     settingsdialog/optioncategorymodel.h
     settingsdialog/optionpage.h
     settingsdialog/settingsdialog.h
+    settingsdialog/qtsettings.h
     widgets/buttonoverlay.h
     widgets/clearcombobox.h
     widgets/clearlineedit.h
     widgets/clearplaintextedit.h
     widgets/clearspinbox.h
     widgets/iconbutton.h
+    paletteeditor/paletteeditor.h
+    paletteeditor/colorbutton.h
 )
 set(SRC_FILES
     aboutdialog/aboutdialog.cpp
@@ -38,18 +41,24 @@ set(SRC_FILES
     settingsdialog/optioncategorymodel.cpp
     settingsdialog/optionpage.cpp
     settingsdialog/settingsdialog.cpp
+    settingsdialog/qtsettings.cpp
     widgets/buttonoverlay.cpp
     widgets/clearcombobox.cpp
     widgets/clearlineedit.cpp
     widgets/clearplaintextedit.cpp
     widgets/clearspinbox.cpp
     widgets/iconbutton.cpp
+    paletteeditor/paletteeditor.cpp
+    paletteeditor/colorbutton.cpp
     resources/qtutilsicons.qrc
 )
 set(WIDGETS_UI_FILES
     aboutdialog/aboutdialog.ui
     enterpassworddialog/enterpassworddialog.ui
     settingsdialog/settingsdialog.ui
+    settingsdialog/qtappearanceoptionpage.ui
+    settingsdialog/qtlanguageoptionpage.ui
+    paletteeditor/paletteeditor.ui
 )
 
 # meta data

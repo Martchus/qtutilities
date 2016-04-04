@@ -60,13 +60,11 @@ bool OptionPage::matches(const QString &searchKeyWord)
     if(searchKeyWord.isEmpty()) {
         return true;
     }
-    if(displayName().contains(searchKeyWord, Qt::CaseInsensitive)) {
-        return true;
-    }
     if(!m_keywordsInitialized) {
         if(!m_widget) {
             m_widget.reset(setupWidget()); // ensure widget has been created
         }
+        m_keywords << m_widget->windowTitle();
         // find common subwidgets
         for(const QLabel *label : m_widget->findChildren<QLabel *>())
             m_keywords << label->text();
@@ -81,7 +79,7 @@ bool OptionPage::matches(const QString &searchKeyWord)
         m_keywordsInitialized = true;
     }
     for(const QString &keyword : m_keywords)
-        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+        if(keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return false;
 }

@@ -12,6 +12,8 @@
 #include <QItemSelectionModel>
 #include <QShowEvent>
 #include <QScrollArea>
+#include <QStringBuilder>
+#include <QMessageBox>
 
 namespace Dialogs {
 
@@ -30,7 +32,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     m_categoryModel(new OptionCategoryModel(this)),
     m_categoryFilterModel(new OptionCategoryFilterModel(this)),
     m_currentCategory(nullptr),
-    m_tabBarAlwaysVisible(true)
+    m_tabBarAlwaysVisible(true),
+    m_categoriesAlwaysVisible(true)
 {
     m_ui->setupUi(this);
     makeHeading(m_ui->headingLabel);
@@ -61,7 +64,6 @@ SettingsDialog::~SettingsDialog()
 
 /*!
  * \brief Sets whether the tab bar is always visible.
- *
  * \sa SettingsDialog::isTabBarAlwaysVisible()
  */
 void SettingsDialog::setTabBarAlwaysVisible(bool value)
@@ -69,6 +71,21 @@ void SettingsDialog::setTabBarAlwaysVisible(bool value)
     m_tabBarAlwaysVisible = value;
     if(m_currentCategory) {
         m_ui->pagesTabWidget->tabBar()->setHidden(!value && m_currentCategory->pages().size() == 1);
+    }
+}
+
+/*!
+ * \brief Sets whether the category selection is always visible.
+ * \sa SettingsDialog::areCategoriesAlwaysVisible()
+ */
+void SettingsDialog::setCategoriesAlwaysVisible(bool value)
+{
+    m_categoriesAlwaysVisible = value;
+    bool visible = value || m_categoryModel->rowCount();
+    m_ui->filterLineEdit->setVisible(visible);
+    m_ui->categoriesListView->setVisible(visible);
+    if(!visible) {
+        m_ui->filterLineEdit->clear();
     }
 }
 
@@ -155,14 +172,14 @@ void SettingsDialog::updateTabWidget()
                 if(index < m_ui->pagesTabWidget->count()) {
                     scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
                     scrollArea->takeWidget();
-                    m_ui->pagesTabWidget->setTabText(index, page->displayName());
+                    m_ui->pagesTabWidget->setTabText(index, page->widget()->windowTitle());
                 } else {
                     scrollArea = new QScrollArea(m_ui->pagesTabWidget);
                     scrollArea->setFrameStyle(QFrame::NoFrame);
                     scrollArea->setBackgroundRole(QPalette::Base);
                     scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                     scrollArea->setWidgetResizable(true);
-                    m_ui->pagesTabWidget->addTab(scrollArea, page->displayName());
+                    m_ui->pagesTabWidget->addTab(scrollArea, page->widget()->windowTitle());
                 }
                 if(page->widget()->layout()) {
                     page->widget()->layout()->setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -189,15 +206,41 @@ void SettingsDialog::updateTabWidget()
  */
 bool SettingsDialog::apply()
 {
+    QString errorMessage;
     for(OptionCategory *category : m_categoryModel->categories()) {
         for(OptionPage *page : category->pages()) {
             if(!page->apply()) {
-                return false;
+                if(errorMessage.isEmpty()) {
+                    errorMessage = tr("<p><b>Errors occured when applying changes.</b></p><ul>");
+                }
+                if(const_cast<const OptionPage *>(page)->errors().isEmpty()) {
+                    errorMessage.append(QStringLiteral("<li><i>")
+                                  % category->displayName()
+                                  % QLatin1Char('/')
+                                  % page->widget()->windowTitle()
+                                  % QStringLiteral("</i>: ")
+                                  % tr("unknonw error")
+                                  % QStringLiteral("</li>"));
+                } else {
+                    for(const QString &error : const_cast<const OptionPage *>(page)->errors()) {
+                        errorMessage.append(QStringLiteral("<li><i>")
+                                      % category->displayName()
+                                      % QLatin1Char('/')
+                                      % page->widget()->windowTitle()
+                                      % QStringLiteral("</i>: ")
+                                      % error
+                                      % QStringLiteral("</li>"));
+                    }
+                }
             }
         }
     }
+    if(!errorMessage.isEmpty()) {
+        errorMessage.append(QStringLiteral("</ul>"));
+        QMessageBox::warning(this, windowTitle(), errorMessage);
+    }
     emit applied();
-    return true;
+    return errorMessage.isEmpty();
 }
 
 /*!

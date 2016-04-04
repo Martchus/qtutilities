@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialogs::QtLanguageOptionPage</class>
+ <widget class="QWidget" name="Dialogs::QtLanguageOptionPage">
+  <property name="windowTitle">
+   <string>Localization</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox { font-weight: bold };</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="localeLabel">
+     <property name="text">
+      <string>Locale</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="localeComboBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" alignment="Qt::AlignHCenter">
+    <widget class="QCheckBox" name="localeCheckBox">
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="defaultLabel">
+     <property name="text">
+      <string>Use system default</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>localeCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>localeComboBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>159</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>75</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
