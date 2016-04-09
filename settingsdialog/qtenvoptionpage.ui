@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialogs::QtEnvOptionPage</class>
+ <widget class="QWidget" name="Dialogs::QtEnvOptionPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>336</width>
+    <height>66</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Environment/paths</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox { font-weight: bold };</string>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="pluginDirLabel">
+     <property name="text">
+      <string>Additional plugin directory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="Widgets::PathSelection" name="pluginPathSelection" native="true"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="iconThemePathLabel">
+     <property name="text">
+      <string>Additional icon theme path</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="Widgets::PathSelection" name="iconThemePathSelection" native="true"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="translationsPathLabel">
+     <property name="text">
+      <string>Additional translations path</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="Widgets::PathSelection" name="translationPathSelection" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Widgets::PathSelection</class>
+   <extends>QWidget</extends>
+   <header>widgets/pathselection.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

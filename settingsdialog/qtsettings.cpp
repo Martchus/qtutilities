@@ -7,8 +7,11 @@
 
 #include "../paletteeditor/paletteeditor.h"
 
+#include "../widgets/clearlineedit.h"
+
 #include "ui_qtappearanceoptionpage.h"
 #include "ui_qtlanguageoptionpage.h"
+#include "ui_qtenvoptionpage.h"
 
 #include <QStyleFactory>
 #include <QFontDialog>
@@ -32,7 +35,8 @@ OptionCategory *qtOptionCategory(QObject *parent)
     category->setIcon(QIcon::fromTheme(QStringLiteral("qtcreator")));
     category->assignPages(QList<OptionPage *>()
                           << new QtAppearanceOptionPage
-                          << new QtLanguageOptionPage);
+                          << new QtLanguageOptionPage
+                          << new QtEnvOptionPage);
     return category;
 }
 
@@ -49,8 +53,8 @@ bool QtAppearanceOptionPage::apply()
     if(hasBeenShown()) {
         // read style sheet
         QString styleSheet;
-        if(!ui()->styleSheetLineEdit->text().isEmpty()) {
-            QFile file(ui()->styleSheetLineEdit->text());
+        if(!ui()->styleSheetPathSelection->lineEdit()->text().isEmpty()) {
+            QFile file(ui()->styleSheetPathSelection->lineEdit()->text());
             if(!file.open(QFile::ReadOnly)) {
                 return false;
             }
@@ -79,7 +83,7 @@ void QtAppearanceOptionPage::reset()
 {
     if(hasBeenShown()) {
         ui()->widgetStyleComboBox->setCurrentText(QApplication::style() ? QApplication::style()->objectName() : QString());
-        ui()->styleSheetLineEdit->setText(QString() /* TODO */);
+        ui()->styleSheetPathSelection->lineEdit()->setText(QString() /* TODO */);
         ui()->fontComboBox->setCurrentFont(QGuiApplication::font());
         ui()->fontPushButton->setPalette(QGuiApplication::palette());
     }
@@ -94,12 +98,7 @@ QWidget *QtAppearanceOptionPage::setupWidget()
     ui()->widgetStyleComboBox->addItems(QStyleFactory::keys());
 
     // setup style sheet selection
-    QObject::connect(ui()->styleSheetPushButton, &QPushButton::clicked, [this] {
-        QString styleSheetPath = QFileDialog::getOpenFileName(this->widget());
-        if(!styleSheetPath.isEmpty()) {
-            ui()->styleSheetLineEdit->setText(styleSheetPath);
-        }
-    });
+    ui()->styleSheetPathSelection->provideCustomFileMode(QFileDialog::ExistingFile);
 
     // setup font selection
     QObject::connect(ui()->fontPushButton, &QPushButton::clicked, [this] {
@@ -139,6 +138,28 @@ void QtLanguageOptionPage::reset()
 {
     if(hasBeenShown()) {
         ui()->localeComboBox->setCurrentText(QLocale().name());
+    }
+}
+
+QtEnvOptionPage::QtEnvOptionPage(QWidget *parentWidget) :
+    QtEnvOptionPageBase(parentWidget)
+{}
+
+QtEnvOptionPage::~QtEnvOptionPage()
+{}
+
+bool QtEnvOptionPage::apply()
+{
+    if(hasBeenShown()) {
+
+    }
+    return true;
+}
+
+void QtEnvOptionPage::reset()
+{
+    if(hasBeenShown()) {
+
     }
 }
 
