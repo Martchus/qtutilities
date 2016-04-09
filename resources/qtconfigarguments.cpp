@@ -81,11 +81,12 @@ void QtConfigArguments::applySettings() const
         if(QStyle *style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front().data()))) {
             QApplication::setStyle(style);
         } else {
-            cout << "Warning: Can not find the specified style." << endl;
+            cerr << "Warning: Can not find the specified style." << endl;
         }
-#endif
-#ifdef GUI_QTQUICK
-        cout << "Warning: Can not set a style for the Qt Quick GUI." << endl;
+#else
+# ifdef GUI_QTQUICK
+        cerr << "Warning: Can not set a style for the Qt Quick GUI." << endl;
+# endif
 #endif
     }
 #ifdef Q_OS_WIN32
@@ -137,7 +138,7 @@ void QtConfigArguments::applySettings() const
         try {
             font.setPointSize(stringToNumber<int>(m_fontArg.values().back()));
         } catch(const ConversionException &) {
-            cout << "Warning: The specified font size is no number and will be ignored." << endl;
+            cerr << "Warning: The specified font size is no number and will be ignored." << endl;
         }
         QGuiApplication::setFont(font);
     } else {

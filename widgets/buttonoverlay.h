@@ -1,16 +1,14 @@
-#ifndef WIDGETS_CLEARABLEWIDGET_H
-#define WIDGETS_CLEARABLEWIDGET_H
+#ifndef WIDGETS_BUTTONOVERLAY_H
+#define WIDGETS_BUTTONOVERLAY_H
 
 #include <c++utilities/application/global.h>
 
 #include <QtGlobal>
 
-QT_BEGIN_NAMESPACE
-class QWidget;
-class QHBoxLayout;
-class QString;
-class QPixmap;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QWidget)
+QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
+QT_FORWARD_DECLARE_CLASS(QString)
+QT_FORWARD_DECLARE_CLASS(QPixmap)
 
 namespace Widgets {
 
@@ -73,4 +71,4 @@ inline bool ButtonOverlay::isInfoButtonEnabled() const
 
 }
 
-#endif // WIDGETS_CLEARABLEWIDGET_H
+#endif // WIDGETS_BUTTONOVERLAY_H

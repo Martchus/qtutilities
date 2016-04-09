@@ -6,9 +6,7 @@
 #include <QAbstractListModel>
 #include <QList>
 
-QT_BEGIN_NAMESPACE
-class QSettings;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QSettings)
 
 namespace Models {
 

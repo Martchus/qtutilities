@@ -2,17 +2,27 @@ cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 # add project files
 set(HEADER_FILES
-    aboutdialog/aboutdialog.h
-    enterpassworddialog/enterpassworddialog.h
-    misc/dialogutils.h
-    misc/desktoputils.h
     misc/xmlparsermacros.h
     misc/undefxmlparsermacros.h
     misc/trylocker.h
     misc/adoptlocker.h
+    misc/dialogutils.cpp
+    misc/desktoputils.cpp
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
+)
+set(SRC_FILES
+    misc/dialogutils.h
+    misc/desktoputils.h
+    models/checklistmodel.cpp
+    resources/qtconfigarguments.cpp
+    resources/resources.cpp
+    resources/qtutilsicons.qrc
+)
+set(WIDGETS_HEADER_FILES
+    aboutdialog/aboutdialog.h
+    enterpassworddialog/enterpassworddialog.h
     settingsdialog/optioncategory.h
     settingsdialog/optioncategoryfiltermodel.h
     settingsdialog/optioncategorymodel.h
@@ -25,17 +35,13 @@ set(HEADER_FILES
     widgets/clearplaintextedit.h
     widgets/clearspinbox.h
     widgets/iconbutton.h
+    widgets/pathselection.h
     paletteeditor/paletteeditor.h
     paletteeditor/colorbutton.h
 )
-set(SRC_FILES
+set(WIDGETS_SRC_FILES
     aboutdialog/aboutdialog.cpp
     enterpassworddialog/enterpassworddialog.cpp
-    misc/dialogutils.cpp
-    misc/desktoputils.cpp
-    models/checklistmodel.cpp
-    resources/qtconfigarguments.cpp
-    resources/resources.cpp
     settingsdialog/optioncategory.cpp
     settingsdialog/optioncategoryfiltermodel.cpp
     settingsdialog/optioncategorymodel.cpp
@@ -48,9 +54,9 @@ set(SRC_FILES
     widgets/clearplaintextedit.cpp
     widgets/clearspinbox.cpp
     widgets/iconbutton.cpp
+    widgets/pathselection.cpp
     paletteeditor/paletteeditor.cpp
     paletteeditor/colorbutton.cpp
-    resources/qtutilsicons.qrc
 )
 set(WIDGETS_UI_FILES
     aboutdialog/aboutdialog.ui
@@ -58,6 +64,7 @@ set(WIDGETS_UI_FILES
     settingsdialog/settingsdialog.ui
     settingsdialog/qtappearanceoptionpage.ui
     settingsdialog/qtlanguageoptionpage.ui
+    settingsdialog/qtenvoptionpage.ui
     paletteeditor/paletteeditor.ui
 )
 
@@ -111,18 +118,56 @@ if(MINGW)
     set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif(MINGW)
 
-# enable Qt Widgets GUI
+# read cached variables
+set(WIDGETS_GUI "yes" CACHE STRING "enables/disables Qt Widgets specific features: yes (default) or no")
+if(${WIDGETS_GUI} STREQUAL "yes")
+    message(STATUS "Building with Qt Widgets specific features.")
+elseif(${WIDGETS_GUI} STREQUAL "no")
+    message(STATUS "Building WITHOUT Qt Widgets specific features.")
+else()
+    message(FATAL_ERROR "Specification whether to build Qt Widgets specific features is invalid (must be either yes or no).")
+endif()
+set(GUI_QTQUICK "yes" CACHE STRING "enables/disables building Qt Quick specific features: yes (default) or no")
+if(${GUI_QTQUICK} STREQUAL "yes")
+    message(STATUS "Building with Qt Quick specific features.")
+elseif(${GUI_QTQUICK} STREQUAL "no")
+    message(STATUS "Building WITHOUT Qt Quick specific features.")
+else()
+    message(FATAL_ERROR "Specification whether to build Qt Quick specific features is invalid (must be either yes or no).")
+endif()
+
+# enable Qt Widgets specific features
+if(${WIDGETS_GUI} STREQUAL "yes")
+    add_definitions(
+        -DGUI_QTWIDGETS
+        -DMODEL_UNDO_SUPPORT
+    )
+endif()
+
+# enable Qt Quick specific features
+if(${WIDGETS_GUI} STREQUAL "yes")
+    add_definitions(
+        -DGUI_QTQUICK
+    )
+endif()
+
 # disable new ABI (can't catch ios_base::failure with new ABI)
 add_definitions(
-    -DGUI_QTWIDGETS
-    -DMODEL_UNDO_SUPPORT
     -D_GLIBCXX_USE_CXX11_ABI=0
 )
+
+# enable code for debugging
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG_BUILD)
+    message(STATUS "Debug build enabled.")
+endif()
 
 # check required Qt 5 modules
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+if(${WIDGETS_GUI} STREQUAL "yes")
+    find_package(Qt5Widgets REQUIRED)
+endif()
 
 # enable moc, uic and rcc
 set(CMAKE_AUTOMOC ON)
@@ -130,8 +175,13 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# stuff which is only required when linking against Qt Widgets
+if(${WIDGETS_GUI} STREQUAL "yes")
+    set(WIDGETS_STUFF ${GUI_TYPE} ${WIDGETS_HEADER_FILES} ${WIDGETS_SRC_FILES} ${WIDGETS_UI_FILES} ${QM_FILES} ${RES_FILES})
+endif()
+
 # executable and linking
-add_library(${META_PROJECT_NAME} SHARED ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_UI_FILES} ${RES_FILES} ${WINDOWS_ICON_PATH})
+add_library(${META_PROJECT_NAME} SHARED ${HEADER_FILES} ${SRC_FILES} ${WIDGETS_STUFF} ${RES_FILES} ${WINDOWS_ICON_PATH})
 if(WIN32)
     # WinAPI provides functions required for capslock detection
     add_definitions(-DPLATFORM_SPECIFIC_CAPSLOCK_DETECTION)

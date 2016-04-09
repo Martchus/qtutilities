@@ -82,6 +82,8 @@ const QString &dialogStyle()
     return style;
 }
 
+# ifdef GUI_QTWIDGETS
+
 /*!
  * \brief Makes \a widget a heading.
  */
@@ -101,6 +103,8 @@ void updateStyle(QWidget *widget)
     widget->style()->polish(widget);
     widget->update();
 }
+
+# endif
 
 #endif
 

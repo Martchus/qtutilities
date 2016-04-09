@@ -1,5 +1,5 @@
-#ifndef WIDGETS_TAGFIELDLINEEDIT_H
-#define WIDGETS_TAGFIELDLINEEDIT_H
+#ifndef WIDGETS_CLEARLINEEDIT_H
+#define WIDGETS_CLEARLINEEDIT_H
 
 #include "./buttonoverlay.h"
 
@@ -30,4 +30,4 @@ private Q_SLOTS:
 
 }
 
-#endif // WIDGETS_TAGFIELDLINEEDIT_H
+#endif // WIDGETS_CLEARLINEEDIT_H
