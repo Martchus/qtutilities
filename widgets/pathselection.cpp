@@ -3,6 +3,10 @@
 
 #include <c++utilities/io/path.h>
 
+#ifndef SEARCH_PATH_SEP_CHAR
+# error "wtf"
+#endif
+
 #include <qtutilities/misc/desktoputils.h>
 
 #include <QHBoxLayout>
