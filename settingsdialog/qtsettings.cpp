@@ -164,3 +164,7 @@ void QtEnvOptionPage::reset()
 }
 
 }
+
+INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
+INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtLanguageOptionPage)
+INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtEnvOptionPage)
