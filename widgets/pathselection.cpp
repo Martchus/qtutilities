@@ -1,13 +1,9 @@
 #include "./pathselection.h"
 #include "./clearlineedit.h"
 
+#include "../misc/desktoputils.h"
+
 #include <c++utilities/io/path.h>
-
-#ifndef SEARCH_PATH_SEP_CHAR
-# error "wtf"
-#endif
-
-#include <qtutilities/misc/desktoputils.h>
 
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -87,6 +83,8 @@ bool PathSelection::eventFilter(QObject *obj, QEvent *event)
             menu->exec(static_cast<QContextMenuEvent *>(event)->globalPos());
         }
             return true;
+        default:
+            ;
         }
     }
 #endif
