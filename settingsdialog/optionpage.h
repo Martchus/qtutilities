@@ -113,7 +113,7 @@ UiFileBasedOptionPage<UiClass>::~UiFileBasedOptionPage()
 {}
 
 /*!
- * \brief Sets up the widget for the option page using the UI class.
+ * \brief Inflates the widget for the option page using the UI class.
  */
 template <class UiClass>
 QWidget *UiFileBasedOptionPage<UiClass>::setupWidget()
@@ -126,6 +126,9 @@ QWidget *UiFileBasedOptionPage<UiClass>::setupWidget()
     return widget;
 }
 
+/*!
+ * \brief Provides the derived class access to the UI class.
+ */
 template <class UiClass>
 inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
 {
@@ -134,8 +137,12 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
 
 }
 
+/*!
+ * \brief Declares a class inheriting from Dialogs::OptionPage in a convenient way.
+ * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
+ */
 #define BEGIN_DECLARE_OPTION_PAGE(SomeClass) \
-    class SomeClass : public ::Dialogs::OptionPage \
+    class LIB_EXPORT SomeClass : public ::Dialogs::OptionPage \
     { \
     public: \
         explicit SomeClass(QWidget *parentWidget = nullptr); \
@@ -144,12 +151,16 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
         void reset(); \
     private:
 
+/*!
+ * \brief Declares a class inheriting from Dialogs::UiFileBasedOptionPage in a convenient way.
+ * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
+ */
 #define BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
     namespace Ui { \
     class SomeClass; \
     } \
     typedef ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> SomeClass ## Base; \
-    class SomeClass : public ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> \
+    class LIB_EXPORT SomeClass : public ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> \
     { \
     public: \
         explicit SomeClass(QWidget *parentWidget = nullptr); \
@@ -158,18 +169,77 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
         void reset(); \
     private:
 
+/*!
+ * \brief Must be used after BEGIN_DECLARE_OPTION_PAGE and BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE.
+ */
 #define END_DECLARE_OPTION_PAGE \
     };
 
+/*!
+ * \brief Instantiates a class declared with BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE in a convenient way.
+ * \remarks Might be required when the class is used by another application.
+ */
+#define INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+    namespace Dialogs { \
+        template class UiFileBasedOptionPage<Ui::SomeClass>; \
+    }
+
+/*!
+ * \brief Instantiates a class declared with BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE inside a given namespace in a convenient way.
+ * \remarks Might be required when the class is used by another application.
+ */
+#define INSTANTIATE_UI_FILE_BASED_OPTION_PAGE_NS(SomeNamespace, SomeClass) \
+    namespace Dialogs { \
+        template class UiFileBasedOptionPage<::SomeNamespace::Ui::SomeClass>; \
+    }
+
+/*!
+ * \brief Declares external instantiation of class declared with BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE in a convenient way.
+ * \remarks Might be required when the class comes from an external library.
+ */
+#define DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+    namespace Dialogs { \
+        namespace Ui { \
+        class SomeClass; \
+        } \
+        extern template class UiFileBasedOptionPage<Ui::SomeClass>; \
+    }
+
+/*!
+ * \brief Declares external instantiation of class declared with BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE inside a given namespace in a convenient way.
+ * \remarks Might be required when the class comes from an external library.
+ */
+#define DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE_NS(SomeNamespace, SomeClass) \
+    namespace SomeNamespace { \
+        namespace Ui { \
+        class SomeClass; \
+        } \
+    } \
+    namespace Dialogs { \
+        extern template class UiFileBasedOptionPage<::SomeNamespace::Ui::SomeClass>; \
+    }
+
+/*!
+ * \brief Declares the method setupWidget() in a convenient way.
+ * \remarks Can be used between BEGIN_DECLARE_OPTION_PAGE and END_DECLARE_OPTION_PAGE.
+ */
 #define DECLARE_SETUP_WIDGETS \
     protected: \
         QWidget *setupWidget(); \
     private:
 
+/*!
+ * \brief Declares a class inheriting from Dialogs::OptionPage in a convenient way.
+ * \remarks Doesn't allow to declare additional class members.
+ */
 #define DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
     BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
     END_DECLARE_OPTION_PAGE
 
+/*!
+ * \brief Declares a class inheriting from Dialogs::UiFileBasedOptionPage in a convenient way.
+ * \remarks Doesn't allow to declare additional class members.
+ */
 #define DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_SETUP(SomeClass) \
     BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
         DECLARE_SETUP_WIDGETS \
