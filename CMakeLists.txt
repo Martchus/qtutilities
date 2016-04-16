@@ -6,15 +6,15 @@ set(HEADER_FILES
     misc/undefxmlparsermacros.h
     misc/trylocker.h
     misc/adoptlocker.h
-    misc/dialogutils.cpp
-    misc/desktoputils.cpp
+    misc/dialogutils.h
+    misc/desktoputils.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
 )
 set(SRC_FILES
-    misc/dialogutils.h
-    misc/desktoputils.h
+    misc/dialogutils.cpp
+    misc/desktoputils.cpp
     models/checklistmodel.cpp
     resources/qtconfigarguments.cpp
     resources/resources.cpp
