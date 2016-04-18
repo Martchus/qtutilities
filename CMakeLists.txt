@@ -39,6 +39,7 @@ set(WIDGETS_HEADER_FILES
     widgets/pathselection.h
     paletteeditor/paletteeditor.h
     paletteeditor/colorbutton.h
+    misc/recentmenumanager.h
 )
 set(WIDGETS_SRC_FILES
     aboutdialog/aboutdialog.cpp
@@ -58,6 +59,7 @@ set(WIDGETS_SRC_FILES
     widgets/pathselection.cpp
     paletteeditor/paletteeditor.cpp
     paletteeditor/colorbutton.cpp
+    misc/recentmenumanager.cpp
 )
 set(WIDGETS_UI_FILES
     aboutdialog/aboutdialog.ui
