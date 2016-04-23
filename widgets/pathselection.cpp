@@ -50,10 +50,10 @@ PathSelection::PathSelection(QWidget *parent) :
     m_lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_lineEdit->installEventFilter(this);
     m_lineEdit->setCompleter(m_completer);
-    m_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    m_button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_button->setText(tr("Select ..."));
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout(this);
     layout->setSpacing(3);
     layout->setMargin(0);
     layout->addWidget(m_lineEdit);
@@ -93,12 +93,24 @@ bool PathSelection::eventFilter(QObject *obj, QEvent *event)
 
 void PathSelection::showFileDialog()
 {
+    QString directory;
+    QFileInfo fileInfo(m_lineEdit->text());
+    if(fileInfo.exists()) {
+        if(fileInfo.isFile()) {
+            directory = fileInfo.absoluteDir().absolutePath();
+        } else {
+            directory = fileInfo.absolutePath();
+        }
+    }
     if(m_customDialog) {
+        m_customDialog->setDirectory(directory);
         if(m_customDialog->exec() == QFileDialog::Accepted) {
-            m_lineEdit->setText(m_customDialog->selectedFiles().join(SEARCH_PATH_SEP_CHAR));
+            m_lineEdit->selectAll();
+            m_lineEdit->insert(m_customDialog->selectedFiles().join(SEARCH_PATH_SEP_CHAR));
         }
     } else {
         QFileDialog dialog(this);
+        dialog.setDirectory(directory);
         dialog.setFileMode(m_customMode);
         if(window()) {
             dialog.setWindowTitle(tr("Select path") % QStringLiteral(" - ") % window()->windowTitle());
@@ -106,7 +118,8 @@ void PathSelection::showFileDialog()
             dialog.setWindowTitle(tr("Select path"));
         }
         if(dialog.exec() == QFileDialog::Accepted) {
-            m_lineEdit->setText(dialog.selectedFiles().join(SEARCH_PATH_SEP_CHAR));
+            m_lineEdit->selectAll();
+            m_lineEdit->insert(dialog.selectedFiles().join(SEARCH_PATH_SEP_CHAR));
         }
     }
 }
