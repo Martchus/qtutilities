@@ -111,9 +111,9 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
 {
     QTranslator *appTranslator = new QTranslator;
     QString fileName = QStringLiteral("%1_%2").arg(applicationName, localeName);
-    if(appTranslator->load(fileName, QStringLiteral("./translations"))) {
+    if(appTranslator->load(fileName, QStringLiteral("."))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if(appTranslator->load(fileName, QStringLiteral("./projects/%1/translations").arg(applicationName))) {
+    } else if(appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if(appTranslator->load(fileName, QStringLiteral("/usr/share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);

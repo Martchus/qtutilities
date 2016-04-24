@@ -17,7 +17,12 @@ if(TS_FILES)
     find_package(Qt5LinguistTools REQUIRED)
 
     # adds the translations and a target for it
-    qt5_add_translation(QM_FILES ${TS_FILES})
+    qt5_create_translation(QM_FILES
+        ${HEADER_FILES} ${SRC_FILES}
+        ${WIDGETS_HEADER_FILES} ${WIDGETS_SRC_FILES} ${WIDGETS_UI_FILES}
+        ${QML_HEADER_FILES} ${QML_SRC_FILES} ${QML_RES_FILES}
+        ${TS_FILES}
+    )
     add_custom_target(${META_PROJECT_NAME}_translations ALL DEPENDS ${QM_FILES})
 
     # add installs and install target for translations
