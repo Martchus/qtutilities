@@ -107,7 +107,7 @@ else()
 endif()
 
 # find c++utilities
-find_package(c++utilities REQUIRED)
+find_package(c++utilities 3.3.0 REQUIRED)
 use_cpp_utilities()
 
 # include modules to apply configuration
