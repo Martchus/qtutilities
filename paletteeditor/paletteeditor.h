@@ -36,7 +36,7 @@ public:
     void setPalette(const QPalette &palette);
     void setPalette(const QPalette &palette, const QPalette &parentPalette);
 
-private slots:
+private Q_SLOTS:
     void on_buildButton_colorChanged(const QColor &);
     void on_activeRadio_clicked();
     void on_inactiveRadio_clicked();
@@ -90,8 +90,10 @@ public:
 
     QPalette::ColorRole colorRole() const { return QPalette::NoRole; }
     void setCompute(bool on) { m_compute = on; }
-signals:
+
+Q_SIGNALS:
     void paletteChanged(const QPalette &palette);
+
 private:
 
     QPalette::ColorGroup columnToGroup(int index) const;
@@ -109,16 +111,20 @@ private:
 class LIB_EXPORT BrushEditor : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit BrushEditor(QWidget *parent = nullptr);
 
     void setBrush(const QBrush &brush);
     QBrush brush() const;
     bool changed() const;
-signals:
+
+Q_SIGNALS:
     void changed(QWidget *widget);
-private slots:
+
+private Q_SLOTS:
     void brushChanged();
+
 private:
     Widgets::ColorButton *m_button;
     bool m_changed;

@@ -130,13 +130,13 @@ void RecentMenuManager::clearEntries()
 void RecentMenuManager::handleActionTriggered()
 {
     if(QAction *action = qobject_cast<QAction *>(sender())) {
-        QString path = action->property("file_path").toString();
+        const QString path = action->property("file_path").toString();
         if(!path.isEmpty()) {
             if(QFile::exists(path)) {
                 emit fileSelected(path);
             } else {
                 QMessageBox msg;
-                msg.setWindowTitle(QCoreApplication::applicationName());
+                msg.setWindowTitle(tr("Recently opened files - ") + QCoreApplication::applicationName());
                 msg.setText(tr("The selected file can't be found anymore. Do you want to delete the obsolete entry from the list?"));
                 msg.setIcon(QMessageBox::Warning);
                 QPushButton *keepEntryButton = msg.addButton(tr("keep entry"), QMessageBox::NoRole);
