@@ -158,4 +158,10 @@ void RecentMenuManager::handleActionTriggered()
     }
 }
 
+/*!
+ * \fn RecentMenuManager::fileSelected()
+ * \brief Emitted after the user selected a file.
+ * \remarks Only emitted when the selected file still existed; otherwise the user is ask whether to keep or delete the entry.
+ */
+
 }

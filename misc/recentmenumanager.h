@@ -17,18 +17,13 @@ class LIB_EXPORT RecentMenuManager : public QObject
 public:
     RecentMenuManager(QMenu *menu, QObject *parent = nullptr);
 
+public Q_SLOTS:
     void restore(const QStringList &savedEntries);
     QStringList save();
-
-public Q_SLOTS:
     void addEntry(const QString &path);
     void clearEntries();
 
 Q_SIGNALS:
-    /*!
-     * \brief Emitted after the user selected a file.
-     * \remarks Only emitted when the selected file still existed; otherwise the user is ask whether to keep or delete the entry.
-     */
     void fileSelected(const QString &path);
 
 private Q_SLOTS:

@@ -146,7 +146,7 @@ public:
 signals:
     void changed(QWidget *widget);
 
-private slots:
+private Q_SLOTS:
     void emitResetProperty();
 
 private:
@@ -164,19 +164,15 @@ class LIB_EXPORT ColorDelegate : public QItemDelegate
 public:
     explicit ColorDelegate(QObject *parent = nullptr);
 
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     void setEditorData(QWidget *ed, const QModelIndex &index) const;
-    void setModelData(QWidget *ed, QAbstractItemModel *model,
-                const QModelIndex &index) const;
+    void setModelData(QWidget *ed, QAbstractItemModel *model, const QModelIndex &index) const;
 
-    void updateEditorGeometry(QWidget *ed,
-                const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void updateEditorGeometry(QWidget *ed, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &opt,
-                       const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const Q_DECL_OVERRIDE;
+    void paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const;
 };
 
 }
