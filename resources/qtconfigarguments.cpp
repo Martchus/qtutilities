@@ -29,10 +29,10 @@ QtConfigArguments::QtConfigArguments() :
     m_qtQuickGuiArg("qt-quick-gui", "q", "shows a Qt quick based graphical user interface"),
     m_lngArg("lang", "l", "sets the language for the Qt GUI"),
     m_qmlDebuggerArg("qmljsdebugger", "qmljsdebugger", "enables QML debugging (see http://doc.qt.io/qt-5/qtquick-debugging.html)"),
-    m_styleArg("style", string(), "sets the Qt widgets style"),
-    m_iconThemeArg("icon-theme", string(), "sets the icon theme and additional theme search paths for the Qt GUI"),
-    m_fontArg("font", string(), "sets the font family and size (point) for the Qt GUI"),
-    m_libraryPathsArg("library-paths", string(), "sets the list of directories to search when loading libraries (all existing paths will be deleted)")
+    m_styleArg("style", nullptr, "sets the Qt widgets style"),
+    m_iconThemeArg("icon-theme", nullptr, "sets the icon theme and additional theme search paths for the Qt GUI"),
+    m_fontArg("font", nullptr, "sets the font family and size (point) for the Qt GUI"),
+    m_libraryPathsArg("library-paths", nullptr, "sets the list of directories to search when loading libraries (all existing paths will be deleted)")
 {
     // language
     m_lngArg.setValueNames({"language"});
