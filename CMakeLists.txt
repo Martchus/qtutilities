@@ -78,6 +78,10 @@ set(CMAKE_MODULE_FILES
     cmake/modules/WebViewProviderConfig.cmake
 )
 
+set(DOC_FILES
+    README.md
+)
+
 # meta data
 set(META_PROJECT_NAME qtutilities)
 set(META_PROJECT_VARNAME QT_UTILITIES)
@@ -87,7 +91,7 @@ set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models.")
 set(META_VERSION_MAJOR 4)
 set(META_VERSION_MINOR 0)
-set(META_VERSION_PATCH 0)
+set(META_VERSION_PATCH 1)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 # required to include CMake modules from own project directory
@@ -116,3 +120,4 @@ include(QtGuiConfig)
 include(QtConfig)
 include(WindowsResources)
 include(LibraryTarget)
+include(Doxygen)

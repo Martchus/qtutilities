@@ -22,10 +22,9 @@ OptionCategoryModel::OptionCategoryModel(QObject *parent) :
 
 /*!
  * \brief Constructs an option category model with the specified \a categories.
- *
- * The model takes ownership over the given categories.
+ * \remarks The model takes ownership over the given categories.
  */
-OptionCategoryModel::OptionCategoryModel(const QList<Dialogs::OptionCategory *> &categories, QObject *parent) :
+OptionCategoryModel::OptionCategoryModel(const QList<OptionCategory *> &categories, QObject *parent) :
     QAbstractListModel(parent),
     m_categories(categories)
 {

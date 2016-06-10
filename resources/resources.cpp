@@ -97,7 +97,7 @@ void loadApplicationTranslationFile(const QString &applicationName)
 /*!
  * \brief Loads and installs the appropriate application translation file for the specified locale.
  * \param applicationName Specifies the name of the application.
- * \param localName Specifies the name of the locale.
+ * \param localeName Specifies the name of the locale.
  * \remarks Translation files have to be placed in one of the following
  *          locations:
  *           - ./translations

@@ -85,11 +85,6 @@ bool OptionPage::matches(const QString &searchKeyWord)
 }
 
 /*!
- * \fn OptionPage::displayName()
- * \brief Returns the display name of the page.
- */
-
-/*!
  * \fn OptionPage::apply()
  * \brief Applies altered settings.
  */

@@ -18,6 +18,7 @@ namespace MiscUtils {
 /*!
  * \brief Constructs a new recent menu manager.
  * \param menu Specifies the QMenu instance to operate with.
+ * \param parent Specifies the parent QObject; might be nullptr.
  * \remarks
  *  - Menu title and icon are set within the constructor.
  *  - The current menu entries are cleared.
