@@ -25,14 +25,14 @@ namespace ApplicationUtilities {
  * \brief Constructs new Qt config arguments.
  */
 QtConfigArguments::QtConfigArguments() :
-    m_qtWidgetsGuiArg("qt-widgets-gui", "g", "shows a Qt widgets based graphical user interface"),
-    m_qtQuickGuiArg("qt-quick-gui", "q", "shows a Qt quick based graphical user interface"),
-    m_lngArg("lang", "l", "sets the language for the Qt GUI"),
-    m_qmlDebuggerArg("qmljsdebugger", "qmljsdebugger", "enables QML debugging (see http://doc.qt.io/qt-5/qtquick-debugging.html)"),
-    m_styleArg("style", nullptr, "sets the Qt widgets style"),
-    m_iconThemeArg("icon-theme", nullptr, "sets the icon theme and additional theme search paths for the Qt GUI"),
-    m_fontArg("font", nullptr, "sets the font family and size (point) for the Qt GUI"),
-    m_libraryPathsArg("library-paths", nullptr, "sets the list of directories to search when loading libraries (all existing paths will be deleted)")
+    m_qtWidgetsGuiArg("qt-widgets-gui", 'g', "shows a Qt widgets based graphical user interface"),
+    m_qtQuickGuiArg("qt-quick-gui", 'q', "shows a Qt quick based graphical user interface"),
+    m_lngArg("lang", 'l', "sets the language for the Qt GUI"),
+    m_qmlDebuggerArg("qmljsdebugger", '\0', "enables QML debugging (see http://doc.qt.io/qt-5/qtquick-debugging.html)"),
+    m_styleArg("style", '\0', "sets the Qt widgets style"),
+    m_iconThemeArg("icon-theme", '\0', "sets the icon theme and additional theme search paths for the Qt GUI"),
+    m_fontArg("font", '\0', "sets the font family and size (point) for the Qt GUI"),
+    m_libraryPathsArg("library-paths", '\0', "sets the list of directories to search when loading libraries (all existing paths will be deleted)")
 {
     // language
     m_lngArg.setValueNames({"language"});
@@ -56,14 +56,14 @@ QtConfigArguments::QtConfigArguments() :
     m_libraryPathsArg.setValueNames({"path 1", "path 2"});
     m_libraryPathsArg.setRequiredValueCount(-1);
     m_libraryPathsArg.setCombinable(true);
-    m_qtWidgetsGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
-    m_qtQuickGuiArg.setSecondaryArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
+    m_qtWidgetsGuiArg.setSubArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
+    m_qtQuickGuiArg.setSubArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
 #if defined GUI_QTWIDGETS
-    m_qtWidgetsGuiArg.setDefault(true);
+    m_qtWidgetsGuiArg.setImplicit(true);
 #elif defined GUI_QTQUICK
-    m_qtQuickGuiArg.setDefault(true);
+    m_qtQuickGuiArg.setImplicit(true);
 #endif
 }
 
@@ -74,11 +74,11 @@ QtConfigArguments::QtConfigArguments() :
 void QtConfigArguments::applySettings() const
 {
     if(m_lngArg.isPresent()) {
-        QLocale::setDefault(QLocale(QString::fromLocal8Bit(m_lngArg.values().front().data())));
+        QLocale::setDefault(QLocale(QString::fromLocal8Bit(m_lngArg.values().front())));
     }
     if(m_styleArg.isPresent()) {
 #ifdef GUI_QTWIDGETS
-        if(QStyle *style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front().data()))) {
+        if(QStyle *style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front()))) {
             QApplication::setStyle(style);
         } else {
             cerr << "Warning: Can not find the specified style." << endl;
@@ -99,14 +99,14 @@ void QtConfigArguments::applySettings() const
                 QStringList searchPaths;
                 searchPaths.reserve(m_iconThemeArg.values().size() - 1);
                 for(; i != end; ++i) {
-                    searchPaths << QString::fromLocal8Bit(i->data());
+                    searchPaths << QString::fromLocal8Bit(*i);
                 }
                 QIcon::setThemeSearchPaths(searchPaths);
 #ifdef Q_OS_WIN32
                 searchPathsPresent = !searchPaths.isEmpty();
 #endif
             }
-            QIcon::setThemeName(QString::fromLocal8Bit(i->data()));
+            QIcon::setThemeName(QString::fromLocal8Bit(*i));
         }
     } else {
         if(qEnvironmentVariableIsSet("ICON_THEME_SEARCH_PATH")) {
@@ -134,7 +134,7 @@ void QtConfigArguments::applySettings() const
 #endif
     if(m_fontArg.isPresent()) {
         QFont font;
-        font.setFamily(QString::fromLocal8Bit(m_fontArg.values().front().data()));
+        font.setFamily(QString::fromLocal8Bit(m_fontArg.values().front()));
         try {
             font.setPointSize(stringToNumber<int>(m_fontArg.values().back()));
         } catch(const ConversionException &) {
@@ -150,7 +150,7 @@ void QtConfigArguments::applySettings() const
         QStringList libraryPaths;
         libraryPaths.reserve(m_libraryPathsArg.values().size());
         for(const auto &path : m_libraryPathsArg.values()) {
-            libraryPaths << QString::fromLocal8Bit(path.data());
+            libraryPaths << QString::fromLocal8Bit(path);
         }
         QCoreApplication::setLibraryPaths(libraryPaths);
     }
