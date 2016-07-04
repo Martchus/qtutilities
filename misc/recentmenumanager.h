@@ -1,5 +1,5 @@
-#ifndef RECENTMENUMANAGER_H
-#define RECENTMENUMANAGER_H
+#ifndef MISC_UTILS_RECENTMENUMANAGER_H
+#define MISC_UTILS_RECENTMENUMANAGER_H
 
 #include <c++utilities/application/global.h>
 
@@ -37,4 +37,4 @@ private:
 
 }
 
-#endif // RECENTMENUMANAGER_H
+#endif // MISC_UTILS_RECENTMENUMANAGER_H

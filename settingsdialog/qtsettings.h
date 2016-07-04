@@ -1,8 +1,8 @@
 // The functions and classes declared in this header are experimental.
 // API/ABI might change in minor release!
 
-#ifndef QT_UTILITIES_QTSETTINGS_H
-#define QT_UTILITIES_QTSETTINGS_H
+#ifndef DIALOGS_QT_UTILITIES_QTSETTINGS_H
+#define DIALOGS_QT_UTILITIES_QTSETTINGS_H
 
 #include "./optionpage.h"
 
@@ -27,4 +27,4 @@ DECLARE_UI_FILE_BASED_OPTION_PAGE(QtEnvOptionPage)
 
 }
 
-#endif // QT_UTILITIES_QTSETTINGS_H
+#endif // DIALOGS_QT_UTILITIES_QTSETTINGS_H

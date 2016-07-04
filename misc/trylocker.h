@@ -1,5 +1,5 @@
-#ifndef TRYLOCKER_H
-#define TRYLOCKER_H
+#ifndef THREADING_UTILS_TRYLOCKER_H
+#define THREADING_UTILS_TRYLOCKER_H
 
 #include <QtGlobal>
 
@@ -54,4 +54,4 @@ private:
 
 }
 
-#endif // TRYLOCKER_H
+#endif // THREADING_UTILS_TRYLOCKER_H

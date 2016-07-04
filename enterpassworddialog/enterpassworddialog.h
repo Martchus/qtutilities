@@ -1,5 +1,5 @@
-#ifndef ENTERPASSWORDDIALOG_H
-#define ENTERPASSWORDDIALOG_H
+#ifndef DIALOGS_ENTERPASSWORDDIALOG_H
+#define DIALOGS_ENTERPASSWORDDIALOG_H
 
 #include <c++utilities/application/global.h>
 
@@ -103,4 +103,4 @@ inline void EnterPasswordDialog::abort()
 
 }
 
-#endif // ENTERPASSWORDDIALOG_H
+#endif // DIALOGS_ENTERPASSWORDDIALOG_H

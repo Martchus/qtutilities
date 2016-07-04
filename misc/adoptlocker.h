@@ -1,5 +1,5 @@
-#ifndef ADOPTLOCKER_H
-#define ADOPTLOCKER_H
+#ifndef THEADING_UTILS_ADOPTLOCKER_H
+#define THEADING_UTILS_ADOPTLOCKER_H
 
 #include <QtGlobal>
 
@@ -35,4 +35,4 @@ private:
 
 }
 
-#endif // ADOPTLOCKER_H
+#endif // THEADING_UTILS_ADOPTLOCKER_H

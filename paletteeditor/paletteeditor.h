@@ -1,5 +1,5 @@
-#ifndef PALETTEEDITOR_H
-#define PALETTEEDITOR_H
+#ifndef WIDGETS_PALETTEEDITOR_H
+#define WIDGETS_PALETTEEDITOR_H
 
 #include "ui_paletteeditor.h"
 
@@ -177,4 +177,4 @@ public:
 
 }
 
-#endif // PALETTEEDITOR_H
+#endif // WIDGETS_PALETTEEDITOR_H

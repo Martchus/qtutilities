@@ -1,5 +1,5 @@
-#ifndef OPTIONSPAGE_H
-#define OPTIONSPAGE_H
+#ifndef DIALOGS_OPTIONSPAGE_H
+#define DIALOGS_OPTIONSPAGE_H
 
 #include <c++utilities/application/global.h>
 
@@ -245,4 +245,4 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
         DECLARE_SETUP_WIDGETS \
     END_DECLARE_OPTION_PAGE
 
-#endif // OPTIONSPAGE_H
+#endif // DIALOGS_OPTIONSPAGE_H

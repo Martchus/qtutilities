@@ -1,5 +1,5 @@
-#ifndef CHECKLISTMODEL_H
-#define CHECKLISTMODEL_H
+#ifndef MODELS_CHECKLISTMODEL_H
+#define MODELS_CHECKLISTMODEL_H
 
 #include <c++utilities/application/global.h>
 
@@ -114,4 +114,4 @@ inline constexpr int ChecklistModel::idRole()
 
 }
 
-#endif // CHECKLISTMODEL_H
+#endif // MODELS_CHECKLISTMODEL_H

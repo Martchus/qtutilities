@@ -1,5 +1,5 @@
-#ifndef ABOUTDIALOG_H
-#define ABOUTDIALOG_H
+#ifndef DIALOGS_ABOUTDIALOG_H
+#define DIALOGS_ABOUTDIALOG_H
 
 #include <c++utilities/application/global.h>
 
@@ -9,8 +9,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QGraphicsScene)
 
-namespace Dialogs
-{
+namespace Dialogs {
 
 namespace Ui {
 class AboutDialog;
@@ -32,5 +31,4 @@ private:
 
 }
 
-
-#endif // ABOUTDIALOG_H
+#endif // DIALOGS_ABOUTDIALOG_H

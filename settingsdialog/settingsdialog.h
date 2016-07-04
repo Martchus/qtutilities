@@ -1,5 +1,5 @@
-#ifndef QT_UTILITIES_SETTINGSDIALOG_H
-#define QT_UTILITIES_SETTINGSDIALOG_H
+#ifndef DIALOGS_SETTINGSDIALOG_H
+#define DIALOGS_SETTINGSDIALOG_H
 
 #include <c++utilities/application/global.h>
 
@@ -94,4 +94,4 @@ inline OptionCategoryModel *SettingsDialog::categoryModel()
 
 }
 
-#endif // QT_UTILITIES_SETTINGSDIALOG_H
+#endif // DIALOGS_SETTINGSDIALOG_H

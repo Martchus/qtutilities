@@ -1,5 +1,5 @@
-#ifndef OPTIONSCATEGORY_H
-#define OPTIONSCATEGORY_H
+#ifndef DIALOGS_OPTIONSCATEGORY_H
+#define DIALOGS_OPTIONSCATEGORY_H
 
 #include <c++utilities/application/global.h>
 
@@ -88,4 +88,4 @@ inline const QList<OptionPage *> OptionCategory::pages() const
 
 }
 
-#endif // OPTIONSCATEGORY_H
+#endif // DIALOGS_OPTIONSCATEGORY_H

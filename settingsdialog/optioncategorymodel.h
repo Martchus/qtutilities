@@ -1,5 +1,5 @@
-#ifndef OPTIONCATEGORYMODEL_H
-#define OPTIONCATEGORYMODEL_H
+#ifndef DIALOGS_OPTIONCATEGORYMODEL_H
+#define DIALOGS_OPTIONCATEGORYMODEL_H
 
 #include <c++utilities/application/global.h>
 
@@ -69,4 +69,4 @@ inline OptionCategory *OptionCategoryModel::category(int row) const
 
 }
 
-#endif // OPTIONCATEGORYMODEL_H
+#endif // DIALOGS_OPTIONCATEGORYMODEL_H

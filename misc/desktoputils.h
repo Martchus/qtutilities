@@ -1,5 +1,5 @@
-#ifndef DESKTOPSERVICES_H
-#define DESKTOPSERVICES_H
+#ifndef DESKTOP_UTILS_DESKTOPSERVICES_H
+#define DESKTOP_UTILS_DESKTOPSERVICES_H
 
 #include <QtGlobal>
 
@@ -11,4 +11,4 @@ bool openLocalFileOrDir(const QString &path);
 
 }
 
-#endif // DESKTOPSERVICES_H
+#endif // DESKTOP_UTILS_DESKTOPSERVICES_H

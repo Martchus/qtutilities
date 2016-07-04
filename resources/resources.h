@@ -1,5 +1,5 @@
-#ifndef RESOURCES_H
-#define RESOURCES_H
+#ifndef APPLICATION_UTILITIES_RESOURCES_H
+#define APPLICATION_UTILITIES_RESOURCES_H
 
 #include <c++utilities/application/global.h>
 
@@ -52,4 +52,4 @@ LIB_EXPORT QString locateConfigFile(const QString &applicationName, const QStrin
 
 }
 
-#endif // RESOURCES_H
+#endif // APPLICATION_UTILITIES_RESOURCES_H

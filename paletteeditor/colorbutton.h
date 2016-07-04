@@ -1,5 +1,5 @@
-#ifndef COLORBUTTON_H
-#define COLORBUTTON_H
+#ifndef WIDGETS_COLORBUTTON_H
+#define WIDGETS_COLORBUTTON_H
 
 #include <c++utilities/application/global.h>
 
@@ -50,4 +50,4 @@ private:
 
 }
 
-#endif
+#endif // WIDGETS_COLORBUTTON_H

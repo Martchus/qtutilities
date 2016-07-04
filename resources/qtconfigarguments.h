@@ -1,5 +1,5 @@
-#ifndef QTCONFIGARGUMENTS_H
-#define QTCONFIGARGUMENTS_H
+#ifndef APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
+#define APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
 
 #include <c++utilities/application/argumentparser.h>
 
@@ -62,10 +62,10 @@ inline bool QtConfigArguments::areQtGuiArgsPresent() const
 
 }
 
-#endif // QTCONFIGARGUMENTS_H
+#endif // APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
 
 #ifdef QT_CONFIG_ARGUMENTS
-#undef QT_CONFIG_ARGUMENTS
+# undef QT_CONFIG_ARGUMENTS
 #endif
 #define QT_CONFIG_ARGUMENTS ApplicationUtilities::QtConfigArguments
 
