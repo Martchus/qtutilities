@@ -1,8 +1,8 @@
 # after including this module, AppConfig must be included
 
 # enable Qt Widgets GUI
-set(WIDGETS_GUI "yes" CACHE STRING "enables/disables building the Qt Widgets GUI: yes (default) or no")
-if(${WIDGETS_GUI} STREQUAL "yes")
+option(WIDGETS_GUI "enables/disables building the Qt Widgets GUI: yes (default) or no" ON)
+if(WIDGETS_GUI)
     add_definitions(
         -DGUI_QTWIDGETS
         -DMODEL_UNDO_SUPPORT
@@ -15,15 +15,13 @@ if(${WIDGETS_GUI} STREQUAL "yes")
     else()
         message(STATUS "Qt Widgets GUI is not available.")
     endif()
-elseif(${WIDGETS_GUI} STREQUAL "no")
-    message(STATUS "Building WITHOUT Qt Widgets GUI.")
 else()
-    message(FATAL_ERROR "Specification whether to build with Qt Widgets GUI is invalid (must be either yes or no).")
+    message(STATUS "Building WITHOUT Qt Widgets GUI.")
 endif()
 
 # enable Qt Quick GUI
-set(QUICK_GUI "yes" CACHE STRING "enables/disables building the Qt Quick GUI: yes (default) or no")
-if(${QUICK_GUI} STREQUAL "yes")
+option(QUICK_GUI "enables/disables building the Qt Quick GUI: yes (default) or no" ON)
+if(QUICK_GUI)
     add_definitions(
         -DGUI_QTQUICK
     )
@@ -35,10 +33,8 @@ if(${QUICK_GUI} STREQUAL "yes")
     else()
         message(STATUS "Qt Quick GUI is not available.")
     endif()
-elseif(${QUICK_GUI} STREQUAL "no")
-    message(STATUS "Building WITHOUT Qt Quick GUI.")
 else()
-    message(FATAL_ERROR "Specification whether to build with Qt Quick GUI is invalid (must be either yes or no).")
+    message(STATUS "Building WITHOUT Qt Quick GUI.")
 endif()
 
 # set "GUI-type" to WIN32 to hide console under windows
