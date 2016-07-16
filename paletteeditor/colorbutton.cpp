@@ -9,6 +9,10 @@
 
 namespace Widgets {
 
+/*!
+ * \cond
+ */
+
 class ColorButtonPrivate
 {
     ColorButton *q_ptr;
@@ -75,7 +79,9 @@ QPixmap ColorButtonPrivate::generatePixmap() const
     return pix;
 }
 
-///////////////
+/*!
+ * \endcond
+ */
 
 ColorButton::ColorButton(QWidget *parent)
     : QToolButton(parent), d_ptr(new ColorButtonPrivate)

@@ -9,12 +9,18 @@ QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QStringList)
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
+/*!
+ * \brief Sets the application meta data in the QCoreApplication singleton.
+ */
 #define SET_QT_APPLICATION_INFO \
     QCoreApplication::setOrganizationName(QStringLiteral(APP_AUTHOR)); \
     QCoreApplication::setOrganizationDomain(QStringLiteral(APP_URL)); \
     QCoreApplication::setApplicationName(QStringLiteral(APP_NAME)); \
     QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION))
 
+/*!
+ * \brief Loads translations for Qt and the application.
+ */
 #define LOAD_QT_TRANSLATIONS \
     TranslationFiles::loadQtTranslationFile(); \
     TranslationFiles::loadApplicationTranslationFile(QStringLiteral(PROJECT_NAME))
@@ -29,6 +35,7 @@ LIB_EXPORT void cleanup();
 namespace TranslationFiles {
 
 LIB_EXPORT void loadQtTranslationFile();
+LIB_EXPORT void loadQtTranslationFile(const QString &localeName);
 LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName);
 LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
 

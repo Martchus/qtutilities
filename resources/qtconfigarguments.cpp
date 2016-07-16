@@ -89,9 +89,6 @@ void QtConfigArguments::applySettings() const
 # endif
 #endif
     }
-#ifdef Q_OS_WIN32
-    bool searchPathsPresent = false;
-#endif
     if(m_iconThemeArg.isPresent()) {
         auto i = m_iconThemeArg.values().cbegin(), end = m_iconThemeArg.values().end();
         if(i != end) {
@@ -101,10 +98,13 @@ void QtConfigArguments::applySettings() const
                 for(; i != end; ++i) {
                     searchPaths << QString::fromLocal8Bit(*i);
                 }
-                QIcon::setThemeSearchPaths(searchPaths);
 #ifdef Q_OS_WIN32
-                searchPathsPresent = !searchPaths.isEmpty();
+                if(searchPaths.isEmpty()) {
+                    searchPaths << QStringLiteral("../share/icons");
+                }
 #endif
+                searchPaths << QStringLiteral(":/icons");
+                QIcon::setThemeSearchPaths(searchPaths);
             }
             QIcon::setThemeName(QString::fromLocal8Bit(*i));
         }
@@ -112,10 +112,9 @@ void QtConfigArguments::applySettings() const
         if(qEnvironmentVariableIsSet("ICON_THEME_SEARCH_PATH")) {
             QString path;
             path.append(qgetenv("ICON_THEME_SEARCH_PATH"));
-            QIcon::setThemeSearchPaths(QStringList() << path);
-#ifdef Q_OS_WIN32
-            searchPathsPresent = true;
-#endif
+            QIcon::setThemeSearchPaths(QStringList() << path << QStringLiteral(":/icons"));
+        } else {
+            QIcon::setThemeSearchPaths(QStringList() << QStringLiteral("../share/icons") << QStringLiteral(":/icons"));
         }
         if(qEnvironmentVariableIsSet("ICON_THEME")) {
             QString themeName;
@@ -125,9 +124,6 @@ void QtConfigArguments::applySettings() const
     }
 #ifdef Q_OS_WIN32
     // default configuration under Windows
-    if(!searchPathsPresent) {
-        QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral("../share/icons"));
-    }
     if(QIcon::themeName().isEmpty()) {
         QIcon::setThemeName(QStringLiteral("default"));
     }

@@ -1,5 +1,7 @@
 #include "./resources.h"
 
+#include "resources/config.h"
+
 #include <QString>
 #include <QLocale>
 #include <QTranslator>
@@ -25,9 +27,18 @@
 
 using namespace std;
 
+/*!
+ * \cond
+ */
 void qInitResources_qtutilsicons();
 void qCleanupResources_qtutilsicons();
+/*!
+ * \endcond
+ */
 
+/*!
+ * \brief Functions for using the resources provided by this library.
+ */
 namespace QtUtilitiesResources {
 
 /*!
@@ -48,48 +59,68 @@ void cleanup()
 
 }
 
+/*!
+ * \brief Convenience functions to load translations for Qt and the application.
+ */
 namespace TranslationFiles {
-
-bool hasEnglishTranslator = false;
 
 /*!
  * \brief Loads and installs the appropriate Qt translation file for the current locale.
+ * \remarks
+ *  - Translation files have to be placed in one of the following locations:
+ *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
+ *    * ../share/qt/translations (used in Windows)
+ *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
  */
 void loadQtTranslationFile()
 {
-    QLocale locale;
-    if(locale.language() != QLocale::English) {
-        QTranslator *qtTranslator = new QTranslator;
-        if(qtTranslator->load(QStringLiteral("qt_%1").arg(locale.name()),
-                              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
-            QCoreApplication::installTranslator(qtTranslator);
-        } else if(qtTranslator->load(QStringLiteral("qt_%1").arg(locale.name()), QStringLiteral("../share/qt/translations"))) {
-            // used in Windows
-            QCoreApplication::installTranslator(qtTranslator);
-        } else {
-            delete qtTranslator;
-            cout << "Unable to load Qt translation file for the language " << locale.name().toStdString() << "." << endl;
-        }
+    // load translation files for current locale
+    loadQtTranslationFile(QLocale().name());
+}
+
+/*!
+ * \brief Loads and installs the appropriate Qt translation file for the specified locale.
+ * \param localeName Specifies the name of the locale.
+ * \remarks
+ *  - Translation files have to be placed in one of the following locations:
+ *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
+ *    * ../share/qt/translations (used in Windows)
+ *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
+ */
+void loadQtTranslationFile(const QString &localeName)
+{
+    QTranslator *qtTranslator = new QTranslator;
+    const QString fileName(QStringLiteral("qtbase_%1").arg(localeName));
+    if(qtTranslator->load(fileName,
+                          QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+        QCoreApplication::installTranslator(qtTranslator);
+    } else if(qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
+        // used in Windows
+        QCoreApplication::installTranslator(qtTranslator);
+    } else if(qtTranslator->load(fileName, QStringLiteral(":/translations"))) {
+        QCoreApplication::installTranslator(qtTranslator);
+    } else {
+        delete qtTranslator;
+        cerr << "Unable to load Qt translation file for the language " << localeName.toLocal8Bit().data() << "." << endl;
     }
 }
 
 /*!
  * \brief Loads and installs the appropriate application translation file for the current locale.
  * \param applicationName Specifies the name of the application.
- * \remarks Translation files have to be placed in one of the following
- *          locations:
- *           - ./translations
- *           - /usr/share/$application/translations (used in UNIX)
- *           - ../share/$application/translations (used in Windows)
- *           - ./projects/%1/translations (used during developement with subdirs project)
- *          Translation files must be named using the following scheme:
- *           - $application_$language.qm
+ * \remarks
+ *  - Translation files have to be placed in one of the following locations:
+ *    * ./translations
+ *    * /usr/share/$application/translations (used in UNIX)
+ *    * ../share/$application/translations (used in Windows)
+ *  - Translation files must be named using the following scheme:
+ *    * $application_$language.qm
+ *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
  */
 void loadApplicationTranslationFile(const QString &applicationName)
 {
     // load English translation files as fallback
     loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
-    hasEnglishTranslator = true;
     // load translation files for current locale
     loadApplicationTranslationFile(applicationName, QLocale().name());
 }
@@ -98,46 +129,46 @@ void loadApplicationTranslationFile(const QString &applicationName)
  * \brief Loads and installs the appropriate application translation file for the specified locale.
  * \param applicationName Specifies the name of the application.
  * \param localeName Specifies the name of the locale.
- * \remarks Translation files have to be placed in one of the following
- *          locations:
- *           - ./translations
- *           - /usr/share/$application/translations (used in UNIX)
- *           - ../share/$application/translations (used in Windows)
- *           - ./projects/%1/translations (used during developement with subdirs project)
- *          Translation files must be named using the following scheme:
- *           - $application_$language.qm
+ * \remarks
+ *  - Translation files have to be placed in one of the following locations:
+ *    * ./translations
+ *    * /usr/share/$application/translations (used in UNIX)
+ *    * ../share/$application/translations (used in Windows)
+ *  - Translation files must be named using the following scheme:
+ *    * $application_$language.qm
+ *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
  */
 void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
 {
     QTranslator *appTranslator = new QTranslator;
-    QString fileName = QStringLiteral("%1_%2").arg(applicationName, localeName);
+    const QString fileName(QStringLiteral("%1_%2").arg(applicationName, localeName));
     if(appTranslator->load(fileName, QStringLiteral("."))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if(appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if(appTranslator->load(fileName, QStringLiteral("/usr/share/%1/translations").arg(applicationName))) {
+    } else if(appTranslator->load(fileName, QStringLiteral(APP_INSTALL_PREFIX "/share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if(appTranslator->load(fileName, QStringLiteral("../share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
+    } else if(appTranslator->load(fileName, QStringLiteral(":/translations"))) {
+        QCoreApplication::installTranslator(appTranslator);
     } else {
         delete appTranslator;
-        if(localeName != QStringLiteral("en_US")) {
-            cout << "Unable to load application translation file for the language \"" << localeName.toStdString() << "\", falling back to language \"en_US\"." << endl;
-            if(!hasEnglishTranslator) {
-                loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
-                hasEnglishTranslator = true;
-            }
-        } else {
-            cout << "Unable to load application translation file for the language \"" << localeName.toStdString() << "\"." << endl;
-        }
+        cerr << "Unable to load application translation file for the language \"" << localeName.toLocal8Bit().data() << "\"." << endl;
     }
 }
 
 }
 
+/*!
+ * \brief Convenience functions to check whether a QCoreApplication/QGuiApplication/QApplication singleton has been instantiated yet.
+ */
 namespace ApplicationInstances {
 
 #if defined(GUI_QTWIDGETS)
+/*!
+ * \brief Returns whether a QApplication has been instantiated yet.
+ */
 bool hasWidgetsApp()
 {
     return qobject_cast<QApplication *>(QCoreApplication::instance()) != nullptr;
@@ -145,12 +176,18 @@ bool hasWidgetsApp()
 #endif
 
 #if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
+/*!
+ * \brief Returns whether a QGuiApplication has been instantiated yet.
+ */
 bool hasGuiApp()
 {
     return qobject_cast<QGuiApplication *>(QCoreApplication::instance()) != nullptr;
 }
 #endif
 
+/*!
+ * \brief Returns whether a QCoreApplication has been instantiated yet.
+ */
 bool hasCoreApp()
 {
     return qobject_cast<QCoreApplication *>(QCoreApplication::instance()) != nullptr;
@@ -158,8 +195,15 @@ bool hasCoreApp()
 
 }
 
+/*!
+ * \brief Provides convenience functions for handling config files.
+ */
 namespace ConfigFile {
 
+/*!
+ * \brief Locates the config file with the specified \a fileName for the application with the specified \a applicationName.
+ * \remarks If \a settings is not nullptr, the path provided by that object is also considered.
+ */
 QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings)
 {
     // check whether the file is in the current working directory
