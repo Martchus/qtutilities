@@ -3,7 +3,6 @@
 #include <QStylePainter>
 #include <QStyleOptionFocusRect>
 #include <QKeyEvent>
-#include <QDebug>
 
 namespace Widgets {
 
