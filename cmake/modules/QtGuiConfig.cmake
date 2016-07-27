@@ -39,9 +39,13 @@ else()
 endif()
 
 # set "GUI-type" to WIN32 to hide console under windows
-if(WIN32)
-    if(${WIDGETS_GUI} STREQUAL "yes" OR ${QUICK_GUI} STREQUAL "yes")
-        list(APPEND QT_MODULES Gui)
-        set(GUI_TYPE WIN32)
-    endif()
+if(WIN32 AND (WIDGETS_GUI OR QUICK_GUI))
+    list(APPEND QT_MODULES Gui)
+    set(GUI_TYPE WIN32)
+endif()
+
+# add source files requried by both GUI variants
+if(WIDGETS_GUI OR QUICK_GUI)
+    list(APPEND SRC_FILES ${GUI_SRC_FILES})
+    list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
 endif()

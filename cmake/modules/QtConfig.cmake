@@ -14,6 +14,37 @@ if(KF_MODULES)
     list(REMOVE_DUPLICATES KF_MODULES)
 endif()
 
+# check whether D-Bus interfaces need to be processed
+if(DBUS_FILES)
+    message(STATUS "Project has D-Bus interface declarations which will be processed.")
+    # the D-Bus Qt module is required
+    list(APPEND QT_MODULES DBus)
+endif()
+
+# currently linking statically against Qt with CMake seems not to be officially supported
+set(QT_LINKAGE "SHARED") # hence always to link dynamically, no matter whether STATIC_LINKAGE is set
+
+# this kind of selection between static/shared Qt would be nice but has not been not implemented (yet) on the Qt side
+if((("${QT_LINKAGE}" STREQUAL "AUTO_LINKAGE" AND ((STATIC_LINKAGE AND "${META_PROJECT_TYPE}" STREQUAL "application") OR (STATIC_LIBRARY_LINKAGE AND ("${META_PROJECT_TYPE}" STREQUAL "" OR "${META_PROJECT_TYPE}" STREQUAL "library")))) OR ("${QT_LINKAGE}" STREQUAL "STATIC")))
+    set(USE_STATIC_QT_BUILD ON)
+    message(STATUS "Linking ${META_PROJECT_NAME} statically against Qt 5.")
+elseif(("${QT_LINKAGE}" STREQUAL "AUTO_LINKAGE" OR ("${LINKAGE}" STREQUAL "SHARED")))
+    set(USE_STATIC_QT_BUILD OFF)
+    message(STATUS "Linking ${META_PROJECT_NAME} dynamically against Qt 5.")
+endif()
+
+# actually find the required Qt/KF modules
+foreach(QT_MODULE ${QT_MODULES})
+    find_package(Qt5${QT_MODULE} REQUIRED)
+    list(APPEND LIBRARIES Qt5::${QT_MODULE})
+    list(APPEND STATIC_LIBRARIES Qt5::${QT_MODULE})
+endforeach()
+foreach(KF_MODULE ${KF_MODULES})
+    find_package(KF5${KF_MODULE} REQUIRED)
+    list(APPEND LIBRARIES KF5::${KF_MODULE})
+    list(APPEND STATIC_LIBRARIES KF5::${KF_MODULE})
+endforeach()
+
 # enable lrelease and add install target for localization
 if(TS_FILES)
     message(STATUS "Project has translations which will be released.")
@@ -77,24 +108,6 @@ if(TS_FILES)
     endif()
 endif()
 
-# check whether D-Bus interfaces need to be processed
-if(DBUS_FILES)
-    message(STATUS "Project has D-Bus interface declarations which will be processed.")
-    # the D-Bus Qt module is required
-    list(APPEND QT_MODULES DBus)
-endif()
-
-# actually find the required Qt/KF modules
-foreach(QT_MODULE ${QT_MODULES})
-    find_package(Qt5${QT_MODULE} REQUIRED)
-    list(APPEND LIBRARIES Qt5::${QT_MODULE})
-endforeach()
-
-foreach(KF_MODULE ${KF_MODULES})
-    find_package(KF5${KF_MODULE} REQUIRED)
-    list(APPEND LIBRARIES KF5::${KF_MODULE})
-endforeach()
-
 # generate DBus interfaces
 if(DBUS_FILES)
     qt5_add_dbus_interfaces(SRC_FILES ${DBUS_FILES})
@@ -154,6 +167,7 @@ if(REQUIRED_ICONS)
             endforeach()
         endforeach()
         set(BUILTIN_ICON_THEMES_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/icons/builtinicons.qrc")
+        list(REMOVE_DUPLICATES ICON_THEME_FILES)
         string(CONCAT BUILTIN_ICON_THEMES_QRC_FILE_CONTENT "<RCC><qresource prefix=\"/icons\">" ${ICON_THEME_FILES} "</qresource></RCC>")
         file(WRITE "${BUILTIN_ICON_THEMES_QRC_FILE}" "${BUILTIN_ICON_THEMES_QRC_FILE_CONTENT}")
         list(APPEND RES_FILES "${BUILTIN_ICON_THEMES_QRC_FILE}")
