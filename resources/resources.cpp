@@ -27,14 +27,15 @@
 
 using namespace std;
 
-/*!
- * \cond
- */
-void qInitResources_qtutilsicons();
-void qCleanupResources_qtutilsicons();
-/*!
- * \endcond
- */
+///! \cond
+inline void initResources() {
+    Q_INIT_RESOURCE(resources_qtutilsicons);
+}
+
+inline void cleanupResources() {
+    Q_CLEANUP_RESOURCE(resources_qtutilsicons);
+}
+///! \endcond
 
 /*!
  * \brief Functions for using the resources provided by this library.
@@ -46,7 +47,7 @@ namespace QtUtilitiesResources {
  */
 void init()
 {
-    qInitResources_qtutilsicons();
+    initResources();
 }
 
 /*!
@@ -54,7 +55,7 @@ void init()
  */
 void cleanup()
 {
-    qCleanupResources_qtutilsicons();
+    cleanupResources();
 }
 
 }
@@ -71,6 +72,8 @@ namespace TranslationFiles {
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
  *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
+ *  - Currently this loads only the translations file for the modules in the base repository.
+ *    TODO: load translations for further modules
  */
 void loadQtTranslationFile()
 {
@@ -86,6 +89,8 @@ void loadQtTranslationFile()
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
  *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
+ *  - Currently this loads only the translations file for the modules in the base repository.
+ *    TODO: load translations for further modules
  */
 void loadQtTranslationFile(const QString &localeName)
 {
