@@ -5,6 +5,8 @@
 
 #include <QtGlobal>
 
+#include <initializer_list>
+
 QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QStringList)
 QT_FORWARD_DECLARE_CLASS(QSettings)
@@ -22,7 +24,7 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
  * \brief Loads translations for Qt and the application.
  */
 #define LOAD_QT_TRANSLATIONS \
-    TranslationFiles::loadQtTranslationFile(); \
+    TranslationFiles::loadQtTranslationFile(QT_TRANSLATION_FILES); \
     TranslationFiles::loadApplicationTranslationFile(QStringLiteral(PROJECT_NAME))
 
 namespace QtUtilitiesResources {
@@ -34,8 +36,8 @@ LIB_EXPORT void cleanup();
 
 namespace TranslationFiles {
 
-LIB_EXPORT void loadQtTranslationFile();
-LIB_EXPORT void loadQtTranslationFile(const QString &localeName);
+LIB_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames);
+LIB_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames, const QString &localeName);
 LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName);
 LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
 

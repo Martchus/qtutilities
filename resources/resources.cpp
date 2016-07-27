@@ -29,11 +29,11 @@ using namespace std;
 
 ///! \cond
 inline void initResources() {
-    Q_INIT_RESOURCE(resources_qtutilsicons);
+    Q_INIT_RESOURCE(qtutilsicons);
 }
 
 inline void cleanupResources() {
-    Q_CLEANUP_RESOURCE(resources_qtutilsicons);
+    Q_CLEANUP_RESOURCE(qtutilsicons);
 }
 ///! \endcond
 
@@ -67,6 +67,7 @@ namespace TranslationFiles {
 
 /*!
  * \brief Loads and installs the appropriate Qt translation file for the current locale.
+ * \param repositoryNames Specifies the names of the Qt repositories to load translations for (eg. qtbase, qtscript, ...).
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
@@ -75,14 +76,14 @@ namespace TranslationFiles {
  *  - Currently this loads only the translations file for the modules in the base repository.
  *    TODO: load translations for further modules
  */
-void loadQtTranslationFile()
+void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
 {
-    // load translation files for current locale
-    loadQtTranslationFile(QLocale().name());
+    loadQtTranslationFile(repositoryNames, QLocale().name());
 }
 
 /*!
  * \brief Loads and installs the appropriate Qt translation file for the specified locale.
+ * \param repositoryNames Specifies the names of the Qt repositories to load translations for (eg. qtbase, qtscript, ...).
  * \param localeName Specifies the name of the locale.
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
@@ -90,23 +91,24 @@ void loadQtTranslationFile()
  *    * ../share/qt/translations (used in Windows)
  *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
  *  - Currently this loads only the translations file for the modules in the base repository.
- *    TODO: load translations for further modules
  */
-void loadQtTranslationFile(const QString &localeName)
+void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
-    QTranslator *qtTranslator = new QTranslator;
-    const QString fileName(QStringLiteral("qtbase_%1").arg(localeName));
-    if(qtTranslator->load(fileName,
-                          QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
-        QCoreApplication::installTranslator(qtTranslator);
-    } else if(qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
-        // used in Windows
-        QCoreApplication::installTranslator(qtTranslator);
-    } else if(qtTranslator->load(fileName, QStringLiteral(":/translations"))) {
-        QCoreApplication::installTranslator(qtTranslator);
-    } else {
-        delete qtTranslator;
-        cerr << "Unable to load Qt translation file for the language " << localeName.toLocal8Bit().data() << "." << endl;
+    for(const QString &repoName : repositoryNames) {
+        QTranslator *qtTranslator = new QTranslator;
+        const QString fileName(repoName % QChar('_') % localeName);
+        if(qtTranslator->load(fileName,
+                              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+            QCoreApplication::installTranslator(qtTranslator);
+        } else if(qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
+            // used in Windows
+            QCoreApplication::installTranslator(qtTranslator);
+        } else if(qtTranslator->load(fileName, QStringLiteral(":/translations"))) {
+            QCoreApplication::installTranslator(qtTranslator);
+        } else {
+            delete qtTranslator;
+            cerr << "Unable to load translation file for Qt repository " << repoName.toLocal8Bit().data() << " and language " << localeName.toLocal8Bit().data() << "." << endl;
+        }
     }
 }
 
