@@ -164,7 +164,7 @@ void SettingsDialog::updateTabWidget()
 {
     if(m_currentCategory) {
         m_ui->pagesTabWidget->setUpdatesEnabled(false);
-        QString searchKeyWord = m_ui->filterLineEdit->text();
+        const QString searchKeyWord = m_ui->filterLineEdit->text();
         int index = 0;
         for(OptionPage *page : m_currentCategory->pages()) {
             if(page->matches(searchKeyWord)) {
@@ -185,8 +185,8 @@ void SettingsDialog::updateTabWidget()
                     page->widget()->layout()->setAlignment(Qt::AlignTop | Qt::AlignLeft);
                 }
                 scrollArea->setWidget(page->widget());
+                ++index;
             }
-            ++index;
         }
         while(index < m_ui->pagesTabWidget->count()) {
             QScrollArea *scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
