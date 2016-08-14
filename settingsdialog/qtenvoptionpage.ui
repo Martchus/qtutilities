@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>336</width>
-    <height>66</height>
+    <width>515</width>
+    <height>243</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,36 +16,69 @@
   <property name="styleSheet">
    <string notr="true">QGroupBox { font-weight: bold };</string>
   </property>
-  <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="pluginDirLabel">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="pluginDirLabel">
+       <property name="text">
+        <string>Additional plugin directory</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="Widgets::PathSelection" name="pluginPathSelection" native="true"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="iconThemePathLabel">
+       <property name="text">
+        <string>Additional icon theme search path</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="Widgets::PathSelection" name="iconThemeSearchPathSelection" native="true"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="translationsSearchPathLabel">
+       <property name="text">
+        <string>Additional translation search path</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="Widgets::PathSelection" name="translationPathSelection" native="true"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>Additional plugin directory</string>
+      <string>These settings take effect after restarting the application.</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
      </property>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="Widgets::PathSelection" name="pluginPathSelection" native="true"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="iconThemePathLabel">
-     <property name="text">
-      <string>Additional icon theme path</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="Widgets::PathSelection" name="iconThemePathSelection" native="true"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="translationsPathLabel">
-     <property name="text">
-      <string>Additional translations path</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="Widgets::PathSelection" name="translationPathSelection" native="true"/>
    </item>
   </layout>
  </widget>

@@ -70,8 +70,9 @@ QtConfigArguments::QtConfigArguments() :
 /*!
  * \brief Applies the settings from the arguments.
  * \remarks Also checks environment variables for the icon theme.
+ * \param preventApplyingDefaultFont If true, the font will not be updated to some default value if no font has been specified explicitly.
  */
-void QtConfigArguments::applySettings() const
+void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
 {
     if(m_lngArg.isPresent()) {
         QLocale::setDefault(QLocale(QString::fromLocal8Bit(m_lngArg.values().front())));
@@ -137,11 +138,14 @@ void QtConfigArguments::applySettings() const
             cerr << "Warning: The specified font size is no number and will be ignored." << endl;
         }
         QGuiApplication::setFont(font);
-    } else {
-#ifdef Q_OS_WIN32
-        QGuiApplication::setFont(QFont(QStringLiteral("Segoe UI"), 9));
-#endif
     }
+#ifdef Q_OS_WIN32
+    else if(!preventApplyingDefaultFont) {
+        QGuiApplication::setFont(QFont(QStringLiteral("Segoe UI"), 9));
+    }
+#else
+    VAR_UNUSED(preventApplyingDefaultFont)
+#endif
     if(m_libraryPathsArg.isPresent()) {
         QStringList libraryPaths;
         libraryPaths.reserve(m_libraryPathsArg.values().size());

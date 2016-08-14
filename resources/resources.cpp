@@ -66,6 +66,16 @@ void cleanup()
 namespace TranslationFiles {
 
 /*!
+ * \brief Allows to set an additional search path for translation files.
+ * \remarks This path is considered *before* the default directories.
+ */
+QString &additionalTranslationFilePath()
+{
+    static QString path;
+    return path;
+}
+
+/*!
  * \brief Loads and installs the appropriate Qt translation file for the current locale.
  * \param repositoryNames Specifies the names of the Qt repositories to load translations for (eg. qtbase, qtscript, ...).
  * \remarks
@@ -97,8 +107,9 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
     for(const QString &repoName : repositoryNames) {
         QTranslator *qtTranslator = new QTranslator;
         const QString fileName(repoName % QChar('_') % localeName);
-        if(qtTranslator->load(fileName,
-                              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+        if(!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, additionalTranslationFilePath())) {
+            QCoreApplication::installTranslator(qtTranslator);
+        } else if(qtTranslator->load(fileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
             QCoreApplication::installTranslator(qtTranslator);
         } else if(qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
             // used in Windows
@@ -129,7 +140,9 @@ void loadApplicationTranslationFile(const QString &applicationName)
     // load English translation files as fallback
     loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
     // load translation files for current locale
-    loadApplicationTranslationFile(applicationName, QLocale().name());
+    if(QLocale().name() != QLatin1String("en_US")) {
+        loadApplicationTranslationFile(applicationName, QLocale().name());
+    }
 }
 
 /*!
@@ -149,7 +162,9 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
 {
     QTranslator *appTranslator = new QTranslator;
     const QString fileName(QStringLiteral("%1_%2").arg(applicationName, localeName));
-    if(appTranslator->load(fileName, QStringLiteral("."))) {
+    if(!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, additionalTranslationFilePath())) {
+        QCoreApplication::installTranslator(appTranslator);
+    } else if(appTranslator->load(fileName, QStringLiteral("."))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if(appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);

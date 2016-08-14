@@ -15,7 +15,7 @@ public:
     Argument &languageArg();
 
     bool areQtGuiArgsPresent() const;
-    void applySettings() const;
+    void applySettings(bool preventApplyingDefaultFont = false) const;
 
 private:
     Argument m_qtWidgetsGuiArg;

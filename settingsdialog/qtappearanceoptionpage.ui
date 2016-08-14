@@ -2,162 +2,250 @@
 <ui version="4.0">
  <class>Dialogs::QtAppearanceOptionPage</class>
  <widget class="QWidget" name="Dialogs::QtAppearanceOptionPage">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>430</width>
-    <height>172</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Appearance</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox { font-weight: bold };</string>
   </property>
-  <layout class="QGridLayout" name="mainGridLayout">
-   <item row="3" column="0">
-    <widget class="QLabel" name="styleSheetLabel">
-     <property name="text">
-      <string>Style sheet</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2" alignment="Qt::AlignHCenter">
-    <widget class="QCheckBox" name="fontCheckBox">
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QComboBox" name="widgetStyleComboBox">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QToolButton" name="paletteToolButton">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>select ...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="widgetStyleLabel">
-     <property name="text">
-      <string>Widget style</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <layout class="QHBoxLayout" name="fontHorizontalLayout">
-     <property name="spacing">
-      <number>4</number>
-     </property>
-     <item>
-      <widget class="QFontComboBox" name="fontComboBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="2">
+      <widget class="QLabel" name="useDefaultLabel">
+       <property name="text">
+        <string>Use system default</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="fontPushButton">
+     <item row="1" column="0">
+      <widget class="QLabel" name="fontLabel">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Font</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout" name="fontHorizontalLayout">
+       <property name="spacing">
+        <number>4</number>
+       </property>
+       <item>
+        <widget class="QFontComboBox" name="fontComboBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="fontPushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>More options ...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="2" alignment="Qt::AlignHCenter">
+      <widget class="QCheckBox" name="fontCheckBox">
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="widgetStyleLabel">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Widget style</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="widgetStyleComboBox">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" alignment="Qt::AlignHCenter">
+      <widget class="QCheckBox" name="widgetStyleCheckBox">
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="styleSheetLabel">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
-        <string>More options ...</string>
+        <string>Style sheet</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="Widgets::PathSelection" name="styleSheetPathSelection" native="true">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" alignment="Qt::AlignHCenter">
+      <widget class="QCheckBox" name="styleSheetCheckBox">
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="paletteLabel">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Palette</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QToolButton" name="paletteToolButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>select ...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2" alignment="Qt::AlignHCenter">
+      <widget class="QCheckBox" name="paletteCheckBox">
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="iconThemeLabel">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Icon theme</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QComboBox" name="iconThemeComboBox">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2" alignment="Qt::AlignHCenter">
+      <widget class="QCheckBox" name="iconThemeCheckBox">
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="paletteLabel">
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>Palette</string>
+      <string>These settings take effect after restarting the application.</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="fontLabel">
-     <property name="text">
-      <string>Font</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QLabel" name="useDefaultLabel">
-     <property name="text">
-      <string>Use system default</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2" alignment="Qt::AlignHCenter">
-    <widget class="QCheckBox" name="widgetStyleCheckBox">
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2" alignment="Qt::AlignHCenter">
-    <widget class="QCheckBox" name="styleSheetCheckBox">
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2" alignment="Qt::AlignHCenter">
-    <widget class="QCheckBox" name="paletteCheckBox">
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="Widgets::PathSelection" name="styleSheetPathSelection" native="true">
-     <property name="enabled">
-      <bool>false</bool>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
      </property>
     </widget>
    </item>
@@ -250,6 +338,22 @@
     <hint type="destinationlabel">
      <x>198</x>
      <y>119</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>iconThemeCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>iconThemeComboBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>412</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>216</x>
+     <y>173</y>
     </hint>
    </hints>
   </connection>

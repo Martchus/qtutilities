@@ -36,6 +36,7 @@ LIB_EXPORT void cleanup();
 
 namespace TranslationFiles {
 
+LIB_EXPORT QString &additionalTranslationFilePath();
 LIB_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames);
 LIB_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames, const QString &localeName);
 LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName);

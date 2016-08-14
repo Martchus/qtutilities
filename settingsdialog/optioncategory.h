@@ -20,7 +20,7 @@ class LIB_EXPORT OptionCategory : public QObject
 
 public:
     explicit OptionCategory(QObject *parent = nullptr);
-    virtual ~OptionCategory();
+    ~OptionCategory();
     
     const QString &displayName() const;
     void setDisplayName(const QString &displayName);

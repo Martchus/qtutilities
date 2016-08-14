@@ -155,7 +155,7 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
  * \brief Declares a class inheriting from Dialogs::UiFileBasedOptionPage in a convenient way.
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
  */
-#define BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+#define BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(SomeClass) \
     namespace Ui { \
     class SomeClass; \
     } \
@@ -163,10 +163,19 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
     class LIB_EXPORT SomeClass : public ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> \
     { \
     public: \
-        explicit SomeClass(QWidget *parentWidget = nullptr); \
         ~SomeClass(); \
         bool apply(); \
         void reset(); \
+    private:
+
+/*!
+ * \brief Declares a class inheriting from Dialogs::UiFileBasedOptionPage in a convenient way.
+ * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
+ */
+#define BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+    BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(SomeClass) \
+    public: \
+        explicit SomeClass(QWidget *parentWidget = nullptr); \
     private:
 
 /*!

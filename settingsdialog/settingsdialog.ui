@@ -105,6 +105,9 @@
       </sizepolicy>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="bottomMargin">
+       <number>6</number>
+      </property>
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -128,8 +131,7 @@
         </property>
         <property name="icon">
          <iconset theme="dialog-cancel">
-          <normaloff/>
-         </iconset>
+          <normaloff>.</normaloff>.</iconset>
         </property>
        </widget>
       </item>
@@ -143,8 +145,7 @@
         </property>
         <property name="icon">
          <iconset theme="dialog-ok-apply">
-          <normaloff/>
-         </iconset>
+          <normaloff>.</normaloff>.</iconset>
         </property>
        </widget>
       </item>
@@ -155,8 +156,7 @@
         </property>
         <property name="icon">
          <iconset theme="dialog-ok">
-          <normaloff/>
-         </iconset>
+          <normaloff>.</normaloff>.</iconset>
         </property>
        </widget>
       </item>
