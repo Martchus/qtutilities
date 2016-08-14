@@ -1,7 +1,6 @@
 # after including this module, AppConfig must be included
 
 # enable Qt Widgets GUI
-option(WIDGETS_GUI "enables/disables building the Qt Widgets GUI: yes (default) or no" ON)
 if(WIDGETS_GUI)
     add_definitions(
         -DGUI_QTWIDGETS
@@ -20,7 +19,6 @@ else()
 endif()
 
 # enable Qt Quick GUI
-option(QUICK_GUI "enables/disables building the Qt Quick GUI: yes (default) or no" ON)
 if(QUICK_GUI)
     add_definitions(
         -DGUI_QTQUICK
