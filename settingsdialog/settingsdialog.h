@@ -22,18 +22,17 @@ class LIB_EXPORT SettingsDialog : public QDialog
 {
     Q_OBJECT
     Q_PROPERTY(bool tabBarAlwaysVisible READ isTabBarAlwaysVisible WRITE setTabBarAlwaysVisible)
-    Q_PROPERTY(bool categoriesAlwaysVisible READ areCategoriesAlwaysVisible WRITE setCategoriesAlwaysVisible)
     
 public:
     explicit SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog();
     bool isTabBarAlwaysVisible() const;
     void setTabBarAlwaysVisible(bool value);
-    bool areCategoriesAlwaysVisible() const;
-    void setCategoriesAlwaysVisible(bool value);
     OptionCategoryModel *categoryModel();
     OptionCategory *category(int categoryIndex) const;
     OptionPage *page(int categoryIndex, int pageIndex) const;
+    void showCategory(OptionCategory *category);
+    void setSingleCategory(OptionCategory *singleCategory);
 
 Q_SIGNALS:
     void applied();
@@ -50,14 +49,11 @@ private Q_SLOTS:
     void reset();
 
 private:
-    void showCategory(OptionCategory *category);
-
     std::unique_ptr<Ui::SettingsDialog> m_ui;
     OptionCategoryModel *m_categoryModel;
     OptionCategoryFilterModel *m_categoryFilterModel;
     OptionCategory *m_currentCategory;
     bool m_tabBarAlwaysVisible;
-    bool m_categoriesAlwaysVisible;
 };
 
 /*!
@@ -70,18 +66,6 @@ private:
 inline bool SettingsDialog::isTabBarAlwaysVisible() const
 {
     return m_tabBarAlwaysVisible;
-}
-
-/*!
- * \brief Returns whether the category selection is always visible.
- *
- * The category selection is always visible by default.
- *
- * \sa SettingsDialog::setCategoriesAlwaysVisible()
- */
-inline bool SettingsDialog::areCategoriesAlwaysVisible() const
-{
-    return m_categoriesAlwaysVisible;
 }
 
 /*!

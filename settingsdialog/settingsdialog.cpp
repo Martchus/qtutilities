@@ -32,8 +32,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     m_categoryModel(new OptionCategoryModel(this)),
     m_categoryFilterModel(new OptionCategoryFilterModel(this)),
     m_currentCategory(nullptr),
-    m_tabBarAlwaysVisible(true),
-    m_categoriesAlwaysVisible(true)
+    m_tabBarAlwaysVisible(true)
 {
     m_ui->setupUi(this);
     makeHeading(m_ui->headingLabel);
@@ -71,21 +70,6 @@ void SettingsDialog::setTabBarAlwaysVisible(bool value)
     m_tabBarAlwaysVisible = value;
     if(m_currentCategory) {
         m_ui->pagesTabWidget->tabBar()->setHidden(!value && m_currentCategory->pages().size() == 1);
-    }
-}
-
-/*!
- * \brief Sets whether the category selection is always visible.
- * \sa SettingsDialog::areCategoriesAlwaysVisible()
- */
-void SettingsDialog::setCategoriesAlwaysVisible(bool value)
-{
-    m_categoriesAlwaysVisible = value;
-    bool visible = value || m_categoryModel->rowCount();
-    m_ui->filterLineEdit->setVisible(visible);
-    m_ui->categoriesListView->setVisible(visible);
-    if(!visible) {
-        m_ui->filterLineEdit->clear();
     }
 }
 
@@ -131,7 +115,7 @@ void SettingsDialog::showEvent(QShowEvent *event)
 }
 
 /*!
- * \brief Shows the selected category specified by its model \a index in the category model.
+ * \brief Shows the selected category specified by its model \a index in the category filter model.
  *
  * This private slot is called when m_ui->categoriesListView->selectionModel()->currentChanged() is emitted.
  */
@@ -155,6 +139,25 @@ void SettingsDialog::showCategory(OptionCategory *category)
         m_ui->headingLabel->setText(tr("No category selected"));
     }
     updateTabWidget();
+}
+
+/*!
+ * \brief Enables *single-category mode* to show only the specified \a singleCategory.
+ * \remarks
+ * - In *single-category mode* category selection, filter and heading are hidden.
+ * - The *single-category mode* can be disabled again by setting \a singleCategory to nullptr.
+ */
+void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
+{
+    bool hasSingleCategory = singleCategory != nullptr;
+    m_ui->filterLineEdit->setHidden(hasSingleCategory);
+    m_ui->categoriesListView->setHidden(hasSingleCategory);
+    m_ui->headingLabel->setHidden(hasSingleCategory);
+    if(hasSingleCategory) {
+        m_ui->filterLineEdit->clear();
+        categoryModel()->setCategories(QList<OptionCategory *>() << singleCategory);
+        showCategory(singleCategory);
+    }
 }
 
 /*!
