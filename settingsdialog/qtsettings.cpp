@@ -200,7 +200,7 @@ OptionCategory *QtSettings::category()
 {
     auto *category = new OptionCategory;
     category->setDisplayName(QCoreApplication::translate("QtGui::QtOptionCategory", "Qt"));
-    category->setIcon(QIcon::fromTheme(QStringLiteral("qtcreator")));
+    category->setIcon(QIcon::fromTheme(QStringLiteral("qtcreator"), QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/apps/qtcreator.svg"))));
     category->assignPages(QList<OptionPage *>()
                           << new QtAppearanceOptionPage(*m_d)
                           << new QtLanguageOptionPage(*m_d)

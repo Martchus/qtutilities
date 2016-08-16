@@ -84,13 +84,13 @@ class LIB_EXPORT UiFileBasedOptionPage : public OptionPage
 {
 public:
     explicit UiFileBasedOptionPage(QWidget *parentWindow = nullptr);
-    virtual ~UiFileBasedOptionPage();
+    ~UiFileBasedOptionPage();
 
-    virtual bool apply() = 0;
-    virtual void reset() = 0;
+    bool apply() = 0;
+    void reset() = 0;
 
 protected:
-    virtual QWidget *setupWidget();
+    QWidget *setupWidget();
     UiClass *ui();
 
 private:
