@@ -26,6 +26,7 @@ private:
     Argument m_iconThemeArg;
     Argument m_fontArg;
     Argument m_libraryPathsArg;
+    Argument m_platformThemeArg;
 };
 
 /*!

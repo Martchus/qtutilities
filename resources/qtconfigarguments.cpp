@@ -32,7 +32,8 @@ QtConfigArguments::QtConfigArguments() :
     m_styleArg("style", '\0', "sets the Qt widgets style"),
     m_iconThemeArg("icon-theme", '\0', "sets the icon theme and additional theme search paths for the Qt GUI"),
     m_fontArg("font", '\0', "sets the font family and size (point) for the Qt GUI"),
-    m_libraryPathsArg("library-paths", '\0', "sets the list of directories to search when loading libraries (all existing paths will be deleted)")
+    m_libraryPathsArg("library-paths", '\0', "sets the list of directories to search when loading libraries (all existing paths will be deleted)"),
+    m_platformThemeArg("platformtheme", '\0', "specifies the Qt platform theme to be used")
 {
     // language
     m_lngArg.setValueNames({"language"});
@@ -56,8 +57,12 @@ QtConfigArguments::QtConfigArguments() :
     m_libraryPathsArg.setValueNames({"path 1", "path 2"});
     m_libraryPathsArg.setRequiredValueCount(-1);
     m_libraryPathsArg.setCombinable(true);
-    m_qtWidgetsGuiArg.setSubArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
-    m_qtQuickGuiArg.setSubArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg});
+    m_platformThemeArg.setRequiredValueCount(1);
+    m_platformThemeArg.setCombinable(true);
+    m_platformThemeArg.setValueNames({"qt5ct/kde/..."});
+    m_platformThemeArg.setPreDefinedCompletionValues("qt5ct kde gnome");
+    m_qtWidgetsGuiArg.setSubArguments({&m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg});
+    m_qtQuickGuiArg.setSubArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg});
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
 #if defined GUI_QTWIDGETS
