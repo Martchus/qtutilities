@@ -8,10 +8,10 @@ set(HEADER_FILES
     misc/adoptlocker.h
     misc/dialogutils.h
     misc/desktoputils.h
-    misc/importplugin.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
+    resources/importplugin.h
 )
 set(SRC_FILES
     misc/dialogutils.cpp

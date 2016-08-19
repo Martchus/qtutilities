@@ -50,8 +50,6 @@ if(WIDGETS_GUI OR QUICK_GUI)
     list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
 endif()
 
-# add option for enabling/disabling svg support
-option(SVG_SUPPORT "enables/disables svg support (only affects static builds where QSvgPlugin will be built-in if enabled)" ON)
-if(SVG_SUPPORT)
-    add_definitions(-DSVG_SUPPORT)
-endif()
+# add option for enabling/disabling static Qt plugins
+option(SVG_SUPPORT "enables/disables svg support for Qt GUI (only affects static builds where QSvgPlugin will be built-in if enabled)" ON)
+option(SVG_ICON_SUPPORT "enables/disables svg icon support for Qt GUI (only affects static builds where QSvgPlugin will be built-in if enabled)" ON)
