@@ -36,14 +36,22 @@ else()
     message(STATUS "Building WITHOUT Qt Quick GUI.")
 endif()
 
-# set "GUI-type" to WIN32 to hide console under windows
-if(WIN32 AND (WIDGETS_GUI OR QUICK_GUI))
+if(WIDGETS_GUI OR QUICK_GUI)
     list(APPEND QT_MODULES Gui)
-    set(GUI_TYPE WIN32)
+    # set "GUI-type" to WIN32 to hide console under windows
+    if(WIN32)
+        set(GUI_TYPE WIN32)
+    endif()
 endif()
 
 # add source files requried by both GUI variants
 if(WIDGETS_GUI OR QUICK_GUI)
     list(APPEND SRC_FILES ${GUI_SRC_FILES})
     list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
+endif()
+
+# add option for enabling/disabling svg support
+option(SVG_SUPPORT "enables/disables svg support (only affects static builds where QSvgPlugin will be built-in if enabled)" ON)
+if(SVG_SUPPORT)
+    add_definitions(-DSVG_SUPPORT)
 endif()
