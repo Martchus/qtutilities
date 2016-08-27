@@ -242,10 +242,14 @@
       </font>
      </property>
      <property name="text">
-      <string>These settings take effect after restarting the application.</string>
+      <string>These settings take effect after restarting the application.
+These settings might be overwritten by your Qt 5 platfrom integration plugin and hence have no effect.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

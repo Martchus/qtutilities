@@ -94,7 +94,7 @@ bool QtSettings::hasCustomFont() const
 void QtSettings::restore(QSettings &settings)
 {
     settings.beginGroup(QStringLiteral("qt"));
-    m_d->font = settings.value(QStringLiteral("font"), m_d->font).value<QFont>();
+    m_d->font.fromString(settings.value(QStringLiteral("font")).toString());
     m_d->customFont = settings.value(QStringLiteral("customfont"), false).toBool();
     m_d->palette = settings.value(QStringLiteral("palette")).value<QPalette>();
     m_d->customPalette = settings.value(QStringLiteral("custompalette"), false).toBool();
@@ -118,7 +118,7 @@ void QtSettings::restore(QSettings &settings)
 void QtSettings::save(QSettings &settings) const
 {
     settings.beginGroup(QStringLiteral("qt"));
-    settings.setValue(QStringLiteral("font"), m_d->font);
+    settings.setValue(QStringLiteral("font"), m_d->font.toString());
     settings.setValue(QStringLiteral("customfont"), m_d->customFont);
     settings.setValue(QStringLiteral("palette"), m_d->palette);
     settings.setValue(QStringLiteral("custompalette"), m_d->customPalette);

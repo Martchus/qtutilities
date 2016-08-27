@@ -142,6 +142,7 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
  */
 #define BEGIN_DECLARE_OPTION_PAGE(SomeClass) \
+    typedef ::Dialogs::OptionPage SomeClass ## Base; \
     class LIB_EXPORT SomeClass : public ::Dialogs::OptionPage \
     { \
     public: \
@@ -243,6 +244,15 @@ inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
  */
 #define DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
     BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE(SomeClass) \
+    END_DECLARE_OPTION_PAGE
+
+/*!
+ * \brief Declares a class inheriting from Dialogs::OptionPage in a convenient way.
+ * \remarks Doesn't allow to declare additional class members.
+ */
+#define DECLARE_OPTION_PAGE(SomeClass) \
+    BEGIN_DECLARE_OPTION_PAGE(SomeClass) \
+        DECLARE_SETUP_WIDGETS \
     END_DECLARE_OPTION_PAGE
 
 /*!
