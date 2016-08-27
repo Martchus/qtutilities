@@ -29,6 +29,8 @@ QColor LIB_EXPORT instructionTextColor();
 # endif
 const QString LIB_EXPORT &dialogStyle();
 # ifdef GUI_QTWIDGETS
+void LIB_EXPORT centerWidget(QWidget *widget);
+void LIB_EXPORT cornerWidget(QWidget *widget);
 void LIB_EXPORT makeHeading(QWidget *widget);
 void LIB_EXPORT updateStyle(QWidget *widget);
 # endif

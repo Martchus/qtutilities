@@ -7,6 +7,11 @@
 # include <QPalette>
 # include <QWidget>
 # include <QStyle>
+# ifdef GUI_QTWIDGETS
+#  include <QApplication>
+#  include <QDesktopWidget>
+#  include <QCursor>
+# endif
 #endif
 #include <QFileInfo>
 #include <QDir>
@@ -83,6 +88,43 @@ const QString &dialogStyle()
 }
 
 # ifdef GUI_QTWIDGETS
+
+/*!
+ * \brief Moves the specified \a widget in the middle of the (available) screen area. If there are multiple
+ *        screens available, the screen where the cursor currently is located is chosen.
+ */
+void centerWidget(QWidget *widget)
+{
+    widget->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            widget->size(),
+            QApplication::desktop()->availableGeometry(QCursor::pos())
+        )
+    );
+}
+
+/*!
+ * \brief Moves the specified \a widget to the corner which is closest to the current cursor position.
+ *        If there are multiple screens available, the screen where the cursor currently is located is chosen.
+ */
+void cornerWidget(QWidget *widget)
+{
+    const QPoint cursorPos(QCursor::pos());
+    const QRect availableGeometry(QApplication::desktop()->availableGeometry(cursorPos));
+    Qt::Alignment alignment = 0;
+    alignment |= (cursorPos.x() - availableGeometry.left() < availableGeometry.right() - cursorPos.x() ? Qt::AlignLeft : Qt::AlignRight);
+    alignment |= (cursorPos.y() - availableGeometry.top() < availableGeometry.bottom() - cursorPos.y() ? Qt::AlignTop : Qt::AlignBottom);
+    widget->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            alignment,
+            widget->size(),
+            availableGeometry
+        )
+    );
+}
 
 /*!
  * \brief Makes \a widget a heading.
