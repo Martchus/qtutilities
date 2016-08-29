@@ -1,7 +1,7 @@
 #ifndef MODELS_CHECKLISTMODEL_H
 #define MODELS_CHECKLISTMODEL_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QAbstractListModel>
 #include <QList>
@@ -12,7 +12,7 @@ namespace Models {
 
 class ChecklistModel;
 
-class LIB_EXPORT ChecklistItem
+class QT_UTILITIES_EXPORT ChecklistItem
 {
     friend class ChecklistModel;
 
@@ -69,7 +69,7 @@ inline bool ChecklistItem::isChecked() const
     return m_checkState == Qt::Checked;
 }
 
-class LIB_EXPORT ChecklistModel : public QAbstractListModel
+class QT_UTILITIES_EXPORT ChecklistModel : public QAbstractListModel
 {
     Q_OBJECT
 public:

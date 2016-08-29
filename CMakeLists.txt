@@ -75,6 +75,7 @@ set(WIDGETS_UI_FILES
 set(CMAKE_MODULE_FILES
     cmake/modules/QtConfig.cmake
     cmake/modules/QtGuiConfig.cmake
+    cmake/modules/QtLinkage.cmake
     cmake/modules/JsProviderConfig.cmake
     cmake/modules/WebViewProviderConfig.cmake
 )

@@ -1,7 +1,7 @@
 #ifndef APPLICATION_UTILITIES_RESOURCES_H
 #define APPLICATION_UTILITIES_RESOURCES_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QtGlobal>
 
@@ -29,36 +29,36 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
 
 namespace QtUtilitiesResources {
 
-LIB_EXPORT void init();
-LIB_EXPORT void cleanup();
+QT_UTILITIES_EXPORT void init();
+QT_UTILITIES_EXPORT void cleanup();
 
 }
 
 namespace TranslationFiles {
 
-LIB_EXPORT QString &additionalTranslationFilePath();
-LIB_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames);
-LIB_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames, const QString &localeName);
-LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName);
-LIB_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
+QT_UTILITIES_EXPORT QString &additionalTranslationFilePath();
+QT_UTILITIES_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames);
+QT_UTILITIES_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames, const QString &localeName);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicationName);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
 
 }
 
 namespace ApplicationInstances {
 
 #if defined(GUI_QTWIDGETS)
-LIB_EXPORT bool hasWidgetsApp();
+QT_UTILITIES_EXPORT bool hasWidgetsApp();
 #endif
 #if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
-LIB_EXPORT bool hasGuiApp();
+QT_UTILITIES_EXPORT bool hasGuiApp();
 #endif
-LIB_EXPORT bool hasCoreApp();
+QT_UTILITIES_EXPORT bool hasCoreApp();
 
 }
 
 namespace ConfigFile {
 
-LIB_EXPORT QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings = nullptr);
+QT_UTILITIES_EXPORT QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings = nullptr);
 
 }
 

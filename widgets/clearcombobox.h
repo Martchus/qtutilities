@@ -3,13 +3,11 @@
 
 #include "./buttonoverlay.h"
 
-#include <c++utilities/application/global.h>
-
 #include <QComboBox>
 
 namespace Widgets {
 
-class LIB_EXPORT ClearComboBox : public QComboBox, public ButtonOverlay
+class QT_UTILITIES_EXPORT ClearComboBox : public QComboBox, public ButtonOverlay
 {
     Q_OBJECT
 public:

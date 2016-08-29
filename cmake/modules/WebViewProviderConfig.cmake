@@ -1,5 +1,7 @@
 # determines the web view provider (either Qt WebKit or Qt WebEngine)
 
+include(QtLinkage)
+
 set(WEBVIEW_PROVIDER "auto" CACHE STRING "specifies the web view provider: auto (default), webkit, webengine or none")
 if(${WEBVIEW_PROVIDER} STREQUAL "auto")
     find_package(Qt5WebKitWidgets)

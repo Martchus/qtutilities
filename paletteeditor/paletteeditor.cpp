@@ -1,6 +1,8 @@
 #include "./paletteeditor.h"
 #include "./colorbutton.h"
 
+#include "ui_paletteeditor.h"
+
 #include <QMetaProperty>
 #include <QPainter>
 #include <QToolButton>
@@ -15,33 +17,33 @@ enum { BrushRole = 33 };
 
 PaletteEditor::PaletteEditor(QWidget *parent) :
     QDialog(parent),
+    m_ui(new Ui::PaletteEditor),
     m_currentColorGroup(QPalette::Active),
     m_paletteModel(new PaletteModel(this)),
     m_modelUpdated(false),
     m_paletteUpdated(false),
     m_compute(true)
 {
-    m_ui.setupUi(this);
-    m_ui.paletteView->setModel(m_paletteModel);
+    m_ui->setupUi(this);
+    m_ui->paletteView->setModel(m_paletteModel);
     updatePreviewPalette();
     updateStyledButton();
-    m_ui.paletteView->setModel(m_paletteModel);
+    m_ui->paletteView->setModel(m_paletteModel);
     ColorDelegate *delegate = new ColorDelegate(this);
-    m_ui.paletteView->setItemDelegate(delegate);
-    m_ui.paletteView->setEditTriggers(QAbstractItemView::AllEditTriggers);
+    m_ui->paletteView->setItemDelegate(delegate);
+    m_ui->paletteView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     connect(m_paletteModel, &PaletteModel::paletteChanged,
                 this, &PaletteEditor::paletteChanged);
-    m_ui.paletteView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_ui.paletteView->setDragEnabled(true);
-    m_ui.paletteView->setDropIndicatorShown(true);
-    m_ui.paletteView->setRootIsDecorated(false);
-    m_ui.paletteView->setColumnHidden(2, true);
-    m_ui.paletteView->setColumnHidden(3, true);
+    m_ui->paletteView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_ui->paletteView->setDragEnabled(true);
+    m_ui->paletteView->setDropIndicatorShown(true);
+    m_ui->paletteView->setRootIsDecorated(false);
+    m_ui->paletteView->setColumnHidden(2, true);
+    m_ui->paletteView->setColumnHidden(3, true);
 }
 
 PaletteEditor::~PaletteEditor()
-{
-}
+{}
 
 QPalette PaletteEditor::palette() const
 {
@@ -104,8 +106,8 @@ void PaletteEditor::on_computeRadio_clicked()
 {
     if (m_compute)
         return;
-    m_ui.paletteView->setColumnHidden(2, true);
-    m_ui.paletteView->setColumnHidden(3, true);
+    m_ui->paletteView->setColumnHidden(2, true);
+    m_ui->paletteView->setColumnHidden(3, true);
     m_compute = true;
     m_paletteModel->setCompute(true);
 }
@@ -114,10 +116,10 @@ void PaletteEditor::on_detailsRadio_clicked()
 {
     if (!m_compute)
         return;
-    const int w = m_ui.paletteView->columnWidth(1);
-    m_ui.paletteView->setColumnHidden(2, false);
-    m_ui.paletteView->setColumnHidden(3, false);
-    QHeaderView *header = m_ui.paletteView->header();
+    const int w = m_ui->paletteView->columnWidth(1);
+    m_ui->paletteView->setColumnHidden(2, false);
+    m_ui->paletteView->setColumnHidden(3, false);
+    QHeaderView *header = m_ui->paletteView->header();
     header->resizeSection(1, w / 3);
     header->resizeSection(2, w / 3);
     header->resizeSection(3, w / 3);
@@ -128,15 +130,16 @@ void PaletteEditor::on_detailsRadio_clicked()
 void PaletteEditor::paletteChanged(const QPalette &palette)
 {
     m_modelUpdated = true;
-    if (!m_paletteUpdated)
+    if (!m_paletteUpdated) {
         setPalette(palette);
+    }
     m_modelUpdated = false;
 }
 
 void PaletteEditor::buildPalette()
 {
-    const QColor btn = m_ui.buildButton->color();
-    const QPalette temp = QPalette(btn);
+    const QColor btn(m_ui->buildButton->color());
+    const QPalette temp(btn);
     setPalette(temp);
 }
 
@@ -157,7 +160,7 @@ void PaletteEditor::updatePreviewPalette()
 
 void PaletteEditor::updateStyledButton()
 {
-    m_ui.buildButton->setColor(palette().color(QPalette::Active, QPalette::Button));
+    m_ui->buildButton->setColor(palette().color(QPalette::Active, QPalette::Button));
 }
 
 QPalette PaletteEditor::getPalette(QWidget *parent, const QPalette &init,

@@ -1,11 +1,14 @@
 #ifndef WIDGETS_PALETTEEDITOR_H
 #define WIDGETS_PALETTEEDITOR_H
 
-#include "ui_paletteeditor.h"
+#include "../global.h"
 
-#include <c++utilities/application/global.h>
+#include <c++utilities/conversion/types.h>
 
 #include <QItemDelegate>
+#include <QDialog>
+
+#include <memory>
 
 QT_FORWARD_DECLARE_CLASS(QListView)
 QT_FORWARD_DECLARE_CLASS(QLabel)
@@ -16,13 +19,17 @@ class ColorButton;
 
 namespace Dialogs {
 
+namespace Ui {
+class PaletteEditor;
+}
+
 /*!
  * \brief The PaletteEditor class provides a dialog to customize a QPalette.
  *
  * This is taken from qttools/src/designer/src/components/propertyeditor/paletteeditor.cpp.
  * In contrast to the original version this version doesn't provide a preview.
  */
-class LIB_EXPORT PaletteEditor : public QDialog
+class QT_UTILITIES_EXPORT PaletteEditor : public QDialog
 {
     Q_OBJECT
 public:
@@ -57,7 +64,7 @@ private:
         return m_currentColorGroup;
     }
 
-    Ui::PaletteEditor m_ui;
+    std::unique_ptr<Ui::PaletteEditor> m_ui;
     QPalette m_editPalette;
     QPalette m_parentPalette;
     QPalette::ColorGroup m_currentColorGroup;
@@ -70,7 +77,7 @@ private:
 /*!
  * \brief The PaletteModel class is used by PaletteEditor.
  */
-class LIB_EXPORT PaletteModel : public QAbstractTableModel
+class QT_UTILITIES_EXPORT PaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
     Q_PROPERTY(QPalette::ColorRole colorRole READ colorRole)
@@ -108,7 +115,7 @@ private:
 /*!
  * \brief The BrushEditor class is used by PaletteEditor.
  */
-class LIB_EXPORT BrushEditor : public QWidget
+class QT_UTILITIES_EXPORT BrushEditor : public QWidget
 {
     Q_OBJECT
 
@@ -133,7 +140,7 @@ private:
 /*!
  * \brief The RoleEditor class is used by PaletteEditor.
  */
-class LIB_EXPORT RoleEditor : public QWidget
+class QT_UTILITIES_EXPORT RoleEditor : public QWidget
 {
     Q_OBJECT
 public:
@@ -157,7 +164,7 @@ private:
 /*!
  * \brief The ColorDelegate class is used by PaletteEditor.
  */
-class LIB_EXPORT ColorDelegate : public QItemDelegate
+class QT_UTILITIES_EXPORT ColorDelegate : public QItemDelegate
 {
     Q_OBJECT
 

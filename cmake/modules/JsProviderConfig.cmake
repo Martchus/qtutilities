@@ -1,5 +1,7 @@
 # determines the JavaScript provider (either Qt Script or Qt Declarative)
 
+include(QtLinkage)
+
 set(JS_PROVIDER "auto" CACHE STRING "specifies the JavaScript provider: auto (default), qml, script or none")
 if(${JS_PROVIDER} STREQUAL "auto")
     find_package(Qt5Script)

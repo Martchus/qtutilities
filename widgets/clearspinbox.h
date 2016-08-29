@@ -3,20 +3,16 @@
 
 #include "./buttonoverlay.h"
 
-#include <c++utilities/application/global.h>
-
 #include <QSpinBox>
 #include <QLineEdit>
 
-QT_BEGIN_NAMESPACE
-class QHBoxLayout;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 
 namespace Widgets {
 
 class IconButton;
 
-class LIB_EXPORT ClearSpinBox : public QSpinBox, public ButtonOverlay
+class QT_UTILITIES_EXPORT ClearSpinBox : public QSpinBox, public ButtonOverlay
 {
     Q_OBJECT
     Q_PROPERTY(bool minimumHidden READ minimumHidden WRITE setMinimumHidden)

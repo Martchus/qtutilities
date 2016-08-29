@@ -3,19 +3,15 @@
 
 #include "./buttonoverlay.h"
 
-#include <c++utilities/application/global.h>
-
 #include <QLineEdit>
 
-QT_BEGIN_NAMESPACE
-class QHBoxLayout;
-QT_END_NAMESPACE
+QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 
 namespace Widgets {
 
 class IconButton;
 
-class LIB_EXPORT ClearLineEdit : public QLineEdit, public ButtonOverlay
+class QT_UTILITIES_EXPORT ClearLineEdit : public QLineEdit, public ButtonOverlay
 {
     Q_OBJECT
 public:

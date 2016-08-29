@@ -1,7 +1,7 @@
 #ifndef DIALOGS_DIALOGUTILS_H
 #define DIALOGS_DIALOGUTILS_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QtGlobal>
 
@@ -20,19 +20,19 @@ enum class DocumentStatus {
     Unsaved /**< There is a document opened and there are unsaved modifications. */
 };
 
-QString LIB_EXPORT generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath);
+QString QT_UTILITIES_EXPORT generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath);
 
 #ifndef GUI_NONE
 # ifdef Q_OS_WIN32
-QColor LIB_EXPORT windowFrameColor();
-QColor LIB_EXPORT instructionTextColor();
+QColor QT_UTILITIES_EXPORT windowFrameColor();
+QColor QT_UTILITIES_EXPORT instructionTextColor();
 # endif
-const QString LIB_EXPORT &dialogStyle();
+const QString QT_UTILITIES_EXPORT &dialogStyle();
 # ifdef GUI_QTWIDGETS
-void LIB_EXPORT centerWidget(QWidget *widget);
-void LIB_EXPORT cornerWidget(QWidget *widget);
-void LIB_EXPORT makeHeading(QWidget *widget);
-void LIB_EXPORT updateStyle(QWidget *widget);
+void QT_UTILITIES_EXPORT centerWidget(QWidget *widget);
+void QT_UTILITIES_EXPORT cornerWidget(QWidget *widget);
+void QT_UTILITIES_EXPORT makeHeading(QWidget *widget);
+void QT_UTILITIES_EXPORT updateStyle(QWidget *widget);
 # endif
 #endif
 

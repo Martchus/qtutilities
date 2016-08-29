@@ -1,7 +1,7 @@
 #ifndef WIDGETS_PATHSELECTION_H
 #define WIDGETS_PATHSELECTION_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QFileDialog>
 
@@ -12,7 +12,7 @@ namespace Widgets {
 
 class ClearLineEdit;
 
-class LIB_EXPORT PathSelection : public QWidget
+class QT_UTILITIES_EXPORT PathSelection : public QWidget
 {
     Q_OBJECT
 public:

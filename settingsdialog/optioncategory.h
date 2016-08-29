@@ -1,7 +1,7 @@
 #ifndef DIALOGS_OPTIONSCATEGORY_H
 #define DIALOGS_OPTIONSCATEGORY_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QObject>
 #include <QIcon>
@@ -11,7 +11,7 @@ namespace Dialogs {
 
 class OptionPage;
 
-class LIB_EXPORT OptionCategory : public QObject
+class QT_UTILITIES_EXPORT OptionCategory : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString displayName READ displayName WRITE setDisplayName NOTIFY displayNameChanged)

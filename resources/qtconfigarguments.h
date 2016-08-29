@@ -1,11 +1,13 @@
 #ifndef APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
 #define APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
 
+#include "../global.h"
+
 #include <c++utilities/application/argumentparser.h>
 
 namespace ApplicationUtilities {
 
-class LIB_EXPORT QtConfigArguments
+class QT_UTILITIES_EXPORT QtConfigArguments
 {
 public:
     QtConfigArguments();

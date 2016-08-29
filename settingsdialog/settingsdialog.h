@@ -1,7 +1,7 @@
 #ifndef DIALOGS_SETTINGSDIALOG_H
 #define DIALOGS_SETTINGSDIALOG_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QDialog>
 
@@ -18,7 +18,7 @@ namespace Ui {
 class SettingsDialog;
 }
 
-class LIB_EXPORT SettingsDialog : public QDialog
+class QT_UTILITIES_EXPORT SettingsDialog : public QDialog
 {
     Q_OBJECT
     Q_PROPERTY(bool tabBarAlwaysVisible READ isTabBarAlwaysVisible WRITE setTabBarAlwaysVisible)

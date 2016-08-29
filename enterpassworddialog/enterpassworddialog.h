@@ -1,7 +1,7 @@
 #ifndef DIALOGS_ENTERPASSWORDDIALOG_H
 #define DIALOGS_ENTERPASSWORDDIALOG_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QDialog>
 
@@ -13,7 +13,7 @@ namespace Ui {
 class EnterPasswordDialog;
 }
 
-class LIB_EXPORT EnterPasswordDialog : public QDialog
+class QT_UTILITIES_EXPORT EnterPasswordDialog : public QDialog
 {
     Q_OBJECT
     Q_PROPERTY(QString userName READ userName)

@@ -1,14 +1,14 @@
 #ifndef WIDGETS_ICONBUTTON_H
 #define WIDGETS_ICONBUTTON_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QAbstractButton>
 #include <QPixmap>
 
 namespace Widgets {
 
-class LIB_EXPORT IconButton : public QAbstractButton
+class QT_UTILITIES_EXPORT IconButton : public QAbstractButton
 {
     Q_OBJECT
     Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)

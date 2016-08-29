@@ -1,7 +1,7 @@
 #ifndef WIDGETS_BUTTONOVERLAY_H
 #define WIDGETS_BUTTONOVERLAY_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QtGlobal>
 
@@ -14,7 +14,7 @@ namespace Widgets {
 
 class IconButton;
 
-class LIB_EXPORT ButtonOverlay
+class QT_UTILITIES_EXPORT ButtonOverlay
 {
 public:
     explicit ButtonOverlay(QWidget *widget);

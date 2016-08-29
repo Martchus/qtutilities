@@ -40,7 +40,7 @@ private:
     QtSettingsData &m_settings;
 END_DECLARE_OPTION_PAGE
 
-class LIB_EXPORT QtSettings
+class QT_UTILITIES_EXPORT QtSettings
 {
 public:
     QtSettings();

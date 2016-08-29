@@ -1,7 +1,7 @@
 #ifndef MISC_UTILS_RECENTMENUMANAGER_H
 #define MISC_UTILS_RECENTMENUMANAGER_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QObject>
 
@@ -10,7 +10,7 @@ QT_FORWARD_DECLARE_CLASS(QAction)
 
 namespace MiscUtils {
 
-class LIB_EXPORT RecentMenuManager : public QObject
+class QT_UTILITIES_EXPORT RecentMenuManager : public QObject
 {
     Q_OBJECT
 

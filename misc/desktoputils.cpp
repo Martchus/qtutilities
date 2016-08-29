@@ -1,6 +1,4 @@
-#include "desktoputils.h"
-
-#include <c++utilities/application/global.h>
+#include "./desktoputils.h"
 
 #include <QDesktopServices>
 #include <QUrl>
@@ -11,7 +9,7 @@ namespace DesktopUtils {
  * \brief Shows the specified file or directory using the default file browser.
  * \remarks \a path musn't be specified as URL. (Conversion to URL is the purpose of this function).
  */
-bool LIB_EXPORT openLocalFileOrDir(const QString &path)
+bool openLocalFileOrDir(const QString &path)
 {
 #ifdef Q_OS_WIN32
     // backslashes are commonly used under Windows

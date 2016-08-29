@@ -1,7 +1,7 @@
 #ifndef DIALOGS_OPTIONCATEGORYMODEL_H
 #define DIALOGS_OPTIONCATEGORYMODEL_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QList>
 #include <QAbstractListModel>
@@ -11,7 +11,7 @@ namespace Dialogs {
 class OptionPage;
 class OptionCategory;
 
-class LIB_EXPORT OptionCategoryModel : public QAbstractListModel
+class QT_UTILITIES_EXPORT OptionCategoryModel : public QAbstractListModel
 {
     Q_OBJECT
 public:

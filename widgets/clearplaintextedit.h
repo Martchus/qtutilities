@@ -7,7 +7,7 @@
 
 namespace Widgets {
 
-class LIB_EXPORT ClearPlainTextEdit : public QPlainTextEdit, public ButtonOverlay
+class QT_UTILITIES_EXPORT ClearPlainTextEdit : public QPlainTextEdit, public ButtonOverlay
 {
     Q_OBJECT
 public:

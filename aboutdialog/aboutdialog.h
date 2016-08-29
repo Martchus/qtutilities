@@ -1,7 +1,7 @@
 #ifndef DIALOGS_ABOUTDIALOG_H
 #define DIALOGS_ABOUTDIALOG_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QDialog>
 
@@ -15,10 +15,10 @@ namespace Ui {
 class AboutDialog;
 }
 
-class LIB_EXPORT AboutDialog : public QDialog
+class QT_UTILITIES_EXPORT AboutDialog : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version, const QString &website = QString(), const QString &description = QString(), const QImage &image = QImage());
     explicit AboutDialog(QWidget *parent, const QString &description = QString(), const QImage &image = QImage());

@@ -1,7 +1,7 @@
 #ifndef WIDGETS_COLORBUTTON_H
 #define WIDGETS_COLORBUTTON_H
 
-#include <c++utilities/application/global.h>
+#include "../global.h"
 
 #include <QToolButton>
 
@@ -12,7 +12,7 @@ namespace Widgets {
  *
  * This is taken from qttools/src/shared/qtgradienteditor/qtcolorbutton.h.
  */
-class LIB_EXPORT ColorButton : public QToolButton
+class QT_UTILITIES_EXPORT ColorButton : public QToolButton
 {
     Q_OBJECT
     Q_PROPERTY(bool backgroundCheckered READ isBackgroundCheckered WRITE setBackgroundCheckered)
