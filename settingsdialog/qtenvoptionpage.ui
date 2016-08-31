@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Environment/paths</string>
   </property>
+  <property name="windowIcon">
+   <iconset theme="system-search"/>
+  </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox { font-weight: bold };</string>
   </property>

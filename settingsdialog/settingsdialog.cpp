@@ -176,6 +176,7 @@ void SettingsDialog::updateTabWidget()
                     scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
                     scrollArea->takeWidget();
                     m_ui->pagesTabWidget->setTabText(index, page->widget()->windowTitle());
+                    m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
                 } else {
                     scrollArea = new QScrollArea(m_ui->pagesTabWidget);
                     scrollArea->setFrameStyle(QFrame::NoFrame);
@@ -183,6 +184,7 @@ void SettingsDialog::updateTabWidget()
                     scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                     scrollArea->setWidgetResizable(true);
                     m_ui->pagesTabWidget->addTab(scrollArea, page->widget()->windowTitle());
+                    m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
                 }
                 if(page->widget()->layout()) {
                     page->widget()->layout()->setAlignment(Qt::AlignTop | Qt::AlignLeft);

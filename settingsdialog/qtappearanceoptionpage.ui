@@ -5,6 +5,10 @@
   <property name="windowTitle">
    <string>Appearance</string>
   </property>
+  <property name="windowIcon">
+   <iconset theme="preferences-desktop-icons">
+    <normaloff>.</normaloff>.</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox { font-weight: bold };</string>
   </property>

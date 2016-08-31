@@ -96,6 +96,9 @@ set(REQUIRED_ICONS
     system-run
     go-next
     qtcreator
+    system-search
+    preferences-desktop-icons
+    preferences-desktop-locale
 )
 
 # meta data
