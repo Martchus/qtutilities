@@ -216,7 +216,7 @@ bool SettingsDialog::apply()
         for(OptionPage *page : category->pages()) {
             if(!page->apply()) {
                 if(errorMessage.isEmpty()) {
-                    errorMessage = tr("<p><b>Errors occured when applying changes.</b></p><ul>");
+                    errorMessage = tr("<p><b>Errors occured when applying changes:</b></p><ul>");
                 }
                 if(const_cast<const OptionPage *>(page)->errors().isEmpty()) {
                     errorMessage.append(QStringLiteral("<li><i>")

@@ -85,20 +85,20 @@ set(DOC_FILES
 )
 
 set(REQUIRED_ICONS
-    window-close
+    dialog-cancel
+    dialog-ok
+    dialog-ok-apply
     document-open
     document-open-recent
-    dialog-ok
-    dialog-cancel
     edit-clear
-    dialog-ok-apply
-    system-file-manager
-    system-run
     go-next
-    qtcreator
-    system-search
     preferences-desktop-icons
     preferences-desktop-locale
+    qtcreator
+    system-file-manager
+    system-run
+    system-search
+    window-close
 )
 
 # meta data
