@@ -12,7 +12,8 @@ namespace Dialogs {
  * \brief Constructs a option category.
  */
 OptionCategory::OptionCategory(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_currentIndex(0)
 {}
 
 /*!

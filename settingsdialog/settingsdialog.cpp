@@ -129,6 +129,9 @@ void SettingsDialog::currentCategoryChanged(const QModelIndex &index)
  */
 void SettingsDialog::showCategory(OptionCategory *category)
 {
+    if(m_currentCategory) {
+        m_currentCategory->setCurrentIndex(m_ui->pagesTabWidget->currentIndex());
+    }
     if(category) {
         if(m_currentCategory != category) {
             m_currentCategory = category;
@@ -168,7 +171,7 @@ void SettingsDialog::updateTabWidget()
     if(m_currentCategory) {
         m_ui->pagesTabWidget->setUpdatesEnabled(false);
         const QString searchKeyWord = m_ui->filterLineEdit->text();
-        int index = 0;
+        int index = 0, pageIndex = 0;
         for(OptionPage *page : m_currentCategory->pages()) {
             if(page->matches(searchKeyWord)) {
                 QScrollArea *scrollArea;
@@ -192,6 +195,10 @@ void SettingsDialog::updateTabWidget()
                 scrollArea->setWidget(page->widget());
                 ++index;
             }
+            if(pageIndex == m_currentCategory->currentIndex()) {
+                m_ui->pagesTabWidget->setCurrentIndex(pageIndex);
+            }
+            ++pageIndex;
         }
         while(index < m_ui->pagesTabWidget->count()) {
             QScrollArea *scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));

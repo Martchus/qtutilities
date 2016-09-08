@@ -31,6 +31,8 @@ public:
     bool applyAllPages();
     void resetAllPages();
     bool matches(const QString &searchKeyWord) const;
+    int currentIndex() const;
+    void setCurrentIndex(int currentIndex);
     
 Q_SIGNALS:
     void displayNameChanged();
@@ -41,7 +43,7 @@ private:
     QString m_displayName;
     QIcon m_icon;
     QList<OptionPage *> m_pages;
-    
+    int m_currentIndex;
 };
 
 /*!
@@ -84,6 +86,25 @@ inline void OptionCategory::setIcon(const QIcon &icon)
 inline const QList<OptionPage *> OptionCategory::pages() const
 {
     return m_pages;
+}
+
+/*!
+ * \brief Returns the index of the currently shown page.
+ * \remarks The returned index might be invalid/out of range.
+ * \sa setCurrentIndex()
+ */
+inline int OptionCategory::currentIndex() const
+{
+    return m_currentIndex;
+}
+
+/*!
+ * \brief Sets the current index.
+ * \sa currentIndex()
+ */
+inline void OptionCategory::setCurrentIndex(int currentIndex)
+{
+    m_currentIndex = currentIndex;
 }
 
 }
