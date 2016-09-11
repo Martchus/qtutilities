@@ -101,6 +101,10 @@ set(REQUIRED_ICONS
     window-close
 )
 
+set(SCRIPT_FILES
+    scripts/required_icons.sh
+)
+
 # meta data
 set(META_PROJECT_NAME qtutilities)
 set(META_PROJECT_VARNAME QT_UTILITIES)
