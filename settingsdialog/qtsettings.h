@@ -1,6 +1,3 @@
-// The functions and classes declared in this header are experimental.
-// API/ABI might change in minor release!
-
 #ifndef DIALOGS_QT_UTILITIES_QTSETTINGS_H
 #define DIALOGS_QT_UTILITIES_QTSETTINGS_H
 

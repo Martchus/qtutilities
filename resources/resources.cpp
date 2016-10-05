@@ -118,7 +118,7 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
             QCoreApplication::installTranslator(qtTranslator);
         } else {
             delete qtTranslator;
-            cerr << "Unable to load translation file for Qt repository " << repoName.toLocal8Bit().data() << " and language " << localeName.toLocal8Bit().data() << "." << endl;
+            cerr << "Unable to load translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and language " << localeName.toLocal8Bit().data() << "." << endl;
         }
     }
 }
@@ -176,7 +176,7 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
         QCoreApplication::installTranslator(appTranslator);
     } else {
         delete appTranslator;
-        cerr << "Unable to load application translation file for the language \"" << localeName.toLocal8Bit().data() << "\"." << endl;
+        cerr << "Unable to load translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the language \"" << localeName.toLocal8Bit().data() << "\"." << endl;
     }
 }
 
