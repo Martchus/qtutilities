@@ -8,11 +8,8 @@
 set(QT_REPOS base ${ADDITIONAL_QT_REPOS})
 set(QT_MODULES Core ${ADDITIONAL_QT_MODULES})
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
-list(REMOVE_DUPLICATES QT_REPOS)
-list(REMOVE_DUPLICATES QT_MODULES)
-if(KF_MODULES)
-    list(REMOVE_DUPLICATES KF_MODULES)
-endif()
+
+include(QtLinkage)
 
 # check whether D-Bus interfaces need to be processed
 if(DBUS_FILES)
@@ -21,7 +18,19 @@ if(DBUS_FILES)
     list(APPEND QT_MODULES DBus)
 endif()
 
-include(QtLinkage)
+if(SVG_SUPPORT OR ((USE_STATIC_QT_BUILD AND (WIDGETS_GUI OR QUICK_GUI)) AND SVG_ICON_SUPPORT))
+    list(APPEND QT_MODULES Svg)
+    list(APPEND QT_REPOS svg)
+endif()
+
+list(REMOVE_DUPLICATES QT_REPOS)
+list(REMOVE_DUPLICATES QT_MODULES)
+if(KF_MODULES)
+    list(REMOVE_DUPLICATES KF_MODULES)
+endif()
+
+message(STATUS "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against the following Qt 5 modules: ${QT_MODULES}")
+message(STATUS "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against the following KDE 5 modules: ${KF_MODULES}")
 
 # actually find the required Qt/KF modules
 foreach(QT_MODULE ${QT_MODULES})
@@ -36,17 +45,14 @@ foreach(KF_MODULE ${KF_MODULES})
 endforeach()
 
 # include plugins statically
-if(USE_STATIC_QT_BUILD)
-    if(WIDGETS_GUI OR QUICK_GUI)
-        if(WIN32)
-            list(APPEND LIBRARIES Qt5::QWindowsIntegrationPlugin)
-            list(APPEND STATIC_LIBRARIES Qt5::QWindowsIntegrationPlugin)
-        endif()
-        if(SVG_SUPPORT)
-            find_package(Qt5Svg REQUIRED)
-            list(APPEND LIBRARIES Qt5::Svg Qt5::QSvgPlugin)
-            list(APPEND STATIC_LIBRARIES Qt5::Svg Qt5::QSvgPlugin)
-        endif()
+if(USE_STATIC_QT_BUILD AND (WIDGETS_GUI OR QUICK_GUI))
+    if(WIN32)
+        list(APPEND LIBRARIES Qt5::QWindowsIntegrationPlugin)
+        list(APPEND STATIC_LIBRARIES Qt5::QWindowsIntegrationPlugin)
+    endif()
+    if(SVG_ICON_SUPPORT)
+        list(APPEND LIBRARIES Qt5::QSvgPlugin)
+        list(APPEND STATIC_LIBRARIES Qt5::QSvgPlugin)
     endif()
 endif()
 

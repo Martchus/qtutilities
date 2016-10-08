@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+
 # after including this module, AppConfig must be included
 
 # enable Qt Widgets GUI
@@ -51,5 +53,10 @@ if(WIDGETS_GUI OR QUICK_GUI)
 endif()
 
 # add option for enabling/disabling static Qt plugins
-option(SVG_SUPPORT "enables/disables svg support for Qt GUI (only affects static builds where QSvgPlugin will be built-in if enabled)" ON)
+if("Svg" IN_LIST ADDITIONAL_QT_MODULES)
+    # Qt Svg module is not optional
+    set(SVG_SUPPORT ON)
+else()
+    option(SVG_SUPPORT "enables/disables svg support for Qt GUI" OFF)
+endif()
 option(SVG_ICON_SUPPORT "enables/disables svg icon support for Qt GUI (only affects static builds where QSvgPlugin will be built-in if enabled)" ON)
