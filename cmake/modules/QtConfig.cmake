@@ -29,31 +29,34 @@ if(KF_MODULES)
     list(REMOVE_DUPLICATES KF_MODULES)
 endif()
 
-message(STATUS "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against the following Qt 5 modules: ${QT_MODULES}")
-message(STATUS "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against the following KDE 5 modules: ${KF_MODULES}")
-
 # actually find the required Qt/KF modules
 foreach(QT_MODULE ${QT_MODULES})
-    find_package(Qt5${QT_MODULE} REQUIRED)
-    list(APPEND LIBRARIES Qt5::${QT_MODULE})
-    list(APPEND STATIC_LIBRARIES Qt5::${QT_MODULE})
+    # using those helpers allows using static Qt 5 build
+    find_qt5_module(${QT_MODULE} REQUIRED)
+    use_qt5_module(${QT_MODULE} REQUIRED)
 endforeach()
 foreach(KF_MODULE ${KF_MODULES})
+    # only shared KF5 modules supported
     find_package(KF5${KF_MODULE} REQUIRED)
-    list(APPEND LIBRARIES KF5::${KF_MODULE})
-    list(APPEND STATIC_LIBRARIES KF5::${KF_MODULE})
+    set(KF5_${KF_MODULE}_DYNAMIC_LIB KF5::${KF_MODULE})
+    link_against_library(KF5_${KF_MODULE} "AUTO_LINKAGE" REQUIRED)
 endforeach()
 
-# include plugins statically
-if(USE_STATIC_QT_BUILD AND (WIDGETS_GUI OR QUICK_GUI))
+# tune for static build
+if(USE_STATIC_QT5_CORE AND (WIDGETS_GUI OR QUICK_GUI))
+    # include plugins statically
     if(WIN32)
-        list(APPEND LIBRARIES Qt5::QWindowsIntegrationPlugin)
-        list(APPEND STATIC_LIBRARIES Qt5::QWindowsIntegrationPlugin)
+        list(APPEND LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
+        list(APPEND STATIC_LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
     endif()
     if(SVG_ICON_SUPPORT)
         list(APPEND LIBRARIES Qt5::QSvgPlugin)
         list(APPEND STATIC_LIBRARIES Qt5::QSvgPlugin)
     endif()
+
+    # workaround for missing compile definition GRAPHITE2_STATIC
+    #set_property(TARGET Qt5::Gui APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS GRAPHITE2_STATIC)
+
 endif()
 
 # option for built-in translations
