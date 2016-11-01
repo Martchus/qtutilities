@@ -169,28 +169,38 @@ if(REQUIRED_ICONS)
                 set(ICON_THEME_PATH "${ICON_SEARCH_PATH}/${ICON_THEME}")
                 set(NEW_ICON_THEME_PATH "${ICON_SEARCH_PATH}/${ICON_THEME}")
                 if(IS_DIRECTORY "${ICON_THEME_PATH}")
+                    message(STATUS "The specified icon theme \"${ICON_THEME}\" has been located under \"${ICON_THEME_PATH}\" and will be built-in.")
                     # find index files
-                    file(GLOB GLOBBED_ICON_THEME_INDEX_FILES LIST_DIRECTORIES false "${ICON_THEME_PATH}/index.theme" "${ICON_THEME_PATH}/icon-theme.cache")
+                    if(NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
+                        file(GLOB GLOBBED_ICON_THEME_INDEX_FILES LIST_DIRECTORIES false "${ICON_THEME_PATH}/index.theme" "${ICON_THEME_PATH}/icon-theme.cache")
+                    else()
+                        # only index.theme required when icons are provided as fallback anyways
+                        file(GLOB GLOBBED_ICON_THEME_INDEX_FILES LIST_DIRECTORIES false "${ICON_THEME_PATH}/index.theme")
+                    endif()
                     # make the first specified built-in the default theme
                     if(NOT EXISTS "${DEFAULT_THEME_INDEX_FILE}")
                         file(MAKE_DIRECTORY "${BUILDIN_ICONS_DIR}/default")
                         file(WRITE "${DEFAULT_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
                         list(APPEND ICON_THEME_FILES "<file>default/index.theme</file>")
                     endif()
-                    # find required icons
-                    set(GLOB_PATTERNS)
-                    foreach(REQUIRED_ICON ${REQUIRED_ICONS})
-                        list(APPEND GLOB_PATTERNS
-                            "${ICON_THEME_PATH}/${REQUIRED_ICON}"
-                            "${ICON_THEME_PATH}/${REQUIRED_ICON}.*"
-                            "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
-                            "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*"
-                        )
-                    endforeach()
-                    file(GLOB_RECURSE GLOBBED_ICON_THEME_FILES LIST_DIRECTORIES false ${GLOB_PATTERNS})
+                    # find required icons, except the icon theme is provided as fallback anyways
+                    if(NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
+                        set(GLOB_PATTERNS)
+                        foreach(REQUIRED_ICON ${REQUIRED_ICONS})
+                            list(APPEND GLOB_PATTERNS
+                                "${ICON_THEME_PATH}/${REQUIRED_ICON}"
+                                "${ICON_THEME_PATH}/${REQUIRED_ICON}.*"
+                                "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
+                                "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*"
+                            )
+                        endforeach()
+                        file(GLOB_RECURSE GLOBBED_ICON_THEME_FILES LIST_DIRECTORIES false ${GLOB_PATTERNS})
+                    else()
+                        message(STATUS "Icon files for specified theme \"${ICON_THEME}\" are skipped because these are provided as fallback anyways.")
+                        set(GLOBBED_ICON_THEME_FILES)
+                    endif()
                     # make temporary copy of required icons and create resource list for Qt
                     foreach(ICON_THEME_FILE ${GLOBBED_ICON_THEME_INDEX_FILES} ${GLOBBED_ICON_THEME_FILES})
-                        #message(STATUS "relpath: ${ICON_THEME_FILE_RELATIVE_PATH}, new relpath: ${NEW_ICON_THEME_FILE_RELATIVE_PATH}")
                         # resolve symlinks (use
                         if(IS_SYMLINK "${ICON_THEME_FILE}")
                             string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH "${ICON_THEME_FILE}")

@@ -14,4 +14,14 @@
 # define QT_UTILITIES_IMPORT LIB_IMPORT
 #endif
 
+/*!
+ * \def QT_UTILITIES_EXPORT
+ * \brief Marks the symbol to be exported by the qtutilities library.
+ */
+
+/*!
+ * \def QT_UTILITIES_IMPORT
+ * \brief Marks the symbol to be imported from the qtutilities library.
+ */
+
 #endif // QT_UTILITIES_GLOBAL
