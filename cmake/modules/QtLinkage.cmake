@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+
 # determines the Qt linkage
 
 if(NOT DEFINED QT_LINKAGE_DETERMINED)
@@ -36,6 +38,8 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
                 set(QT5_${MODULE}_STATIC_LIB Qt5::static::${MODULE})
                 set(QT5_${MODULE}_ASSUME_STATIC OFF)
                 set(QT5_${MODULE}_FOUND ON)
+                # reverse lookup for pkg-config
+                set(PC_PKG_STATIC_Qt5_static_${MODULE} "StaticQt5${MODULE}")
             else()
                 # consider the regular Qt package (without "Static" prefix) the static version if
                 # static Qt is required and Qt package with "Static" prefix doesn't exist
@@ -46,6 +50,8 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
                         set(QT5_${MODULE}_STATIC_LIB Qt5::${MODULE})
                         set(QT5_${MODULE}_ASSUME_STATIC ON)
                         set(QT5_${MODULE}_FOUND ON)
+                        # reverse lookup for pkg-config
+                        set(PC_PKG_STATIC_Qt5_${MODULE} "Qt5${MODULE}")
                         message(WARNING "Building static libs and/or static Qt linkage has been enabled. Hence assuming provided Qt 5 ${MODULE} library is static.")
                     endif()
                 endif()
@@ -61,12 +67,18 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
             if(Qt5${MODULE}_FOUND)
                 set(QT5_${MODULE}_DYNAMIC_LIB Qt5::${MODULE})
                 set(QT5_${MODULE}_FOUND ON)
+                # reverse lookup for pkg-config
+                set(PC_PKG_SHARED_Qt5_${MODULE} "Qt5${MODULE}")
             endif()
         endif()
     endmacro()
 
     macro(use_qt5_module MODULE REQUIRED)
         link_against_library("QT5_${MODULE}" "${QT_LINKAGE}" "${REQUIRED}")
+        if(${MODULE} IN_LIST META_PUBLIC_QT_MODULES)
+            list(APPEND META_PUBLIC_SHARED_LIB_DEPENDS ${QT5_${MODULE}_DYNAMIC_LIB})
+            list(APPEND META_PUBLIC_STATIC_LIB_DEPENDS ${QT5_${MODULE}_STATIC_LIB})
+        endif()
     endmacro()
 
     macro(use_static_qt5_plugin PLUGIN)

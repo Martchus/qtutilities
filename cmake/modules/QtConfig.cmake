@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+
 # applies Qt specific configuration
 # for GUI applications, QtGuiAppConfig must be included before
 # after including this module, AppTarget must be included
@@ -23,10 +25,17 @@ if(SVG_SUPPORT OR ((USE_STATIC_QT_BUILD AND (WIDGETS_GUI OR QUICK_GUI)) AND SVG_
     list(APPEND QT_REPOS svg)
 endif()
 
+# remove duplicates
 list(REMOVE_DUPLICATES QT_REPOS)
 list(REMOVE_DUPLICATES QT_MODULES)
+if(IMPORTED_QT_MODULES)
+    list(REMOVE_DUPLICATES IMPORTED_QT_MODULES)
+endif()
 if(KF_MODULES)
     list(REMOVE_DUPLICATES KF_MODULES)
+endif()
+if(IMPORTED_KF_MODULES)
+    list(REMOVE_DUPLICATES IMPORTED_KF_MODULES)
 endif()
 
 # actually find the required Qt/KF modules
@@ -35,28 +44,34 @@ foreach(QT_MODULE ${QT_MODULES})
     find_qt5_module(${QT_MODULE} REQUIRED)
     use_qt5_module(${QT_MODULE} REQUIRED)
 endforeach()
+foreach(QT_MODULE ${IMPORTED_QT_MODULES})
+    if(NOT "${QT_MODULE}" IN_LIST QT_MODULES)
+        find_qt5_module(${QT_MODULE} REQUIRED)
+    endif()
+endforeach()
 foreach(KF_MODULE ${KF_MODULES})
     # only shared KF5 modules supported
     find_package(KF5${KF_MODULE} REQUIRED)
     set(KF5_${KF_MODULE}_DYNAMIC_LIB KF5::${KF_MODULE})
     link_against_library(KF5_${KF_MODULE} "AUTO_LINKAGE" REQUIRED)
 endforeach()
+foreach(KF_MODULE ${IMPORTED_KF_MODULES})
+    if(NOT "${KF_MODULE}" IN_LIST KF_MODULES)
+        find_package(KF5${KF_MODULE} REQUIRED)
+    endif()
+endforeach()
 
 # tune for static build
 if(USE_STATIC_QT5_CORE AND (WIDGETS_GUI OR QUICK_GUI))
     # include plugins statically
     if(WIN32)
-        list(APPEND LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
-        list(APPEND STATIC_LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
+        list(APPEND PRIVATE_LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
+        list(APPEND PRIVATE_STATIC_LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
     endif()
     if(SVG_ICON_SUPPORT)
-        list(APPEND LIBRARIES Qt5::QSvgPlugin)
-        list(APPEND STATIC_LIBRARIES Qt5::QSvgPlugin)
+        list(APPEND PRIVATE_LIBRARIES Qt5::static::QSvgPlugin)
+        list(APPEND PRIVATE_STATIC_LIBRARIES Qt5::static::QSvgPlugin)
     endif()
-
-    # workaround for missing compile definition GRAPHITE2_STATIC
-    #set_property(TARGET Qt5::Gui APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS GRAPHITE2_STATIC)
-
 endif()
 
 # option for built-in translations

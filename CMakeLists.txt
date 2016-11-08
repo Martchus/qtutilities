@@ -123,13 +123,13 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODUL
 # configure platform specific capslock detection
 if(WIN32)
     # WinAPI provides functions required for capslock detection
-    add_definitions(-DPLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+    list(APPEND META_PRIVATE_COMPILE_DEFINITIONS PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
 else()
     # X11 can provide functions required for capslock detection under non-Windows environments
     find_package(X11)
     if(X11_FOUND)
         list(APPEND LIBRARIES ${X11_LIBRARIES})
-        add_definitions(-DPLATFORM_SPECIFIC_CAPSLOCK_DETECTION -DX_AVAILABLE)
+        list(APPEND META_PRIVATE_COMPILE_DEFINITIONS PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
     endif()
 endif()
 
