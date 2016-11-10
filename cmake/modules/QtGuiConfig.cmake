@@ -34,8 +34,6 @@ else()
 endif()
 
 if(WIDGETS_GUI OR QUICK_GUI)
-    list(APPEND QT_MODULES Gui)
-
     # set "GUI-type" to WIN32 to hide console under windows
     if(WIN32)
         set(GUI_TYPE WIN32)
