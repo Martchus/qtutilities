@@ -35,7 +35,11 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
             # - has the advantage that usage of dynamic and static Qt during the same build is possible
             find_package(StaticQt5${MODULE})
             if(StaticQt5${MODULE}_FOUND)
-                set(QT5_${MODULE}_STATIC_LIB Qt5::static::${MODULE})
+                if(TARGET StaticQt5::${MODULE})
+                    set(QT5_${MODULE}_STATIC_LIB StaticQt5::${MODULE})
+                else()
+                    set(QT5_${MODULE}_STATIC_LIB Qt5::static::${MODULE})
+                endif()
                 set(QT5_${MODULE}_ASSUME_STATIC OFF)
                 set(QT5_${MODULE}_FOUND ON)
                 # reverse lookup for pkg-config
