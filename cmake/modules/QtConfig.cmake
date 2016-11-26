@@ -20,7 +20,7 @@ if(DBUS_FILES)
     list(APPEND QT_MODULES DBus)
 endif()
 
-if(SVG_SUPPORT OR ((USE_STATIC_QT_BUILD AND (WIDGETS_GUI OR QUICK_GUI)) AND SVG_ICON_SUPPORT))
+if(SVG_SUPPORT OR (SVG_ICON_SUPPORT AND (USE_STATIC_QT5_Gui OR USE_STATIC_QT5_Widgets OR USE_STATIC_QT5_Quick)))
     list(APPEND QT_MODULES Svg)
     list(APPEND QT_REPOS svg)
 endif()
@@ -61,17 +61,18 @@ foreach(KF_MODULE ${IMPORTED_KF_MODULES})
     endif()
 endforeach()
 
-# tune for static build
-if(USE_STATIC_QT5_CORE AND (WIDGETS_GUI OR QUICK_GUI))
-    # include plugins statically
-    if(WIN32)
-        list(APPEND PRIVATE_LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
-        list(APPEND PRIVATE_STATIC_LIBRARIES Qt5::static::QWindowsIntegrationPlugin)
+# built-in plugins when doing static build
+if(WIN32 AND (USE_STATIC_QT5_Gui OR USE_STATIC_QT5_Widgets OR USE_STATIC_QT5_Quick))
+    if(NOT USE_STATIC_QT5_Gui)
+        find_qt5_module(Gui REQUIRED)
     endif()
-    if(SVG_ICON_SUPPORT)
-        list(APPEND PRIVATE_LIBRARIES Qt5::static::QSvgPlugin)
-        list(APPEND PRIVATE_STATIC_LIBRARIES Qt5::static::QSvgPlugin)
-    endif()
+    use_static_qt5_plugin(Gui WindowsIntegration)
+endif()
+if((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND USE_STATIC_QT5_Svg)
+    use_static_qt5_plugin(Svg Svg)
+endif()
+if(SVG_ICON_SUPPORT AND USE_STATIC_QT5_Svg)
+    use_static_qt5_plugin(Svg SvgIcon)
 endif()
 
 # option for built-in translations

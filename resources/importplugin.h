@@ -6,7 +6,7 @@
 #ifdef QT_STATIC
 # if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
 #  include <QtPlugin>
-#  ifdef PLATFORM_WINDOWS
+#  ifdef Q_OS_WIN32
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #  endif
 #  ifdef SVG_SUPPORT
