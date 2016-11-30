@@ -3,5 +3,6 @@
         <file>icons/hicolor/16x16/actions/edit-clear.png</file>
         <file>icons/hicolor/16x16/actions/edit-menu.png</file>
         <file>icons/hicolor/48x48/apps/qtcreator.svg</file>
+        <file>icons/hicolor/16x16/actions/edit-error.png</file>
     </qresource>
 </RCC>
