@@ -71,7 +71,7 @@ void ButtonOverlay::setClearButtonEnabled(bool enabled)
         m_clearButton->setHidden(isCleared());
         m_clearButton->setPixmap(/*QIcon::fromTheme(QStringLiteral("edit-clear"), */QIcon(QStringLiteral(":/qtutilities/icons/hicolor/16x16/actions/edit-clear.png")/*)*/).pixmap(16));
         m_clearButton->setGeometry(0, 0, 16, 16);
-        m_clearButton->setToolTip(QObject::tr("clear"));
+        m_clearButton->setToolTip(QObject::tr("Clear"));
         QObject::connect(m_clearButton, &IconButton::clicked, std::bind(&ButtonOverlay::handleClearButtonClicked, this));
         m_buttonLayout->addWidget(m_clearButton);
     }
