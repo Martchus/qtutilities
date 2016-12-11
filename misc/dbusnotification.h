@@ -25,7 +25,8 @@ enum class NotificationCloseReason
     Undefined,
     Expired,
     Dismissed,
-    Manually
+    Manually,
+    ActionInvoked
 };
 
 class QT_UTILITIES_EXPORT DBusNotification : public QObject

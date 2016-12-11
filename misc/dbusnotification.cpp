@@ -226,7 +226,11 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
 {
     auto i = pendingNotifications.find(id);
     if(i != pendingNotifications.end()) {
-        emit i->second->actionInvoked(action);
+        DBusNotification *notification = i->second;
+        notification->m_id = 0;
+        emit notification->actionInvoked(action);
+        emit notification->closed(NotificationCloseReason::ActionInvoked);
+        pendingNotifications.erase(i);
     }
 }
 
