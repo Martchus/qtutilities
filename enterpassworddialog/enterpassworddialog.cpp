@@ -9,7 +9,7 @@
 #include <QMessageBox>
 #include <QGuiApplication>
 
-#ifdef PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
+#ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 # if defined(Q_OS_WIN32)
 #  include <windows.h>
 # elif defined(X_AVAILABLE)
@@ -49,7 +49,7 @@ EnterPasswordDialog::EnterPasswordDialog(QWidget *parent) :
     m_ui->password1LineEdit->installEventFilter(this);
     m_ui->password2LineEdit->installEventFilter(this);
     // capslock key detection
-#ifdef PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
+#ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
     m_capslockPressed = isCapslockPressed();
 #else
     m_capslockPressed = false;
@@ -302,14 +302,14 @@ void EnterPasswordDialog::confirm()
  *
  * \remarks - Returns always false for unsupported platforms.
  *          - This method always returns false when not built with
- *            PLATFORM_SPECIFIC_CAPSLOCK_DETECTION defined.
+ *            QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION defined.
  *          - This static function will be used internally to detect whether the capslock key is pressed
  *            when initializing the dialog if available.
  *          - The function requires the application to be linked against X11 on Linux/Unix.
  */
 bool EnterPasswordDialog::isCapslockPressed()
 {
-#ifdef PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
+#ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
     // platform dependent method of determining if CAPS LOCK is pressed
 # if defined(Q_OS_WIN32)
     return GetKeyState(VK_CAPITAL) == 1;
