@@ -133,6 +133,29 @@ else()
     endif()
 endif()
 
+# configure support for D-Bus notifications
+option(DBUS_NOTIFICATIONS "enables support for D-Bus notifications" ${UNIX})
+set(DBUS_NOTIFICATIONS_FILE_NAME misc/dbusnotification)
+if(DBUS_NOTIFICATIONS)
+    list(APPEND HEADER_FILES
+        ${DBUS_NOTIFICATIONS_FILE_NAME}.h
+    )
+    list(APPEND SRC_FILES
+        ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp
+    )
+    list(APPEND DBUS_FILES
+        dbus/org.freedesktop.Notifications.xml
+    )
+    list(APPEND META_PUBLIC_COMPILE_DEFINITIONS QT_UTILITIES_SUPPORT_DBUS_NOTIFICATIONS)
+    message(STATUS "D-Bus notifications enabled")
+else()
+    list(APPEND DOC_ONLY_FILES
+        ${DBUS_NOTIFICATIONS_FILE_NAME}.h
+        ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp
+    )
+    message(STATUS "D-Bus notifications disabled")
+endif()
+
 # find c++utilities
 find_package(c++utilities 4.0.0 REQUIRED)
 use_cpp_utilities()
