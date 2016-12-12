@@ -225,7 +225,8 @@ bool SettingsDialog::apply()
                 if(errorMessage.isEmpty()) {
                     errorMessage = tr("<p><b>Errors occured when applying changes:</b></p><ul>");
                 }
-                if(const_cast<const OptionPage *>(page)->errors().isEmpty()) {
+                QStringList &errors = const_cast<OptionPage *>(page)->errors();
+                if(errors.isEmpty()) {
                     errorMessage.append(QStringLiteral("<li><i>")
                                   % category->displayName()
                                   % QLatin1Char('/')
@@ -234,7 +235,7 @@ bool SettingsDialog::apply()
                                   % tr("unknonw error")
                                   % QStringLiteral("</li>"));
                 } else {
-                    for(const QString &error : const_cast<const OptionPage *>(page)->errors()) {
+                    for(const QString &error : errors) {
                         errorMessage.append(QStringLiteral("<li><i>")
                                       % category->displayName()
                                       % QLatin1Char('/')
@@ -243,6 +244,7 @@ bool SettingsDialog::apply()
                                       % error
                                       % QStringLiteral("</li>"));
                     }
+                    errors.clear();
                 }
             }
         }

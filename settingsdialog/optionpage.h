@@ -10,8 +10,12 @@
 
 namespace Dialogs {
 
+class SettingsDialog;
+
 class QT_UTILITIES_EXPORT OptionPage
 {
+    friend class SettingsDialog;
+
 public:
     explicit OptionPage(QWidget *parentWindow = nullptr);
     virtual ~OptionPage();
