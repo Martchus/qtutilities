@@ -227,10 +227,15 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
     auto i = pendingNotifications.find(id);
     if(i != pendingNotifications.end()) {
         DBusNotification *notification = i->second;
-        notification->m_id = 0;
         emit notification->actionInvoked(action);
+        // Plasma 5 also closes the notification but doesn't emit the NotificationClose signal
+        // -> just consider the notification closed
         emit notification->closed(NotificationCloseReason::ActionInvoked);
+        notification->m_id = 0;
         pendingNotifications.erase(i);
+        // however, lxqt-notificationd does not close the notification
+        // -> close manually for consistent behaviour
+        m_dbusInterface->CloseNotification(i->first);
     }
 }
 
