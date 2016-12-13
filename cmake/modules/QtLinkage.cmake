@@ -44,6 +44,7 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
                 set(QT5_${MODULE}_ASSUME_STATIC OFF)
                 set(QT5_${MODULE}_FOUND ON)
                 # reverse lookup for pkg-config
+                set(PC_PKG_STATIC_StaticQt5_${MODULE} "StaticQt5${MODULE}")
                 set(PC_PKG_STATIC_Qt5_static_${MODULE} "StaticQt5${MODULE}")
             else()
                 # consider the regular Qt package (without "Static" prefix) the static version if
