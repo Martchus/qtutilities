@@ -8,6 +8,7 @@ set(HEADER_FILES
     misc/adoptlocker.h
     misc/dialogutils.h
     misc/desktoputils.h
+    misc/conversion.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
@@ -113,7 +114,7 @@ set(META_APP_AUTHOR "Martchus")
 set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
 set(META_VERSION_MAJOR 5)
-set(META_VERSION_MINOR 2)
+set(META_VERSION_MINOR 3)
 set(META_VERSION_PATCH 0)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
@@ -146,7 +147,7 @@ if(DBUS_NOTIFICATIONS)
     list(APPEND DBUS_FILES
         dbus/org.freedesktop.Notifications.xml
     )
-    list(APPEND META_PUBLIC_COMPILE_DEFINITIONS QT_UTILITIES_SUPPORT_DBUS_NOTIFICATIONS)
+    list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SUPPORT_DBUS_NOTIFICATIONS)
     message(STATUS "D-Bus notifications enabled")
 else()
     list(APPEND DOC_ONLY_FILES
