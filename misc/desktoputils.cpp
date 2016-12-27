@@ -16,9 +16,13 @@ bool openLocalFileOrDir(const QString &path)
     // -> replace backslashes with slashes to support Windows paths
     QString tmp(path);
     tmp.replace(QChar('\\'), QChar('/'));
-    return QDesktopServices::openUrl(QUrl(QStringLiteral("file:///") + path, QUrl::TolerantMode));
+    QUrl url(QStringLiteral("file:///"));
+    url.setPath(tmp, QUrl::DecodedMode);
+    return QDesktopServices::openUrl(url);
 #else
-    return QDesktopServices::openUrl(QUrl(QStringLiteral("file://") + path, QUrl::TolerantMode));
+    QUrl url(QStringLiteral("file://"));
+    url.setPath(path, QUrl::DecodedMode);
+    return QDesktopServices::openUrl(url);
 #endif
 }
 
