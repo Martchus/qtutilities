@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
+# meta data
+set(META_PROJECT_NAME qtutilities)
+set(META_PROJECT_VARNAME QT_UTILITIES)
+set(META_APP_NAME "Qt Utilities")
+set(META_APP_AUTHOR "Martchus")
+set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
+set(META_APP_DESCRIPTION "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
+set(META_VERSION_MAJOR 5)
+set(META_VERSION_MINOR 4)
+set(META_VERSION_PATCH 0)
+set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
+
 # add project files
 set(HEADER_FILES
     misc/xmlparsermacros.h
@@ -81,6 +93,11 @@ set(CMAKE_MODULE_FILES
     cmake/modules/WebViewProviderConfig.cmake
 )
 
+set(TS_FILES
+    translations/${META_PROJECT_NAME}_de_DE.ts
+    translations/${META_PROJECT_NAME}_en_US.ts
+)
+
 set(DOC_FILES
     README.md
 )
@@ -105,18 +122,6 @@ set(REQUIRED_ICONS
 set(SCRIPT_FILES
     scripts/required_icons.sh
 )
-
-# meta data
-set(META_PROJECT_NAME qtutilities)
-set(META_PROJECT_VARNAME QT_UTILITIES)
-set(META_APP_NAME "Qt Utilities")
-set(META_APP_AUTHOR "Martchus")
-set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
-set(META_APP_DESCRIPTION "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
-set(META_VERSION_MAJOR 5)
-set(META_VERSION_MINOR 4)
-set(META_VERSION_PATCH 0)
-set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 # required to include CMake modules from own project directory
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
