@@ -110,6 +110,7 @@ list_to_string(", " "QStringLiteral(\"" "\")" "${QT_TRANSLATION_FILES}" QT_TRANS
 # enable lrelease and add install target for localization
 if(TS_FILES)
     message(STATUS "Project has translations which will be released.")
+    set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE YES)
 
     # the LinguistTools module is required
     # (but not add it to QT_MODULES because we don't link against it)
@@ -137,6 +138,10 @@ if(TS_FILES)
         add_dependencies(${LOCALIZATION_TARGET} ${META_PROJECT_NAME}_translations)
     endif()
 
+    # make application specific translation available as array via config.h
+    list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}")
+    list_to_string(", " "QStringLiteral(\"" "\")" "${APP_SPECIFIC_QT_TRANSLATION_FILES}" APP_SPECIFIC_QT_TRANSLATION_FILES_ARRAY)
+
     # built-in translations
     if(BUILTIN_TRANSLATIONS)
         # write a qrc file for the qm files and add it to the resource files
@@ -149,6 +154,9 @@ if(TS_FILES)
         file(APPEND "${TRANSLATIONS_QRC_FILE}" "</qresource></RCC>")
         list(APPEND RES_FILES "${TRANSLATIONS_QRC_FILE}")
     endif()
+
+else()
+    set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE NO)
 endif()
 
 # generate DBus interfaces

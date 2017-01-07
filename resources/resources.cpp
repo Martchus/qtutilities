@@ -180,6 +180,20 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
     }
 }
 
+void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames)
+{
+    for(const QString &applicationName : applicationNames) {
+        loadApplicationTranslationFile(applicationName);
+    }
+}
+
+void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames, const QString &localeName)
+{
+    for(const QString &applicationName : applicationNames) {
+        loadApplicationTranslationFile(applicationName, localeName);
+    }
+}
+
 }
 
 /*!

@@ -21,11 +21,11 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
     QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION))
 
 /*!
- * \brief Loads translations for Qt and the application.
+ * \brief Loads translations for Qt, other dependencies and the application.
  */
 #define LOAD_QT_TRANSLATIONS \
     TranslationFiles::loadQtTranslationFile(QT_TRANSLATION_FILES); \
-    TranslationFiles::loadApplicationTranslationFile(QStringLiteral(PROJECT_NAME))
+    TranslationFiles::loadApplicationTranslationFile(APP_SPECIFIC_QT_TRANSLATION_FILES)
 
 namespace QtUtilitiesResources {
 
@@ -41,6 +41,8 @@ QT_UTILITIES_EXPORT void loadQtTranslationFile(std::initializer_list<QString> re
 QT_UTILITIES_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames, const QString &localeName);
 QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicationName);
 QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames, const QString &localeName);
 
 }
 
