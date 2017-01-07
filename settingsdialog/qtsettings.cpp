@@ -329,7 +329,7 @@ bool QtLanguageOptionPage::apply()
 {
     if(hasBeenShown()) {
         m_settings.localeName = ui()->localeComboBox->currentText();
-        m_settings.customLocale = ui()->localeCheckBox->isChecked();
+        m_settings.customLocale = !ui()->localeCheckBox->isChecked();
     }
     return true;
 }
@@ -338,7 +338,7 @@ void QtLanguageOptionPage::reset()
 {
     if(hasBeenShown()) {
         ui()->localeComboBox->setCurrentText(m_settings.localeName);
-        ui()->localeCheckBox->setChecked(m_settings.customLocale);
+        ui()->localeCheckBox->setChecked(!m_settings.customLocale);
     }
 }
 
