@@ -14,7 +14,7 @@
 #include "ui_qtlanguageoptionpage.h"
 #include "ui_qtenvoptionpage.h"
 
-#include <c++utilities/misc/memory.h>
+#include <memory>
 
 #include <QStyleFactory>
 #include <QFontDialog>
