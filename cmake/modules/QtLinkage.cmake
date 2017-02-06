@@ -6,6 +6,11 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
     set(QT_LINKAGE_DETERMINED true)
     include(3rdParty)
 
+    # by default, require Qt 5.6 or higher
+    if(NOT META_QT5_VERSION)
+        set(META_QT5_VERSION 5.6)
+    endif()
+
     set(QT_LINKAGE "AUTO_LINKAGE" CACHE STRING "specifies whether to link statically or dynamically against Qt 5")
 
     if(BUILD_STATIC_LIBS OR ("${QT_LINKAGE}" STREQUAL "AUTO_LINKAGE" AND ((STATIC_LINKAGE AND "${META_PROJECT_TYPE}" STREQUAL "application") OR (STATIC_LIBRARY_LINKAGE AND ("${META_PROJECT_TYPE}" STREQUAL "" OR "${META_PROJECT_TYPE}" STREQUAL "library")))) OR ("${QT_LINKAGE}" STREQUAL "STATIC"))
@@ -33,7 +38,7 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
             # check for 'Static'-prefixed CMake module first
             # - patched mingw-w64-qt5 packages providing those files are available in my PKGBUILDs repository
             # - has the advantage that usage of dynamic and static Qt during the same build is possible
-            find_package(StaticQt5${MODULE})
+            find_package(StaticQt5${MODULE} ${META_QT5_VERSION} ${QT_5_${MODULE}_REQUIRED})
             if(StaticQt5${MODULE}_FOUND)
                 if(TARGET StaticQt5::${MODULE})
                     set(QT5_${MODULE}_STATIC_PREFIX "StaticQt5::")
@@ -51,7 +56,7 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
                 # static Qt is required and Qt package with "Static" prefix doesn't exist
                 # (fallback if not using patched version of Qt mentioned above)
                 if(USE_STATIC_QT_BUILD AND NOT StaticQt5${MODULE}_FOUND AND Qt5${MODULE}_FOUND)
-                    find_package(Qt5${MODULE} ${QT_5_${MODULE}_REQUIRED})
+                    find_package(Qt5${MODULE} ${META_QT5_VERSION} ${QT_5_${MODULE}_REQUIRED})
                     if(Qt5${MODULE}_FOUND)
                         set(QT5_${MODULE}_STATIC_PREFIX "Qt5::")
                         set(QT5_${MODULE}_STATIC_LIB "${QT5_${MODULE}_STATIC_PREFIX}${MODULE}")
@@ -59,7 +64,7 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
                         set(QT5_${MODULE}_FOUND ON)
                         # reverse lookup for pkg-config
                         set(PC_PKG_STATIC_Qt5_${MODULE} "Qt5${MODULE}")
-                        message(WARNING "Building static libs and/or static Qt linkage has been enabled. Hence assuming provided Qt 5 ${MODULE} library is static.")
+                        message(WARNING "Building static libs and/or static Qt linkage has been enabled. Hence assuming provided Qt 5 module ${MODULE} is static.")
                     endif()
                 endif()
             endif()
@@ -68,9 +73,9 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
         # find dynamic version
         if(USE_SHARED_QT_BUILD)
             if(QT5_${MODULE}_ASSUME_STATIC)
-                message(FATAL_ERROR "The provided Qt 5 ${MODULE} is assumed to be static. However, a shared version is required for building dynamic libs and/or dynamic Qt linkage.")
+                message(FATAL_ERROR "The provided Qt 5 module ${MODULE} is assumed to be static. However, a shared version is required for building dynamic libs and/or dynamic Qt linkage.")
             endif()
-            find_package(Qt5${MODULE} ${QT_5_${MODULE}_REQUIRED})
+            find_package(Qt5${MODULE} ${META_QT5_VERSION} ${QT_5_${MODULE}_REQUIRED})
             if(Qt5${MODULE}_FOUND)
                 set(QT5_${MODULE}_DYNAMIC_LIB Qt5::${MODULE})
                 set(QT5_${MODULE}_FOUND ON)
