@@ -153,8 +153,8 @@ if(TS_FILES)
         endforeach()
         file(APPEND "${TRANSLATIONS_QRC_FILE}" "</qresource></RCC>")
         list(APPEND RES_FILES "${TRANSLATIONS_QRC_FILE}")
+        list(APPEND AUTOGEN_DEPS ${QM_FILES})
     endif()
-
 else()
     set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE NO)
 endif()
@@ -258,7 +258,7 @@ if(REQUIRED_ICONS)
     endif()
 endif()
 
-# enable moc, uic and rcc
+# enable moc, uic and rcc by default for all targets
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
