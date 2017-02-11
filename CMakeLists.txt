@@ -32,6 +32,8 @@ set(SRC_FILES
     models/checklistmodel.cpp
     resources/qtconfigarguments.cpp
     resources/resources.cpp
+)
+set(RES_FILES
     resources/qtutilsicons.qrc
 )
 

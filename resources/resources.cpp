@@ -39,11 +39,13 @@ inline void cleanupResources() {
 
 /*!
  * \brief Functions for using the resources provided by this library.
+ * \deprecated Replaced by ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES macro.
  */
 namespace QtUtilitiesResources {
 
 /*!
  * \brief Initiates the resources used and provided by this library.
+ * \deprecated Replaced by ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES macro.
  */
 void init()
 {
@@ -52,6 +54,7 @@ void init()
 
 /*!
  * \brief Frees the resources used and provided by this library.
+ * \deprecated Replaced by ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES macro.
  */
 void cleanup()
 {

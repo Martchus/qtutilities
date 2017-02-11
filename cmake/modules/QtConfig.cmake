@@ -105,7 +105,7 @@ endforeach()
 
 # make relevant Qt translations available as array via config.h
 include(ListToString)
-list_to_string(", " "QStringLiteral(\"" "\")" "${QT_TRANSLATION_FILES}" QT_TRANSLATION_FILES_ARRAY)
+list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${QT_TRANSLATION_FILES}" QT_TRANSLATION_FILES_ARRAY)
 
 # enable lrelease and add install target for localization
 if(TS_FILES)
@@ -140,12 +140,13 @@ if(TS_FILES)
 
     # make application specific translation available as array via config.h
     list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}")
-    list_to_string(", " "QStringLiteral(\"" "\")" "${APP_SPECIFIC_QT_TRANSLATION_FILES}" APP_SPECIFIC_QT_TRANSLATION_FILES_ARRAY)
+    list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${APP_SPECIFIC_QT_TRANSLATION_FILES}" APP_SPECIFIC_QT_TRANSLATION_FILES_ARRAY)
 
     # built-in translations
     if(BUILTIN_TRANSLATIONS)
         # write a qrc file for the qm files and add it to the resource files
-        set(TRANSLATIONS_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/${META_PROJECT_NAME}_translations.qrc")
+        set(TRANSLATIONS_QRC_FILE_NAME "${META_PROJECT_VARNAME_LOWER}_translations.qrc")
+        set(TRANSLATIONS_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TRANSLATIONS_QRC_FILE_NAME}")
         file(WRITE "${TRANSLATIONS_QRC_FILE}" "<RCC><qresource prefix=\"/translations\">")
         foreach(QM_FILE ${QM_FILES})
             get_filename_component(QM_FILE_NAME "${QM_FILE}" NAME)
@@ -154,6 +155,7 @@ if(TS_FILES)
         file(APPEND "${TRANSLATIONS_QRC_FILE}" "</qresource></RCC>")
         list(APPEND RES_FILES "${TRANSLATIONS_QRC_FILE}")
         list(APPEND AUTOGEN_DEPS ${QM_FILES})
+        list(APPEND BUILTIN_TRANSLATION_FILES "${TRANSLATIONS_QRC_FILE_NAME}")
     endif()
 else()
     set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE NO)
@@ -225,7 +227,7 @@ if(REQUIRED_ICONS)
                     endif()
                     # make temporary copy of required icons and create resource list for Qt
                     foreach(ICON_THEME_FILE ${GLOBBED_ICON_THEME_INDEX_FILES} ${GLOBBED_ICON_THEME_FILES})
-                        # resolve symlinks (use
+                        # resolve symlinks
                         if(IS_SYMLINK "${ICON_THEME_FILE}")
                             string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH "${ICON_THEME_FILE}")
                             string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH "${ICON_THEME_FILE_RELATIVE_PATH}")
@@ -257,6 +259,28 @@ if(REQUIRED_ICONS)
         list(APPEND RES_FILES "${BUILTIN_ICON_THEMES_QRC_FILE}")
     endif()
 endif()
+
+# add Qt resources from specified RES_FILES
+foreach(RES_FILE ${RES_FILES})
+    get_filename_component(RES_EXT ${RES_FILE} EXT)
+    if(RES_EXT STREQUAL ".qrc")
+        get_filename_component(RES_NAME ${RES_FILE} NAME_WE)
+        list(APPEND QT_RESOURCES "${RES_NAME}")
+    endif()
+endforeach()
+# add Qt resources required by static library dependencies
+list(APPEND QT_RESOURCES ${LIBRARIES_QT_RESOURCES})
+if(QT_RESOURCES)
+    list(REMOVE_DUPLICATES QT_RESOURCES)
+endif()
+
+# make enabling resources of static dependencies available via config.h
+unset(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES)
+foreach(QT_RESOURCE ${LIBRARIES_QT_RESOURCES})
+    set(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
+        "${ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES} \\\n    struct initializer_${QT_RESOURCE} { \\\n        initializer_${QT_RESOURCE}() { Q_INIT_RESOURCE(${QT_RESOURCE}); } \\\n        ~initializer_${QT_RESOURCE}() { Q_CLEANUP_RESOURCE(${QT_RESOURCE}); } \\\n    } dummy_${QT_RESOURCE};"
+    )
+endforeach()
 
 # enable moc, uic and rcc by default for all targets
 set(CMAKE_AUTOMOC ON)
