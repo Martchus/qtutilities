@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 # determines the Qt linkage
 
 if(NOT DEFINED QT_LINKAGE_DETERMINED)
-    set(QT_LINKAGE_DETERMINED true)
     include(3rdParty)
 
     # by default, require Qt 5.6 or higher
@@ -99,4 +98,5 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
         message(STATUS "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against static Qt 5 plugin ${QT5_${MODULE}_STATIC_PREFIX}Q${PLUGIN}Plugin")
     endmacro()
 
+    set(QT_LINKAGE_DETERMINED YES)
 endif(NOT DEFINED QT_LINKAGE_DETERMINED)

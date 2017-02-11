@@ -2,7 +2,17 @@ cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 
 # applies Qt specific configuration
 # for GUI applications, QtGuiAppConfig must be included before
-# after including this module, AppTarget must be included
+# this module must be included before AppTarget/LibraryTarget
+
+if(NOT BASIC_PROJECT_CONFIG_DONE)
+    message(FATAL_ERROR "Before including the QtConfig module, the BasicConfig module must be included.")
+endif()
+if(QT_CONFIGURED)
+    message(FATAL_ERROR "The QtConfig module can not be included when Qt usage has already been configured.")
+endif()
+if(TARGET_CONFIG_DONE)
+    message(FATAL_ERROR "Can not include QtConfig module when targets are already configured.")
+endif()
 
 # add the Core module as it is always required
 # also add additional Qt/KF modules which must have been specified before if required
@@ -300,3 +310,5 @@ if(WIDGETS_UI_FILES AND WIDGETS_GUI)
         endforeach()
     endif()
 endif()
+
+set(QT_CONFIGURED YES)

@@ -1,5 +1,9 @@
 # determines the JavaScript provider (either Qt Script or Qt Declarative)
 
+if(TARGET_CONFIG_DONE)
+    message(FATAL_ERROR "Can not include JsProviderConfig module when targets are already configured.")
+endif()
+
 include(QtLinkage)
 
 set(JS_PROVIDER "auto" CACHE STRING "specifies the JavaScript provider: auto (default), qml, script or none")

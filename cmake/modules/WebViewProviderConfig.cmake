@@ -1,5 +1,9 @@
 # determines the web view provider (either Qt WebKit or Qt WebEngine)
 
+if(TARGET_CONFIG_DONE)
+    message(FATAL_ERROR "Can not include WebViewProviderConfig module when targets are already configured.")
+endif()
+
 include(QtLinkage)
 
 set(WEBVIEW_PROVIDER "auto" CACHE STRING "specifies the web view provider: auto (default), webkit, webengine or none")
