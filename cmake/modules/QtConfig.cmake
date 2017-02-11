@@ -86,7 +86,7 @@ if(SVG_ICON_SUPPORT AND USE_STATIC_QT5_Svg)
 endif()
 
 # option for built-in translations
-option(BUILTIN_TRANSLATIONS "enables/disables built-in translations" OFF)
+option(BUILTIN_TRANSLATIONS "enables/disables built-in translations when building applications and libraries" OFF)
 
 # determine relevant Qt translation files
 set(QT_TRANSLATION_FILES)
@@ -179,7 +179,8 @@ endif()
 # add icons to be built-in
 if(REQUIRED_ICONS)
     set(BUILTIN_ICON_THEMES "" CACHE STRING "specifies icon themes to be built-in")
-    if(BUILTIN_ICON_THEMES)
+    option(BUILTIN_ICON_THEMES_IN_LIBRARIES "specifies whether icon themes should also be built-in when building libraries" OFF)
+    if(BUILTIN_ICON_THEMES AND (BUILTIN_ICON_THEMES_IN_LIBRARIES OR (NOT "${META_PROJECT_TYPE}" STREQUAL "library")))
         set(ICON_THEME_FILES)
         set(ICON_SEARCH_PATHS)
         if(CMAKE_FIND_ROOT_PATH)
