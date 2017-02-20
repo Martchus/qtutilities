@@ -1,16 +1,14 @@
 cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 
 if(NOT BASIC_PROJECT_CONFIG_DONE)
-    message(FATAL_ERROR "Before including the QtConfig module, the BasicConfig module must be included.")
+    message(FATAL_ERROR "Before including the QtGuiConfig module, the BasicConfig module must be included.")
 endif()
 if(QT_CONFIGURED)
-    message(FATAL_ERROR "The QtConfig module can not be included when Qt usage has already been configured.")
+    message(FATAL_ERROR "The QtGuiConfig module can not be included when Qt usage has already been configured.")
 endif()
 if(TARGET_CONFIG_DONE)
     message(FATAL_ERROR "Can not include QtGuiConfig module when targets are already configured.")
 endif()
-
-# this module must be included before QtConfig and AppTarget/LibraryTarget
 
 # enable Qt Widgets GUI
 if(WIDGETS_GUI)
