@@ -21,6 +21,9 @@ set(QT_REPOS base ${ADDITIONAL_QT_REPOS})
 set(QT_MODULES Core ${ADDITIONAL_QT_MODULES})
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
 
+# allow specifying a custom directory for Qt plugins
+set(QT_PLUGIN_DIR "" CACHE STRING "specifies the directory to install Qt plugins")
+
 include(QtLinkage)
 
 # check whether D-Bus interfaces need to be processed
