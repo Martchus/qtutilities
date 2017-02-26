@@ -104,8 +104,9 @@ foreach(QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
         foreach(QT_REPO ${QT_REPOS})
             file(GLOB QT_QM_FILES "${QT_TRANSLATION_PATH}/qt${QT_REPO}_*.qm")
             if(QT_QM_FILES)
-                # add file to list of built-in translations (if that configuration is enabled)
-                if(BUILTIN_TRANSLATIONS)
+                # add files to list of built-in translations
+                # but only if that configuration is enabled and if we're building the final application
+                if(BUILTIN_TRANSLATIONS AND "${META_PROJECT_TYPE}" STREQUAL "application")
                     file(COPY ${QT_QM_FILES} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
                     list(APPEND QM_FILES ${QT_QM_FILES})
                 endif()
