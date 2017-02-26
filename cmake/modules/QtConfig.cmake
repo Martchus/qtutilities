@@ -155,24 +155,24 @@ if(TS_FILES)
     # make application specific translation available as array via config.h
     list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}")
     list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${APP_SPECIFIC_QT_TRANSLATION_FILES}" APP_SPECIFIC_QT_TRANSLATION_FILES_ARRAY)
-
-    # built-in translations
-    if(BUILTIN_TRANSLATIONS)
-        # write a qrc file for the qm files and add it to the resource files
-        set(TRANSLATIONS_QRC_FILE_NAME "${META_PROJECT_VARNAME_LOWER}_translations.qrc")
-        set(TRANSLATIONS_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TRANSLATIONS_QRC_FILE_NAME}")
-        file(WRITE "${TRANSLATIONS_QRC_FILE}" "<RCC><qresource prefix=\"/translations\">")
-        foreach(QM_FILE ${QM_FILES})
-            get_filename_component(QM_FILE_NAME "${QM_FILE}" NAME)
-            file(APPEND "${TRANSLATIONS_QRC_FILE}" "<file>${QM_FILE_NAME}</file>")
-        endforeach()
-        file(APPEND "${TRANSLATIONS_QRC_FILE}" "</qresource></RCC>")
-        list(APPEND RES_FILES "${TRANSLATIONS_QRC_FILE}")
-        list(APPEND AUTOGEN_DEPS ${QM_FILES})
-        list(APPEND BUILTIN_TRANSLATION_FILES "${TRANSLATIONS_QRC_FILE_NAME}")
-    endif()
 else()
     set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE NO)
+endif()
+
+# built-in translations
+if(BUILTIN_TRANSLATIONS AND QM_FILES)
+    # write a qrc file for the qm files and add it to the resource files
+    set(TRANSLATIONS_QRC_FILE_NAME "${META_PROJECT_VARNAME_LOWER}_translations.qrc")
+    set(TRANSLATIONS_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TRANSLATIONS_QRC_FILE_NAME}")
+    file(WRITE "${TRANSLATIONS_QRC_FILE}" "<RCC><qresource prefix=\"/translations\">")
+    foreach(QM_FILE ${QM_FILES})
+        get_filename_component(QM_FILE_NAME "${QM_FILE}" NAME)
+        file(APPEND "${TRANSLATIONS_QRC_FILE}" "<file>${QM_FILE_NAME}</file>")
+    endforeach()
+    file(APPEND "${TRANSLATIONS_QRC_FILE}" "</qresource></RCC>")
+    list(APPEND RES_FILES "${TRANSLATIONS_QRC_FILE}")
+    list(APPEND AUTOGEN_DEPS ${QM_FILES})
+    list(APPEND BUILTIN_TRANSLATION_FILES "${TRANSLATIONS_QRC_FILE_NAME}")
 endif()
 
 # generate DBus interfaces
