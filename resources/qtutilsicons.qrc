@@ -2,7 +2,10 @@
     <qresource prefix="/qtutilities">
         <file>icons/hicolor/16x16/actions/edit-clear.png</file>
         <file>icons/hicolor/16x16/actions/edit-menu.png</file>
-        <file>icons/hicolor/48x48/apps/qtcreator.svg</file>
         <file>icons/hicolor/16x16/actions/edit-error.png</file>
+        <file>icons/hicolor/48x48/actions/edit-clear.png</file>
+        <file>icons/hicolor/48x48/actions/edit-menu.png</file>
+        <file>icons/hicolor/48x48/actions/edit-error.png</file>
+        <file alias="icons/hicolor/48x48/apps/qtcreator.svg">icons/hicolor/scalable/apps/qtcreator.svg</file>
     </qresource>
 </RCC>
