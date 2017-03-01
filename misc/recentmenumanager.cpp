@@ -90,7 +90,7 @@ void RecentMenuManager::addEntry(const QString &path)
         }
     }
     if(!entry) {
-        // remove old entries to have never more then 10 entries
+        // remove old entries to have never more than 10 entries
         for(int i = existingEntries.size() - 1; i > 8; --i) {
             delete existingEntries[i];
         }
