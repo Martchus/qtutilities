@@ -150,11 +150,11 @@ void QtSettings::apply()
     if(m_d->customStyleSheet && !m_d->styleSheetPath.isEmpty()) {
         QFile file(m_d->styleSheetPath);
         if(!file.open(QFile::ReadOnly)) {
-            // TODO: handle error
+            cerr << "Unable to open the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << endl;
         }
         styleSheet.append(file.readAll());
         if(file.error() != QFile::NoError) {
-            // TODO: handle error
+            cerr << "Unable to read the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << endl;
         }
     }
 
@@ -165,10 +165,12 @@ void QtSettings::apply()
     if(m_d->customWidgetStyle) {
         QApplication::setStyle(m_d->widgetStyle);
     }
-    if(auto *qapp = qobject_cast<QApplication *>(QApplication::instance())) {
-        qapp->setStyleSheet(styleSheet);
-    } else {
-        // TODO: handle error
+    if(!styleSheet.isEmpty()) {
+        if(auto *qapp = qobject_cast<QApplication *>(QApplication::instance())) {
+            qapp->setStyleSheet(styleSheet);
+        } else {
+            cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\" because no QApplication has been instantiated." << endl;
+        }
     }
     if(m_d->customPalette) {
         QGuiApplication::setPalette(m_d->palette);
