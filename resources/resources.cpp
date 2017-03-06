@@ -86,8 +86,7 @@ QString &additionalTranslationFilePath()
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
  *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
- *  - Currently this loads only the translations file for the modules in the base repository.
- *    TODO: load translations for further modules
+ *    In this case it is also necessary to load the translations using this function.
  */
 void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
 {
@@ -103,7 +102,7 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
  *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
- *  - Currently this loads only the translations file for the modules in the base repository.
+ *    In this case it is also necessary to load the translations using this function.
  */
 void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
@@ -137,6 +136,7 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
  *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
+ *    In this case it is also necessary to load the translations using this function.
  */
 void loadApplicationTranslationFile(const QString &applicationName)
 {
@@ -160,6 +160,7 @@ void loadApplicationTranslationFile(const QString &applicationName)
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
  *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
+ *    In this case it is also necessary to load the translations using this function.
  */
 void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
 {
@@ -183,6 +184,10 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
     }
 }
 
+/*!
+ * \brief Loads and installs the appropriate application translation file for the current locale.
+ * \param applicationNames Specifies the names of the applications.
+ */
 void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames)
 {
     for(const QString &applicationName : applicationNames) {
@@ -190,6 +195,11 @@ void loadApplicationTranslationFile(const std::initializer_list<QString> &applic
     }
 }
 
+/*!
+ * \brief Loads and installs the appropriate application translation file for the specified locale.
+ * \param applicationNames Specifies the names of the applications.
+ * \param localeName Specifies the name of the locale.
+ */
 void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames, const QString &localeName)
 {
     for(const QString &applicationName : applicationNames) {
