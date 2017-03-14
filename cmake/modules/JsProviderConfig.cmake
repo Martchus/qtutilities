@@ -51,5 +51,30 @@ endif()
 
 if(JS_PROVIDER)
     use_qt5_module(${JS_PROVIDER} REQUIRED)
+
+    # add header files with some defines/includes to conveniently use the selected provider
+    if(META_JS_SRC_DIR)
+        set(JS_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${META_JS_SRC_DIR}")
+    else()
+        set(JS_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gui")
+    endif()
+    include(TemplateFinder)
+    find_template_file("jsdefs.h" QT_UTILITIES JS_DEFS_H_TEMPLATE_FILE)
+    configure_file(
+        "${JS_DEFS_H_TEMPLATE_FILE}"
+        "${JS_HEADER_DIR}/jsdefs.h" # simply add this to source to ease inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
+    find_template_file("jsincludes.h" QT_UTILITIES JS_INCLUDES_H_TEMPLATE_FILE)
+    configure_file(
+        "${JS_INCLUDES_H_TEMPLATE_FILE}"
+        "${JS_HEADER_DIR}/jsincludes.h" # simply add this to source to ease inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
+    list(APPEND WIDGETS_FILES
+        "${JS_HEADER_DIR}/jsdefs.h"
+        "${JS_HEADER_DIR}/jsincludes.h"
+    )
 endif()
-list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${JS_DEFINITION})
+
+list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${JS_DEFINITION})

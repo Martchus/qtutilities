@@ -1,0 +1,19 @@
+// Created via CMake from template webviewdefs.h.in
+// WARNING! Any changes to this file will be overwritten by the next CMake run!
+
+#ifndef @META_PROJECT_VARNAME_UPPER@_JAVA_SCRIPT_INCLUDES
+#define @META_PROJECT_VARNAME_UPPER@_JAVA_SCRIPT_INCLUDES
+
+#include <QtGlobal>
+
+#if defined(@META_PROJECT_VARNAME_UPPER@_USE_JSENGINE)
+# include <QJSEngine>
+# include <QJSValue>
+#elif defined(@META_PROJECT_VARNAME_UPPER@_USE_SCRIPT)
+# include <QScriptEngine>
+# include <QScriptValue>
+#elif !defined(@META_PROJECT_VARNAME_UPPER@_NO_WEBVIEW)
+# error "No definition for JavaScript provider present."
+#endif
+
+#endif // @META_PROJECT_VARNAME_UPPER@_JAVA_SCRIPT_INCLUDES

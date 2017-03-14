@@ -1,0 +1,36 @@
+// Created via CMake from template webviewdefs.h.in
+// WARNING! Any changes to this file will be overwritten by the next CMake run!
+
+#ifndef @META_PROJECT_VARNAME_UPPER@_JAVA_SCRIPT_DEFINES
+#define @META_PROJECT_VARNAME_UPPER@_JAVA_SCRIPT_DEFINES
+
+#include <QtGlobal>
+
+#if defined(@META_PROJECT_VARNAME_UPPER@_USE_JSENGINE)
+# define @META_PROJECT_VARNAME_UPPER@_JS_ENGINE QJSEngine
+# define @META_PROJECT_VARNAME_UPPER@_JS_VALUE QJSValue
+# define @META_PROJECT_VARNAME_UPPER@_JS_READONLY
+# define @META_PROJECT_VARNAME_UPPER@_JS_UNDELETABLE
+# define @META_PROJECT_VARNAME_UPPER@_JS_QOBJECT(engine, obj) engine.newQObject(obj)
+# define @META_PROJECT_VARNAME_UPPER@_JS_INT(value) value.toInt()
+# define @META_PROJECT_VARNAME_UPPER@_JS_IS_VALID_PROG(program) (!program.isError() && program.isCallable())
+#elif defined(@META_PROJECT_VARNAME_UPPER@_USE_SCRIPT)
+# define @META_PROJECT_VARNAME_UPPER@_JS_ENGINE QScriptEngine
+# define @META_PROJECT_VARNAME_UPPER@_JS_VALUE QScriptValue
+# define @META_PROJECT_VARNAME_UPPER@_JS_READONLY ,QScriptValue::ReadOnly
+# define @META_PROJECT_VARNAME_UPPER@_JS_UNDELETABLE ,QScriptValue::Undeletable
+# define @META_PROJECT_VARNAME_UPPER@_JS_QOBJECT(engine, obj) engine.newQObject(obj, QScriptEngine::ScriptOwnership)
+# define @META_PROJECT_VARNAME_UPPER@_JS_INT(value) value.toInt32()
+# define @META_PROJECT_VARNAME_UPPER@_JS_IS_VALID_PROG(program) (!program.isError() && program.isFunction())
+#elif !defined(@META_PROJECT_VARNAME_UPPER@_NO_WEBVIEW)
+# error "No definition for JavaScript provider present."
+#endif
+
+#ifdef @META_PROJECT_VARNAME_UPPER@_JS_ENGINE
+QT_FORWARD_DECLARE_CLASS(@META_PROJECT_VARNAME_UPPER@_JS_ENGINE)
+#endif
+#ifdef @META_PROJECT_VARNAME_UPPER@_JS_VALUE
+QT_FORWARD_DECLARE_CLASS(@META_PROJECT_VARNAME_UPPER@_JS_VALUE)
+#endif
+
+#endif // @META_PROJECT_VARNAME_UPPER@_JAVA_SCRIPT_DEFINES

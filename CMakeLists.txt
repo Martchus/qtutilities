@@ -98,6 +98,8 @@ set(CMAKE_MODULE_FILES
 set(CMAKE_TEMPLATE_FILES
     cmake/templates/webviewdefs.h.in
     cmake/templates/webviewincludes.h.in
+    cmake/templates/jsdefs.h.in
+    cmake/templates/jsincludes.h.in
 )
 
 set(TS_FILES
