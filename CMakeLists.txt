@@ -95,6 +95,11 @@ set(CMAKE_MODULE_FILES
     cmake/modules/WebViewProviderConfig.cmake
 )
 
+set(CMAKE_TEMPLATE_FILES
+    cmake/templates/webviewdefs.h.in
+    cmake/templates/webviewincludes.h.in
+)
+
 set(TS_FILES
     translations/${META_PROJECT_NAME}_de_DE.ts
     translations/${META_PROJECT_NAME}_en_US.ts

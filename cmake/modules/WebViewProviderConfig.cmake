@@ -48,6 +48,32 @@ else()
 endif()
 
 if(WEBVIEW_PROVIDER)
+    # require the selected Qt module
     use_qt5_module(${WEBVIEW_PROVIDER} REQUIRED)
+
+    # add header files with some defines/includes to conveniently use the selected provider
+    if(META_WEBVIEW_SRC_DIR)
+        set(WEBVIEW_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${META_WEBVIEW_SRC_DIR}")
+    else()
+        set(WEBVIEW_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gui")
+    endif()
+    include(TemplateFinder)
+    find_template_file("webviewdefs.h" QT_UTILITIES WEBVIEWDEFS_H_TEMPLATE_FILE)
+    configure_file(
+        "${WEBVIEWDEFS_H_TEMPLATE_FILE}"
+        "${WEBVIEW_HEADER_DIR}/webviewdefs.h" # simply add this to source to ease inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
+    find_template_file("webviewincludes.h" QT_UTILITIES WEBVIEWINCLUDES_H_TEMPLATE_FILE)
+    configure_file(
+        "${WEBVIEWINCLUDES_H_TEMPLATE_FILE}"
+        "${WEBVIEW_HEADER_DIR}/webviewincludes.h" # simply add this to source to ease inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
+    list(APPEND WIDGETS_FILES
+        "${WEBVIEW_HEADER_DIR}/webviewdefs.h"
+        "${WEBVIEW_HEADER_DIR}/webviewincludes.h"
+    )
 endif()
-list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${WEBVIEW_DEFINITION})
+
+list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${WEBVIEW_DEFINITION})

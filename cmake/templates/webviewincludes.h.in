@@ -1,0 +1,18 @@
+// Created via CMake from template webviewincludes.h.in
+// WARNING! Any changes to this file will be overwritten by the next CMake run!
+
+#ifndef @META_PROJECT_VARNAME_UPPER@_WEB_VIEW_INCLUDES
+#define @META_PROJECT_VARNAME_UPPER@_WEB_VIEW_INCLUDES
+
+#include <QtGlobal>
+
+#if defined(@META_PROJECT_VARNAME_UPPER@_USE_WEBENGINE)
+# include <QWebEngineView>
+# include <QWebEnginePage>
+#elif defined(@META_PROJECT_VARNAME_UPPER@_USE_WEBKIT)
+# include <QWebView>
+# include <QWebPage>
+# include <QWebFrame>
+#endif
+
+#endif // @META_PROJECT_VARNAME_UPPER@_WEB_VIEW_INCLUDES
