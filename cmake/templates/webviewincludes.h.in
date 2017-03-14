@@ -13,6 +13,8 @@
 # include <QWebView>
 # include <QWebPage>
 # include <QWebFrame>
+#elif !defined(@META_PROJECT_VARNAME_UPPER@_NO_WEBVIEW)
+# error "No definition for web view provider present."
 #endif
 
 #endif // @META_PROJECT_VARNAME_UPPER@_WEB_VIEW_INCLUDES
