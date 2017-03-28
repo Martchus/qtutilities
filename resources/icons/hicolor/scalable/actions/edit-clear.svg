@@ -24,7 +24,7 @@
   <defs
      id="defs2">
     <linearGradient
-       id="linearGradient6213"
+       id="circle-filling"
        inkscape:collect="always">
       <stop
          style="stop-color:#464646;stop-opacity:0.41960785"
@@ -53,7 +53,7 @@
     </linearGradient>
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient6213"
+       xlink:href="#circle-filling"
        id="radialGradient6207"
        cx="16"
        cy="281"
@@ -103,7 +103,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568542"
-     inkscape:cx="42.432345"
+     inkscape:cx="72.66116"
      inkscape:cy="44.340881"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -132,18 +132,15 @@
      id="layer1"
      transform="translate(0,-265)">
     <circle
-       style="opacity:0.901;fill:url(#radialGradient6207);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.20103037;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.25;stroke-dasharray:none;stroke-dashoffset:1.99954295;stroke-opacity:0.85034012;paint-order:normal"
-       id="path4485"
+       style="opacity:0.8;fill:url(#radialGradient6207);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.20103037;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.25;stroke-dasharray:none;stroke-dashoffset:1.99954295;stroke-opacity:0.85034012;paint-order:normal"
+       id="circle"
        cx="16"
        cy="281"
-       r="15"
-       inkscape:export-filename="/run/media/martchus/files/programming/projects/c++/cmake/qtutilities/resources/icons/hicolor/48x48/actions/edit-clear.svg.png"
-       inkscape:export-xdpi="40.639999"
-       inkscape:export-ydpi="40.639999" />
+       r="15" />
     <path
        style="fill:#ffffff;fill-opacity:0.94557822;fill-rule:evenodd;stroke:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter4754)"
        d="m 12.259207,273.77243 -3.2511908,3.14457 3.7343458,3.64477 -3.6618579,3.58141 3.2511909,3.14457 3.712508,-3.60185 3.675756,3.59174 3.251191,-3.14456 -3.696885,-3.57131 3.769373,-3.63466 -3.251191,-3.14456 -3.748244,3.65508 z"
-       id="path4595"
+       id="x"
        inkscape:connector-curvature="0" />
   </g>
 </svg>

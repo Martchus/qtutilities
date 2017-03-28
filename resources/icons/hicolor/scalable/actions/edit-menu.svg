@@ -24,7 +24,7 @@
   <defs
      id="defs2">
     <linearGradient
-       id="linearGradient6213"
+       id="circle-filling"
        inkscape:collect="always">
       <stop
          style="stop-color:#464646;stop-opacity:0.41960785"
@@ -53,7 +53,7 @@
     </linearGradient>
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient6213"
+       xlink:href="#circle-filling"
        id="radialGradient6207"
        cx="16"
        cy="281"
@@ -134,9 +134,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="-695.55956"
-     inkscape:cy="57.305424"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="-64.901506"
+     inkscape:cy="39.858925"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -164,17 +164,17 @@
      id="layer1"
      transform="translate(0,-265)">
     <circle
-       style="opacity:0.701;fill:url(#radialGradient6207);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.20103037;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.25;stroke-dasharray:none;stroke-dashoffset:1.99954295;stroke-opacity:0.85034012;paint-order:normal"
-       id="path4485"
+       style="opacity:0.8;fill:url(#radialGradient6207);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.20103037;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.25;stroke-dasharray:none;stroke-dashoffset:1.99954295;stroke-opacity:0.85034012;paint-order:normal"
+       id="circle"
        cx="16"
        cy="281"
        r="15"
-       inkscape:export-filename="/run/media/martchus/files/programming/projects/c++/cmake/qtutilities/resources/icons/hicolor/48x48/actions/edit-clear.svg.png"
-       inkscape:export-xdpi="40.639999"
-       inkscape:export-ydpi="40.639999" />
+       inkscape:export-filename="../../48x48/actions/circle.png"
+       inkscape:export-xdpi="38"
+       inkscape:export-ydpi="38" />
     <ellipse
        style="opacity:1;fill:#ffffff;fill-opacity:0.82653061;fill-rule:nonzero;stroke:none;stroke-width:0.44207191;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.99954295;stroke-opacity:1;paint-order:normal;filter:url(#filter4716)"
-       id="path4500"
+       id="inner-circle"
        cx="-43.410675"
        cy="278.35611"
        rx="6.4542603"
