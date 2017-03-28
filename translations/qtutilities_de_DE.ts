@@ -371,7 +371,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="363"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="365"/>
         <source>recognized by Qt as</source>
         <translation>von Qt erkannt als</translation>
     </message>
@@ -379,7 +379,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="202"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="204"/>
         <source>Qt</source>
         <translation></translation>
     </message>
