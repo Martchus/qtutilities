@@ -1,4 +1,10 @@
 #!/bin/bash
+if [[ ! $@ ]]; then
+    echo 'Prints the list of icons required by the projects in the specified directories.'
+    echo 'However, no project directories have been specified.'
+    exit -1
+fi
+
 declare -A icon_names
 
 # iterate over specified source directories
