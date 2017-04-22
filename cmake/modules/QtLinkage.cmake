@@ -85,11 +85,11 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
     endmacro()
 
     macro(use_qt5_module MODULE REQUIRED)
-        link_against_library("QT5_${MODULE}" "${QT_LINKAGE}" "${REQUIRED}")
         if(${MODULE} IN_LIST META_PUBLIC_QT_MODULES)
             list(APPEND META_PUBLIC_SHARED_LIB_DEPENDS ${QT5_${MODULE}_DYNAMIC_LIB})
             list(APPEND META_PUBLIC_STATIC_LIB_DEPENDS ${QT5_${MODULE}_STATIC_LIB})
         endif()
+        link_against_library("QT5_${MODULE}" "${QT_LINKAGE}" "${REQUIRED}")
     endmacro()
 
     macro(use_static_qt5_plugin MODULE PLUGIN)
