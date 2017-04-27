@@ -4,7 +4,7 @@
 #include "resources/config.h"
 
 #ifdef QT_STATIC
-# if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
+# if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 #  include <QtPlugin>
 #  ifdef Q_OS_WIN32
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)

@@ -1,13 +1,13 @@
 #include "./dialogutils.h"
 
-#ifdef GUI_NONE
+#if !defined(QT_UTILITIES_GUI_QTWIDGETS) && !defined(QT_UTILITIES_GUI_QTQUICK)
 # include <QCoreApplication>
 #else
 # include <QGuiApplication>
 # include <QPalette>
 # include <QWidget>
 # include <QStyle>
-# ifdef GUI_QTWIDGETS
+# ifdef QT_UTILITIES_GUI_QTWIDGETS
 #  include <QApplication>
 #  include <QDesktopWidget>
 #  include <QCursor>
@@ -46,7 +46,7 @@ QString generateWindowTitle(DocumentStatus documentStatus, const QString &docume
     }
 }
 
-#ifndef GUI_NONE
+#if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 
 # ifdef Q_OS_WIN32
 
@@ -87,7 +87,7 @@ const QString &dialogStyle()
     return style;
 }
 
-# ifdef GUI_QTWIDGETS
+# ifdef QT_UTILITIES_GUI_QTWIDGETS
 
 /*!
  * \brief Moves the specified \a widget in the middle of the (available) screen area. If there are multiple

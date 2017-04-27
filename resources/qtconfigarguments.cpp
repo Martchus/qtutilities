@@ -6,7 +6,7 @@
 #include <QLocale>
 #include <QFont>
 #include <QIcon>
-#ifdef GUI_QTWIDGETS
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
 # include <QApplication>
 # include <QStyleFactory>
 #else
@@ -65,9 +65,9 @@ QtConfigArguments::QtConfigArguments() :
     m_qtQuickGuiArg.setSubArguments({&m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg});
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
-#if defined GUI_QTWIDGETS
+#if defined QT_UTILITIES_GUI_QTWIDGETS
     m_qtWidgetsGuiArg.setImplicit(true);
-#elif defined GUI_QTQUICK
+#elif defined QT_UTILITIES_GUI_QTQUICK
     m_qtQuickGuiArg.setImplicit(true);
 #endif
 }
@@ -83,14 +83,14 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         QLocale::setDefault(QLocale(QString::fromLocal8Bit(m_lngArg.values().front())));
     }
     if(m_styleArg.isPresent()) {
-#ifdef GUI_QTWIDGETS
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
         if(QStyle *style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front()))) {
             QApplication::setStyle(style);
         } else {
             cerr << "Warning: Can not find the specified style." << endl;
         }
 #else
-# ifdef GUI_QTQUICK
+# ifdef QT_UTILITIES_GUI_QTQUICK
         cerr << "Warning: Can not set a style for the Qt Quick GUI." << endl;
 # endif
 #endif

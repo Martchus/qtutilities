@@ -301,11 +301,11 @@ void EnterPasswordDialog::confirm()
  * \brief Returns an indication whether the capslock key is pressed using platform specific functions.
  *
  * \remarks - Returns always false for unsupported platforms.
- *          - This method always returns false when not built with
- *            QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION defined.
- *          - This static function will be used internally to detect whether the capslock key is pressed
- *            when initializing the dialog if available.
+ *          - This method always returns false when the detection is not supported. It is supported under X11
+ *            and Windows.
  *          - The function requires the application to be linked against X11 on Linux/Unix.
+ *          - This static function will be used internally to detect whether the capslock key is pressed
+ *            when initializing the dialog.
  */
 bool EnterPasswordDialog::isCapslockPressed()
 {
@@ -325,6 +325,7 @@ bool EnterPasswordDialog::isCapslockPressed()
 # else
     return false;
 # endif
+#else
     return false;
 #endif
 }

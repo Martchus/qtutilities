@@ -22,13 +22,13 @@ enum class DocumentStatus {
 
 QString QT_UTILITIES_EXPORT generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath);
 
-#ifndef GUI_NONE
+#if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined (QT_UTILITIES_GUI_QTQUICK)
 # ifdef Q_OS_WIN32
 QColor QT_UTILITIES_EXPORT windowFrameColor();
 QColor QT_UTILITIES_EXPORT instructionTextColor();
 # endif
 const QString QT_UTILITIES_EXPORT &dialogStyle();
-# ifdef GUI_QTWIDGETS
+# ifdef QT_UTILITIES_GUI_QTWIDGETS
 void QT_UTILITIES_EXPORT centerWidget(QWidget *widget);
 void QT_UTILITIES_EXPORT cornerWidget(QWidget *widget);
 void QT_UTILITIES_EXPORT makeHeading(QWidget *widget);

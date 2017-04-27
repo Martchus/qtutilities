@@ -8,8 +8,8 @@ set(META_APP_AUTHOR "Martchus")
 set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
 set(META_VERSION_MAJOR 5)
-set(META_VERSION_MINOR 6)
-set(META_VERSION_PATCH 1)
+set(META_VERSION_MINOR 7)
+set(META_VERSION_PATCH 0)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 # add project files
@@ -138,13 +138,13 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODUL
 # configure platform specific capslock detection
 if(WIN32)
     # WinAPI provides functions required for capslock detection
-    list(APPEND META_PRIVATE_COMPILE_DEFINITIONS QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+    list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
 else()
     # X11 can provide functions required for capslock detection under non-Windows environments
     find_package(X11)
     if(X11_FOUND)
         list(APPEND LIBRARIES ${X11_LIBRARIES})
-        list(APPEND META_PRIVATE_COMPILE_DEFINITIONS QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+        list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
     endif()
 endif()
 
@@ -172,13 +172,15 @@ else()
 endif()
 
 # find c++utilities
-find_package(c++utilities 4.6.0 REQUIRED)
+find_package(c++utilities 4.7.0 REQUIRED)
 use_cpp_utilities()
 
 # include modules to apply configuration
 include(BasicConfig)
 include(QtGuiConfig)
+# apply Qt utilities specific configuration
 set(META_PUBLIC_QT_MODULES Core ${ADDITIONAL_QT_MODULES})
+# include further modules to apply configuration
 include(QtConfig)
 include(WindowsResources)
 include(LibraryTarget)

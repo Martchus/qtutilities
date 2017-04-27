@@ -10,12 +10,12 @@
 #include <QDir>
 #include <QStringBuilder>
 #include <QSettings>
-#if defined(GUI_QTWIDGETS)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 # include <QApplication>
 # include <QIcon>
 # include <QFont>
 # include <QStyleFactory>
-#elif defined(GUI_QTQUICK)
+#elif defined(QT_UTILITIES_GUI_QTQUICK)
 # include <QGuiApplication>
 # include <QIcon>
 # include <QFont>
@@ -214,7 +214,7 @@ void loadApplicationTranslationFile(const std::initializer_list<QString> &applic
  */
 namespace ApplicationInstances {
 
-#if defined(GUI_QTWIDGETS)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 /*!
  * \brief Returns whether a QApplication has been instantiated yet.
  */
@@ -224,7 +224,7 @@ bool hasWidgetsApp()
 }
 #endif
 
-#if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 /*!
  * \brief Returns whether a QGuiApplication has been instantiated yet.
  */

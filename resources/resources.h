@@ -49,10 +49,10 @@ QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const std::initializer_l
 
 namespace ApplicationInstances {
 
-#if defined(GUI_QTWIDGETS)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 QT_UTILITIES_EXPORT bool hasWidgetsApp();
 #endif
-#if defined(GUI_QTWIDGETS) || defined(GUI_QTQUICK)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 QT_UTILITIES_EXPORT bool hasGuiApp();
 #endif
 QT_UTILITIES_EXPORT bool hasCoreApp();

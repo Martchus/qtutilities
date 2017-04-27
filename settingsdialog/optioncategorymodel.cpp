@@ -1,7 +1,7 @@
 #include "./optioncategorymodel.h"
 #include "./optioncategory.h"
 
-#ifdef GUI_QTWIDGETS
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
 # include <QApplication>
 # include <QStyle>
 #endif
@@ -72,7 +72,7 @@ QVariant OptionCategoryModel::data(const QModelIndex &index, int role) const
             const QIcon &icon = m_categories.at(index.row())->icon();
             if(!icon.isNull()) {
                 return icon.pixmap(
-#ifdef GUI_QTWIDGETS
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
                             QApplication::style()->pixelMetric(QStyle::PM_LargeIconSize)
 #else
                             QSize(32, 32)
