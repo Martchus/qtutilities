@@ -1,12 +1,12 @@
 #include "recentmenumanager.h"
 
-#include <QStringList>
-#include <QCoreApplication>
-#include <QMenu>
 #include <QAction>
+#include <QCoreApplication>
+#include <QFile>
+#include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QFile>
+#include <QStringList>
 
 namespace MiscUtils {
 
@@ -25,9 +25,9 @@ namespace MiscUtils {
  *  - The menu entries shouldn't be manipulated manually by the caller till the manager is destructed.
  *  - The manager does not take ownership over \a menu.
  */
-RecentMenuManager::RecentMenuManager(QMenu *menu, QObject *parent) :
-    QObject(parent),
-    m_menu(menu)
+RecentMenuManager::RecentMenuManager(QMenu *menu, QObject *parent)
+    : QObject(parent)
+    , m_menu(menu)
 {
     m_menu->clear();
     m_menu->setTitle(tr("&Recent"));
@@ -42,15 +42,15 @@ RecentMenuManager::RecentMenuManager(QMenu *menu, QObject *parent) :
 void RecentMenuManager::restore(const QStringList &savedEntries)
 {
     QAction *action = nullptr;
-    for(const QString &path : savedEntries) {
-        if(!path.isEmpty()) {
+    for (const QString &path : savedEntries) {
+        if (!path.isEmpty()) {
             action = new QAction(path, m_menu);
             action->setProperty("file_path", path);
             m_menu->insertAction(m_sep, action);
             connect(action, &QAction::triggered, this, &RecentMenuManager::handleActionTriggered);
         }
     }
-    if(action) {
+    if (action) {
         m_menu->actions().front()->setShortcut(QKeySequence(Qt::Key_F6));
         m_menu->setEnabled(true);
     }
@@ -64,9 +64,9 @@ QStringList RecentMenuManager::save()
     QStringList existingEntires;
     QList<QAction *> entryActions = m_menu->actions();
     existingEntires.reserve(entryActions.size());
-    for(const QAction *action : entryActions) {
+    for (const QAction *action : entryActions) {
         QVariant path = action->property("file_path");
-        if(!path.isNull()) {
+        if (!path.isNull()) {
             existingEntires << path.toString();
         }
     }
@@ -81,17 +81,17 @@ void RecentMenuManager::addEntry(const QString &path)
     QList<QAction *> existingEntries = m_menu->actions();
     QAction *entry = nullptr;
     // remove shortcut from existing entries
-    for(QAction *existingEntry : existingEntries) {
+    for (QAction *existingEntry : existingEntries) {
         existingEntry->setShortcut(QKeySequence());
         // check whether existing entry matches entry to add
-        if(existingEntry->property("file_path").toString() == path) {
+        if (existingEntry->property("file_path").toString() == path) {
             entry = existingEntry;
             break;
         }
     }
-    if(!entry) {
+    if (!entry) {
         // remove old entries to have never more than 10 entries
-        for(int i = existingEntries.size() - 1; i > 8; --i) {
+        for (int i = existingEntries.size() - 1; i > 8; --i) {
             delete existingEntries[i];
         }
         existingEntries = m_menu->actions();
@@ -117,8 +117,8 @@ void RecentMenuManager::addEntry(const QString &path)
 void RecentMenuManager::clearEntries()
 {
     QList<QAction *> entries = m_menu->actions();
-    for(auto i = entries.begin(), end = entries.end() - 2; i != end; ++i) {
-        if(*i != m_clearAction) {
+    for (auto i = entries.begin(), end = entries.end() - 2; i != end; ++i) {
+        if (*i != m_clearAction) {
             delete *i;
         }
     }
@@ -130,10 +130,10 @@ void RecentMenuManager::clearEntries()
  */
 void RecentMenuManager::handleActionTriggered()
 {
-    if(QAction *action = qobject_cast<QAction *>(sender())) {
+    if (QAction *action = qobject_cast<QAction *>(sender())) {
         const QString path = action->property("file_path").toString();
-        if(!path.isEmpty()) {
-            if(QFile::exists(path)) {
+        if (!path.isEmpty()) {
+            if (QFile::exists(path)) {
                 emit fileSelected(path);
             } else {
                 QMessageBox msg;
@@ -144,10 +144,10 @@ void RecentMenuManager::handleActionTriggered()
                 QPushButton *deleteEntryButton = msg.addButton(tr("delete entry"), QMessageBox::YesRole);
                 msg.setEscapeButton(keepEntryButton);
                 msg.exec();
-                if(msg.clickedButton() == deleteEntryButton) {
+                if (msg.clickedButton() == deleteEntryButton) {
                     delete action;
                     QList<QAction *> remainingActions = m_menu->actions();
-                    if(!remainingActions.isEmpty() && remainingActions.front() != m_sep && remainingActions.front() != m_clearAction) {
+                    if (!remainingActions.isEmpty() && remainingActions.front() != m_sep && remainingActions.front() != m_clearAction) {
                         remainingActions.front()->setShortcut(QKeySequence(Qt::Key_F6));
                         m_menu->setEnabled(true);
                     } else {
@@ -164,5 +164,4 @@ void RecentMenuManager::handleActionTriggered()
  * \brief Emitted after the user selected a file.
  * \remarks Only emitted when the selected file still existed; otherwise the user is ask whether to keep or delete the entry.
  */
-
 }

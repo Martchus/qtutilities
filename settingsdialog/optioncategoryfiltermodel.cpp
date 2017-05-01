@@ -1,6 +1,6 @@
 #include "./optioncategoryfiltermodel.h"
-#include "./optioncategorymodel.h"
 #include "./optioncategory.h"
+#include "./optioncategorymodel.h"
 
 namespace Dialogs {
 
@@ -12,20 +12,20 @@ namespace Dialogs {
 /*!
  * \brief Constructs an option category filter model.
  */
-OptionCategoryFilterModel::OptionCategoryFilterModel(QObject *parent) :
-    QSortFilterProxyModel(parent)
-{}
+OptionCategoryFilterModel::OptionCategoryFilterModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+}
 
 bool OptionCategoryFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     if (QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent))
-            return true;
-    if(OptionCategoryModel *model = qobject_cast<OptionCategoryModel *>(sourceModel())) {
-        if(OptionCategory *category = model->category(sourceRow)) {
+        return true;
+    if (OptionCategoryModel *model = qobject_cast<OptionCategoryModel *>(sourceModel())) {
+        if (OptionCategory *category = model->category(sourceRow)) {
             return category->matches(filterRegExp().pattern());
         }
     }
     return false;
 }
-
 }

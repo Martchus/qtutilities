@@ -1,7 +1,7 @@
 #include "./qtsettings.h"
-#include "./optioncategorymodel.h"
-#include "./optioncategoryfiltermodel.h"
 #include "./optioncategory.h"
+#include "./optioncategoryfiltermodel.h"
+#include "./optioncategorymodel.h"
 #include "./optionpage.h"
 
 #include "../paletteeditor/paletteeditor.h"
@@ -11,18 +11,18 @@
 #include "../resources/resources.h"
 
 #include "ui_qtappearanceoptionpage.h"
-#include "ui_qtlanguageoptionpage.h"
 #include "ui_qtenvoptionpage.h"
+#include "ui_qtlanguageoptionpage.h"
 
 #include <memory>
 
-#include <QStyleFactory>
-#include <QFontDialog>
+#include <QDir>
 #include <QFileDialog>
+#include <QFontDialog>
+#include <QIcon>
 #include <QSettings>
 #include <QStringBuilder>
-#include <QIcon>
-#include <QDir>
+#include <QStyleFactory>
 
 #include <iostream>
 
@@ -30,8 +30,7 @@ using namespace std;
 
 namespace Dialogs {
 
-struct QtSettingsData
-{
+struct QtSettingsData {
     QtSettingsData();
 
     QFont font;
@@ -51,32 +50,35 @@ struct QtSettingsData
     QString additionalIconThemeSearchPath;
 };
 
-inline QtSettingsData::QtSettingsData() :
-    customFont(false),
-    customPalette(false),
-    customWidgetStyle(false),
-    customStyleSheet(false),
-    iconTheme(QIcon::themeName()),
-    customIconTheme(false),
-    localeName(defaultLocale.name()),
-    customLocale(false)
-{}
+inline QtSettingsData::QtSettingsData()
+    : customFont(false)
+    , customPalette(false)
+    , customWidgetStyle(false)
+    , customStyleSheet(false)
+    , iconTheme(QIcon::themeName())
+    , customIconTheme(false)
+    , localeName(defaultLocale.name())
+    , customLocale(false)
+{
+}
 
 /*!
  * \brief Creates a new settings object.
  * \remarks Settings are not restored automatically. Instead, some values (font, widget style, ...) are initialized
  *          from the current Qt configuration. These values are considered as system-default.
  */
-QtSettings::QtSettings() :
-    m_d(new QtSettingsData())
-{}
+QtSettings::QtSettings()
+    : m_d(new QtSettingsData())
+{
+}
 
 /*!
  * \brief Destroys the settings object.
  * \remarks Unlike QSettings not explicitely saved settings are not saved automatically.
  */
 QtSettings::~QtSettings()
-{}
+{
+}
 
 /*!
  * \brief Returns whether a custom font is set.
@@ -147,35 +149,36 @@ void QtSettings::apply()
 {
     // read style sheet
     QString styleSheet;
-    if(m_d->customStyleSheet && !m_d->styleSheetPath.isEmpty()) {
+    if (m_d->customStyleSheet && !m_d->styleSheetPath.isEmpty()) {
         QFile file(m_d->styleSheetPath);
-        if(!file.open(QFile::ReadOnly)) {
+        if (!file.open(QFile::ReadOnly)) {
             cerr << "Unable to open the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << endl;
         }
         styleSheet.append(file.readAll());
-        if(file.error() != QFile::NoError) {
+        if (file.error() != QFile::NoError) {
             cerr << "Unable to read the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << endl;
         }
     }
 
     // apply appearance
-    if(m_d->customFont) {
+    if (m_d->customFont) {
         QGuiApplication::setFont(m_d->font);
     }
-    if(m_d->customWidgetStyle) {
+    if (m_d->customWidgetStyle) {
         QApplication::setStyle(m_d->widgetStyle);
     }
-    if(!styleSheet.isEmpty()) {
-        if(auto *qapp = qobject_cast<QApplication *>(QApplication::instance())) {
+    if (!styleSheet.isEmpty()) {
+        if (auto *qapp = qobject_cast<QApplication *>(QApplication::instance())) {
             qapp->setStyleSheet(styleSheet);
         } else {
-            cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\" because no QApplication has been instantiated." << endl;
+            cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data()
+                 << "\" because no QApplication has been instantiated." << endl;
         }
     }
-    if(m_d->customPalette) {
+    if (m_d->customPalette) {
         QGuiApplication::setPalette(m_d->palette);
     }
-    if(m_d->customIconTheme) {
+    if (m_d->customIconTheme) {
         QIcon::setThemeName(m_d->iconTheme);
     }
 
@@ -183,10 +186,10 @@ void QtSettings::apply()
     QLocale::setDefault(m_d->customLocale ? m_d->localeName : m_d->defaultLocale);
 
     // apply environment
-    if(m_d->additionalPluginDirectory.isEmpty()) {
+    if (m_d->additionalPluginDirectory.isEmpty()) {
         QCoreApplication::addLibraryPath(m_d->additionalPluginDirectory);
     }
-    if(!m_d->additionalIconThemeSearchPath.isEmpty()) {
+    if (!m_d->additionalIconThemeSearchPath.isEmpty()) {
         QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << m_d->additionalIconThemeSearchPath);
     }
 }
@@ -203,25 +206,24 @@ OptionCategory *QtSettings::category()
     auto *category = new OptionCategory;
     category->setDisplayName(QCoreApplication::translate("QtGui::QtOptionCategory", "Qt"));
     category->setIcon(QIcon::fromTheme(QStringLiteral("qtcreator"), QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/apps/qtcreator.svg"))));
-    category->assignPages(QList<OptionPage *>()
-                          << new QtAppearanceOptionPage(*m_d)
-                          << new QtLanguageOptionPage(*m_d)
-                          << new QtEnvOptionPage(*m_d));
+    category->assignPages(QList<OptionPage *>() << new QtAppearanceOptionPage(*m_d) << new QtLanguageOptionPage(*m_d) << new QtEnvOptionPage(*m_d));
     return category;
 }
 
-QtAppearanceOptionPage::QtAppearanceOptionPage(QtSettingsData &settings, QWidget *parentWidget) :
-    QtAppearanceOptionPageBase(parentWidget),
-    m_settings(settings),
-    m_fontDialog(nullptr)
-{}
+QtAppearanceOptionPage::QtAppearanceOptionPage(QtSettingsData &settings, QWidget *parentWidget)
+    : QtAppearanceOptionPageBase(parentWidget)
+    , m_settings(settings)
+    , m_fontDialog(nullptr)
+{
+}
 
 QtAppearanceOptionPage::~QtAppearanceOptionPage()
-{}
+{
+}
 
 bool QtAppearanceOptionPage::apply()
 {
-    if(hasBeenShown()) {
+    if (hasBeenShown()) {
         m_settings.font = ui()->fontComboBox->font();
         m_settings.customFont = !ui()->fontCheckBox->isChecked();
         m_settings.widgetStyle = ui()->widgetStyleComboBox->currentText();
@@ -230,7 +232,8 @@ bool QtAppearanceOptionPage::apply()
         m_settings.customStyleSheet = !ui()->styleSheetCheckBox->isChecked();
         m_settings.palette = ui()->paletteToolButton->palette();
         m_settings.customPalette = !ui()->paletteCheckBox->isChecked();
-        m_settings.iconTheme = ui()->iconThemeComboBox->currentIndex() != -1 ? ui()->iconThemeComboBox->currentData().toString() : ui()->iconThemeComboBox->currentText();
+        m_settings.iconTheme = ui()->iconThemeComboBox->currentIndex() != -1 ? ui()->iconThemeComboBox->currentData().toString()
+                                                                             : ui()->iconThemeComboBox->currentText();
         m_settings.customIconTheme = !ui()->iconThemeCheckBox->isChecked();
     }
     return true;
@@ -238,17 +241,18 @@ bool QtAppearanceOptionPage::apply()
 
 void QtAppearanceOptionPage::reset()
 {
-    if(hasBeenShown()) {
+    if (hasBeenShown()) {
         ui()->fontComboBox->setCurrentFont(m_settings.font);
         ui()->fontCheckBox->setChecked(!m_settings.customFont);
-        ui()->widgetStyleComboBox->setCurrentText(m_settings.widgetStyle.isEmpty() ? (QApplication::style() ? QApplication::style()->objectName() : QString()) : m_settings.widgetStyle);
+        ui()->widgetStyleComboBox->setCurrentText(
+            m_settings.widgetStyle.isEmpty() ? (QApplication::style() ? QApplication::style()->objectName() : QString()) : m_settings.widgetStyle);
         ui()->widgetStyleCheckBox->setChecked(!m_settings.customWidgetStyle);
         ui()->styleSheetPathSelection->lineEdit()->setText(m_settings.styleSheetPath);
         ui()->styleSheetCheckBox->setChecked(!m_settings.customStyleSheet);
         ui()->paletteToolButton->setPalette(m_settings.palette);
         ui()->paletteCheckBox->setChecked(!m_settings.customPalette);
         int iconThemeIndex = ui()->iconThemeComboBox->findData(m_settings.iconTheme);
-        if(iconThemeIndex != -1) {
+        if (iconThemeIndex != -1) {
             ui()->iconThemeComboBox->setCurrentIndex(iconThemeIndex);
         } else {
             ui()->iconThemeComboBox->setCurrentText(m_settings.iconTheme);
@@ -270,7 +274,7 @@ QWidget *QtAppearanceOptionPage::setupWidget()
 
     // setup font selection
     QObject::connect(ui()->fontPushButton, &QPushButton::clicked, [this] {
-        if(!m_fontDialog) {
+        if (!m_fontDialog) {
             m_fontDialog = new QFontDialog(this->widget());
             m_fontDialog->setCurrentFont(ui()->fontComboBox->font());
             QObject::connect(m_fontDialog, &QFontDialog::fontSelected, ui()->fontComboBox, &QFontComboBox::setCurrentFont);
@@ -280,28 +284,27 @@ QWidget *QtAppearanceOptionPage::setupWidget()
     });
 
     // setup palette selection
-    QObject::connect(ui()->paletteToolButton, &QToolButton::clicked, [this] {
-        ui()->paletteToolButton->setPalette(PaletteEditor::getPalette(this->widget(), ui()->paletteToolButton->palette()));
-    });
+    QObject::connect(ui()->paletteToolButton, &QToolButton::clicked,
+        [this] { ui()->paletteToolButton->setPalette(PaletteEditor::getPalette(this->widget(), ui()->paletteToolButton->palette())); });
 
     // setup icon theme selection
     const QStringList searchPaths = QIcon::themeSearchPaths() << QStringLiteral("/usr/share/icons/");
-    for(const QString &searchPath : searchPaths) {
-        for(const QString &iconTheme : QDir(searchPath).entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+    for (const QString &searchPath : searchPaths) {
+        for (const QString &iconTheme : QDir(searchPath).entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
             const int existingItemIndex = ui()->iconThemeComboBox->findData(iconTheme);
             QFile indexFile(searchPath % QChar('/') % iconTheme % QStringLiteral("/index.theme"));
             QByteArray index;
-            if(indexFile.open(QFile::ReadOnly) && !(index = indexFile.readAll()).isEmpty()) {
+            if (indexFile.open(QFile::ReadOnly) && !(index = indexFile.readAll()).isEmpty()) {
                 const int iconThemeSection = index.indexOf("[Icon Theme]");
                 const int nameStart = index.indexOf("Name=", iconThemeSection != -1 ? iconThemeSection : 0);
-                if(nameStart != -1) {
+                if (nameStart != -1) {
                     int nameLength = index.indexOf("\n", nameStart) - nameStart - 5;
-                    if(nameLength > 0) {
+                    if (nameLength > 0) {
                         QString displayName = index.mid(nameStart + 5, nameLength);
-                        if(displayName != iconTheme) {
+                        if (displayName != iconTheme) {
                             displayName += QChar(' ') % QChar('(') % iconTheme % QChar(')');
                         }
-                        if(existingItemIndex != -1) {
+                        if (existingItemIndex != -1) {
                             ui()->iconThemeComboBox->setItemText(existingItemIndex, displayName);
                         } else {
                             ui()->iconThemeComboBox->addItem(displayName, iconTheme);
@@ -310,7 +313,7 @@ QWidget *QtAppearanceOptionPage::setupWidget()
                     }
                 }
             }
-            if(existingItemIndex == -1) {
+            if (existingItemIndex == -1) {
                 ui()->iconThemeComboBox->addItem(iconTheme, iconTheme);
             }
         }
@@ -319,17 +322,19 @@ QWidget *QtAppearanceOptionPage::setupWidget()
     return widget;
 }
 
-QtLanguageOptionPage::QtLanguageOptionPage(QtSettingsData &settings, QWidget *parentWidget) :
-    QtLanguageOptionPageBase(parentWidget),
-    m_settings(settings)
-{}
+QtLanguageOptionPage::QtLanguageOptionPage(QtSettingsData &settings, QWidget *parentWidget)
+    : QtLanguageOptionPageBase(parentWidget)
+    , m_settings(settings)
+{
+}
 
 QtLanguageOptionPage::~QtLanguageOptionPage()
-{}
+{
+}
 
 bool QtLanguageOptionPage::apply()
 {
-    if(hasBeenShown()) {
+    if (hasBeenShown()) {
         m_settings.localeName = ui()->localeComboBox->currentText();
         m_settings.customLocale = !ui()->localeCheckBox->isChecked();
     }
@@ -338,7 +343,7 @@ bool QtLanguageOptionPage::apply()
 
 void QtLanguageOptionPage::reset()
 {
-    if(hasBeenShown()) {
+    if (hasBeenShown()) {
         ui()->localeComboBox->setCurrentText(m_settings.localeName);
         ui()->localeCheckBox->setChecked(!m_settings.customLocale);
     }
@@ -351,10 +356,7 @@ QWidget *QtLanguageOptionPage::setupWidget()
 
     // add all available locales to combo box
     auto *localeComboBox = ui()->localeComboBox;
-    for(const QLocale &locale : QLocale::matchingLocales(
-            QLocale::AnyLanguage,
-            QLocale::AnyScript,
-            QLocale::AnyCountry)) {
+    for (const QLocale &locale : QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry)) {
         localeComboBox->addItem(locale.name());
     }
 
@@ -362,27 +364,26 @@ QWidget *QtLanguageOptionPage::setupWidget()
     QObject::connect(ui()->localeComboBox, &QComboBox::currentTextChanged, [languageLabel, localeComboBox] {
         const QLocale selectedLocale(localeComboBox->currentText());
         const QLocale currentLocale;
-        languageLabel->setText(QCoreApplication::translate("QtGui::QtLanguageOptionPage", "recognized by Qt as")
-                               % QStringLiteral(" <i>")
-                               % currentLocale.languageToString(selectedLocale.language())
-                               % QChar(',') % QChar(' ')
-                               % currentLocale.countryToString(selectedLocale.country())
-                               % QStringLiteral("</i>"));
+        languageLabel->setText(QCoreApplication::translate("QtGui::QtLanguageOptionPage", "recognized by Qt as") % QStringLiteral(" <i>")
+            % currentLocale.languageToString(selectedLocale.language()) % QChar(',') % QChar(' ')
+            % currentLocale.countryToString(selectedLocale.country()) % QStringLiteral("</i>"));
     });
     return widget;
 }
 
-QtEnvOptionPage::QtEnvOptionPage(QtSettingsData &settings, QWidget *parentWidget) :
-    QtEnvOptionPageBase(parentWidget),
-    m_settings(settings)
-{}
+QtEnvOptionPage::QtEnvOptionPage(QtSettingsData &settings, QWidget *parentWidget)
+    : QtEnvOptionPageBase(parentWidget)
+    , m_settings(settings)
+{
+}
 
 QtEnvOptionPage::~QtEnvOptionPage()
-{}
+{
+}
 
 bool QtEnvOptionPage::apply()
 {
-    if(hasBeenShown()) {
+    if (hasBeenShown()) {
         m_settings.additionalPluginDirectory = ui()->pluginPathSelection->lineEdit()->text();
         m_settings.additionalIconThemeSearchPath = ui()->iconThemeSearchPathSelection->lineEdit()->text();
         TranslationFiles::additionalTranslationFilePath() = ui()->translationPathSelection->lineEdit()->text();
@@ -392,13 +393,12 @@ bool QtEnvOptionPage::apply()
 
 void QtEnvOptionPage::reset()
 {
-    if(hasBeenShown()) {
+    if (hasBeenShown()) {
         ui()->pluginPathSelection->lineEdit()->setText(m_settings.additionalPluginDirectory);
         ui()->iconThemeSearchPathSelection->lineEdit()->setText(m_settings.additionalIconThemeSearchPath);
         ui()->translationPathSelection->lineEdit()->setText(TranslationFiles::additionalTranslationFilePath());
     }
 }
-
 }
 
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)

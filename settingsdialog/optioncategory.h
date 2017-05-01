@@ -3,16 +3,15 @@
 
 #include "../global.h"
 
-#include <QObject>
 #include <QIcon>
 #include <QList>
+#include <QObject>
 
 namespace Dialogs {
 
 class OptionPage;
 
-class QT_UTILITIES_EXPORT OptionCategory : public QObject
-{
+class QT_UTILITIES_EXPORT OptionCategory : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString displayName READ displayName WRITE setDisplayName NOTIFY displayNameChanged)
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
@@ -21,7 +20,7 @@ class QT_UTILITIES_EXPORT OptionCategory : public QObject
 public:
     explicit OptionCategory(QObject *parent = nullptr);
     ~OptionCategory();
-    
+
     const QString &displayName() const;
     void setDisplayName(const QString &displayName);
     const QIcon &icon() const;
@@ -33,7 +32,7 @@ public:
     bool matches(const QString &searchKeyWord) const;
     int currentIndex() const;
     void setCurrentIndex(int currentIndex);
-    
+
 Q_SIGNALS:
     void displayNameChanged();
     void iconChanged();
@@ -106,7 +105,6 @@ inline void OptionCategory::setCurrentIndex(int currentIndex)
 {
     m_currentIndex = currentIndex;
 }
-
 }
 
 #endif // DIALOGS_OPTIONSCATEGORY_H

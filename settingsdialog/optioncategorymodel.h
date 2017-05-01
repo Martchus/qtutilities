@@ -3,22 +3,21 @@
 
 #include "../global.h"
 
-#include <QList>
 #include <QAbstractListModel>
+#include <QList>
 
 namespace Dialogs {
 
 class OptionPage;
 class OptionCategory;
 
-class QT_UTILITIES_EXPORT OptionCategoryModel : public QAbstractListModel
-{
+class QT_UTILITIES_EXPORT OptionCategoryModel : public QAbstractListModel {
     Q_OBJECT
 public:
     explicit OptionCategoryModel(QObject *parent = nullptr);
     explicit OptionCategoryModel(const QList<OptionCategory *> &categories, QObject *parent = nullptr);
     virtual ~OptionCategoryModel();
-    
+
     const QList<OptionCategory *> &categories() const;
     OptionCategory *category(const QModelIndex &index) const;
     OptionCategory *category(int row) const;
@@ -29,10 +28,9 @@ public:
 private Q_SLOTS:
     void categoryChangedName();
     void categoryChangedIcon();
-    
+
 private:
     QList<OptionCategory *> m_categories;
-
 };
 
 /*!
@@ -52,9 +50,7 @@ inline const QList<OptionCategory *> &OptionCategoryModel::categories() const
  */
 inline OptionCategory *OptionCategoryModel::category(const QModelIndex &index) const
 {
-    return (index.isValid())
-            ? category(index.row())
-            : nullptr;
+    return (index.isValid()) ? category(index.row()) : nullptr;
 }
 
 /*!
@@ -66,7 +62,6 @@ inline OptionCategory *OptionCategoryModel::category(int row) const
 {
     return row < m_categories.size() ? m_categories.at(row) : nullptr;
 }
-
 }
 
 #endif // DIALOGS_OPTIONCATEGORYMODEL_H

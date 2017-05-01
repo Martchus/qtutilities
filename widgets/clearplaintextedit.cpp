@@ -15,9 +15,9 @@ namespace Widgets {
 /*!
  * \brief Constructs a clear plain text edit.
  */
-ClearPlainTextEdit::ClearPlainTextEdit(QWidget *parent) :
-    QPlainTextEdit(parent),
-    ButtonOverlay(viewport())
+ClearPlainTextEdit::ClearPlainTextEdit(QWidget *parent)
+    : QPlainTextEdit(parent)
+    , ButtonOverlay(viewport())
 {
     // set alignment to show buttons in the bottom right corner
     ButtonOverlay::buttonLayout()->setAlignment(Qt::AlignBottom | Qt::AlignRight);
@@ -32,7 +32,8 @@ ClearPlainTextEdit::ClearPlainTextEdit(QWidget *parent) :
  * \brief Destroys the clear plain text edit.
  */
 ClearPlainTextEdit::~ClearPlainTextEdit()
-{}
+{
+}
 
 /*!
  * \brief Updates the visibility of the clear button.

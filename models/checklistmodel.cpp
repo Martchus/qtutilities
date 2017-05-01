@@ -22,13 +22,14 @@ namespace Models {
 /*!
  * \brief Constructs a new checklist model.
  */
-ChecklistModel::ChecklistModel(QObject *parent) :
-    QAbstractListModel(parent)
-{}
+ChecklistModel::ChecklistModel(QObject *parent)
+    : QAbstractListModel(parent)
+{
+}
 
 int ChecklistModel::rowCount(const QModelIndex &parent) const
 {
-    if(!parent.isValid()) {
+    if (!parent.isValid()) {
         return m_items.size();
     }
     return 0;
@@ -36,7 +37,7 @@ int ChecklistModel::rowCount(const QModelIndex &parent) const
 
 Qt::ItemFlags ChecklistModel::flags(const QModelIndex &index) const
 {
-    if(!index.isValid() || index.row() >= m_items.count() || index.model() != this) {
+    if (!index.isValid() || index.row() >= m_items.count() || index.model() != this) {
         return Qt::ItemIsDropEnabled; // allows drops outside the items
     }
     return QAbstractListModel::flags(index) | Qt::ItemIsUserCheckable | Qt::ItemIsDragEnabled;
@@ -44,16 +45,15 @@ Qt::ItemFlags ChecklistModel::flags(const QModelIndex &index) const
 
 QVariant ChecklistModel::data(const QModelIndex &index, int role) const
 {
-    if(index.isValid() && index.row() < m_items.size()) {
-        switch(role) {
+    if (index.isValid() && index.row() < m_items.size()) {
+        switch (role) {
         case Qt::DisplayRole:
             return m_items.at(index.row()).label();
         case Qt::CheckStateRole:
             return m_items.at(index.row()).checkState();
         case idRole():
             return m_items.at(index.row()).id();
-        default:
-            ;
+        default:;
         }
     }
     return QVariant();
@@ -73,14 +73,14 @@ bool ChecklistModel::setData(const QModelIndex &index, const QVariant &value, in
     bool success = false;
     QVector<int> roles;
     roles << role;
-    if(index.isValid() && index.row() < m_items.size()) {
-        switch(role) {
+    if (index.isValid() && index.row() < m_items.size()) {
+        switch (role) {
         case Qt::DisplayRole:
             m_items[index.row()].m_label = value.toString();
             success = true;
             break;
         case Qt::CheckStateRole:
-            if(value.canConvert(QMetaType::Int)) {
+            if (value.canConvert(QMetaType::Int)) {
                 m_items[index.row()].m_checkState = static_cast<Qt::CheckState>(value.toInt());
                 success = true;
             }
@@ -89,16 +89,16 @@ bool ChecklistModel::setData(const QModelIndex &index, const QVariant &value, in
             m_items[index.row()].m_id = value;
             success = true;
             QString label = labelForId(value);
-            if(!label.isEmpty()) {
+            if (!label.isEmpty()) {
                 m_items[index.row()].m_label = label;
                 roles << Qt::DisplayRole;
             }
             break;
-        } default:
-            ;
+        }
+        default:;
         }
     }
-    if(success) {
+    if (success) {
         dataChanged(index, index, roles);
     }
     return success;
@@ -106,7 +106,7 @@ bool ChecklistModel::setData(const QModelIndex &index, const QVariant &value, in
 
 bool ChecklistModel::setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles)
 {
-    for(QMap<int, QVariant>::ConstIterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
+    for (QMap<int, QVariant>::ConstIterator it = roles.constBegin(); it != roles.constEnd(); ++it) {
         setData(index, it.value(), it.key());
     }
     return true;
@@ -138,7 +138,7 @@ bool ChecklistModel::insertRows(int row, int count, const QModelIndex &parent)
         return false;
     }
     beginInsertRows(QModelIndex(), row, row + count - 1);
-    for(int index = row, end = row + count; index < end; ++index) {
+    for (int index = row, end = row + count; index < end; ++index) {
         m_items.insert(index, ChecklistItem());
     }
     endInsertRows();
@@ -151,7 +151,7 @@ bool ChecklistModel::removeRows(int row, int count, const QModelIndex &parent)
         return false;
     }
     beginRemoveRows(QModelIndex(), row, row + count - 1);
-    for(int index = row, end = row + count; index < end; ++index) {
+    for (int index = row, end = row + count; index < end; ++index) {
         m_items.removeAt(index);
     }
     endRemoveRows();
@@ -185,18 +185,18 @@ void ChecklistModel::restore(QSettings &settings, const QString &name)
     m_items.clear();
     int rows = settings.beginReadArray(name);
     m_items.reserve(rows);
-    for(int i = 0; i < rows; ++i) {
+    for (int i = 0; i < rows; ++i) {
         settings.setArrayIndex(i);
         QVariant id = settings.value(QStringLiteral("id"));
         QVariant selected = settings.value(QStringLiteral("selected"));
-        if(!id.isNull() && !selected.isNull() && selected.canConvert(QMetaType::Bool) && !restoredIds.contains(id)) {
+        if (!id.isNull() && !selected.isNull() && selected.canConvert(QMetaType::Bool) && !restoredIds.contains(id)) {
             m_items << ChecklistItem(id, labelForId(id), selected.toBool() ? Qt::Checked : Qt::Unchecked);
             restoredIds << id;
         }
     }
     settings.endArray();
-    for(const ChecklistItem &item : currentItems) {
-        if(!restoredIds.contains(item.id())) {
+    for (const ChecklistItem &item : currentItems) {
+        if (!restoredIds.contains(item.id())) {
             m_items << item;
         }
     }
@@ -214,7 +214,7 @@ void ChecklistModel::save(QSettings &settings, const QString &name) const
 {
     settings.beginWriteArray(name, m_items.size());
     int index = 0;
-    for(const ChecklistItem &item : m_items) {
+    for (const ChecklistItem &item : m_items) {
         settings.setArrayIndex(index);
         settings.setValue(QStringLiteral("id"), item.id());
         settings.setValue(QStringLiteral("selected"), item.isChecked());
@@ -222,5 +222,4 @@ void ChecklistModel::save(QSettings &settings, const QString &name) const
     }
     settings.endArray();
 }
-
 }

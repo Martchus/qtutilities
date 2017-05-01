@@ -7,8 +7,7 @@
 
 namespace ApplicationUtilities {
 
-class QT_UTILITIES_EXPORT QtConfigArguments
-{
+class QT_UTILITIES_EXPORT QtConfigArguments {
 public:
     QtConfigArguments();
 
@@ -62,13 +61,11 @@ inline bool QtConfigArguments::areQtGuiArgsPresent() const
 {
     return m_qtWidgetsGuiArg.isPresent() || m_qtQuickGuiArg.isPresent();
 }
-
 }
 
 #endif // APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
 
 #ifdef QT_CONFIG_ARGUMENTS
-# undef QT_CONFIG_ARGUMENTS
+#undef QT_CONFIG_ARGUMENTS
 #endif
 #define QT_CONFIG_ARGUMENTS ApplicationUtilities::QtConfigArguments
-

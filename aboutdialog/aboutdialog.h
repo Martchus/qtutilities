@@ -15,12 +15,12 @@ namespace Ui {
 class AboutDialog;
 }
 
-class QT_UTILITIES_EXPORT AboutDialog : public QDialog
-{
+class QT_UTILITIES_EXPORT AboutDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version, const QString &website = QString(), const QString &description = QString(), const QImage &image = QImage());
+    explicit AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version,
+        const QString &website = QString(), const QString &description = QString(), const QImage &image = QImage());
     explicit AboutDialog(QWidget *parent, const QString &description = QString(), const QImage &image = QImage());
     ~AboutDialog();
 
@@ -28,7 +28,6 @@ private:
     std::unique_ptr<Ui::AboutDialog> m_ui;
     QGraphicsScene *m_iconScene;
 };
-
 }
 
 #endif // DIALOGS_ABOUTDIALOG_H

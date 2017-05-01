@@ -15,30 +15,32 @@ struct QtSettingsData;
 
 BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtAppearanceOptionPage)
 public:
-    explicit QtAppearanceOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
+explicit QtAppearanceOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
+
 private:
-    DECLARE_SETUP_WIDGETS
-    QtSettingsData &m_settings;
-    QFontDialog *m_fontDialog;
+DECLARE_SETUP_WIDGETS
+QtSettingsData &m_settings;
+QFontDialog *m_fontDialog;
 END_DECLARE_OPTION_PAGE
 
 BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtLanguageOptionPage)
 public:
-    explicit QtLanguageOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
+explicit QtLanguageOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
+
 private:
-    DECLARE_SETUP_WIDGETS
-    QtSettingsData &m_settings;
+DECLARE_SETUP_WIDGETS
+QtSettingsData &m_settings;
 END_DECLARE_OPTION_PAGE
 
 BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtEnvOptionPage)
 public:
-    explicit QtEnvOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
+explicit QtEnvOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
+
 private:
-    QtSettingsData &m_settings;
+QtSettingsData &m_settings;
 END_DECLARE_OPTION_PAGE
 
-class QT_UTILITIES_EXPORT QtSettings
-{
+class QT_UTILITIES_EXPORT QtSettings {
 public:
     QtSettings();
     ~QtSettings();
@@ -53,7 +55,6 @@ public:
 private:
     std::unique_ptr<QtSettingsData> m_d;
 };
-
 }
 
 DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)

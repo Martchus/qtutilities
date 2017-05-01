@@ -11,19 +11,17 @@ namespace Widgets {
 
 class IconButton;
 
-class QT_UTILITIES_EXPORT ClearLineEdit : public QLineEdit, public ButtonOverlay
-{
+class QT_UTILITIES_EXPORT ClearLineEdit : public QLineEdit, public ButtonOverlay {
     Q_OBJECT
 public:
     explicit ClearLineEdit(QWidget *parent = nullptr);
     ~ClearLineEdit();
     bool isCleared() const;
-    
+
 private Q_SLOTS:
     void handleTextChanged(const QString &text);
     void handleClearButtonClicked();
 };
-
 }
 
 #endif // WIDGETS_CLEARLINEEDIT_H

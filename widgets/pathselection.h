@@ -12,8 +12,7 @@ namespace Widgets {
 
 class ClearLineEdit;
 
-class QT_UTILITIES_EXPORT PathSelection : public QWidget
-{
+class QT_UTILITIES_EXPORT PathSelection : public QWidget {
     Q_OBJECT
 public:
     explicit PathSelection(QWidget *parent = nullptr);
@@ -72,7 +71,6 @@ inline void PathSelection::provideCustomFileDialog(QFileDialog *customFileDialog
 {
     m_customDialog = customFileDialog;
 }
-
 }
 
 #endif // WIDGETS_PATHSELECTION_H

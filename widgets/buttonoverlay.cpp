@@ -1,12 +1,12 @@
 #include "./buttonoverlay.h"
 #include "./iconbutton.h"
 
-#include <QWidget>
+#include <QCursor>
 #include <QHBoxLayout>
 #include <QStyle>
 #include <QStyleOption>
 #include <QToolTip>
-#include <QCursor>
+#include <QWidget>
 
 #include <functional>
 
@@ -31,12 +31,12 @@ namespace Widgets {
  * \brief Constructs a button overlay for the specified \a widget.
  * \param widget Specifies the widget to display the buttons on.
  */
-ButtonOverlay::ButtonOverlay(QWidget *widget) :
-    m_widget(widget),
-    m_buttonWidget(new QWidget(widget)),
-    m_buttonLayout(new QHBoxLayout(m_buttonWidget)),
-    m_clearButton(nullptr),
-    m_infoButton(nullptr)
+ButtonOverlay::ButtonOverlay(QWidget *widget)
+    : m_widget(widget)
+    , m_buttonWidget(new QWidget(widget))
+    , m_buttonLayout(new QHBoxLayout(m_buttonWidget))
+    , m_clearButton(nullptr)
+    , m_infoButton(nullptr)
 {
     // setup button widget and layout
     const QMargins margins = widget->contentsMargins();
@@ -44,7 +44,8 @@ ButtonOverlay::ButtonOverlay(QWidget *widget) :
     opt.initFrom(m_widget);
     const int frameWidth = widget->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, &opt, m_widget);
     const int pad = 2;
-    m_buttonLayout->setContentsMargins(margins.left() + frameWidth + pad, margins.top() + frameWidth, margins.right() + frameWidth + pad, margins.bottom() + frameWidth);
+    m_buttonLayout->setContentsMargins(
+        margins.left() + frameWidth + pad, margins.top() + frameWidth, margins.right() + frameWidth + pad, margins.bottom() + frameWidth);
     m_buttonLayout->setAlignment(Qt::AlignCenter | Qt::AlignRight);
     widget->setLayout(m_buttonLayout);
 }
@@ -53,23 +54,26 @@ ButtonOverlay::ButtonOverlay(QWidget *widget) :
  * \brief Destroys the button overlay.
  */
 ButtonOverlay::~ButtonOverlay()
-{}
+{
+}
 
 /*!
  * \brief Sets whether the clear button is enabled.
  */
 void ButtonOverlay::setClearButtonEnabled(bool enabled)
 {
-    if(isClearButtonEnabled() && !enabled) {
+    if (isClearButtonEnabled() && !enabled) {
         // disable clear button
         m_buttonLayout->removeWidget(m_clearButton);
         delete m_clearButton;
         m_clearButton = nullptr;
-    } else if(!isClearButtonEnabled() && enabled) {
+    } else if (!isClearButtonEnabled() && enabled) {
         // enable clear button
         m_clearButton = new IconButton;
         m_clearButton->setHidden(isCleared());
-        m_clearButton->setPixmap(/*QIcon::fromTheme(QStringLiteral("edit-clear"), */QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/actions/edit-clear.png")/*)*/).pixmap(16));
+        m_clearButton->setPixmap(/*QIcon::fromTheme(QStringLiteral("edit-clear"), */ QIcon(
+            QStringLiteral(":/qtutilities/icons/hicolor/48x48/actions/edit-clear.png") /*)*/)
+                                     .pixmap(16));
         m_clearButton->setGeometry(0, 0, 16, 16);
         m_clearButton->setToolTip(QObject::tr("Clear"));
         QObject::connect(m_clearButton, &IconButton::clicked, std::bind(&ButtonOverlay::handleClearButtonClicked, this));
@@ -86,11 +90,11 @@ void ButtonOverlay::setClearButtonEnabled(bool enabled)
  */
 void ButtonOverlay::enableInfoButton(const QPixmap &pixmap, const QString &infoText)
 {
-    if(!m_infoButton) {
+    if (!m_infoButton) {
         m_infoButton = new IconButton;
         m_infoButton->setGeometry(0, 0, 16, 16);
         QObject::connect(m_infoButton, &IconButton::clicked, std::bind(&ButtonOverlay::showInfo, this));
-        if(m_clearButton) {
+        if (m_clearButton) {
             m_buttonLayout->insertWidget(m_buttonLayout->count() - 2, m_infoButton);
         } else {
             m_buttonLayout->addWidget(m_infoButton);
@@ -106,7 +110,7 @@ void ButtonOverlay::enableInfoButton(const QPixmap &pixmap, const QString &infoT
  */
 void ButtonOverlay::disableInfoButton()
 {
-    if(m_infoButton) {
+    if (m_infoButton) {
         m_buttonLayout->removeWidget(m_infoButton);
         delete m_infoButton;
         m_infoButton = nullptr;
@@ -150,7 +154,7 @@ void ButtonOverlay::removeCustomButton(QWidget *button)
  */
 void ButtonOverlay::updateClearButtonVisibility(bool visible)
 {
-    if(m_clearButton) {
+    if (m_clearButton) {
         m_clearButton->setVisible(visible);
     }
 }
@@ -161,7 +165,8 @@ void ButtonOverlay::updateClearButtonVisibility(bool visible)
  * This method is meant to be implemented when subclassing.
  */
 void ButtonOverlay::handleClearButtonClicked()
-{}
+{
+}
 
 /*!
  * \brief Returns whether the related widget is cleared.
@@ -180,9 +185,8 @@ bool ButtonOverlay::isCleared() const
  */
 void ButtonOverlay::showInfo()
 {
-    if(m_infoButton) {
+    if (m_infoButton) {
         QToolTip::showText(QCursor::pos(), m_infoButton->toolTip(), m_infoButton);
     }
 }
-
 }

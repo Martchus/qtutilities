@@ -13,8 +13,7 @@ namespace Ui {
 class EnterPasswordDialog;
 }
 
-class QT_UTILITIES_EXPORT EnterPasswordDialog : public QDialog
-{
+class QT_UTILITIES_EXPORT EnterPasswordDialog : public QDialog {
     Q_OBJECT
     Q_PROPERTY(QString userName READ userName)
     Q_PROPERTY(QString password READ password)
@@ -100,7 +99,6 @@ inline void EnterPasswordDialog::abort()
     m_password.clear();
     done(QDialog::Rejected);
 }
-
 }
 
 #endif // DIALOGS_ENTERPASSWORDDIALOG_H

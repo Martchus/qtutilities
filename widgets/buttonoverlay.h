@@ -14,8 +14,7 @@ namespace Widgets {
 
 class IconButton;
 
-class QT_UTILITIES_EXPORT ButtonOverlay
-{
+class QT_UTILITIES_EXPORT ButtonOverlay {
 public:
     explicit ButtonOverlay(QWidget *widget);
     virtual ~ButtonOverlay();
@@ -35,7 +34,7 @@ protected:
     void updateClearButtonVisibility(bool visible);
     virtual void handleClearButtonClicked();
 
-private:    
+private:
     void showInfo();
 
     QWidget *m_widget;
@@ -68,7 +67,6 @@ inline bool ButtonOverlay::isInfoButtonEnabled() const
 {
     return m_infoButton != nullptr;
 }
-
 }
 
 #endif // WIDGETS_BUTTONOVERLAY_H

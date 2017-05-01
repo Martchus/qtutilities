@@ -2,25 +2,25 @@
 
 #include "resources/config.h"
 
-#include <QString>
-#include <QLocale>
-#include <QTranslator>
-#include <QLibraryInfo>
-#include <QFile>
 #include <QDir>
-#include <QStringBuilder>
+#include <QFile>
+#include <QLibraryInfo>
+#include <QLocale>
 #include <QSettings>
+#include <QString>
+#include <QStringBuilder>
+#include <QTranslator>
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
-# include <QApplication>
-# include <QIcon>
-# include <QFont>
-# include <QStyleFactory>
+#include <QApplication>
+#include <QFont>
+#include <QIcon>
+#include <QStyleFactory>
 #elif defined(QT_UTILITIES_GUI_QTQUICK)
-# include <QGuiApplication>
-# include <QIcon>
-# include <QFont>
+#include <QFont>
+#include <QGuiApplication>
+#include <QIcon>
 #else
-# include <QCoreApplication>
+#include <QCoreApplication>
 #endif
 
 #include <iostream>
@@ -28,11 +28,13 @@
 using namespace std;
 
 ///! \cond
-inline void initResources() {
+inline void initResources()
+{
     Q_INIT_RESOURCE(qtutilsicons);
 }
 
-inline void cleanupResources() {
+inline void cleanupResources()
+{
     Q_CLEANUP_RESOURCE(qtutilsicons);
 }
 ///! \endcond
@@ -60,7 +62,6 @@ void cleanup()
 {
     cleanupResources();
 }
-
 }
 
 /*!
@@ -106,21 +107,22 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
  */
 void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
-    for(const QString &repoName : repositoryNames) {
+    for (const QString &repoName : repositoryNames) {
         QTranslator *qtTranslator = new QTranslator;
         const QString fileName(repoName % QChar('_') % localeName);
-        if(!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, additionalTranslationFilePath())) {
+        if (!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, additionalTranslationFilePath())) {
             QCoreApplication::installTranslator(qtTranslator);
-        } else if(qtTranslator->load(fileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+        } else if (qtTranslator->load(fileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
             QCoreApplication::installTranslator(qtTranslator);
-        } else if(qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
+        } else if (qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
             // used in Windows
             QCoreApplication::installTranslator(qtTranslator);
-        } else if(qtTranslator->load(fileName, QStringLiteral(":/translations"))) {
+        } else if (qtTranslator->load(fileName, QStringLiteral(":/translations"))) {
             QCoreApplication::installTranslator(qtTranslator);
         } else {
             delete qtTranslator;
-            cerr << "Unable to load translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and language " << localeName.toLocal8Bit().data() << "." << endl;
+            cerr << "Unable to load translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and language "
+                 << localeName.toLocal8Bit().data() << "." << endl;
         }
     }
 }
@@ -143,7 +145,7 @@ void loadApplicationTranslationFile(const QString &applicationName)
     // load English translation files as fallback
     loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
     // load translation files for current locale
-    if(QLocale().name() != QLatin1String("en_US")) {
+    if (QLocale().name() != QLatin1String("en_US")) {
         loadApplicationTranslationFile(applicationName, QLocale().name());
     }
 }
@@ -166,21 +168,22 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
 {
     QTranslator *appTranslator = new QTranslator;
     const QString fileName(QStringLiteral("%1_%2").arg(applicationName, localeName));
-    if(!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, additionalTranslationFilePath())) {
+    if (!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, additionalTranslationFilePath())) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if(appTranslator->load(fileName, QStringLiteral("."))) {
+    } else if (appTranslator->load(fileName, QStringLiteral("."))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if(appTranslator->load(fileName, QStringLiteral("./translations"))) {
+    } else if (appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if(appTranslator->load(fileName, QStringLiteral(APP_INSTALL_PREFIX "/share/%1/translations").arg(applicationName))) {
+    } else if (appTranslator->load(fileName, QStringLiteral(APP_INSTALL_PREFIX "/share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if(appTranslator->load(fileName, QStringLiteral("../share/%1/translations").arg(applicationName))) {
+    } else if (appTranslator->load(fileName, QStringLiteral("../share/%1/translations").arg(applicationName))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if(appTranslator->load(fileName, QStringLiteral(":/translations"))) {
+    } else if (appTranslator->load(fileName, QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
     } else {
         delete appTranslator;
-        cerr << "Unable to load translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the language \"" << localeName.toLocal8Bit().data() << "\"." << endl;
+        cerr << "Unable to load translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the language \""
+             << localeName.toLocal8Bit().data() << "\"." << endl;
     }
 }
 
@@ -190,7 +193,7 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
  */
 void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames)
 {
-    for(const QString &applicationName : applicationNames) {
+    for (const QString &applicationName : applicationNames) {
         loadApplicationTranslationFile(applicationName);
     }
 }
@@ -202,11 +205,10 @@ void loadApplicationTranslationFile(const std::initializer_list<QString> &applic
  */
 void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames, const QString &localeName)
 {
-    for(const QString &applicationName : applicationNames) {
+    for (const QString &applicationName : applicationNames) {
         loadApplicationTranslationFile(applicationName, localeName);
     }
 }
-
 }
 
 /*!
@@ -241,7 +243,6 @@ bool hasCoreApp()
 {
     return qobject_cast<QCoreApplication *>(QCoreApplication::instance()) != nullptr;
 }
-
 }
 
 /*!
@@ -256,27 +257,27 @@ namespace ConfigFile {
 QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings)
 {
     // check whether the file is in the current working directory
-    if(QFile::exists(fileName)) {
+    if (QFile::exists(fileName)) {
         return fileName;
     } else {
         // check whether the file is in the settings directory used by QSettings
         QString path;
-        if(settings) {
+        if (settings) {
             path = QFileInfo(settings->fileName()).absoluteDir().absoluteFilePath(fileName);
-            if(QFile::exists(path)) {
+            if (QFile::exists(path)) {
                 return path;
             }
         }
-        // check whether there is a user created version of the file under /etc/app/
+// check whether there is a user created version of the file under /etc/app/
 #ifdef Q_OS_WIN32
         // use relative paths on Windows
         path = QStringLiteral("../etc/") % applicationName % QChar('/') % fileName;
-        if(QFile::exists(path)) {
+        if (QFile::exists(path)) {
             return path;
         } else {
             // check whether there is the default version of the file under /usr/share/app/
             path = QStringLiteral("../share/") % applicationName % QChar('/') % fileName;
-            if(QFile::exists(path)) {
+            if (QFile::exists(path)) {
                 return path;
             } else {
                 return QString(); // file is not present
@@ -284,12 +285,12 @@ QString locateConfigFile(const QString &applicationName, const QString &fileName
         }
 #else
         path = QStringLiteral("/etc/") % applicationName % QChar('/') % fileName;
-        if(QFile::exists(path)) {
+        if (QFile::exists(path)) {
             return path;
         } else {
             // check whether there is the default version of the file under /usr/share/app/
             path = QStringLiteral("/usr/share/") % applicationName % QChar('/') % fileName;
-            if(QFile::exists(path)) {
+            if (QFile::exists(path)) {
                 return path;
             } else {
                 return QString(); // file is not present
@@ -298,5 +299,4 @@ QString locateConfigFile(const QString &applicationName, const QString &fileName
 #endif
     }
 }
-
 }

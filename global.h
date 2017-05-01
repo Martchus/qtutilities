@@ -7,11 +7,11 @@
 #include <c++utilities/application/global.h>
 
 #ifdef QT_UTILITIES_STATIC
-# define QT_UTILITIES_EXPORT
-# define QT_UTILITIES_IMPORT
+#define QT_UTILITIES_EXPORT
+#define QT_UTILITIES_IMPORT
 #else
-# define QT_UTILITIES_EXPORT LIB_EXPORT
-# define QT_UTILITIES_IMPORT LIB_IMPORT
+#define QT_UTILITIES_EXPORT LIB_EXPORT
+#define QT_UTILITIES_IMPORT LIB_IMPORT
 #endif
 
 /*!

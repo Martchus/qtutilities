@@ -25,5 +25,4 @@ bool openLocalFileOrDir(const QString &path)
     return QDesktopServices::openUrl(url);
 #endif
 }
-
 }

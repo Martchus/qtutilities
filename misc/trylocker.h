@@ -10,16 +10,15 @@ namespace ThreadingUtils {
 /*!
  * \brief Like QMutexLocker, but it just tries to lock the mutex.
  */
-template<typename Mutex = QMutex>
-class TryLocker
-{
+template <typename Mutex = QMutex> class TryLocker {
 public:
     /*!
      * \brief Tries to lock the specified mutex.
      */
-    TryLocker(Mutex &mutex) :
-        m_mutex(mutex.tryLock() ? &mutex : nullptr)
-    {}
+    TryLocker(Mutex &mutex)
+        : m_mutex(mutex.tryLock() ? &mutex : nullptr)
+    {
+    }
 
     /*!
      * \brief Unlocks the mutex specified when constructing.
@@ -27,7 +26,7 @@ public:
      */
     ~TryLocker()
     {
-        if(m_mutex) {
+        if (m_mutex) {
             m_mutex->unlock();
         }
     }
@@ -51,7 +50,6 @@ public:
 private:
     Mutex *m_mutex;
 };
-
 }
 
 #endif // THREADING_UTILS_TRYLOCKER_H

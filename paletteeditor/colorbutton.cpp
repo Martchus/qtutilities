@@ -1,11 +1,11 @@
 #include "./colorbutton.h"
 
-#include <QColorDialog>
-#include <QPainter>
-#include <QMimeData>
-#include <QDragEnterEvent>
-#include <QDrag>
 #include <QApplication>
+#include <QColorDialog>
+#include <QDrag>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QPainter>
 
 namespace Widgets {
 
@@ -13,8 +13,7 @@ namespace Widgets {
  * \cond
  */
 
-class ColorButtonPrivate
-{
+class ColorButtonPrivate {
     ColorButton *q_ptr;
     Q_DECLARE_PUBLIC(ColorButton)
 public:
@@ -71,9 +70,7 @@ QPixmap ColorButtonPrivate::generatePixmap() const
     p.setBrushOrigin((r.width() % pixSize + pixSize) / 2 + corr, (r.height() % pixSize + pixSize) / 2 + corr);
     p.fillRect(r, br);
 
-    p.fillRect(r.width() / 4 + corr, r.height() / 4 + corr,
-               r.width() / 2, r.height() / 2,
-               QColor(shownColor().rgb()));
+    p.fillRect(r.width() / 4 + corr, r.height() / 4 + corr, r.width() / 2, r.height() / 2, QColor(shownColor().rgb()));
     p.drawRect(pix.rect().adjusted(0, 0, -1, -1));
 
     return pix;
@@ -84,7 +81,8 @@ QPixmap ColorButtonPrivate::generatePixmap() const
  */
 
 ColorButton::ColorButton(QWidget *parent)
-    : QToolButton(parent), d_ptr(new ColorButtonPrivate)
+    : QToolButton(parent)
+    , d_ptr(new ColorButtonPrivate)
 {
     d_ptr->q_ptr = this;
     d_ptr->m_dragging = false;
@@ -187,8 +185,7 @@ void ColorButton::mousePressEvent(QMouseEvent *event)
 void ColorButton::mouseMoveEvent(QMouseEvent *event)
 {
 #ifndef QT_NO_DRAGANDDROP
-    if (event->buttons() & Qt::LeftButton &&
-            (d_ptr->m_dragStart - event->pos()).manhattanLength() > QApplication::startDragDistance()) {
+    if (event->buttons() & Qt::LeftButton && (d_ptr->m_dragStart - event->pos()).manhattanLength() > QApplication::startDragDistance()) {
         QMimeData *mime = new QMimeData;
         mime->setColorData(color());
         QDrag *drg = new QDrag(this);
@@ -233,7 +230,6 @@ void ColorButton::dropEvent(QDropEvent *event)
     emit colorChanged(color());
 }
 #endif
-
 }
 
 #include "moc_colorbutton.cpp"

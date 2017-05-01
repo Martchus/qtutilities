@@ -3,11 +3,11 @@
 
 #include "ui_paletteeditor.h"
 
+#include <QHeaderView>
+#include <QLabel>
 #include <QMetaProperty>
 #include <QPainter>
 #include <QToolButton>
-#include <QLabel>
-#include <QHeaderView>
 
 using namespace Widgets;
 
@@ -15,14 +15,14 @@ namespace Dialogs {
 
 enum { BrushRole = 33 };
 
-PaletteEditor::PaletteEditor(QWidget *parent) :
-    QDialog(parent),
-    m_ui(new Ui::PaletteEditor),
-    m_currentColorGroup(QPalette::Active),
-    m_paletteModel(new PaletteModel(this)),
-    m_modelUpdated(false),
-    m_paletteUpdated(false),
-    m_compute(true)
+PaletteEditor::PaletteEditor(QWidget *parent)
+    : QDialog(parent)
+    , m_ui(new Ui::PaletteEditor)
+    , m_currentColorGroup(QPalette::Active)
+    , m_paletteModel(new PaletteModel(this))
+    , m_modelUpdated(false)
+    , m_paletteUpdated(false)
+    , m_compute(true)
 {
     m_ui->setupUi(this);
     m_ui->paletteView->setModel(m_paletteModel);
@@ -32,8 +32,7 @@ PaletteEditor::PaletteEditor(QWidget *parent) :
     ColorDelegate *delegate = new ColorDelegate(this);
     m_ui->paletteView->setItemDelegate(delegate);
     m_ui->paletteView->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    connect(m_paletteModel, &PaletteModel::paletteChanged,
-                this, &PaletteEditor::paletteChanged);
+    connect(m_paletteModel, &PaletteModel::paletteChanged, this, &PaletteEditor::paletteChanged);
     m_ui->paletteView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_ui->paletteView->setDragEnabled(true);
     m_ui->paletteView->setDropIndicatorShown(true);
@@ -43,7 +42,8 @@ PaletteEditor::PaletteEditor(QWidget *parent) :
 }
 
 PaletteEditor::~PaletteEditor()
-{}
+{
+}
 
 QPalette PaletteEditor::palette() const
 {
@@ -56,12 +56,12 @@ void PaletteEditor::setPalette(const QPalette &palette)
     const uint mask = palette.resolve();
     for (int i = 0; i < (int)QPalette::NColorRoles; i++) {
         if (!(mask & (1 << i))) {
-            m_editPalette.setBrush(QPalette::Active, static_cast<QPalette::ColorRole>(i),
-                        m_parentPalette.brush(QPalette::Active, static_cast<QPalette::ColorRole>(i)));
+            m_editPalette.setBrush(
+                QPalette::Active, static_cast<QPalette::ColorRole>(i), m_parentPalette.brush(QPalette::Active, static_cast<QPalette::ColorRole>(i)));
             m_editPalette.setBrush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i),
-                        m_parentPalette.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i)));
+                m_parentPalette.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i)));
             m_editPalette.setBrush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i),
-                        m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
+                m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
         }
     }
     m_editPalette.resolve(mask);
@@ -149,7 +149,7 @@ void PaletteEditor::updatePreviewPalette()
     // build the preview palette
     const QPalette currentPalette = palette();
     QPalette previewPalette;
-    for(int i = QPalette::WindowText; i < QPalette::NColorRoles; ++i) {
+    for (int i = QPalette::WindowText; i < QPalette::NColorRoles; ++i) {
         const QPalette::ColorRole r = static_cast<QPalette::ColorRole>(i);
         const QBrush br = currentPalette.brush(g, r);
         previewPalette.setBrush(QPalette::Active, r, br);
@@ -163,35 +163,35 @@ void PaletteEditor::updateStyledButton()
     m_ui->buildButton->setColor(palette().color(QPalette::Active, QPalette::Button));
 }
 
-QPalette PaletteEditor::getPalette(QWidget *parent, const QPalette &init,
-            const QPalette &parentPal, int *ok)
+QPalette PaletteEditor::getPalette(QWidget *parent, const QPalette &init, const QPalette &parentPal, int *ok)
 {
     PaletteEditor dlg(parent);
     QPalette parentPalette(parentPal);
     uint mask = init.resolve();
     for (int i = 0; i < (int)QPalette::NColorRoles; ++i) {
         if (!(mask & (1 << i))) {
-            parentPalette.setBrush(QPalette::Active, static_cast<QPalette::ColorRole>(i),
-                        init.brush(QPalette::Active, static_cast<QPalette::ColorRole>(i)));
-            parentPalette.setBrush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i),
-                        init.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i)));
-            parentPalette.setBrush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i),
-                        init.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
+            parentPalette.setBrush(
+                QPalette::Active, static_cast<QPalette::ColorRole>(i), init.brush(QPalette::Active, static_cast<QPalette::ColorRole>(i)));
+            parentPalette.setBrush(
+                QPalette::Inactive, static_cast<QPalette::ColorRole>(i), init.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(i)));
+            parentPalette.setBrush(
+                QPalette::Disabled, static_cast<QPalette::ColorRole>(i), init.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
         }
     }
     dlg.setPalette(init, parentPalette);
 
     const int result = dlg.exec();
-    if (ok) *ok = result;
+    if (ok)
+        *ok = result;
 
     return result == QDialog::Accepted ? dlg.palette() : init;
 }
 
 //////////////////////
 
-PaletteModel::PaletteModel(QObject *parent)  :
-    QAbstractTableModel(parent),
-    m_compute(true)
+PaletteModel::PaletteModel(QObject *parent)
+    : QAbstractTableModel(parent)
+    , m_compute(true)
 {
     const QMetaObject *meta = metaObject();
     const int index = meta->indexOfProperty("colorRole");
@@ -233,8 +233,7 @@ QVariant PaletteModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     if (role == BrushRole)
-        return m_palette.brush(columnToGroup(index.column()),
-                    static_cast<QPalette::ColorRole>(index.row()));
+        return m_palette.brush(columnToGroup(index.column()), static_cast<QPalette::ColorRole>(index.row()));
     return QVariant();
 }
 
@@ -254,30 +253,30 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (m_compute) {
             m_palette.setBrush(QPalette::Inactive, r, br);
             switch (r) {
-                case QPalette::WindowText:
-                case QPalette::Text:
-                case QPalette::ButtonText:
-                case QPalette::Base:
-                    break;
-                case QPalette::Dark:
-                    m_palette.setBrush(QPalette::Disabled, QPalette::WindowText, br);
-                    m_palette.setBrush(QPalette::Disabled, QPalette::Dark, br);
-                    m_palette.setBrush(QPalette::Disabled, QPalette::Text, br);
-                    m_palette.setBrush(QPalette::Disabled, QPalette::ButtonText, br);
-                    idxBegin = PaletteModel::index(0, 0);
-                    idxEnd = PaletteModel::index(m_roleNames.count() - 1, 3);
-                    break;
-                case QPalette::Window:
-                    m_palette.setBrush(QPalette::Disabled, QPalette::Base, br);
-                    m_palette.setBrush(QPalette::Disabled, QPalette::Window, br);
-                    idxBegin = PaletteModel::index(QPalette::Base, 0);
-                    break;
-                case QPalette::Highlight:
-                    //m_palette.setBrush(QPalette::Disabled, QPalette::Highlight, c.dark(120));
-                    break;
-                default:
-                    m_palette.setBrush(QPalette::Disabled, r, br);
-                    break;
+            case QPalette::WindowText:
+            case QPalette::Text:
+            case QPalette::ButtonText:
+            case QPalette::Base:
+                break;
+            case QPalette::Dark:
+                m_palette.setBrush(QPalette::Disabled, QPalette::WindowText, br);
+                m_palette.setBrush(QPalette::Disabled, QPalette::Dark, br);
+                m_palette.setBrush(QPalette::Disabled, QPalette::Text, br);
+                m_palette.setBrush(QPalette::Disabled, QPalette::ButtonText, br);
+                idxBegin = PaletteModel::index(0, 0);
+                idxEnd = PaletteModel::index(m_roleNames.count() - 1, 3);
+                break;
+            case QPalette::Window:
+                m_palette.setBrush(QPalette::Disabled, QPalette::Base, br);
+                m_palette.setBrush(QPalette::Disabled, QPalette::Window, br);
+                idxBegin = PaletteModel::index(QPalette::Base, 0);
+                break;
+            case QPalette::Highlight:
+                //m_palette.setBrush(QPalette::Disabled, QPalette::Highlight, c.dark(120));
+                break;
+            default:
+                m_palette.setBrush(QPalette::Disabled, r, br);
+                break;
             }
         }
         emit paletteChanged(m_palette);
@@ -291,12 +290,12 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (isMask)
             mask |= (1 << r);
         else {
-            m_palette.setBrush(QPalette::Active, static_cast<QPalette::ColorRole>(r),
-                        m_parentPalette.brush(QPalette::Active, static_cast<QPalette::ColorRole>(r)));
+            m_palette.setBrush(
+                QPalette::Active, static_cast<QPalette::ColorRole>(r), m_parentPalette.brush(QPalette::Active, static_cast<QPalette::ColorRole>(r)));
             m_palette.setBrush(QPalette::Inactive, static_cast<QPalette::ColorRole>(r),
-                        m_parentPalette.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(r)));
+                m_parentPalette.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(r)));
             m_palette.setBrush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r),
-                        m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r)));
+                m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r)));
 
             mask &= ~(1 << index.row());
         }
@@ -316,8 +315,7 @@ Qt::ItemFlags PaletteModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
-QVariant PaletteModel::headerData(int section, Qt::Orientation orientation,
-                int role) const
+QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (section == 0)
@@ -366,10 +364,10 @@ int PaletteModel::groupToColumn(QPalette::ColorGroup group) const
 
 //////////////////////////
 
-BrushEditor::BrushEditor(QWidget *parent) :
-    QWidget(parent),
-    m_button(new ColorButton(this)),
-    m_changed(false)
+BrushEditor::BrushEditor(QWidget *parent)
+    : QWidget(parent)
+    , m_button(new ColorButton(this))
+    , m_changed(false)
 {
     QLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
@@ -402,10 +400,10 @@ bool BrushEditor::changed() const
 
 //////////////////////////
 
-RoleEditor::RoleEditor(QWidget *parent) :
-    QWidget(parent),
-    m_label(new QLabel(this)),
-    m_edited(false)
+RoleEditor::RoleEditor(QWidget *parent)
+    : QWidget(parent)
+    , m_label(new QLabel(this))
+    , m_edited(false)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
@@ -419,7 +417,7 @@ RoleEditor::RoleEditor(QWidget *parent) :
     QToolButton *button = new QToolButton(this);
     button->setToolButtonStyle(Qt::ToolButtonIconOnly);
     button->setIcon(QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/actions/edit-clear.png")));
-    button->setIconSize(QSize(8,8));
+    button->setIconSize(QSize(8, 8));
     button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
     layout->addWidget(button);
     connect(button, &QAbstractButton::clicked, this, &RoleEditor::emitResetProperty);
@@ -452,8 +450,8 @@ void RoleEditor::emitResetProperty()
 }
 
 //////////////////////////
-ColorDelegate::ColorDelegate(QObject *parent) :
-    QItemDelegate(parent)
+ColorDelegate::ColorDelegate(QObject *parent)
+    : QItemDelegate(parent)
 {
 }
 
@@ -470,8 +468,7 @@ QWidget *ColorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem
         typedef void (BrushEditor::*BrushEditorWidgetSignal)(QWidget *);
 
         BrushEditor *editor = new BrushEditor(parent);
-        connect(editor, static_cast<BrushEditorWidgetSignal>(&BrushEditor::changed),
-                this, &ColorDelegate::commitData);
+        connect(editor, static_cast<BrushEditorWidgetSignal>(&BrushEditor::changed), this, &ColorDelegate::commitData);
         editor->setFocusPolicy(Qt::NoFocus);
         editor->installEventFilter(const_cast<ColorDelegate *>(this));
         ed = editor;
@@ -494,8 +491,7 @@ void ColorDelegate::setEditorData(QWidget *ed, const QModelIndex &index) const
     }
 }
 
-void ColorDelegate::setModelData(QWidget *ed, QAbstractItemModel *model,
-                const QModelIndex &index) const
+void ColorDelegate::setModelData(QWidget *ed, QAbstractItemModel *model, const QModelIndex &index) const
 {
     if (index.column() == 0) {
         RoleEditor *editor = static_cast<RoleEditor *>(ed);
@@ -510,8 +506,7 @@ void ColorDelegate::setModelData(QWidget *ed, QAbstractItemModel *model,
     }
 }
 
-void ColorDelegate::updateEditorGeometry(QWidget *ed,
-                const QStyleOptionViewItem &option, const QModelIndex &index) const
+void ColorDelegate::updateEditorGeometry(QWidget *ed, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QItemDelegate::updateEditorGeometry(ed, option, index);
     ed->setGeometry(ed->geometry().adjusted(0, 0, -1, -1));
@@ -525,9 +520,7 @@ void ColorDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt, co
         option.font.setBold(true);
     }
     QBrush br = qvariant_cast<QBrush>(index.model()->data(index, BrushRole));
-    if (br.style() == Qt::LinearGradientPattern ||
-            br.style() == Qt::RadialGradientPattern ||
-            br.style() == Qt::ConicalGradientPattern) {
+    if (br.style() == Qt::LinearGradientPattern || br.style() == Qt::RadialGradientPattern || br.style() == Qt::ConicalGradientPattern) {
         painter->save();
         painter->translate(option.rect.x(), option.rect.y());
         painter->scale(option.rect.width(), option.rect.height());
@@ -544,15 +537,12 @@ void ColorDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt, co
     }
     QItemDelegate::paint(painter, option, index);
 
-
     const QColor color = static_cast<QRgb>(QApplication::style()->styleHint(QStyle::SH_Table_GridLineColor, &option));
     const QPen oldPen = painter->pen();
     painter->setPen(QPen(color));
 
-    painter->drawLine(option.rect.right(), option.rect.y(),
-            option.rect.right(), option.rect.bottom());
-    painter->drawLine(option.rect.x(), option.rect.bottom(),
-            option.rect.right(), option.rect.bottom());
+    painter->drawLine(option.rect.right(), option.rect.y(), option.rect.right(), option.rect.bottom());
+    painter->drawLine(option.rect.x(), option.rect.bottom(), option.rect.right(), option.rect.bottom());
     painter->setPen(oldPen);
 }
 
@@ -560,5 +550,4 @@ QSize ColorDelegate::sizeHint(const QStyleOptionViewItem &opt, const QModelIndex
 {
     return QItemDelegate::sizeHint(opt, index) + QSize(4, 4);
 }
-
 }

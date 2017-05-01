@@ -10,9 +10,9 @@ namespace Widgets {
 /*!
  * \brief Constructs a clear line edit.
  */
-ClearLineEdit::ClearLineEdit(QWidget *parent) :
-    QLineEdit(parent),
-    ButtonOverlay(this)
+ClearLineEdit::ClearLineEdit(QWidget *parent)
+    : QLineEdit(parent)
+    , ButtonOverlay(this)
 {
     ButtonOverlay::setClearButtonEnabled(true);
     connect(this, &ClearLineEdit::textChanged, this, &ClearLineEdit::handleTextChanged);
@@ -22,7 +22,8 @@ ClearLineEdit::ClearLineEdit(QWidget *parent) :
  * \brief Destroys the clear combo box.
  */
 ClearLineEdit::~ClearLineEdit()
-{}
+{
+}
 
 /*!
  * \brief Updates the visibility of the clear button.
@@ -41,5 +42,4 @@ bool ClearLineEdit::isCleared() const
 {
     return text().isEmpty();
 }
-
 }

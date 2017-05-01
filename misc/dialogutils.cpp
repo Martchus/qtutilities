@@ -1,20 +1,20 @@
 #include "./dialogutils.h"
 
 #if !defined(QT_UTILITIES_GUI_QTWIDGETS) && !defined(QT_UTILITIES_GUI_QTQUICK)
-# include <QCoreApplication>
+#include <QCoreApplication>
 #else
-# include <QGuiApplication>
-# include <QPalette>
-# include <QWidget>
-# include <QStyle>
-# ifdef QT_UTILITIES_GUI_QTWIDGETS
-#  include <QApplication>
-#  include <QDesktopWidget>
-#  include <QCursor>
-# endif
+#include <QGuiApplication>
+#include <QPalette>
+#include <QStyle>
+#include <QWidget>
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
+#include <QApplication>
+#include <QCursor>
+#include <QDesktopWidget>
 #endif
-#include <QFileInfo>
+#endif
 #include <QDir>
+#include <QFileInfo>
 
 namespace Dialogs {
 
@@ -24,20 +24,22 @@ namespace Dialogs {
  */
 QString generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath)
 {
-    switch(documentStatus) {
+    switch (documentStatus) {
     case DocumentStatus::Saved:
-        if(documentPath.isEmpty()) {
+        if (documentPath.isEmpty()) {
             return QCoreApplication::translate("Utilities::windowTitle", "Unsaved - %1").arg(QCoreApplication::applicationName());
         } else {
             QFileInfo file(documentPath);
-            return QCoreApplication::translate("Utilities::windowTitle", "%1 - %2 - %3").arg(file.fileName(), file.dir().path(), QCoreApplication::applicationName());
+            return QCoreApplication::translate("Utilities::windowTitle", "%1 - %2 - %3")
+                .arg(file.fileName(), file.dir().path(), QCoreApplication::applicationName());
         }
     case DocumentStatus::Unsaved:
-        if(documentPath.isEmpty()) {
+        if (documentPath.isEmpty()) {
             return QCoreApplication::translate("Utilities::windowTitle", "*Unsaved - %1").arg(QCoreApplication::applicationName());
         } else {
             QFileInfo file(documentPath);
-            return QCoreApplication::translate("Utilities::windowTitle", "*%1 - %2 - %3").arg(file.fileName(), file.dir().path(), QCoreApplication::applicationName());
+            return QCoreApplication::translate("Utilities::windowTitle", "*%1 - %2 - %3")
+                .arg(file.fileName(), file.dir().path(), QCoreApplication::applicationName());
         }
     case DocumentStatus::NoDocument:
         return QCoreApplication::applicationName();
@@ -48,7 +50,7 @@ QString generateWindowTitle(DocumentStatus documentStatus, const QString &docume
 
 #if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 
-# ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN32
 
 /*!
  * \brief Returns the color used to draw frames.
@@ -67,27 +69,28 @@ QColor instructionTextColor()
     return (baseColor.value() > 204 && baseColor.saturation() < 63) ? QColor(0x00, 0x33, 0x99) : QGuiApplication::palette().text().color();
 }
 
-# endif
+#endif
 
 /*!
  * \brief Returns the stylesheet for dialogs and other windows used in my applications.
  */
 const QString &dialogStyle()
 {
-# ifdef Q_OS_WIN32
-    static const auto style = QStringLiteral("#mainWidget { color: palette(text); background-color: palette(base); border: none; }"
-                                             "#bottomWidget { background-color: palette(window); color: palette(window-text); border-top: 1px solid %1; }"
-                                             "QMessageBox QLabel, QInputDialog QLabel, *[classNames~=\"heading\"] { font-size: 12pt; color: %2; }"
-                                             "*[classNames~=\"input-invalid\"] { color: red; }").arg(
-                                   windowFrameColor().name(), instructionTextColor().name());
-# else
+#ifdef Q_OS_WIN32
+    static const auto style
+        = QStringLiteral("#mainWidget { color: palette(text); background-color: palette(base); border: none; }"
+                         "#bottomWidget { background-color: palette(window); color: palette(window-text); border-top: 1px solid %1; }"
+                         "QMessageBox QLabel, QInputDialog QLabel, *[classNames~=\"heading\"] { font-size: 12pt; color: %2; }"
+                         "*[classNames~=\"input-invalid\"] { color: red; }")
+              .arg(windowFrameColor().name(), instructionTextColor().name());
+#else
     static const auto style = QStringLiteral("*[classNames~=\"heading\"] { font-weight: bold; }"
                                              "*[classNames~=\"input-invalid\"] { color: red; }");
-# endif
+#endif
     return style;
 }
 
-# ifdef QT_UTILITIES_GUI_QTWIDGETS
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
 
 /*!
  * \brief Moves the specified \a widget in the middle of the (available) screen area. If there are multiple
@@ -96,13 +99,7 @@ const QString &dialogStyle()
 void centerWidget(QWidget *widget)
 {
     widget->setGeometry(
-        QStyle::alignedRect(
-            Qt::LeftToRight,
-            Qt::AlignCenter,
-            widget->size(),
-            QApplication::desktop()->availableGeometry(QCursor::pos())
-        )
-    );
+        QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, widget->size(), QApplication::desktop()->availableGeometry(QCursor::pos())));
 }
 
 /*!
@@ -116,14 +113,7 @@ void cornerWidget(QWidget *widget)
     Qt::Alignment alignment = 0;
     alignment |= (cursorPos.x() - availableGeometry.left() < availableGeometry.right() - cursorPos.x() ? Qt::AlignLeft : Qt::AlignRight);
     alignment |= (cursorPos.y() - availableGeometry.top() < availableGeometry.bottom() - cursorPos.y() ? Qt::AlignTop : Qt::AlignBottom);
-    widget->setGeometry(
-        QStyle::alignedRect(
-            Qt::LeftToRight,
-            alignment,
-            widget->size(),
-            availableGeometry
-        )
-    );
+    widget->setGeometry(QStyle::alignedRect(Qt::LeftToRight, alignment, widget->size(), availableGeometry));
 }
 
 /*!
@@ -146,9 +136,8 @@ void updateStyle(QWidget *widget)
     widget->update();
 }
 
-# endif
+#endif
 
 #endif
 
 } // namespace Dialogs
-

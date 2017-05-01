@@ -1,8 +1,8 @@
 #include "./settingsdialog.h"
 
-#include "./optioncategorymodel.h"
-#include "./optioncategoryfiltermodel.h"
 #include "./optioncategory.h"
+#include "./optioncategoryfiltermodel.h"
+#include "./optioncategorymodel.h"
 #include "./optionpage.h"
 
 #include "../misc/dialogutils.h"
@@ -10,10 +10,10 @@
 #include "ui_settingsdialog.h"
 
 #include <QItemSelectionModel>
-#include <QShowEvent>
-#include <QScrollArea>
-#include <QStringBuilder>
 #include <QMessageBox>
+#include <QScrollArea>
+#include <QShowEvent>
+#include <QStringBuilder>
 
 namespace Dialogs {
 
@@ -26,13 +26,13 @@ namespace Dialogs {
  * \brief Constructs a settings dialog.
  * \param parent Specifies the parent widget.
  */
-SettingsDialog::SettingsDialog(QWidget *parent) :
-    QDialog(parent),
-    m_ui(new Ui::SettingsDialog),
-    m_categoryModel(new OptionCategoryModel(this)),
-    m_categoryFilterModel(new OptionCategoryFilterModel(this)),
-    m_currentCategory(nullptr),
-    m_tabBarAlwaysVisible(true)
+SettingsDialog::SettingsDialog(QWidget *parent)
+    : QDialog(parent)
+    , m_ui(new Ui::SettingsDialog)
+    , m_categoryModel(new OptionCategoryModel(this))
+    , m_categoryFilterModel(new OptionCategoryFilterModel(this))
+    , m_currentCategory(nullptr)
+    , m_tabBarAlwaysVisible(true)
 {
     m_ui->setupUi(this);
     makeHeading(m_ui->headingLabel);
@@ -59,7 +59,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
  * \brief Destroys the settings dialog.
  */
 SettingsDialog::~SettingsDialog()
-{}
+{
+}
 
 /*!
  * \brief Sets whether the tab bar is always visible.
@@ -68,7 +69,7 @@ SettingsDialog::~SettingsDialog()
 void SettingsDialog::setTabBarAlwaysVisible(bool value)
 {
     m_tabBarAlwaysVisible = value;
-    if(m_currentCategory) {
+    if (m_currentCategory) {
         m_ui->pagesTabWidget->tabBar()->setHidden(!value && m_currentCategory->pages().size() == 1);
     }
 }
@@ -92,8 +93,8 @@ OptionCategory *SettingsDialog::category(int categoryIndex) const
  */
 OptionPage *SettingsDialog::page(int categoryIndex, int pageIndex) const
 {
-    if(OptionCategory *category = this->category(categoryIndex)) {
-        if(pageIndex < category->pages().length()) {
+    if (OptionCategory *category = this->category(categoryIndex)) {
+        if (pageIndex < category->pages().length()) {
             return category->pages()[pageIndex];
         }
     }
@@ -105,9 +106,9 @@ OptionPage *SettingsDialog::page(int categoryIndex, int pageIndex) const
  */
 void SettingsDialog::showEvent(QShowEvent *event)
 {
-    if(!event->spontaneous()) {
-        for(OptionCategory *category : m_categoryModel->categories()) {
-            for(OptionPage *page : category->pages()) {
+    if (!event->spontaneous()) {
+        for (OptionCategory *category : m_categoryModel->categories()) {
+            for (OptionPage *page : category->pages()) {
                 page->reset();
             }
         }
@@ -129,11 +130,11 @@ void SettingsDialog::currentCategoryChanged(const QModelIndex &index)
  */
 void SettingsDialog::showCategory(OptionCategory *category)
 {
-    if(m_currentCategory) {
+    if (m_currentCategory) {
         m_currentCategory->setCurrentIndex(m_ui->pagesTabWidget->currentIndex());
     }
-    if(category) {
-        if(m_currentCategory != category) {
+    if (category) {
+        if (m_currentCategory != category) {
             m_currentCategory = category;
             m_ui->headingLabel->setText(category->displayName());
         }
@@ -156,7 +157,7 @@ void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
     m_ui->filterLineEdit->setHidden(hasSingleCategory);
     m_ui->categoriesListView->setHidden(hasSingleCategory);
     m_ui->headingLabel->setHidden(hasSingleCategory);
-    if(hasSingleCategory) {
+    if (hasSingleCategory) {
         m_ui->filterLineEdit->clear();
         categoryModel()->setCategories(QList<OptionCategory *>() << singleCategory);
         showCategory(singleCategory);
@@ -168,14 +169,14 @@ void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
  */
 void SettingsDialog::updateTabWidget()
 {
-    if(m_currentCategory) {
+    if (m_currentCategory) {
         m_ui->pagesTabWidget->setUpdatesEnabled(false);
         const QString searchKeyWord = m_ui->filterLineEdit->text();
         int index = 0, pageIndex = 0;
-        for(OptionPage *page : m_currentCategory->pages()) {
-            if(page->matches(searchKeyWord)) {
+        for (OptionPage *page : m_currentCategory->pages()) {
+            if (page->matches(searchKeyWord)) {
                 QScrollArea *scrollArea;
-                if(index < m_ui->pagesTabWidget->count()) {
+                if (index < m_ui->pagesTabWidget->count()) {
                     scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
                     scrollArea->takeWidget();
                     m_ui->pagesTabWidget->setTabText(index, page->widget()->windowTitle());
@@ -189,18 +190,18 @@ void SettingsDialog::updateTabWidget()
                     m_ui->pagesTabWidget->addTab(scrollArea, page->widget()->windowTitle());
                     m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
                 }
-                if(page->widget()->layout()) {
+                if (page->widget()->layout()) {
                     page->widget()->layout()->setAlignment(Qt::AlignTop | Qt::AlignLeft);
                 }
                 scrollArea->setWidget(page->widget());
                 ++index;
             }
-            if(pageIndex == m_currentCategory->currentIndex()) {
+            if (pageIndex == m_currentCategory->currentIndex()) {
                 m_ui->pagesTabWidget->setCurrentIndex(pageIndex);
             }
             ++pageIndex;
         }
-        while(index < m_ui->pagesTabWidget->count()) {
+        while (index < m_ui->pagesTabWidget->count()) {
             QScrollArea *scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
             scrollArea->takeWidget();
             m_ui->pagesTabWidget->removeTab(index);
@@ -219,37 +220,27 @@ void SettingsDialog::updateTabWidget()
 bool SettingsDialog::apply()
 {
     QString errorMessage;
-    for(OptionCategory *category : m_categoryModel->categories()) {
-        for(OptionPage *page : category->pages()) {
-            if(!page->apply()) {
-                if(errorMessage.isEmpty()) {
+    for (OptionCategory *category : m_categoryModel->categories()) {
+        for (OptionPage *page : category->pages()) {
+            if (!page->apply()) {
+                if (errorMessage.isEmpty()) {
                     errorMessage = tr("<p><b>Errors occured when applying changes:</b></p><ul>");
                 }
                 QStringList &errors = const_cast<OptionPage *>(page)->errors();
-                if(errors.isEmpty()) {
-                    errorMessage.append(QStringLiteral("<li><i>")
-                                  % category->displayName()
-                                  % QLatin1Char('/')
-                                  % page->widget()->windowTitle()
-                                  % QStringLiteral("</i>: ")
-                                  % tr("unknonw error")
-                                  % QStringLiteral("</li>"));
+                if (errors.isEmpty()) {
+                    errorMessage.append(QStringLiteral("<li><i>") % category->displayName() % QLatin1Char('/') % page->widget()->windowTitle()
+                        % QStringLiteral("</i>: ") % tr("unknonw error") % QStringLiteral("</li>"));
                 } else {
-                    for(const QString &error : errors) {
-                        errorMessage.append(QStringLiteral("<li><i>")
-                                      % category->displayName()
-                                      % QLatin1Char('/')
-                                      % page->widget()->windowTitle()
-                                      % QStringLiteral("</i>: ")
-                                      % error
-                                      % QStringLiteral("</li>"));
+                    for (const QString &error : errors) {
+                        errorMessage.append(QStringLiteral("<li><i>") % category->displayName() % QLatin1Char('/') % page->widget()->windowTitle()
+                            % QStringLiteral("</i>: ") % error % QStringLiteral("</li>"));
                     }
                     errors.clear();
                 }
             }
         }
     }
-    if(!errorMessage.isEmpty()) {
+    if (!errorMessage.isEmpty()) {
         errorMessage.append(QStringLiteral("</ul>"));
         QMessageBox::warning(this, windowTitle(), errorMessage);
     }
@@ -262,10 +253,9 @@ bool SettingsDialog::apply()
  */
 void SettingsDialog::reset()
 {
-    for(OptionCategory *category : m_categoryModel->categories()) {
+    for (OptionCategory *category : m_categoryModel->categories()) {
         category->resetAllPages();
     }
     emit resetted();
 }
-
 }

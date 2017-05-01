@@ -11,10 +11,11 @@ namespace Dialogs {
 /*!
  * \brief Constructs a option category.
  */
-OptionCategory::OptionCategory(QObject *parent) :
-    QObject(parent),
-    m_currentIndex(0)
-{}
+OptionCategory::OptionCategory(QObject *parent)
+    : QObject(parent)
+    , m_currentIndex(0)
+{
+}
 
 /*!
  * \brief Destroys the option category.
@@ -30,8 +31,8 @@ OptionCategory::~OptionCategory()
  */
 bool OptionCategory::applyAllPages()
 {
-    for(OptionPage *page : m_pages) {
-        if(!page->apply()) {
+    for (OptionPage *page : m_pages) {
+        if (!page->apply()) {
             return false;
         }
     }
@@ -44,7 +45,7 @@ bool OptionCategory::applyAllPages()
  */
 void OptionCategory::resetAllPages()
 {
-    for(OptionPage *page : m_pages) {
+    for (OptionPage *page : m_pages) {
         page->reset();
     }
 }
@@ -54,8 +55,8 @@ void OptionCategory::resetAllPages()
  */
 bool OptionCategory::matches(const QString &searchKeyWord) const
 {
-    for(OptionPage *page : m_pages) {
-        if(page->matches(searchKeyWord)) {
+    for (OptionPage *page : m_pages) {
+        if (page->matches(searchKeyWord)) {
             return true;
         }
     }
@@ -89,5 +90,4 @@ void OptionCategory::assignPages(const QList<OptionPage *> pages)
  * \fn OptionCategory::pagesChanged()
  * \brief Emitted when the pages changed.
  */
-
 }

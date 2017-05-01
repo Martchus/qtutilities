@@ -1,8 +1,8 @@
 #include "./iconbutton.h"
 
-#include <QStylePainter>
-#include <QStyleOptionFocusRect>
 #include <QKeyEvent>
+#include <QStyleOptionFocusRect>
+#include <QStylePainter>
 
 namespace Widgets {
 
@@ -14,8 +14,8 @@ namespace Widgets {
 /*!
  * \brief Constructs an icon button.
  */
-IconButton::IconButton(QWidget *parent) :
-    QAbstractButton(parent)
+IconButton::IconButton(QWidget *parent)
+    : QAbstractButton(parent)
 {
     setCursor(Qt::ArrowCursor);
     setFocusPolicy(Qt::NoFocus);
@@ -25,7 +25,8 @@ IconButton::IconButton(QWidget *parent) :
  * \brief Destroys the icon button.
  */
 IconButton::~IconButton()
-{}
+{
+}
 
 QSize IconButton::sizeHint() const
 {
@@ -48,7 +49,7 @@ void IconButton::paintEvent(QPaintEvent *)
     QRect pixmapRect = QRect(0, 0, m_pixmap.width() / pixmapRatio, m_pixmap.height() / pixmapRatio);
     pixmapRect.moveCenter(rect().center());
     painter.drawPixmap(pixmapRect, m_pixmap);
-    if(hasFocus()) {
+    if (hasFocus()) {
         QStyleOptionFocusRect focusOption;
         focusOption.initFrom(this);
         focusOption.rect = pixmapRect;
@@ -75,5 +76,4 @@ void IconButton::keyReleaseEvent(QKeyEvent *event)
     QAbstractButton::keyReleaseEvent(event);
     event->accept();
 }
-
 }

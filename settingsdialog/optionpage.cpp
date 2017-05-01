@@ -1,10 +1,10 @@
 #include "./optionpage.h"
 
-#include <QLabel>
 #include <QCheckBox>
-#include <QRadioButton>
-#include <QPushButton>
 #include <QGroupBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QRadioButton>
 
 namespace Dialogs {
 
@@ -18,17 +18,19 @@ namespace Dialogs {
 /*!
  * \brief Constructs a option page.
  */
-OptionPage::OptionPage(QWidget *parentWindow) :
-    m_parentWindow(parentWindow),
-    m_shown(false),
-    m_keywordsInitialized(false)
-{}
+OptionPage::OptionPage(QWidget *parentWindow)
+    : m_parentWindow(parentWindow)
+    , m_shown(false)
+    , m_keywordsInitialized(false)
+{
+}
 
 /*!
  * \brief Destroys the option page.
  */
 OptionPage::~OptionPage()
-{}
+{
+}
 
 /*!
  * \brief Returns the widget for the option page.
@@ -41,10 +43,10 @@ OptionPage::~OptionPage()
  */
 QWidget *OptionPage::widget()
 {
-    if(!m_widget) {
+    if (!m_widget) {
         m_widget.reset(setupWidget()); // ensure widget has been created
     }
-    if(!m_shown) {
+    if (!m_shown) {
         m_shown = true;
         reset(); // show current configuration if not shown yet
     }
@@ -57,29 +59,29 @@ QWidget *OptionPage::widget()
  */
 bool OptionPage::matches(const QString &searchKeyWord)
 {
-    if(searchKeyWord.isEmpty()) {
+    if (searchKeyWord.isEmpty()) {
         return true;
     }
-    if(!m_keywordsInitialized) {
-        if(!m_widget) {
+    if (!m_keywordsInitialized) {
+        if (!m_widget) {
             m_widget.reset(setupWidget()); // ensure widget has been created
         }
         m_keywords << m_widget->windowTitle();
         // find common subwidgets
-        for(const QLabel *label : m_widget->findChildren<QLabel *>())
+        for (const QLabel *label : m_widget->findChildren<QLabel *>())
             m_keywords << label->text();
-        for(const QCheckBox *checkbox : m_widget->findChildren<QCheckBox *>())
+        for (const QCheckBox *checkbox : m_widget->findChildren<QCheckBox *>())
             m_keywords << checkbox->text();
-        for(const QRadioButton *checkbox : m_widget->findChildren<QRadioButton *>())
+        for (const QRadioButton *checkbox : m_widget->findChildren<QRadioButton *>())
             m_keywords << checkbox->text();
-        for(const QPushButton *pushButton : m_widget->findChildren<QPushButton *>())
+        for (const QPushButton *pushButton : m_widget->findChildren<QPushButton *>())
             m_keywords << pushButton->text();
-        for(const QGroupBox *groupBox : m_widget->findChildren<QGroupBox *>())
+        for (const QGroupBox *groupBox : m_widget->findChildren<QGroupBox *>())
             m_keywords << groupBox->title();
         m_keywordsInitialized = true;
     }
-    for(const QString &keyword : m_keywords)
-        if(keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+    for (const QString &keyword : m_keywords)
+        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return false;
 }
@@ -98,5 +100,4 @@ bool OptionPage::matches(const QString &searchKeyWord)
  * \fn OptionPage::setupWidget()
  * \brief Creates the widget for the page. Called in the first invocation of widget().
  */
-
 }

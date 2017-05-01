@@ -5,20 +5,20 @@
  */
 
 #ifdef iftag
-# undef iftag
+#undef iftag
 #endif
 #ifdef eliftag
-# undef eliftag
+#undef eliftag
 #endif
 #ifdef else_skip
-# undef else_skip
+#undef else_skip
 #endif
 #ifdef children
-# undef children
+#undef children
 #endif
 #ifdef text
-# undef text
+#undef text
 #endif
 #ifdef attribute
-# undef attribute
+#undef attribute
 #endif

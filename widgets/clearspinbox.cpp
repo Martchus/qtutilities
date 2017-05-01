@@ -15,10 +15,10 @@ namespace Widgets {
 /*!
  * \brief Constructs a clear spin box.
  */
-ClearSpinBox::ClearSpinBox(QWidget *parent) :
-    QSpinBox(parent),
-    ButtonOverlay(this),
-    m_minimumHidden(false)
+ClearSpinBox::ClearSpinBox(QWidget *parent)
+    : QSpinBox(parent)
+    , ButtonOverlay(this)
+    , m_minimumHidden(false)
 {
     const QMargins margins = contentsMargins();
     QStyleOptionComboBox opt;
@@ -26,7 +26,8 @@ ClearSpinBox::ClearSpinBox(QWidget *parent) :
     const int frameWidth = style()->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &opt, this);
     const int pad = 5;
     const int buttonWidth = style()->subControlRect(QStyle::CC_SpinBox, &opt, QStyle::SC_SpinBoxUp, this).width() + 10;
-    buttonLayout()->setContentsMargins(margins.left() + frameWidth + pad, margins.top() + frameWidth, margins.right() + frameWidth + pad + buttonWidth, margins.bottom() + frameWidth);
+    buttonLayout()->setContentsMargins(margins.left() + frameWidth + pad, margins.top() + frameWidth,
+        margins.right() + frameWidth + pad + buttonWidth, margins.bottom() + frameWidth);
     setClearButtonEnabled(true);
     connect(this, static_cast<void (ClearSpinBox::*)(int)>(&ClearSpinBox::valueChanged), this, &ClearSpinBox::handleValueChanged);
 }
@@ -35,7 +36,8 @@ ClearSpinBox::ClearSpinBox(QWidget *parent) :
  * \brief Destroys the clear spin box.
  */
 ClearSpinBox::~ClearSpinBox()
-{}
+{
+}
 
 /*!
  * \brief Updates the visibility of the clear button.
@@ -57,7 +59,7 @@ bool ClearSpinBox::isCleared() const
 
 int ClearSpinBox::valueFromText(const QString &text) const
 {
-    if(m_minimumHidden && text.isEmpty()) {
+    if (m_minimumHidden && text.isEmpty()) {
         return minimum();
     } else {
         return QSpinBox::valueFromText(text);
@@ -66,11 +68,10 @@ int ClearSpinBox::valueFromText(const QString &text) const
 
 QString ClearSpinBox::textFromValue(int val) const
 {
-    if(m_minimumHidden && (val == minimum())) {
+    if (m_minimumHidden && (val == minimum())) {
         return QString();
     } else {
         return QSpinBox::textFromValue(val);
     }
 }
-
 }

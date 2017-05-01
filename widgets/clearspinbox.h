@@ -3,8 +3,8 @@
 
 #include "./buttonoverlay.h"
 
-#include <QSpinBox>
 #include <QLineEdit>
+#include <QSpinBox>
 
 QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 
@@ -12,8 +12,7 @@ namespace Widgets {
 
 class IconButton;
 
-class QT_UTILITIES_EXPORT ClearSpinBox : public QSpinBox, public ButtonOverlay
-{
+class QT_UTILITIES_EXPORT ClearSpinBox : public QSpinBox, public ButtonOverlay {
     Q_OBJECT
     Q_PROPERTY(bool minimumHidden READ minimumHidden WRITE setMinimumHidden)
     Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
@@ -38,7 +37,6 @@ private Q_SLOTS:
 
 private:
     bool m_minimumHidden;
-
 };
 
 /*!
@@ -74,7 +72,6 @@ inline void ClearSpinBox::setPlaceholderText(const QString &placeholderText)
 {
     lineEdit()->setPlaceholderText(placeholderText);
 }
-
 }
 
 #endif // WIDGETS_CLEARSPINBOX_H

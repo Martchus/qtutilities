@@ -5,20 +5,20 @@
 
 #include <QEvent>
 #include <QGraphicsPixmapItem>
+#include <QGuiApplication>
 #include <QKeyEvent>
 #include <QMessageBox>
-#include <QGuiApplication>
 
 #ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
-# if defined(Q_OS_WIN32)
-#  include <windows.h>
-# elif defined(X_AVAILABLE)
-#  include <X11/XKBlib.h>
-#  undef KeyPress
-#  undef KeyRelease
-#  undef FocusIn
-#  undef FocusOut
-# endif
+#if defined(Q_OS_WIN32)
+#include <windows.h>
+#elif defined(X_AVAILABLE)
+#include <X11/XKBlib.h>
+#undef KeyPress
+#undef KeyRelease
+#undef FocusIn
+#undef FocusOut
+#endif
 #endif
 
 namespace Dialogs {
@@ -32,9 +32,9 @@ namespace Dialogs {
  * \brief Constructs a password dialog.
  * \param parent Specifies the parent widget.
  */
-EnterPasswordDialog::EnterPasswordDialog(QWidget *parent) :
-    QDialog(parent),
-    m_ui(new Ui::EnterPasswordDialog)
+EnterPasswordDialog::EnterPasswordDialog(QWidget *parent)
+    : QDialog(parent)
+    , m_ui(new Ui::EnterPasswordDialog)
 {
     // setup ui
     m_ui->setupUi(this);
@@ -48,7 +48,7 @@ EnterPasswordDialog::EnterPasswordDialog(QWidget *parent) :
     m_ui->userNameLineEdit->installEventFilter(this);
     m_ui->password1LineEdit->installEventFilter(this);
     m_ui->password2LineEdit->installEventFilter(this);
-    // capslock key detection
+// capslock key detection
 #ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
     m_capslockPressed = isCapslockPressed();
 #else
@@ -57,14 +57,14 @@ EnterPasswordDialog::EnterPasswordDialog(QWidget *parent) :
     m_ui->capslockWarningWidget->setVisible(m_capslockPressed);
     // draw icon to capslock warning graphics view
     QIcon icon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning, nullptr, this);
-    QGraphicsScene* scene = new QGraphicsScene();
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(icon.pixmap(16, 16));
+    QGraphicsScene *scene = new QGraphicsScene();
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(icon.pixmap(16, 16));
     scene->addItem(item);
     m_ui->capslockWarningGraphicsView->setScene(scene);
     // connect signals and slots
     connect(m_ui->showPasswordCheckBox, &QCheckBox::clicked, this, &EnterPasswordDialog::updateShowPassword);
-    connect(m_ui->noPwCheckBox,  &QCheckBox::clicked, this, &EnterPasswordDialog::updateShowPassword);
-    connect(m_ui->confirmPushButton,  &QPushButton::clicked, this, &EnterPasswordDialog::confirm);
+    connect(m_ui->noPwCheckBox, &QCheckBox::clicked, this, &EnterPasswordDialog::updateShowPassword);
+    connect(m_ui->confirmPushButton, &QPushButton::clicked, this, &EnterPasswordDialog::confirm);
     connect(m_ui->abortPushButton, &QPushButton::clicked, this, &EnterPasswordDialog::abort);
     // grab the keyboard
     grabKeyboard();
@@ -74,7 +74,8 @@ EnterPasswordDialog::EnterPasswordDialog(QWidget *parent) :
  * \brief Destroys the password dialog.
  */
 EnterPasswordDialog::~EnterPasswordDialog()
-{}
+{
+}
 
 /*!
  * \brief Returns the description. The description is shown under the instruction text.
@@ -163,9 +164,7 @@ void EnterPasswordDialog::setPasswordRequired(bool value)
  */
 void EnterPasswordDialog::updateShowPassword()
 {
-    m_ui->password1LineEdit->setEchoMode(m_ui->showPasswordCheckBox->isChecked()
-                                        ? QLineEdit::Normal
-                                        : QLineEdit::Password);
+    m_ui->password1LineEdit->setEchoMode(m_ui->showPasswordCheckBox->isChecked() ? QLineEdit::Normal : QLineEdit::Password);
     m_ui->password1LineEdit->setEnabled(!m_ui->noPwCheckBox->isChecked());
     m_ui->password2LineEdit->setEnabled(!(m_ui->showPasswordCheckBox->isChecked() || m_ui->noPwCheckBox->isChecked()));
 }
@@ -177,7 +176,7 @@ void EnterPasswordDialog::updateShowPassword()
  */
 void EnterPasswordDialog::setVerificationRequired(bool value)
 {
-    if(m_instruction.isEmpty()) {
+    if (m_instruction.isEmpty()) {
         m_ui->instructionLabel->setText(value ? tr("Enter the new password") : tr("Enter the password"));
     }
     m_ui->password2LineEdit->setHidden(!value);
@@ -192,7 +191,7 @@ void EnterPasswordDialog::setVerificationRequired(bool value)
 void EnterPasswordDialog::setInstruction(const QString &value)
 {
     m_instruction = value;
-    if(m_instruction.isEmpty()) {
+    if (m_instruction.isEmpty()) {
         m_ui->instructionLabel->setText(isVerificationRequired() ? tr("Enter the new password") : tr("Enter the password"));
     } else {
         m_ui->instructionLabel->setText(value);
@@ -202,17 +201,16 @@ void EnterPasswordDialog::setInstruction(const QString &value)
 
 bool EnterPasswordDialog::event(QEvent *event)
 {
-    switch(event->type()) {
+    switch (event->type()) {
     case QEvent::KeyPress: {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if(keyEvent->key() == Qt::Key_CapsLock) {
+        if (keyEvent->key() == Qt::Key_CapsLock) {
             m_capslockPressed = !m_capslockPressed;
         }
         m_ui->capslockWarningWidget->setVisible(m_capslockPressed);
         break;
     }
-    default:
-        ;
+    default:;
     }
     return QDialog::event(event);
 }
@@ -224,40 +222,38 @@ bool EnterPasswordDialog::event(QEvent *event)
  */
 bool EnterPasswordDialog::eventFilter(QObject *sender, QEvent *event)
 {
-    switch(event->type()) {
+    switch (event->type()) {
     case QEvent::KeyPress: {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if(keyEvent->key() == Qt::Key_CapsLock) {
+        if (keyEvent->key() == Qt::Key_CapsLock) {
             m_capslockPressed = !m_capslockPressed;
         } else {
             QString text = keyEvent->text();
-            if(text.length()) {
+            if (text.length()) {
                 QChar firstChar = text.at(0);
                 bool shiftPressed = (keyEvent->modifiers() & Qt::ShiftModifier) != 0;
-                if((shiftPressed && firstChar.isLower()) || (!shiftPressed && firstChar.isUpper())) {
+                if ((shiftPressed && firstChar.isLower()) || (!shiftPressed && firstChar.isUpper())) {
                     m_capslockPressed = true;
-                } else if(firstChar.isLetter()) {
+                } else if (firstChar.isLetter()) {
                     m_capslockPressed = false;
                 }
             }
         }
         m_ui->capslockWarningWidget->setVisible(m_capslockPressed);
-    }
-        break;
+    } break;
     case QEvent::FocusIn:
-        if(sender == m_ui->userNameLineEdit || sender == m_ui->password1LineEdit || sender == m_ui->password2LineEdit) {
+        if (sender == m_ui->userNameLineEdit || sender == m_ui->password1LineEdit || sender == m_ui->password2LineEdit) {
             releaseKeyboard();
             qobject_cast<QWidget *>(sender)->grabKeyboard();
         }
         break;
     case QEvent::FocusOut:
-        if(sender == m_ui->userNameLineEdit || sender == m_ui->password1LineEdit || sender == m_ui->password2LineEdit) {
+        if (sender == m_ui->userNameLineEdit || sender == m_ui->password1LineEdit || sender == m_ui->password2LineEdit) {
             qobject_cast<QWidget *>(sender)->releaseKeyboard();
             grabKeyboard();
         }
         break;
-    default:
-        ;
+    default:;
     }
     return false;
 }
@@ -270,20 +266,20 @@ bool EnterPasswordDialog::eventFilter(QObject *sender, QEvent *event)
  */
 void EnterPasswordDialog::confirm()
 {
-    if(!isPasswordRequired() && m_ui->noPwCheckBox->isChecked()) {
+    if (!isPasswordRequired() && m_ui->noPwCheckBox->isChecked()) {
         m_password.clear();
         done(QDialog::Accepted);
     } else {
         QString userName = m_ui->userNameLineEdit->text();
         QString password = m_ui->password1LineEdit->text();
         QString repeatedPassword = m_ui->password2LineEdit->text();
-        if(promtForUserName() && userName.isEmpty()) {
+        if (promtForUserName() && userName.isEmpty()) {
             QMessageBox::warning(this, windowTitle(), tr("You didn't enter a user name."));
-        } else if(password.isEmpty()) {
+        } else if (password.isEmpty()) {
             QMessageBox::warning(this, windowTitle(), tr("You didn't enter a password."));
         } else {
-            if(isVerificationRequired() && (password != repeatedPassword) && !m_ui->showPasswordCheckBox->isChecked()) {
-                if(repeatedPassword.isEmpty()) {
+            if (isVerificationRequired() && (password != repeatedPassword) && !m_ui->showPasswordCheckBox->isChecked()) {
+                if (repeatedPassword.isEmpty()) {
                     QMessageBox::warning(this, windowTitle(), tr("You have to enter the new password twice to ensure you enterd it correct."));
                 } else {
                     QMessageBox::warning(this, windowTitle(), tr("You mistyped the password."));
@@ -310,11 +306,11 @@ void EnterPasswordDialog::confirm()
 bool EnterPasswordDialog::isCapslockPressed()
 {
 #ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
-    // platform dependent method of determining if CAPS LOCK is pressed
-# if defined(Q_OS_WIN32)
+// platform dependent method of determining if CAPS LOCK is pressed
+#if defined(Q_OS_WIN32)
     return GetKeyState(VK_CAPITAL) == 1;
-# elif defined(X_AVAILABLE)
-    Display *d = XOpenDisplay((char*)0);
+#elif defined(X_AVAILABLE)
+    Display *d = XOpenDisplay((char *)0);
     bool caps_state = false;
     if (d) {
         unsigned n;
@@ -322,12 +318,11 @@ bool EnterPasswordDialog::isCapslockPressed()
         caps_state = (n & 0x01) == 1;
     }
     return caps_state;
-# else
+#else
     return false;
-# endif
+#endif
 #else
     return false;
 #endif
 }
-
 }

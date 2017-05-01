@@ -36,12 +36,12 @@ OrgFreedesktopNotificationsInterface *DBusNotification::m_dbusInterface = nullpt
 /*!
  * \brief Creates a new notification (which is *not* shown instantly).
  */
-DBusNotification::DBusNotification(const QString &title, NotificationIcon icon, int timeout, QObject *parent) :
-    QObject(parent),
-    m_id(0),
-    m_watcher(nullptr),
-    m_title(title),
-    m_timeout(timeout)
+DBusNotification::DBusNotification(const QString &title, NotificationIcon icon, int timeout, QObject *parent)
+    : QObject(parent)
+    , m_id(0)
+    , m_watcher(nullptr)
+    , m_title(title)
+    , m_timeout(timeout)
 {
     initInterface();
     setIcon(icon);
@@ -50,13 +50,13 @@ DBusNotification::DBusNotification(const QString &title, NotificationIcon icon, 
 /*!
  * \brief Creates a new notification (which is *not* shown instantly).
  */
-DBusNotification::DBusNotification(const QString &title, const QString &icon, int timeout, QObject *parent) :
-    QObject(parent),
-    m_id(0),
-    m_watcher(nullptr),
-    m_title(title),
-    m_icon(icon),
-    m_timeout(timeout)
+DBusNotification::DBusNotification(const QString &title, const QString &icon, int timeout, QObject *parent)
+    : QObject(parent)
+    , m_id(0)
+    , m_watcher(nullptr)
+    , m_title(title)
+    , m_icon(icon)
+    , m_timeout(timeout)
 {
     initInterface();
 }
@@ -66,8 +66,9 @@ DBusNotification::DBusNotification(const QString &title, const QString &icon, in
  */
 void DBusNotification::initInterface()
 {
-    if(!m_dbusInterface) {
-        m_dbusInterface = new OrgFreedesktopNotificationsInterface(QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("/org/freedesktop/Notifications"), QDBusConnection::sessionBus());
+    if (!m_dbusInterface) {
+        m_dbusInterface = new OrgFreedesktopNotificationsInterface(
+            QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("/org/freedesktop/Notifications"), QDBusConnection::sessionBus());
         connect(m_dbusInterface, &OrgFreedesktopNotificationsInterface::ActionInvoked, &DBusNotification::handleActionInvoked);
         connect(m_dbusInterface, &OrgFreedesktopNotificationsInterface::NotificationClosed, &DBusNotification::handleNotificationClosed);
     }
@@ -79,7 +80,7 @@ void DBusNotification::initInterface()
 DBusNotification::~DBusNotification()
 {
     auto i = pendingNotifications.find(m_id);
-    if(i != pendingNotifications.end()) {
+    if (i != pendingNotifications.end()) {
         pendingNotifications.erase(i);
     }
     hide();
@@ -99,15 +100,17 @@ bool DBusNotification::isAvailable()
  */
 void DBusNotification::setIcon(NotificationIcon icon)
 {
-    switch(icon) {
+    switch (icon) {
     case NotificationIcon::Information:
-        m_icon = QStringLiteral("dialog-information"); break;
+        m_icon = QStringLiteral("dialog-information");
+        break;
     case NotificationIcon::Warning:
-        m_icon = QStringLiteral("dialog-warning"); break;
+        m_icon = QStringLiteral("dialog-warning");
+        break;
     case NotificationIcon::Critical:
-        m_icon = QStringLiteral("dialog-critical"); break;
-    default:
-        ;
+        m_icon = QStringLiteral("dialog-critical");
+        break;
+    default:;
     }
 }
 
@@ -127,13 +130,14 @@ void DBusNotification::deleteOnCloseOrError()
  */
 bool DBusNotification::show()
 {
-    if(!m_dbusInterface->isValid()) {
+    if (!m_dbusInterface->isValid()) {
         emit error();
         return false;
     }
 
     delete m_watcher;
-    m_watcher = new QDBusPendingCallWatcher(m_dbusInterface->Notify(QCoreApplication::applicationName(), m_id, m_icon, m_title, m_msg, m_actions, m_hints, m_timeout), this);
+    m_watcher = new QDBusPendingCallWatcher(
+        m_dbusInterface->Notify(QCoreApplication::applicationName(), m_id, m_icon, m_title, m_msg, m_actions, m_hints, m_timeout), this);
     connect(m_watcher, &QDBusPendingCallWatcher::finished, this, &DBusNotification::handleNotifyResult);
     return true;
 }
@@ -160,10 +164,10 @@ bool DBusNotification::show(const QString &message)
  */
 bool DBusNotification::update(const QString &line)
 {
-    if(!isVisible() || m_msg.isEmpty()) {
+    if (!isVisible() || m_msg.isEmpty()) {
         m_msg = line;
     } else {
-        if(!m_msg.startsWith(QStringLiteral("•"))) {
+        if (!m_msg.startsWith(QStringLiteral("•"))) {
             m_msg.insert(0, QStringLiteral("• "));
         }
         m_msg.append(QStringLiteral("\n• "));
@@ -178,7 +182,7 @@ bool DBusNotification::update(const QString &line)
  */
 void DBusNotification::hide()
 {
-    if(m_id) {
+    if (m_id) {
         m_dbusInterface->CloseNotification(m_id);
     }
 }
@@ -188,7 +192,7 @@ void DBusNotification::hide()
  */
 void DBusNotification::handleNotifyResult(QDBusPendingCallWatcher *watcher)
 {
-    if(watcher != m_watcher) {
+    if (watcher != m_watcher) {
         return;
     }
 
@@ -211,7 +215,7 @@ void DBusNotification::handleNotifyResult(QDBusPendingCallWatcher *watcher)
 void DBusNotification::handleNotificationClosed(uint id, uint reason)
 {
     auto i = pendingNotifications.find(id);
-    if(i != pendingNotifications.end()) {
+    if (i != pendingNotifications.end()) {
         DBusNotification *notification = i->second;
         notification->m_id = 0;
         emit notification->closed(reason >= 1 && reason <= 3 ? static_cast<NotificationCloseReason>(reason) : NotificationCloseReason::Undefined);
@@ -225,7 +229,7 @@ void DBusNotification::handleNotificationClosed(uint id, uint reason)
 void DBusNotification::handleActionInvoked(uint id, const QString &action)
 {
     auto i = pendingNotifications.find(id);
-    if(i != pendingNotifications.end()) {
+    if (i != pendingNotifications.end()) {
         DBusNotification *notification = i->second;
         emit notification->actionInvoked(action);
         // Plasma 5 also closes the notification but doesn't emit the NotificationClose signal
@@ -286,5 +290,4 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
  * \fn DBusNotification::isVisible()
  * \brief Returns whether the notification is (still) visible.
  */
-
 }

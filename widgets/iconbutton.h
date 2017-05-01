@@ -8,8 +8,7 @@
 
 namespace Widgets {
 
-class QT_UTILITIES_EXPORT IconButton : public QAbstractButton
-{
+class QT_UTILITIES_EXPORT IconButton : public QAbstractButton {
     Q_OBJECT
     Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
 
@@ -46,7 +45,6 @@ inline void IconButton::setPixmap(const QPixmap &pixmap)
     m_pixmap = pixmap;
     update();
 }
-
 }
 
 #endif // WIDGETS_ICONBUTTON_H

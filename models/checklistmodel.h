@@ -12,8 +12,7 @@ namespace Models {
 
 class ChecklistModel;
 
-class QT_UTILITIES_EXPORT ChecklistItem
-{
+class QT_UTILITIES_EXPORT ChecklistItem {
     friend class ChecklistModel;
 
 public:
@@ -30,11 +29,12 @@ private:
     Qt::CheckState m_checkState;
 };
 
-inline ChecklistItem::ChecklistItem(const QVariant &id, const QString &label, Qt::CheckState checkState) :
-    m_id(id),
-    m_label(label),
-    m_checkState(checkState)
-{}
+inline ChecklistItem::ChecklistItem(const QVariant &id, const QString &label, Qt::CheckState checkState)
+    : m_id(id)
+    , m_label(label)
+    , m_checkState(checkState)
+{
+}
 
 /*!
  * \brief Returns the ID of the item.
@@ -69,8 +69,7 @@ inline bool ChecklistItem::isChecked() const
     return m_checkState == Qt::Checked;
 }
 
-class QT_UTILITIES_EXPORT ChecklistModel : public QAbstractListModel
-{
+class QT_UTILITIES_EXPORT ChecklistModel : public QAbstractListModel {
     Q_OBJECT
 public:
     explicit ChecklistModel(QObject *parent = nullptr);
@@ -93,7 +92,6 @@ public:
 
 private:
     QList<ChecklistItem> m_items;
-
 };
 
 /*!
@@ -111,7 +109,6 @@ inline constexpr int ChecklistModel::idRole()
 {
     return Qt::UserRole + 1;
 }
-
 }
 
 #endif // MODELS_CHECKLISTMODEL_H

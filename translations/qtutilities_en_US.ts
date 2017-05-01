@@ -34,12 +34,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="48"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="49"/>
         <source>developed by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="51"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="52"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -49,8 +49,8 @@
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="12"/>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="51"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="181"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="196"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="180"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="195"/>
         <source>Enter the password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -95,28 +95,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="181"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="196"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="180"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="195"/>
         <source>Enter the new password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="281"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="277"/>
         <source>You didn&apos;t enter a user name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="283"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="279"/>
         <source>You didn&apos;t enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="287"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="283"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="289"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="285"/>
         <source>You mistyped the password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -152,22 +152,22 @@
 <context>
     <name>Dialogs::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="324"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="322"/>
         <source>Color Role</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="326"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="324"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="328"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="326"/>
         <source>Inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="330"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="328"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,7 +286,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="53"/>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="142"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="143"/>
         <source>No category selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,12 +311,12 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="226"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="227"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occured when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="235"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="232"/>
         <source>unknonw error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -357,7 +357,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../widgets/buttonoverlay.cpp" line="74"/>
+        <location filename="../widgets/buttonoverlay.cpp" line="78"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -365,7 +365,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="365"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="367"/>
         <source>recognized by Qt as</source>
         <translation type="unfinished"></translation>
     </message>
@@ -373,7 +373,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="204"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="207"/>
         <source>Qt</source>
         <translation type="unfinished"></translation>
     </message>
@@ -391,12 +391,12 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="37"/>
+        <location filename="../misc/dialogutils.cpp" line="38"/>
         <source>*Unsaved - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="40"/>
+        <location filename="../misc/dialogutils.cpp" line="41"/>
         <source>*%1 - %2 - %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -410,18 +410,18 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="78"/>
+        <location filename="../widgets/pathselection.cpp" line="79"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="80"/>
+        <location filename="../widgets/pathselection.cpp" line="82"/>
         <source>Explore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="116"/>
         <location filename="../widgets/pathselection.cpp" line="118"/>
+        <location filename="../widgets/pathselection.cpp" line="120"/>
         <source>Select path</source>
         <translation type="unfinished"></translation>
     </message>

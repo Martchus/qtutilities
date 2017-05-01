@@ -7,18 +7,16 @@
 
 namespace Widgets {
 
-class QT_UTILITIES_EXPORT ClearComboBox : public QComboBox, public ButtonOverlay
-{
+class QT_UTILITIES_EXPORT ClearComboBox : public QComboBox, public ButtonOverlay {
     Q_OBJECT
 public:
     explicit ClearComboBox(QWidget *parent = nullptr);
     ~ClearComboBox();
     bool isCleared() const;
-    
+
 private Q_SLOTS:
     void handleTextChanged(const QString &text);
     void handleClearButtonClicked();
-    
 };
 
 } // namespace Widgets

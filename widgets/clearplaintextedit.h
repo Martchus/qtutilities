@@ -7,8 +7,7 @@
 
 namespace Widgets {
 
-class QT_UTILITIES_EXPORT ClearPlainTextEdit : public QPlainTextEdit, public ButtonOverlay
-{
+class QT_UTILITIES_EXPORT ClearPlainTextEdit : public QPlainTextEdit, public ButtonOverlay {
     Q_OBJECT
 public:
     explicit ClearPlainTextEdit(QWidget *parent = nullptr);
@@ -19,7 +18,6 @@ private Q_SLOTS:
     void handleTextChanged();
     void handleClearButtonClicked();
     void handleScroll();
-
 };
 
 } // namespace Widgets

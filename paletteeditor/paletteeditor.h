@@ -5,8 +5,8 @@
 
 #include <c++utilities/conversion/types.h>
 
-#include <QItemDelegate>
 #include <QDialog>
+#include <QItemDelegate>
 
 #include <memory>
 
@@ -29,15 +29,13 @@ class PaletteEditor;
  * This is taken from qttools/src/designer/src/components/propertyeditor/paletteeditor.cpp.
  * In contrast to the original version this version doesn't provide a preview.
  */
-class QT_UTILITIES_EXPORT PaletteEditor : public QDialog
-{
+class QT_UTILITIES_EXPORT PaletteEditor : public QDialog {
     Q_OBJECT
 public:
     PaletteEditor(QWidget *parent);
     ~PaletteEditor();
 
-    static QPalette getPalette(QWidget *parent, const QPalette &init = QPalette(),
-                const QPalette &parentPal = QPalette(), int *result = nullptr);
+    static QPalette getPalette(QWidget *parent, const QPalette &init = QPalette(), const QPalette &parentPal = QPalette(), int *result = nullptr);
 
     QPalette palette() const;
     void setPalette(const QPalette &palette);
@@ -77,8 +75,7 @@ private:
 /*!
  * \brief The PaletteModel class is used by PaletteEditor.
  */
-class QT_UTILITIES_EXPORT PaletteModel : public QAbstractTableModel
-{
+class QT_UTILITIES_EXPORT PaletteModel : public QAbstractTableModel {
     Q_OBJECT
     Q_PROPERTY(QPalette::ColorRole colorRole READ colorRole)
 public:
@@ -89,20 +86,24 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     QPalette getPalette() const;
     void setPalette(const QPalette &palette, const QPalette &parentPalette);
 
-    QPalette::ColorRole colorRole() const { return QPalette::NoRole; }
-    void setCompute(bool on) { m_compute = on; }
+    QPalette::ColorRole colorRole() const
+    {
+        return QPalette::NoRole;
+    }
+    void setCompute(bool on)
+    {
+        m_compute = on;
+    }
 
 Q_SIGNALS:
     void paletteChanged(const QPalette &palette);
 
 private:
-
     QPalette::ColorGroup columnToGroup(int index) const;
     int groupToColumn(QPalette::ColorGroup group) const;
 
@@ -115,8 +116,7 @@ private:
 /*!
  * \brief The BrushEditor class is used by PaletteEditor.
  */
-class QT_UTILITIES_EXPORT BrushEditor : public QWidget
-{
+class QT_UTILITIES_EXPORT BrushEditor : public QWidget {
     Q_OBJECT
 
 public:
@@ -140,8 +140,7 @@ private:
 /*!
  * \brief The RoleEditor class is used by PaletteEditor.
  */
-class QT_UTILITIES_EXPORT RoleEditor : public QWidget
-{
+class QT_UTILITIES_EXPORT RoleEditor : public QWidget {
     Q_OBJECT
 public:
     explicit RoleEditor(QWidget *parent = nullptr);
@@ -164,8 +163,7 @@ private:
 /*!
  * \brief The ColorDelegate class is used by PaletteEditor.
  */
-class QT_UTILITIES_EXPORT ColorDelegate : public QItemDelegate
-{
+class QT_UTILITIES_EXPORT ColorDelegate : public QItemDelegate {
     Q_OBJECT
 
 public:
@@ -181,7 +179,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const;
 };
-
 }
 
 #endif // WIDGETS_PALETTEEDITOR_H

@@ -18,11 +18,10 @@ namespace Ui {
 class SettingsDialog;
 }
 
-class QT_UTILITIES_EXPORT SettingsDialog : public QDialog
-{
+class QT_UTILITIES_EXPORT SettingsDialog : public QDialog {
     Q_OBJECT
     Q_PROPERTY(bool tabBarAlwaysVisible READ isTabBarAlwaysVisible WRITE setTabBarAlwaysVisible)
-    
+
 public:
     explicit SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog();
@@ -75,7 +74,6 @@ inline OptionCategoryModel *SettingsDialog::categoryModel()
 {
     return m_categoryModel;
 }
-
 }
 
 #endif // DIALOGS_SETTINGSDIALOG_H

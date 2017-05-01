@@ -12,25 +12,11 @@ class OrgFreedesktopNotificationsInterface;
 
 namespace MiscUtils {
 
-enum class NotificationIcon
-{
-    NoIcon,
-    Information,
-    Warning,
-    Critical
-};
+enum class NotificationIcon { NoIcon, Information, Warning, Critical };
 
-enum class NotificationCloseReason
-{
-    Undefined,
-    Expired,
-    Dismissed,
-    Manually,
-    ActionInvoked
-};
+enum class NotificationCloseReason { Undefined, Expired, Dismissed, Manually, ActionInvoked };
 
-class QT_UTILITIES_EXPORT DBusNotification : public QObject
-{
+class QT_UTILITIES_EXPORT DBusNotification : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle)
     Q_PROPERTY(QString message READ message WRITE setMessage)
@@ -40,7 +26,8 @@ class QT_UTILITIES_EXPORT DBusNotification : public QObject
     Q_PROPERTY(bool visible READ isVisible)
 
 public:
-    explicit DBusNotification(const QString &title, NotificationIcon icon = NotificationIcon::Information, int timeout = 10000, QObject *parent = nullptr);
+    explicit DBusNotification(
+        const QString &title, NotificationIcon icon = NotificationIcon::Information, int timeout = 10000, QObject *parent = nullptr);
     explicit DBusNotification(const QString &title, const QString &icon, int timeout = 10000, QObject *parent = nullptr);
     ~DBusNotification();
 
@@ -170,7 +157,6 @@ inline bool DBusNotification::isVisible() const
 {
     return m_id != 0;
 }
-
 }
 
 #endif // MISC_UTILS_NOTIFICATION_H

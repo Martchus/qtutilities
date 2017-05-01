@@ -12,8 +12,7 @@ namespace Widgets {
  *
  * This is taken from qttools/src/shared/qtgradienteditor/qtcolorbutton.h.
  */
-class QT_UTILITIES_EXPORT ColorButton : public QToolButton
-{
+class QT_UTILITIES_EXPORT ColorButton : public QToolButton {
     Q_OBJECT
     Q_PROPERTY(bool backgroundCheckered READ isBackgroundCheckered WRITE setBackgroundCheckered)
 public:
@@ -47,7 +46,6 @@ private:
     Q_DISABLE_COPY(ColorButton)
     Q_PRIVATE_SLOT(d_func(), void slotEditColor())
 };
-
 }
 
 #endif // WIDGETS_COLORBUTTON_H
