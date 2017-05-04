@@ -13,16 +13,16 @@ namespace ThreadingUtils {
 template <typename Mutex = QMutex> class AdoptLocker {
 public:
     /*!
-     * \brief Constructs the locker for the specified \a mutex.
-     */
+   * \brief Constructs the locker for the specified \a mutex.
+   */
     AdoptLocker(Mutex &mutex)
         : m_mutex(mutex)
     {
     }
 
     /*!
-     * \brief Unlocks the mutex specified when constructing the instance.
-     */
+   * \brief Unlocks the mutex specified when constructing the instance.
+   */
     ~AdoptLocker()
     {
         m_mutex.unlock();

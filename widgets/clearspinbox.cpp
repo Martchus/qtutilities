@@ -8,7 +8,8 @@ namespace Widgets {
 
 /*!
  * \class Widgets::ClearSpinBox
- * \brief A QSpinBox with an embedded button for clearing its contents and the ability to hide
+ * \brief A QSpinBox with an embedded button for clearing its contents and the
+ * ability to hide
  *        the minimum value.
  */
 

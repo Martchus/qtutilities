@@ -65,7 +65,8 @@ inline void PathSelection::provideCustomFileMode(QFileDialog::FileMode customFil
 /*!
  * \brief Can be used to provide a custom file dialog.
  *
- * The default file mode is ignored when a custom file dialog has been specified.
+ * The default file mode is ignored when a custom file dialog has been
+ * specified.
  */
 inline void PathSelection::provideCustomFileDialog(QFileDialog *customFileDialog)
 {

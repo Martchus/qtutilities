@@ -12,7 +12,8 @@ namespace MiscUtils {
 
 /*!
  * \class RecentMenuManager
- * \brief The RecentMenuManager class manages the entries for a "recently opened files" menu.
+ * \brief The RecentMenuManager class manages the entries for a "recently opened
+ * files" menu.
  */
 
 /*!
@@ -22,7 +23,8 @@ namespace MiscUtils {
  * \remarks
  *  - Menu title and icon are set within the constructor.
  *  - The current menu entries are cleared.
- *  - The menu entries shouldn't be manipulated manually by the caller till the manager is destructed.
+ *  - The menu entries shouldn't be manipulated manually by the caller till the
+ * manager is destructed.
  *  - The manager does not take ownership over \a menu.
  */
 RecentMenuManager::RecentMenuManager(QMenu *menu, QObject *parent)
@@ -74,7 +76,8 @@ QStringList RecentMenuManager::save()
 }
 
 /*!
- * \brief Ensures an entry for the specified \a path is present and the first entry in the list.
+ * \brief Ensures an entry for the specified \a path is present and the first
+ * entry in the list.
  */
 void RecentMenuManager::addEntry(const QString &path)
 {
@@ -126,7 +129,8 @@ void RecentMenuManager::clearEntries()
 }
 
 /*!
- * \brief Internally called to emit fileSelected() after an action has been triggered.
+ * \brief Internally called to emit fileSelected() after an action has been
+ * triggered.
  */
 void RecentMenuManager::handleActionTriggered()
 {
@@ -138,7 +142,8 @@ void RecentMenuManager::handleActionTriggered()
             } else {
                 QMessageBox msg;
                 msg.setWindowTitle(tr("Recently opened files - ") + QCoreApplication::applicationName());
-                msg.setText(tr("The selected file can't be found anymore. Do you want to delete the obsolete entry from the list?"));
+                msg.setText(tr("The selected file can't be found anymore. Do you want "
+                               "to delete the obsolete entry from the list?"));
                 msg.setIcon(QMessageBox::Warning);
                 QPushButton *keepEntryButton = msg.addButton(tr("keep entry"), QMessageBox::NoRole);
                 QPushButton *deleteEntryButton = msg.addButton(tr("delete entry"), QMessageBox::YesRole);
@@ -162,6 +167,7 @@ void RecentMenuManager::handleActionTriggered()
 /*!
  * \fn RecentMenuManager::fileSelected()
  * \brief Emitted after the user selected a file.
- * \remarks Only emitted when the selected file still existed; otherwise the user is ask whether to keep or delete the entry.
+ * \remarks Only emitted when the selected file still existed; otherwise the
+ * user is ask whether to keep or delete the entry.
  */
 }

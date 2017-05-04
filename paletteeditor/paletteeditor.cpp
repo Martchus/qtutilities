@@ -272,7 +272,8 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
                 idxBegin = PaletteModel::index(QPalette::Base, 0);
                 break;
             case QPalette::Highlight:
-                //m_palette.setBrush(QPalette::Disabled, QPalette::Highlight, c.dark(120));
+                // m_palette.setBrush(QPalette::Disabled, QPalette::Highlight,
+                // c.dark(120));
                 break;
             default:
                 m_palette.setBrush(QPalette::Disabled, r, br);
@@ -411,7 +412,8 @@ RoleEditor::RoleEditor(QWidget *parent)
 
     layout->addWidget(m_label);
     m_label->setAutoFillBackground(true);
-    m_label->setIndent(3); // ### hardcode it should have the same value of textMargin in QItemDelegate
+    m_label->setIndent(3); // ### hardcode it should have the same value of
+    // textMargin in QItemDelegate
     setFocusProxy(m_label);
 
     QToolButton *button = new QToolButton(this);
@@ -461,8 +463,8 @@ QWidget *ColorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem
     if (index.column() == 0) {
         RoleEditor *editor = new RoleEditor(parent);
         connect(editor, &RoleEditor::changed, this, &ColorDelegate::commitData);
-        //editor->setFocusPolicy(Qt::NoFocus);
-        //editor->installEventFilter(const_cast<ColorDelegate *>(this));
+        // editor->setFocusPolicy(Qt::NoFocus);
+        // editor->installEventFilter(const_cast<ColorDelegate *>(this));
         ed = editor;
     } else {
         typedef void (BrushEditor::*BrushEditorWidgetSignal)(QWidget *);

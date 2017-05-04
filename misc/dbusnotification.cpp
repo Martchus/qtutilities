@@ -15,15 +15,20 @@ namespace MiscUtils {
  * \class DBusNotification
  * \brief The DBusNotification class emits D-Bus notifications.
  *
- * D-Bus notifications are only available if the library has been compiled with support for it by specifying
- * CMake option `DBUS_NOTIFICATIONS`. If support is available, the macro `QT_UTILITIES_SUPPORT_DBUS_NOTIFICATIONS`
+ * D-Bus notifications are only available if the library has been compiled with
+ * support for it by specifying
+ * CMake option `DBUS_NOTIFICATIONS`. If support is available, the macro
+ * `QT_UTILITIES_SUPPORT_DBUS_NOTIFICATIONS`
  * is defined.
  *
  * **Usage**
  *
- * First create a new instance. The constructor allows to set basic parameters. To set more parameters, use
- * setter methods. Call show() to actually show the notification. This method can also be used to update
- * the currently shown notification (it will not be updated automatically by just using the setter methods).
+ * First create a new instance. The constructor allows to set basic parameters.
+ * To set more parameters, use
+ * setter methods. Call show() to actually show the notification. This method
+ * can also be used to update
+ * the currently shown notification (it will not be updated automatically by
+ * just using the setter methods).
  *
  * \sa https://developer.gnome.org/notification-spec
  */
@@ -115,7 +120,8 @@ void DBusNotification::setIcon(NotificationIcon icon)
 }
 
 /*!
- * \brief Makes the notification object delete itself when the notification has been closed or an error occured.
+ * \brief Makes the notification object delete itself when the notification has
+ * been closed or an error occured.
  */
 void DBusNotification::deleteOnCloseOrError()
 {
@@ -125,8 +131,10 @@ void DBusNotification::deleteOnCloseOrError()
 
 /*!
  * \brief Shows the notification.
- * \remarks If called when a previous notification is still shown, the previous notification is updated.
- * \returns Returns false is the D-Bus daemon isn't reachable and true otherwise.
+ * \remarks If called when a previous notification is still shown, the previous
+ * notification is updated.
+ * \returns Returns false is the D-Bus daemon isn't reachable and true
+ * otherwise.
  */
 bool DBusNotification::show()
 {
@@ -144,8 +152,10 @@ bool DBusNotification::show()
 
 /*!
  * \brief Updates the message and shows/updates the notification.
- * \remarks If called when a previous notification is still shown, the previous notification is updated.
- * \returns Returns false is the D-Bus daemon isn't reachable and true otherwise. The message is updated in any case.
+ * \remarks If called when a previous notification is still shown, the previous
+ * notification is updated.
+ * \returns Returns false is the D-Bus daemon isn't reachable and true
+ * otherwise. The message is updated in any case.
  */
 bool DBusNotification::show(const QString &message)
 {
@@ -156,11 +166,14 @@ bool DBusNotification::show(const QString &message)
 /*!
  * \brief Updates the message and shows/updates the notification.
  * \remarks
- * - If called when a previous notification is still shown, the previous notification is updated. In this
+ * - If called when a previous notification is still shown, the previous
+ * notification is updated. In this
  *   case the specified \a line will be appended to the current message.
- * - If called when no previous notification is still shown, the previous message is completely replaced
+ * - If called when no previous notification is still shown, the previous
+ * message is completely replaced
  *   by \a line and shown as a new notification.
- * \returns Returns false is the D-Bus daemon isn't reachable and true otherwise. The message is updated in any case.
+ * \returns Returns false is the D-Bus daemon isn't reachable and true
+ * otherwise. The message is updated in any case.
  */
 bool DBusNotification::update(const QString &line)
 {
@@ -178,7 +191,8 @@ bool DBusNotification::update(const QString &line)
 
 /*!
  * \brief Hides the notification (if still visible).
- * \remarks On success, the signal closed() is emitted with the reason NotificationCloseReason::Manually.
+ * \remarks On success, the signal closed() is emitted with the reason
+ * NotificationCloseReason::Manually.
  */
 void DBusNotification::hide()
 {
@@ -232,7 +246,8 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
     if (i != pendingNotifications.end()) {
         DBusNotification *notification = i->second;
         emit notification->actionInvoked(action);
-        // Plasma 5 also closes the notification but doesn't emit the NotificationClose signal
+        // Plasma 5 also closes the notification but doesn't emit the
+        // NotificationClose signal
         // -> just consider the notification closed
         emit notification->closed(NotificationCloseReason::ActionInvoked);
         notification->m_id = 0;
@@ -254,18 +269,21 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
  * \brief Sets the message to be shown.
  * \remarks
  * - Might also be set via show() and update().
- * - Can contain the following HTML tags: `<b>`, `<i>`, `<u>`, `<a href="...">` and `<img src="..." alt="..."/>`
+ * - Can contain the following HTML tags: `<b>`, `<i>`, `<u>`, `<a href="...">`
+ * and `<img src="..." alt="..."/>`
  */
 
 /*!
  * \fn DBusNotification::timeout()
- * \brief Returns the number of milliseconds the notification will be visible after calling show().
+ * \brief Returns the number of milliseconds the notification will be visible
+ * after calling show().
  * \sa setTimeout() for more details.
  */
 
 /*!
  * \fn DBusNotification::setTimeout()
- * \brief Sets the number of milliseconds the notification will be visible after calling show().
+ * \brief Sets the number of milliseconds the notification will be visible after
+ * calling show().
  * \remarks
  * - Set to 0 for non-expiring notifications.
  * - Set to -1 to let the notification daemon decide.
@@ -282,7 +300,8 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
  * \brief Sets the list of available actions.
  * \remarks
  * The list consists of pairs of action IDs and action labels, eg.
- * `QStringList({QStringLiteral("first_id"), tr("First action"), QStringLiteral("second_id"), tr("Second action"), ...})`
+ * `QStringList({QStringLiteral("first_id"), tr("First action"),
+ * QStringLiteral("second_id"), tr("Second action"), ...})`
  * \sa actionInvoked() signal
  */
 

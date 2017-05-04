@@ -28,11 +28,15 @@ QtConfigArguments::QtConfigArguments()
     : m_qtWidgetsGuiArg("qt-widgets-gui", 'g', "shows a Qt widgets based graphical user interface")
     , m_qtQuickGuiArg("qt-quick-gui", 'q', "shows a Qt quick based graphical user interface")
     , m_lngArg("lang", 'l', "sets the language for the Qt GUI")
-    , m_qmlDebuggerArg("qmljsdebugger", '\0', "enables QML debugging (see http://doc.qt.io/qt-5/qtquick-debugging.html)")
+    , m_qmlDebuggerArg("qmljsdebugger", '\0', "enables QML debugging (see "
+                                              "http://doc.qt.io/qt-5/"
+                                              "qtquick-debugging.html)")
     , m_styleArg("style", '\0', "sets the Qt widgets style")
-    , m_iconThemeArg("icon-theme", '\0', "sets the icon theme and additional theme search paths for the Qt GUI")
+    , m_iconThemeArg("icon-theme", '\0', "sets the icon theme and additional "
+                                         "theme search paths for the Qt GUI")
     , m_fontArg("font", '\0', "sets the font family and size (point) for the Qt GUI")
-    , m_libraryPathsArg("library-paths", '\0', "sets the list of directories to search when loading libraries (all existing paths will be deleted)")
+    , m_libraryPathsArg("library-paths", '\0', "sets the list of directories to search when loading "
+                                               "libraries (all existing paths will be deleted)")
     , m_platformThemeArg("platformtheme", '\0', "specifies the Qt platform theme to be used")
 {
     // language
@@ -76,7 +80,8 @@ QtConfigArguments::QtConfigArguments()
 /*!
  * \brief Applies the settings from the arguments.
  * \remarks Also checks environment variables for the icon theme.
- * \param preventApplyingDefaultFont If true, the font will not be updated to some default value if no font has been specified explicitly.
+ * \param preventApplyingDefaultFont If true, the font will not be updated to
+ * some default value if no font has been specified explicitly.
  */
 void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
 {
@@ -136,7 +141,9 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         try {
             font.setPointSize(stringToNumber<int>(m_fontArg.values().back()));
         } catch (const ConversionException &) {
-            cerr << "Warning: The specified font size is no number and will be ignored." << endl;
+            cerr << "Warning: The specified font size is no number and will be "
+                    "ignored."
+                 << endl;
         }
         QGuiApplication::setFont(font);
     }

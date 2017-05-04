@@ -7,7 +7,8 @@ namespace DesktopUtils {
 
 /*!
  * \brief Shows the specified file or directory using the default file browser.
- * \remarks \a path musn't be specified as URL. (Conversion to URL is the purpose of this function).
+ * \remarks \a path musn't be specified as URL. (Conversion to URL is the
+ * purpose of this function).
  */
 bool openLocalFileOrDir(const QString &path)
 {

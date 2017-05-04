@@ -39,12 +39,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="49"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="55"/>
         <source>developed by %1</source>
         <translation>entwickelt von %1</translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="52"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="57"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation>Für Aktualisierung und Melden von Fehlern besuche die &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;Webseite des Projekts&lt;/a&gt;.</translation>
     </message>
@@ -54,8 +54,8 @@
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="12"/>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="51"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="180"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="195"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="187"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="202"/>
         <source>Enter the password</source>
         <translation>Passwort eingeben</translation>
     </message>
@@ -100,28 +100,28 @@
         <translation>Bestätigen</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="180"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="195"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="187"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="202"/>
         <source>Enter the new password</source>
         <translation>Neues Passwort festlegen</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="277"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="287"/>
         <source>You didn&apos;t enter a user name.</source>
         <translation>Es wurde kein Benutzername eingegeben.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="279"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="289"/>
         <source>You didn&apos;t enter a password.</source>
         <translation>Es wurde kein Passwort eingegeben.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="283"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="293"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation>Um sicher zu stellen, dass das neue Passwort richtig eingegeben wurde, muss es zweimal eingegeben werden.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="285"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="296"/>
         <source>You mistyped the password.</source>
         <translation>Erstes und zweites Passwort stimmen nicht überein.</translation>
     </message>
@@ -157,22 +157,22 @@
 <context>
     <name>Dialogs::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="322"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
         <source>Color Role</source>
         <translation>Farbrolle</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="324"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="326"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
         <source>Inactive</source>
         <translation>Inaktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="328"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="329"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
@@ -292,7 +292,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="53"/>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="143"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="148"/>
         <source>No category selected</source>
         <translation>Keine Kategorie gewählt</translation>
     </message>
@@ -317,12 +317,12 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="227"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="236"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occured when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;p&gt;&lt;b&gt;Beim Anwenden der Einstellungen sind Fehler aufgetreten:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="232"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="241"/>
         <source>unknonw error</source>
         <translation>unbekannter Fehler</translation>
     </message>
@@ -330,32 +330,32 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>MiscUtils::RecentMenuManager</name>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="33"/>
+        <location filename="../misc/recentmenumanager.cpp" line="35"/>
         <source>&amp;Recent</source>
         <translation>&amp;Zuletzt verwendet</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="36"/>
+        <location filename="../misc/recentmenumanager.cpp" line="38"/>
         <source>&amp;Clear list</source>
         <translation>&amp;Liste löschen</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="140"/>
+        <location filename="../misc/recentmenumanager.cpp" line="144"/>
         <source>Recently opened files - </source>
         <translation>Kürzlich geöffnete Dateien - </translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="141"/>
+        <location filename="../misc/recentmenumanager.cpp" line="145"/>
         <source>The selected file can&apos;t be found anymore. Do you want to delete the obsolete entry from the list?</source>
         <translation>Die ausgewählte Datei kann nicht mehr gefunden werden. Soll die Datei aus der Liste gelöscht werden?</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="143"/>
+        <location filename="../misc/recentmenumanager.cpp" line="148"/>
         <source>keep entry</source>
         <translation>Eintrag behalten</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="144"/>
+        <location filename="../misc/recentmenumanager.cpp" line="149"/>
         <source>delete entry</source>
         <translation>Eintrag löschen</translation>
     </message>
@@ -363,7 +363,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../widgets/buttonoverlay.cpp" line="78"/>
+        <location filename="../widgets/buttonoverlay.cpp" line="84"/>
         <source>Clear</source>
         <translation>Text löschen</translation>
     </message>
@@ -371,7 +371,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="367"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="375"/>
         <source>recognized by Qt as</source>
         <translation>von Qt erkannt als</translation>
     </message>
@@ -379,7 +379,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="207"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="215"/>
         <source>Qt</source>
         <translation></translation>
     </message>
@@ -410,24 +410,24 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>Widgets::PathSelection</name>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="54"/>
-        <location filename="../widgets/pathselection.cpp" line="74"/>
+        <location filename="../widgets/pathselection.cpp" line="55"/>
+        <location filename="../widgets/pathselection.cpp" line="75"/>
         <source>Select ...</source>
         <translation>Wählen ...</translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="79"/>
+        <location filename="../widgets/pathselection.cpp" line="80"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="82"/>
+        <location filename="../widgets/pathselection.cpp" line="83"/>
         <source>Explore</source>
         <translation>Im Dateibrowser öffnen</translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="118"/>
-        <location filename="../widgets/pathselection.cpp" line="120"/>
+        <location filename="../widgets/pathselection.cpp" line="119"/>
+        <location filename="../widgets/pathselection.cpp" line="121"/>
         <source>Select path</source>
         <translation>Pfad auswählen</translation>
     </message>

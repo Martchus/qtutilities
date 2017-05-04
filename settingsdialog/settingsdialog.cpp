@@ -19,7 +19,8 @@ namespace Dialogs {
 
 /*!
  * \class Dialogs::SettingsDialog
- * \brief The SettingsDialog class provides a framework for creating settings dialogs with different categories and subcategories.
+ * \brief The SettingsDialog class provides a framework for creating settings
+ * dialogs with different categories and subcategories.
  */
 
 /*!
@@ -86,7 +87,8 @@ OptionCategory *SettingsDialog::category(int categoryIndex) const
 }
 
 /*!
- * \brief Returns the page for the specified \a categoryIndex and the specified \a pageIndex.
+ * \brief Returns the page for the specified \a categoryIndex and the specified
+ * \a pageIndex.
  *
  * The settings dialog keeps ownership over the returned category.
  * If no page for the specified indices a null pointer is returned.
@@ -116,9 +118,11 @@ void SettingsDialog::showEvent(QShowEvent *event)
 }
 
 /*!
- * \brief Shows the selected category specified by its model \a index in the category filter model.
+ * \brief Shows the selected category specified by its model \a index in the
+ * category filter model.
  *
- * This private slot is called when m_ui->categoriesListView->selectionModel()->currentChanged() is emitted.
+ * This private slot is called when
+ * m_ui->categoriesListView->selectionModel()->currentChanged() is emitted.
  */
 void SettingsDialog::currentCategoryChanged(const QModelIndex &index)
 {
@@ -126,7 +130,8 @@ void SettingsDialog::currentCategoryChanged(const QModelIndex &index)
 }
 
 /*!
- * \brief Sets the current category to the specified \a category and updates the relevant widgets to show it.
+ * \brief Sets the current category to the specified \a category and updates the
+ * relevant widgets to show it.
  */
 void SettingsDialog::showCategory(OptionCategory *category)
 {
@@ -146,10 +151,13 @@ void SettingsDialog::showCategory(OptionCategory *category)
 }
 
 /*!
- * \brief Enables *single-category mode* to show only the specified \a singleCategory.
+ * \brief Enables *single-category mode* to show only the specified \a
+ * singleCategory.
  * \remarks
- * - In *single-category mode* category selection, filter and heading are hidden.
- * - The *single-category mode* can be disabled again by setting \a singleCategory to nullptr.
+ * - In *single-category mode* category selection, filter and heading are
+ * hidden.
+ * - The *single-category mode* can be disabled again by setting \a
+ * singleCategory to nullptr.
  */
 void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
 {
@@ -215,7 +223,8 @@ void SettingsDialog::updateTabWidget()
 }
 
 /*!
- * \brief Applies all changes. Calls OptionCategory::applyAllPages() for each category.
+ * \brief Applies all changes. Calls OptionCategory::applyAllPages() for each
+ * category.
  */
 bool SettingsDialog::apply()
 {
@@ -249,7 +258,8 @@ bool SettingsDialog::apply()
 }
 
 /*!
- * \brief Resets all changes. Calls OptionCategory::resetAllPages() for each category.
+ * \brief Resets all changes. Calls OptionCategory::resetAllPages() for each
+ * category.
  */
 void SettingsDialog::reset()
 {

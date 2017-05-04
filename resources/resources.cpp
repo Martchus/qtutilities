@@ -80,14 +80,18 @@ QString &additionalTranslationFilePath()
 }
 
 /*!
- * \brief Loads and installs the appropriate Qt translation file for the current locale.
- * \param repositoryNames Specifies the names of the Qt repositories to load translations for (eg. qtbase, qtscript, ...).
+ * \brief Loads and installs the appropriate Qt translation file for the current
+ * locale.
+ * \param repositoryNames Specifies the names of the Qt repositories to load
+ * translations for (eg. qtbase, qtscript, ...).
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
- *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
- *    In this case it is also necessary to load the translations using this function.
+ *  - Translation files can also be built-in using by setting the CMake variable
+ * BUILTIN_TRANSLATIONS.
+ *    In this case it is also necessary to load the translations using this
+ * function.
  */
 void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
 {
@@ -95,15 +99,19 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
 }
 
 /*!
- * \brief Loads and installs the appropriate Qt translation file for the specified locale.
- * \param repositoryNames Specifies the names of the Qt repositories to load translations for (eg. qtbase, qtscript, ...).
+ * \brief Loads and installs the appropriate Qt translation file for the
+ * specified locale.
+ * \param repositoryNames Specifies the names of the Qt repositories to load
+ * translations for (eg. qtbase, qtscript, ...).
  * \param localeName Specifies the name of the locale.
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
- *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
- *    In this case it is also necessary to load the translations using this function.
+ *  - Translation files can also be built-in using by setting the CMake variable
+ * BUILTIN_TRANSLATIONS.
+ *    In this case it is also necessary to load the translations using this
+ * function.
  */
 void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
@@ -128,7 +136,8 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
 }
 
 /*!
- * \brief Loads and installs the appropriate application translation file for the current locale.
+ * \brief Loads and installs the appropriate application translation file for
+ * the current locale.
  * \param applicationName Specifies the name of the application.
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
@@ -137,8 +146,10 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
  *    * ../share/$application/translations (used in Windows)
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
- *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
- *    In this case it is also necessary to load the translations using this function.
+ *  - Translation files can also be built-in using by setting the CMake variable
+ * BUILTIN_TRANSLATIONS.
+ *    In this case it is also necessary to load the translations using this
+ * function.
  */
 void loadApplicationTranslationFile(const QString &applicationName)
 {
@@ -151,7 +162,8 @@ void loadApplicationTranslationFile(const QString &applicationName)
 }
 
 /*!
- * \brief Loads and installs the appropriate application translation file for the specified locale.
+ * \brief Loads and installs the appropriate application translation file for
+ * the specified locale.
  * \param applicationName Specifies the name of the application.
  * \param localeName Specifies the name of the locale.
  * \remarks
@@ -161,8 +173,10 @@ void loadApplicationTranslationFile(const QString &applicationName)
  *    * ../share/$application/translations (used in Windows)
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
- *  - Translation files can also be built-in using by setting the CMake variable BUILTIN_TRANSLATIONS.
- *    In this case it is also necessary to load the translations using this function.
+ *  - Translation files can also be built-in using by setting the CMake variable
+ * BUILTIN_TRANSLATIONS.
+ *    In this case it is also necessary to load the translations using this
+ * function.
  */
 void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
 {
@@ -188,7 +202,8 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
 }
 
 /*!
- * \brief Loads and installs the appropriate application translation file for the current locale.
+ * \brief Loads and installs the appropriate application translation file for
+ * the current locale.
  * \param applicationNames Specifies the names of the applications.
  */
 void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames)
@@ -199,7 +214,8 @@ void loadApplicationTranslationFile(const std::initializer_list<QString> &applic
 }
 
 /*!
- * \brief Loads and installs the appropriate application translation file for the specified locale.
+ * \brief Loads and installs the appropriate application translation file for
+ * the specified locale.
  * \param applicationNames Specifies the names of the applications.
  * \param localeName Specifies the name of the locale.
  */
@@ -212,7 +228,9 @@ void loadApplicationTranslationFile(const std::initializer_list<QString> &applic
 }
 
 /*!
- * \brief Convenience functions to check whether a QCoreApplication/QGuiApplication/QApplication singleton has been instantiated yet.
+ * \brief Convenience functions to check whether a
+ * QCoreApplication/QGuiApplication/QApplication singleton has been instantiated
+ * yet.
  */
 namespace ApplicationInstances {
 
@@ -251,8 +269,10 @@ bool hasCoreApp()
 namespace ConfigFile {
 
 /*!
- * \brief Locates the config file with the specified \a fileName for the application with the specified \a applicationName.
- * \remarks If \a settings is not nullptr, the path provided by that object is also considered.
+ * \brief Locates the config file with the specified \a fileName for the
+ * application with the specified \a applicationName.
+ * \remarks If \a settings is not nullptr, the path provided by that object is
+ * also considered.
  */
 QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings)
 {
@@ -275,7 +295,8 @@ QString locateConfigFile(const QString &applicationName, const QString &fileName
         if (QFile::exists(path)) {
             return path;
         } else {
-            // check whether there is the default version of the file under /usr/share/app/
+            // check whether there is the default version of the file under
+            // /usr/share/app/
             path = QStringLiteral("../share/") % applicationName % QChar('/') % fileName;
             if (QFile::exists(path)) {
                 return path;
@@ -288,7 +309,8 @@ QString locateConfigFile(const QString &applicationName, const QString &fileName
         if (QFile::exists(path)) {
             return path;
         } else {
-            // check whether there is the default version of the file under /usr/share/app/
+            // check whether there is the default version of the file under
+            // /usr/share/app/
             path = QStringLiteral("/usr/share/") % applicationName % QChar('/') % fileName;
             if (QFile::exists(path)) {
                 return path;

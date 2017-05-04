@@ -12,12 +12,16 @@ QT_FORWARD_DECLARE_CLASS(QColor)
 namespace Dialogs {
 
 /*!
- * \brief The DocumentStatus enum specifies the status of the document in a window.
+ * \brief The DocumentStatus enum specifies the status of the document in a
+ * window.
  */
 enum class DocumentStatus {
-    NoDocument, /**< There is no document opened. The document path is ignored in this case. */
-    Saved, /**< There is a document opened. All modifications have been saved yet. */
-    Unsaved /**< There is a document opened and there are unsaved modifications. */
+    NoDocument, /**< There is no document opened. The document path is ignored in
+                 this case. */
+    Saved, /**< There is a document opened. All modifications have been saved yet.
+            */
+    Unsaved /**< There is a document opened and there are unsaved modifications.
+             */
 };
 
 QString QT_UTILITIES_EXPORT generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath);

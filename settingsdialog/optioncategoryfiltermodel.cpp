@@ -6,7 +6,8 @@ namespace Dialogs {
 
 /*!
  * \class Dialogs::OptionCategoryFilterModel
- * \brief The OptionCategoryFilterModel class is used by SettingsDialog to filter option categories.
+ * \brief The OptionCategoryFilterModel class is used by SettingsDialog to
+ * filter option categories.
  */
 
 /*!

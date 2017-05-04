@@ -11,12 +11,14 @@ namespace Models {
 
 /*!
  * \class Models::ChecklistItem
- * \brief The ChecklistItem class provides an item for use with the ChecklistModel class.
+ * \brief The ChecklistItem class provides an item for use with the
+ * ChecklistModel class.
  */
 
 /*!
  * \class Models::ChecklistModel
- * \brief The ChecklistModel class provides a generic model for storing checkable items.
+ * \brief The ChecklistModel class provides a generic model for storing
+ * checkable items.
  */
 
 /*!
@@ -169,7 +171,8 @@ void ChecklistModel::setItems(const QList<ChecklistItem> &items)
 }
 
 /*!
- * \brief Restores the IDs and checkstates read from the specified \a settings object.
+ * \brief Restores the IDs and checkstates read from the specified \a settings
+ * object.
  *
  * The items will be read from the array with the specified \a name.
  *

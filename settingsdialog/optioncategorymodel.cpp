@@ -10,7 +10,8 @@ namespace Dialogs {
 
 /*!
  * \class Dialogs::OptionCategoryModel
- * \brief The OptionCategoryModel class is used by SettingsDialog to store and display option categories.
+ * \brief The OptionCategoryModel class is used by SettingsDialog to store and
+ * display option categories.
  */
 
 /*!

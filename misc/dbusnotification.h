@@ -115,7 +115,8 @@ inline const QString &DBusNotification::icon() const
 /*!
  * \brief Sets the icon name.
  * \remarks
- * The specified \a icon should be either an URI (file:// is the only URI schema supported
+ * The specified \a icon should be either an URI (file:// is the only URI schema
+ * supported
  * right now) or a name in an icon theme.
  */
 inline void DBusNotification::setIcon(const QString &icon)

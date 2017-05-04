@@ -51,7 +51,8 @@ void OptionCategory::resetAllPages()
 }
 
 /*!
- * \brief Returns whether the option category matches the specified \a searchKeyWord.
+ * \brief Returns whether the option category matches the specified \a
+ * searchKeyWord.
  */
 bool OptionCategory::matches(const QString &searchKeyWord) const
 {

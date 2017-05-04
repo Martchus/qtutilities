@@ -68,7 +68,8 @@ inline bool SettingsDialog::isTabBarAlwaysVisible() const
 }
 
 /*!
- * \brief Returns the category model used by the settings dialog to manage the categories.
+ * \brief Returns the category model used by the settings dialog to manage the
+ * categories.
  */
 inline OptionCategoryModel *SettingsDialog::categoryModel()
 {

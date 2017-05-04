@@ -12,7 +12,8 @@ namespace Dialogs {
  * \class Dialogs::OptionPage
  * \brief The OptionPage class is the base class for SettingsDialog pages.
  *
- * The specified \a parentWindow might be used by some implementations as parent when showing dialogs.
+ * The specified \a parentWindow might be used by some implementations as parent
+ * when showing dialogs.
  */
 
 /*!
@@ -98,6 +99,7 @@ bool OptionPage::matches(const QString &searchKeyWord)
 
 /*!
  * \fn OptionPage::setupWidget()
- * \brief Creates the widget for the page. Called in the first invocation of widget().
+ * \brief Creates the widget for the page. Called in the first invocation of
+ * widget().
  */
 }

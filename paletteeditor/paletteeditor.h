@@ -26,7 +26,8 @@ class PaletteEditor;
 /*!
  * \brief The PaletteEditor class provides a dialog to customize a QPalette.
  *
- * This is taken from qttools/src/designer/src/components/propertyeditor/paletteeditor.cpp.
+ * This is taken from
+ * qttools/src/designer/src/components/propertyeditor/paletteeditor.cpp.
  * In contrast to the original version this version doesn't provide a preview.
  */
 class QT_UTILITIES_EXPORT PaletteEditor : public QDialog {

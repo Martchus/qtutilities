@@ -24,7 +24,8 @@ namespace Widgets {
 
 /*!
  * \class Widgets::PathSelection
- * \brief A QLineEdit with a QPushButton next to it which allows to select file/directory via QFileDialog.
+ * \brief A QLineEdit with a QPushButton next to it which allows to select
+ * file/directory via QFileDialog.
  */
 
 QCompleter *PathSelection::m_completer = nullptr;

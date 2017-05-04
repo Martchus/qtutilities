@@ -25,7 +25,8 @@ namespace Dialogs {
 
 /*!
  * \class Dialogs::EnterPasswordDialog
- * \brief The EnterPasswordDialog class provides a simple dialog to ask the user for a password.
+ * \brief The EnterPasswordDialog class provides a simple dialog to ask the user
+ * for a password.
  */
 
 /*!
@@ -78,7 +79,8 @@ EnterPasswordDialog::~EnterPasswordDialog()
 }
 
 /*!
- * \brief Returns the description. The description is shown under the instruction text.
+ * \brief Returns the description. The description is shown under the
+ * instruction text.
  * \sa setDescription()
  */
 QString EnterPasswordDialog::description() const
@@ -120,7 +122,8 @@ void EnterPasswordDialog::setPromptForUserName(bool prompt)
 }
 
 /*!
- * \brief Returns an indication whether a verification (password has to be entered twice) is required.
+ * \brief Returns an indication whether a verification (password has to be
+ * entered twice) is required.
  *
  * \sa EnterPasswordDialog::setVerificationRequired()
  */
@@ -132,7 +135,8 @@ bool EnterPasswordDialog::isVerificationRequired() const
 /*!
  * \brief Returns an indication whether the user is force to enter a password.
  *
- * If no password is required, the user is allowed to skip the dialog without entering
+ * If no password is required, the user is allowed to skip the dialog without
+ * entering
  * a password.
  *
  * \sa EnterPasswordDialog::setPasswordRequired()
@@ -145,7 +149,8 @@ bool EnterPasswordDialog::isPasswordRequired() const
 /*!
  * \brief Sets whether the user is force to enter a password.
  *
- * If no password is required, the user is allowed to skip the dialog without entering
+ * If no password is required, the user is allowed to skip the dialog without
+ * entering
  * a password.
  *
  * \sa EnterPasswordDialog::isPasswordRequired()
@@ -158,7 +163,8 @@ void EnterPasswordDialog::setPasswordRequired(bool value)
 }
 
 /*!
- * \brief Updates the relevant controls to show entered characters or to mask them them.
+ * \brief Updates the relevant controls to show entered characters or to mask
+ * them them.
  *
  * This private slot is called when m_ui->showPasswordCheckBox is clicked.
  */
@@ -170,7 +176,8 @@ void EnterPasswordDialog::updateShowPassword()
 }
 
 /*!
- * \brief Sets whether a verification (password has to be entered twice) is required.
+ * \brief Sets whether a verification (password has to be entered twice) is
+ * required.
  *
  * \sa EnterPasswordDialog::isVerificationRequired()
  */
@@ -216,9 +223,11 @@ bool EnterPasswordDialog::event(QEvent *event)
 }
 
 /*!
- * \brief Internal method to notice when the capslock key is pressed by the user.
+ * \brief Internal method to notice when the capslock key is pressed by the
+ * user.
  *
- * Invocation of this method is done by installing the event filter in the constructor.
+ * Invocation of this method is done by installing the event filter in the
+ * constructor.
  */
 bool EnterPasswordDialog::eventFilter(QObject *sender, QEvent *event)
 {
@@ -259,7 +268,8 @@ bool EnterPasswordDialog::eventFilter(QObject *sender, QEvent *event)
 }
 
 /*!
- * \brief Sets the dialog status to QDialog::Accepted if a valid password has been enterd.
+ * \brief Sets the dialog status to QDialog::Accepted if a valid password has
+ * been enterd.
  *        Displays an error message otherwise.
  *
  * This private slot is called when m_ui->confirmPushButton is clicked.
@@ -280,7 +290,8 @@ void EnterPasswordDialog::confirm()
         } else {
             if (isVerificationRequired() && (password != repeatedPassword) && !m_ui->showPasswordCheckBox->isChecked()) {
                 if (repeatedPassword.isEmpty()) {
-                    QMessageBox::warning(this, windowTitle(), tr("You have to enter the new password twice to ensure you enterd it correct."));
+                    QMessageBox::warning(this, windowTitle(), tr("You have to enter the new password twice to "
+                                                                 "ensure you enterd it correct."));
                 } else {
                     QMessageBox::warning(this, windowTitle(), tr("You mistyped the password."));
                 }
@@ -294,13 +305,17 @@ void EnterPasswordDialog::confirm()
 }
 
 /*!
- * \brief Returns an indication whether the capslock key is pressed using platform specific functions.
+ * \brief Returns an indication whether the capslock key is pressed using
+ * platform specific functions.
  *
  * \remarks - Returns always false for unsupported platforms.
- *          - This method always returns false when the detection is not supported. It is supported under X11
+ *          - This method always returns false when the detection is not
+ * supported. It is supported under X11
  *            and Windows.
- *          - The function requires the application to be linked against X11 on Linux/Unix.
- *          - This static function will be used internally to detect whether the capslock key is pressed
+ *          - The function requires the application to be linked against X11 on
+ * Linux/Unix.
+ *          - This static function will be used internally to detect whether the
+ * capslock key is pressed
  *            when initializing the dialog.
  */
 bool EnterPasswordDialog::isCapslockPressed()

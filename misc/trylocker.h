@@ -13,17 +13,17 @@ namespace ThreadingUtils {
 template <typename Mutex = QMutex> class TryLocker {
 public:
     /*!
-     * \brief Tries to lock the specified mutex.
-     */
+   * \brief Tries to lock the specified mutex.
+   */
     TryLocker(Mutex &mutex)
         : m_mutex(mutex.tryLock() ? &mutex : nullptr)
     {
     }
 
     /*!
-     * \brief Unlocks the mutex specified when constructing.
-     * \remarks Does nothing if the mutex couldn't be locked in the first place.
-     */
+   * \brief Unlocks the mutex specified when constructing.
+   * \remarks Does nothing if the mutex couldn't be locked in the first place.
+   */
     ~TryLocker()
     {
         if (m_mutex) {
@@ -32,16 +32,16 @@ public:
     }
 
     /*!
-     * \brief Returns whether the mutex could be locked.
-     */
+   * \brief Returns whether the mutex could be locked.
+   */
     bool isLocked() const
     {
         return m_mutex != nullptr;
     }
 
     /*!
-     * \brief Returns whether the mutex could be locked.
-     */
+   * \brief Returns whether the mutex could be locked.
+   */
     operator bool() const
     {
         return m_mutex != nullptr;

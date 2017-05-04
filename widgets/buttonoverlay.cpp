@@ -12,19 +12,24 @@
 
 /*!
  * \namespace Widgets
- * \brief Provides a set of extended widgets such as ClearLineEdit and ClearComboBox.
+ * \brief Provides a set of extended widgets such as ClearLineEdit and
+ * ClearComboBox.
  */
 
 namespace Widgets {
 
 /*!
  * \class Widgets::ButtonOverlay
- * \brief The ButtonOverlay class is used to display buttons on top of other widgets.
+ * \brief The ButtonOverlay class is used to display buttons on top of other
+ * widgets.
  *
- * The class creates a new layout manager and sets it to the widget which is specified
- * when constructing an instance. Thus this widget must not already have a layout manager.
+ * The class creates a new layout manager and sets it to the widget which is
+ * specified
+ * when constructing an instance. Thus this widget must not already have a
+ * layout manager.
  *
- * The class is used to implement widget customization like ClearLineEidt and ClearComboBox.
+ * The class is used to implement widget customization like ClearLineEidt and
+ * ClearComboBox.
  */
 
 /*!
@@ -71,9 +76,10 @@ void ButtonOverlay::setClearButtonEnabled(bool enabled)
         // enable clear button
         m_clearButton = new IconButton;
         m_clearButton->setHidden(isCleared());
-        m_clearButton->setPixmap(/*QIcon::fromTheme(QStringLiteral("edit-clear"), */ QIcon(
-            QStringLiteral(":/qtutilities/icons/hicolor/48x48/actions/edit-clear.png") /*)*/)
-                                     .pixmap(16));
+        m_clearButton->setPixmap(
+            /*QIcon::fromTheme(QStringLiteral("edit-clear"), */ QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/actions/"
+                                                                                     "edit-clear.png") /*)*/)
+                .pixmap(16));
         m_clearButton->setGeometry(0, 0, 16, 16);
         m_clearButton->setToolTip(QObject::tr("Clear"));
         QObject::connect(m_clearButton, &IconButton::clicked, std::bind(&ButtonOverlay::handleClearButtonClicked, this));
@@ -84,7 +90,8 @@ void ButtonOverlay::setClearButtonEnabled(bool enabled)
 /*!
  * \brief Shows an info button with the specified \a pixmap and \a infoText.
  *
- * If there is already an info button enabled, it gets replaced with the new button.
+ * If there is already an info button enabled, it gets replaced with the new
+ * button.
  *
  * \sa ButtonOverlay::disableInfoButton()
  */

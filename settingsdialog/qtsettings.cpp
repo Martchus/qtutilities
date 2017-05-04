@@ -64,8 +64,10 @@ inline QtSettingsData::QtSettingsData()
 
 /*!
  * \brief Creates a new settings object.
- * \remarks Settings are not restored automatically. Instead, some values (font, widget style, ...) are initialized
- *          from the current Qt configuration. These values are considered as system-default.
+ * \remarks Settings are not restored automatically. Instead, some values (font,
+ * widget style, ...) are initialized
+ *          from the current Qt configuration. These values are considered as
+ * system-default.
  */
 QtSettings::QtSettings()
     : m_d(new QtSettingsData())
@@ -74,7 +76,8 @@ QtSettings::QtSettings()
 
 /*!
  * \brief Destroys the settings object.
- * \remarks Unlike QSettings not explicitely saved settings are not saved automatically.
+ * \remarks Unlike QSettings not explicitely saved settings are not saved
+ * automatically.
  */
 QtSettings::~QtSettings()
 {
@@ -90,7 +93,8 @@ bool QtSettings::hasCustomFont() const
 
 /*!
  * \brief Restors the settings from the specified QSettings object.
- * \remarks The restored values are not applied automatically (except translation path).
+ * \remarks The restored values are not applied automatically (except
+ * translation path).
  * \sa apply(), save()
  */
 void QtSettings::restore(QSettings &settings)
@@ -142,8 +146,10 @@ void QtSettings::save(QSettings &settings) const
  * \brief Applies the current configuraion.
  * \remarks
  *  - Some settings take only affect after restarting the application.
- *  - QApplication/QGuiApplication must be instantiated before calling this method.
- *  - Hence it makes most sense to call this directly after instantiating QApplication/QGuiApplication.
+ *  - QApplication/QGuiApplication must be instantiated before calling this
+ * method.
+ *  - Hence it makes most sense to call this directly after instantiating
+ * QApplication/QGuiApplication.
  */
 void QtSettings::apply()
 {
@@ -197,8 +203,10 @@ void QtSettings::apply()
 /*!
  * \brief Returns a new OptionCatecory containing all Qt related option pages.
  * \remarks
- * - The QtSettings instance does not keep the ownership over the returned category.
- * - The pages of the returned category require the QtSetings instance which hence
+ * - The QtSettings instance does not keep the ownership over the returned
+ * category.
+ * - The pages of the returned category require the QtSetings instance which
+ * hence
  *   must be present as long as all pages are destroyed.
  */
 OptionCategory *QtSettings::category()

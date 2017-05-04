@@ -44,7 +44,8 @@ QString generateWindowTitle(DocumentStatus documentStatus, const QString &docume
     case DocumentStatus::NoDocument:
         return QCoreApplication::applicationName();
     default:
-        return QString(); // to suppress warning: "control reaches end of non-void function"
+        return QString(); // to suppress warning: "control reaches end of non-void
+        // function"
     }
 }
 
@@ -72,17 +73,21 @@ QColor instructionTextColor()
 #endif
 
 /*!
- * \brief Returns the stylesheet for dialogs and other windows used in my applications.
+ * \brief Returns the stylesheet for dialogs and other windows used in my
+ * applications.
  */
 const QString &dialogStyle()
 {
 #ifdef Q_OS_WIN32
-    static const auto style
-        = QStringLiteral("#mainWidget { color: palette(text); background-color: palette(base); border: none; }"
-                         "#bottomWidget { background-color: palette(window); color: palette(window-text); border-top: 1px solid %1; }"
-                         "QMessageBox QLabel, QInputDialog QLabel, *[classNames~=\"heading\"] { font-size: 12pt; color: %2; }"
-                         "*[classNames~=\"input-invalid\"] { color: red; }")
-              .arg(windowFrameColor().name(), instructionTextColor().name());
+    static const auto style = QStringLiteral("#mainWidget { color: palette(text); background-color: "
+                                             "palette(base); border: none; }"
+                                             "#bottomWidget { background-color: palette(window); "
+                                             "color: palette(window-text); border-top: 1px solid %1; }"
+                                             "QMessageBox QLabel, QInputDialog QLabel, "
+                                             "*[classNames~=\"heading\"] { font-size: 12pt; color: %2; "
+                                             "}"
+                                             "*[classNames~=\"input-invalid\"] { color: red; }")
+                                  .arg(windowFrameColor().name(), instructionTextColor().name());
 #else
     static const auto style = QStringLiteral("*[classNames~=\"heading\"] { font-weight: bold; }"
                                              "*[classNames~=\"input-invalid\"] { color: red; }");
@@ -93,8 +98,10 @@ const QString &dialogStyle()
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
 
 /*!
- * \brief Moves the specified \a widget in the middle of the (available) screen area. If there are multiple
- *        screens available, the screen where the cursor currently is located is chosen.
+ * \brief Moves the specified \a widget in the middle of the (available) screen
+ * area. If there are multiple
+ *        screens available, the screen where the cursor currently is located is
+ * chosen.
  */
 void centerWidget(QWidget *widget)
 {
@@ -103,8 +110,10 @@ void centerWidget(QWidget *widget)
 }
 
 /*!
- * \brief Moves the specified \a widget to the corner which is closest to the current cursor position.
- *        If there are multiple screens available, the screen where the cursor currently is located is chosen.
+ * \brief Moves the specified \a widget to the corner which is closest to the
+ * current cursor position.
+ *        If there are multiple screens available, the screen where the cursor
+ * currently is located is chosen.
  */
 void cornerWidget(QWidget *widget)
 {
@@ -127,7 +136,8 @@ void makeHeading(QWidget *widget)
 /*!
  * \brief Updates the widget style.
  * \remarks Useful when dynamic properties are used in the stylesheet because
- *          the widget style does not update automatically when a property changes.
+ *          the widget style does not update automatically when a property
+ * changes.
  */
 void updateStyle(QWidget *widget)
 {
