@@ -16,6 +16,7 @@
 #include <QContextMenuEvent>
 #endif
 
+#include <functional>
 #include <memory>
 
 using namespace std;
