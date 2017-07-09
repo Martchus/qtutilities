@@ -177,7 +177,7 @@ endif()
 
 # generate DBus interfaces
 if(DBUS_FILES)
-    qt5_add_dbus_interfaces(SRC_FILES ${DBUS_FILES})
+    qt5_add_dbus_interfaces(GENERATED_DBUS_FILES ${DBUS_FILES})
 endif()
 
 # add icons to be built-in

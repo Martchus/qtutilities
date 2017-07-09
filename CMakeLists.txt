@@ -172,7 +172,7 @@ else()
 endif()
 
 # find c++utilities
-find_package(c++utilities 4.7.0 REQUIRED)
+find_package(c++utilities 4.9.0 REQUIRED)
 use_cpp_utilities()
 
 # include modules to apply configuration
