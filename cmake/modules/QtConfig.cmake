@@ -139,17 +139,19 @@ if(TS_FILES)
     )
     add_custom_target(${META_PROJECT_NAME}_translations ALL DEPENDS ${QM_FILES})
 
-    # add installs and install target for translations
-    install(FILES ${QM_FILES}
-        DESTINATION share/${META_PROJECT_NAME}/translations
-        COMPONENT localization
-    )
-    if(NOT TARGET install-localization)
-        set(LOCALIZATION_TARGET "install-localization")
-        add_custom_target(${LOCALIZATION_TARGET}
-            COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=localization -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+    # add install target for translations
+    if(NOT META_NO_INSTALL_TARGETS AND ENABLE_INSTALL_TARGETS)
+        install(FILES ${QM_FILES}
+            DESTINATION share/${META_PROJECT_NAME}/translations
+            COMPONENT localization
         )
-        add_dependencies(${LOCALIZATION_TARGET} ${META_PROJECT_NAME}_translations)
+        if(NOT TARGET install-localization)
+            set(LOCALIZATION_TARGET "install-localization")
+            add_custom_target(${LOCALIZATION_TARGET}
+                COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=localization -P "${CMAKE_BINARY_DIR}/cmake_install.cmake"
+            )
+            add_dependencies(${LOCALIZATION_TARGET} ${META_PROJECT_NAME}_translations)
+        endif()
     endif()
 
     # make application specific translation available as array via config.h
