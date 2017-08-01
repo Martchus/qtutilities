@@ -130,12 +130,15 @@ if(TS_FILES)
     # (but not add it to QT_MODULES because we don't link against it)
     find_package(Qt5LinguistTools REQUIRED)
 
+    set(LUPDATE_OPTIONS "" CACHE STRING "specifies options passed to lupdate")
+
     # adds the translations and a target for it
     qt5_create_translation(QM_FILES
         ${HEADER_FILES} ${SRC_FILES}
         ${WIDGETS_HEADER_FILES} ${WIDGETS_SRC_FILES} ${WIDGETS_UI_FILES}
         ${QML_HEADER_FILES} ${QML_SRC_FILES} ${QML_RES_FILES}
         ${TS_FILES}
+        OPTIONS ${LUPDATE_OPTIONS}
     )
     add_custom_target(${META_PROJECT_NAME}_translations ALL DEPENDS ${QM_FILES})
 
