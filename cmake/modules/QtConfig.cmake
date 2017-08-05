@@ -122,7 +122,8 @@ include(ListToString)
 list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${QT_TRANSLATION_FILES}" QT_TRANSLATION_FILES_ARRAY)
 
 # enable lrelease and add install target for localization
-if(TS_FILES)
+option(ENABLE_QT_TRANSLATIONS "specifies whether Qt translations should be updated/released" ON)
+if(ENABLE_QT_TRANSLATIONS AND TS_FILES)
     message(STATUS "Project has translations which will be released.")
     set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE YES)
 
