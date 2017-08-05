@@ -44,10 +44,11 @@ else()
 endif()
 
 if(WIDGETS_GUI OR QUICK_GUI)
-    # set "GUI-type" to WIN32 to hide console under Windows
     if(WIN32)
+        # set "GUI-type" to WIN32 to hide console under Windows
         set(GUI_TYPE WIN32)
     elseif(APPLE)
+        # make the GUI application a "bundle" under MacOSX
         set(GUI_TYPE MACOSX_BUNDLE)
     endif()
 

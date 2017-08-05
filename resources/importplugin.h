@@ -9,6 +9,9 @@
 #ifdef Q_OS_WIN32
 Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin)
 #endif
+#ifdef Q_OS_MACOS
+Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin)
+#endif
 #ifdef SVG_SUPPORT
 Q_IMPORT_PLUGIN(QSvgPlugin)
 #endif

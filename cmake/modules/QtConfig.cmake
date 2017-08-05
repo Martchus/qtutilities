@@ -75,12 +75,20 @@ foreach(KF_MODULE ${IMPORTED_KF_MODULES})
 endforeach()
 
 # built-in plugins when doing static build
-if(WIN32 AND (USE_STATIC_QT5_Gui OR USE_STATIC_QT5_Widgets OR USE_STATIC_QT5_Quick))
+# -> ensure platform integration plugins for corresponding platforms are built-in when creating a GUI application
+if(USE_STATIC_QT5_Gui OR USE_STATIC_QT5_Widgets OR USE_STATIC_QT5_Quick)
     if(NOT USE_STATIC_QT5_Gui)
         find_qt5_module(Gui REQUIRED)
     endif()
-    use_static_qt5_plugin(Gui WindowsIntegration)
+    if(WIN32)
+        use_static_qt5_plugin(Gui WindowsIntegration)
+    elseif(APPLE)
+        use_static_qt5_plugin(Gui CocoaIntegration)
+    else()
+        message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
+    endif()
 endif()
+# -> ensure SVG plugins are built-in if configured
 if((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND USE_STATIC_QT5_Svg)
     use_static_qt5_plugin(Svg Svg)
 endif()
