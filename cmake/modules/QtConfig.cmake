@@ -289,19 +289,25 @@ foreach(RES_FILE ${RES_FILES})
         list(APPEND QT_RESOURCES "${RES_NAME}")
     endif()
 endforeach()
+
 # add Qt resources required by static library dependencies
-list(APPEND QT_RESOURCES ${LIBRARIES_QT_RESOURCES})
+if(LIBRARIES_QT_RESOURCES)
+    list(REMOVE_DUPLICATES LIBRARIES_QT_RESOURCES)
+    list(APPEND QT_RESOURCES ${LIBRARIES_QT_RESOURCES})
+
+    # make enabling resources of static dependencies available via config.h
+    unset(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES)
+    foreach(QT_RESOURCE ${LIBRARIES_QT_RESOURCES})
+        set(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
+            "${ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES} \\\n    struct initializer_${QT_RESOURCE} { \\\n        initializer_${QT_RESOURCE}() { Q_INIT_RESOURCE(${QT_RESOURCE}); } \\\n        ~initializer_${QT_RESOURCE}() { Q_CLEANUP_RESOURCE(${QT_RESOURCE}); } \\\n    } dummy_${QT_RESOURCE};"
+        )
+    endforeach()
+endif()
+
+# prevent duplicated resources
 if(QT_RESOURCES)
     list(REMOVE_DUPLICATES QT_RESOURCES)
 endif()
-
-# make enabling resources of static dependencies available via config.h
-unset(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES)
-foreach(QT_RESOURCE ${LIBRARIES_QT_RESOURCES})
-    set(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
-        "${ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES} \\\n    struct initializer_${QT_RESOURCE} { \\\n        initializer_${QT_RESOURCE}() { Q_INIT_RESOURCE(${QT_RESOURCE}); } \\\n        ~initializer_${QT_RESOURCE}() { Q_CLEANUP_RESOURCE(${QT_RESOURCE}); } \\\n    } dummy_${QT_RESOURCE};"
-    )
-endforeach()
 
 # enable moc, uic and rcc by default for all targets
 set(CMAKE_AUTOMOC ON)
