@@ -18,7 +18,7 @@ endif()
 # also add additional Qt/KF modules which must have been specified before if required
 # the Gui/Widgets/Quick modules should be added by including QtGuiAppConfig
 set(QT_REPOS base ${ADDITIONAL_QT_REPOS})
-set(QT_MODULES Core ${ADDITIONAL_QT_MODULES})
+set(QT_MODULES ${ADDITIONAL_QT_MODULES} Core)
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
 
 # allow specifying a custom directory for Qt plugins
