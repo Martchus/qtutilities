@@ -149,7 +149,12 @@ else()
 endif()
 
 # configure support for D-Bus notifications
-option(DBUS_NOTIFICATIONS "enables support for D-Bus notifications" ${UNIX})
+if(UNIX AND NOT APPLE)
+    set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT ON)
+else()
+    set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT OFF)
+endif()
+option(DBUS_NOTIFICATIONS "enables support for D-Bus notifications" ${ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT})
 set(DBUS_NOTIFICATIONS_FILE_NAME misc/dbusnotification)
 if(DBUS_NOTIFICATIONS)
     list(APPEND HEADER_FILES
