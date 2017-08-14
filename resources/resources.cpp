@@ -89,9 +89,9 @@ QString &additionalTranslationFilePath()
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
  *  - Translation files can also be built-in using by setting the CMake variable
- * BUILTIN_TRANSLATIONS.
+ *    BUILTIN_TRANSLATIONS.
  *    In this case it is also necessary to load the translations using this
- * function.
+ *    function.
  */
 void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
 {
@@ -109,9 +109,9 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
  *    * ../share/qt/translations (used in Windows)
  *  - Translation files can also be built-in using by setting the CMake variable
- * BUILTIN_TRANSLATIONS.
+ *    BUILTIN_TRANSLATIONS.
  *    In this case it is also necessary to load the translations using this
- * function.
+ *    function.
  */
 void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
@@ -123,13 +123,16 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
         } else if (qtTranslator->load(fileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
             QCoreApplication::installTranslator(qtTranslator);
         } else if (qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
-            // used in Windows
             QCoreApplication::installTranslator(qtTranslator);
         } else if (qtTranslator->load(fileName, QStringLiteral(":/translations"))) {
             QCoreApplication::installTranslator(qtTranslator);
         } else {
             delete qtTranslator;
-            cerr << "Unable to load translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and language "
+            if (localeName.startsWith(QLatin1String("en"))) {
+                // the translation file is probably just empty (English is built-in and usually only used for plural forms)
+                continue;
+            }
+            cerr << "Unable to load translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and locale "
                  << localeName.toLocal8Bit().data() << "." << endl;
         }
     }
@@ -147,9 +150,9 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
  *  - Translation files can also be built-in using by setting the CMake variable
- * BUILTIN_TRANSLATIONS.
+ *    BUILTIN_TRANSLATIONS.
  *    In this case it is also necessary to load the translations using this
- * function.
+ *    function.
  */
 void loadApplicationTranslationFile(const QString &applicationName)
 {
@@ -174,9 +177,9 @@ void loadApplicationTranslationFile(const QString &applicationName)
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
  *  - Translation files can also be built-in using by setting the CMake variable
- * BUILTIN_TRANSLATIONS.
+ *    BUILTIN_TRANSLATIONS.
  *    In this case it is also necessary to load the translations using this
- * function.
+ *    function.
  */
 void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
 {
@@ -196,7 +199,11 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
         QCoreApplication::installTranslator(appTranslator);
     } else {
         delete appTranslator;
-        cerr << "Unable to load translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the language \""
+        if (localeName.startsWith(QLatin1String("en"))) {
+            // the translation file is probably just empty (English is built-in and usually only used for plural forms)
+            return;
+        }
+        cerr << "Unable to load translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the locale \""
              << localeName.toLocal8Bit().data() << "\"." << endl;
     }
 }
