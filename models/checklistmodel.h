@@ -88,7 +88,7 @@ public:
     void setItems(const QList<ChecklistItem> &items);
     void restore(QSettings &settings, const QString &name);
     void save(QSettings &settings, const QString &name) const;
-    static inline constexpr int idRole();
+    static constexpr int idRole();
 
 private:
     QList<ChecklistItem> m_items;
@@ -105,7 +105,7 @@ inline const QList<ChecklistItem> &ChecklistModel::items() const
 /*!
  * \brief Returns the role used to get or set the item ID.
  */
-inline constexpr int ChecklistModel::idRole()
+constexpr int ChecklistModel::idRole()
 {
     return Qt::UserRole + 1;
 }
