@@ -116,8 +116,7 @@ inline const QString &DBusNotification::icon() const
  * \brief Sets the icon name.
  * \remarks
  * The specified \a icon should be either an URI (file:// is the only URI schema
- * supported
- * right now) or a name in an icon theme.
+ * supported right now) or a name in an icon theme.
  */
 inline void DBusNotification::setIcon(const QString &icon)
 {
@@ -134,11 +133,25 @@ inline void DBusNotification::setTimeout(int timeout)
     m_timeout = timeout;
 }
 
+/*!
+ * \brief Returns the actions for the notification.
+ *
+ * The actions are a list of action IDs and action names. The ID is returned by
+ * the actionInvoked() signal if an action is triggered. The action name is the
+ * user-visible name of the notification.
+ *
+ * Example: { QStringLiteral("dismiss"), tr("Dismiss notification"),
+ *            QStringLiteral("details"), tr("Show details") }
+ */
 inline const QStringList &DBusNotification::actions() const
 {
     return m_actions;
 }
 
+/*!
+ * \brief Sets the actions for the notification.
+ * \sa see actions() for details and an example
+ */
 inline void DBusNotification::setActions(const QStringList &actions)
 {
     m_actions = actions;
