@@ -297,7 +297,7 @@ if(REQUIRED_ICONS)
     endif()
 endif()
 
-# add Qt resources from specified RES_FILES
+# export Qt resources from specified RES_FILES
 foreach(RES_FILE ${RES_FILES})
     get_filename_component(RES_EXT ${RES_FILE} EXT)
     if(RES_EXT STREQUAL ".qrc")
@@ -306,10 +306,15 @@ foreach(RES_FILE ${RES_FILES})
     endif()
 endforeach()
 
-# add Qt resources required by static library dependencies
+# export Qt resources required by static libraries the static library depends on
+if(STATIC_LIBRARIES_QT_RESOURCES)
+    list(REMOVE_DUPLICATES STATIC_LIBRARIES_QT_RESOURCES)
+    list(APPEND QT_RESOURCES ${STATIC_LIBRARIES_QT_RESOURCES})
+endif()
+
+# enable Qt resources required by static libraries the shared library or application depends on
 if(LIBRARIES_QT_RESOURCES)
     list(REMOVE_DUPLICATES LIBRARIES_QT_RESOURCES)
-    list(APPEND QT_RESOURCES ${LIBRARIES_QT_RESOURCES})
 
     # make enabling resources of static dependencies available via config.h
     unset(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES)
