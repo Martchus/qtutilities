@@ -33,11 +33,6 @@ if(DBUS_FILES)
     list(APPEND QT_MODULES DBus)
 endif()
 
-if(SVG_SUPPORT OR (SVG_ICON_SUPPORT AND (USE_STATIC_QT5_Gui OR USE_STATIC_QT5_Widgets OR USE_STATIC_QT5_Quick)))
-    list(APPEND QT_MODULES Svg)
-    list(APPEND QT_REPOS svg)
-endif()
-
 # remove duplicates
 list(REMOVE_DUPLICATES QT_REPOS)
 list(REMOVE_DUPLICATES QT_MODULES)
@@ -74,33 +69,63 @@ foreach(KF_MODULE ${IMPORTED_KF_MODULES})
     endif()
 endforeach()
 
-# built-in plugins when doing static build
-if(USE_STATIC_QT5_Gui OR USE_STATIC_QT5_Widgets OR USE_STATIC_QT5_Quick)
-    # ensure platform integration plugins for corresponding platforms are built-in when creating a GUI application
+# built-in platform, imageformat and iconengine plugins when linking statically against Qt Gui
+# -> determine which targets link statically against Qt Gui
+set(USING_STATIC_QT_GUI_FOR_SHARED_TARGET NO)
+set(USING_STATIC_QT_GUI_FOR_STATIC_TARGET NO)
+foreach(MODULE Gui Widgets Quick)
+    if(NOT USING_STATIC_QT_GUI_FOR_SHARED_TARGET AND (QT5_${MODULE}_STATIC_LIB IN_LIST LIBRARIES OR QT5_${MODULE}_STATIC_LIB IN_LIST PRIVATE_LIBRARIES))
+        set(USING_STATIC_QT_GUI_FOR_SHARED_TARGET YES)
+        message(STATUS "Linking shared target of project ${META_PROJECT_NAME} against static Qt 5 plugins.")
+    endif()
+    if(NOT USING_STATIC_QT_GUI_FOR_STATIC_TARGET AND (QT5_${MODULE}_STATIC_LIB IN_LIST STATIC_LIBRARIES OR QT5_${MODULE}_STATIC_LIB IN_LIST PRIVATE_STATIC_LIBRARIES))
+        set(USING_STATIC_QT_GUI_FOR_STATIC_TARGET YES)
+        message(STATUS "Linking static target of project ${META_PROJECT_NAME} against static Qt 5 plugins.")
+    endif()
+endforeach()
+# -> link against plugins according to platform and configuration
+if(USING_STATIC_QT_GUI_FOR_SHARED_TARGET OR USING_STATIC_QT_GUI_FOR_STATIC_TARGET)
     if(NOT USE_STATIC_QT5_Gui)
         find_qt5_module(Gui REQUIRED)
     endif()
+
+    # ensure platform integration plugins for corresponding platforms are built-in when creating a GUI application
     if(WIN32)
-        use_static_qt5_plugin(Gui WindowsIntegration)
+        use_static_qt5_plugin(Gui WindowsIntegration ${USING_STATIC_QT_GUI_FOR_SHARED_TARGET} ${USING_STATIC_QT_GUI_FOR_STATIC_TARGET})
     elseif(APPLE)
-        use_static_qt5_plugin(Gui CocoaIntegration)
+        use_static_qt5_plugin(Gui CocoaIntegration ${USING_STATIC_QT_GUI_FOR_SHARED_TARGET} ${USING_STATIC_QT_GUI_FOR_STATIC_TARGET})
+    elseif(TARGET ${QT5_Gui_STATIC_PREFIX}QXcbIntegrationPlugin)
+        use_static_qt5_plugin(Gui XcbIntegration ${USING_STATIC_QT_GUI_FOR_SHARED_TARGET} ${USING_STATIC_QT_GUI_FOR_STATIC_TARGET})
     else()
         message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
     endif()
+
+    # ensure image format plugins (beside SVG) are built-in if configured
+    if(IMAGE_FORMAT_SUPPORT)
+        foreach(IMAGE_FORMAT ${IMAGE_FORMAT_SUPPORT})
+            if(IMAGE_FORMAT EQUAL "Svg")
+                # the image format plugin of the Qt Svg module is handled separately
+                set(SVG_SUPPORT ON)
+                list(REMOVE_ITEM IMAGE_FORMAT_SUPPORT Svg)
+            else()
+                use_static_qt5_plugin(Gui "${IMAGE_FORMAT}" ${USING_STATIC_QT_GUI_FOR_SHARED_TARGET} ${USING_STATIC_QT_GUI_FOR_STATIC_TARGET})
+            endif()
+        endforeach()
+
+        # allow importing image format plugins via config.h
+        include(ListToString)
+        list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${IMAGE_FORMAT_SUPPORT}" IMAGE_FORMAT_SUPPORT_ARRAY)
+    endif()
+
     # ensure SVG plugins are built-in if configured
-    if(SVG_SUPPORT OR SVG_ICON_SUPPORT)
-        if(NOT USE_STATIC_QT5_Svg)
-            find_qt5_module(Svg REQUIRED)
-            use_qt5_module(Svg REQUIRED)
-        endif()
-        use_static_qt5_plugin(Svg Svg)
+    if((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND NOT USE_STATIC_QT5_Svg)
+        find_qt5_module(Svg REQUIRED)
+    endif()
+    if(SVG_SUPPORT)
+        use_static_qt5_plugin(Svg Svg ${USING_STATIC_QT_GUI_FOR_SHARED_TARGET} ${USING_STATIC_QT_GUI_FOR_STATIC_TARGET})
     endif()
     if(SVG_ICON_SUPPORT)
-        if(NOT USE_STATIC_QT5_Svg)
-            find_qt5_module(Svg REQUIRED)
-            use_qt5_module(Svg REQUIRED)
-        endif()
-        use_static_qt5_plugin(Svg SvgIcon)
+        use_static_qt5_plugin(Svg SvgIcon ${USING_STATIC_QT_GUI_FOR_SHARED_TARGET} ${USING_STATIC_QT_GUI_FOR_STATIC_TARGET})
     endif()
 endif()
 

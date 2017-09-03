@@ -18,6 +18,9 @@ Q_IMPORT_PLUGIN(QSvgPlugin)
 #ifdef SVG_ICON_SUPPORT
 Q_IMPORT_PLUGIN(QSvgIconPlugin)
 #endif
+#ifdef IMAGE_FORMAT_SUPPORT
+IMPORT_IMAGE_FORMAT_PLUGINS
+#endif
 #endif
 #endif
 

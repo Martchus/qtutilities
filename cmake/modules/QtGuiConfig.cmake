@@ -43,6 +43,8 @@ else()
     message(STATUS "Building WITHOUT Qt Quick GUI.")
 endif()
 
+# do further GUI-related configuration only if at least one kind of GUI is enabled (tageditor allows building without GUI
+# so this is a valid configuration)
 if(WIDGETS_GUI OR QUICK_GUI)
     if(WIN32)
         # set "GUI-type" to WIN32 to hide console under Windows
@@ -55,13 +57,9 @@ if(WIDGETS_GUI OR QUICK_GUI)
     # add source files requried by both GUI variants
     list(APPEND SRC_FILES ${GUI_SRC_FILES})
     list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
-endif()
 
-# add option for enabling/disabling static Qt plugins
-if("Svg" IN_LIST ADDITIONAL_QT_MODULES)
-    # Qt Svg module is not optional
-    set(SVG_SUPPORT ON)
-else()
-    option(SVG_SUPPORT "enables/disables svg support for Qt GUI" OFF)
+    # add option for enabling/disabling static Qt plugins
+    option(SVG_SUPPORT "whether to link against the SVG image format plugin (only relevant when using static Qt)" ON)
+    option(SVG_ICON_SUPPORT "whether to link against the SVG icon engine (only relevant when using static Qt)" ON)
+    set(IMAGE_FORMAT_SUPPORT "Gif;ICO;Jpeg" CACHE STRING "specifies the image format plugins to link against (only relevant when using static Qt)")
 endif()
-option(SVG_ICON_SUPPORT "enables/disables svg icon support for Qt GUI (only affects static builds where QSvgPlugin will be built-in if enabled)" ON)
