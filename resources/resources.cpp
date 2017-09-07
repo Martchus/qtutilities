@@ -184,16 +184,16 @@ void loadApplicationTranslationFile(const QString &applicationName)
 void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
 {
     QTranslator *appTranslator = new QTranslator;
-    const QString fileName(QStringLiteral("%1_%2").arg(applicationName, localeName));
+    const QString fileName(applicationName % QChar('_') % localeName);
     if (!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, additionalTranslationFilePath())) {
         QCoreApplication::installTranslator(appTranslator);
     } else if (appTranslator->load(fileName, QStringLiteral("."))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if (appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral(APP_INSTALL_PREFIX "/share/%1/translations").arg(applicationName))) {
+    } else if (appTranslator->load(fileName, QStringLiteral(APP_INSTALL_PREFIX "/share/") % applicationName % QStringLiteral("/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral("../share/%1/translations").arg(applicationName))) {
+    } else if (appTranslator->load(fileName, QStringLiteral("../share/") % applicationName % QStringLiteral("/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if (appTranslator->load(fileName, QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
