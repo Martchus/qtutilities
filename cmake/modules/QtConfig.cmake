@@ -199,8 +199,12 @@ if(ENABLE_QT_TRANSLATIONS AND TS_FILES)
         endif()
     endif()
 
-    # make application specific translation available as array via config.h
     list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}")
+endif()
+
+# make application specific translation available as array via config.h
+# (even if this project has no translations, there might be some from dependencies)
+if(APP_SPECIFIC_QT_TRANSLATION_FILES)
     list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${APP_SPECIFIC_QT_TRANSLATION_FILES}" APP_SPECIFIC_QT_TRANSLATION_FILES_ARRAY)
 else()
     set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE NO)
