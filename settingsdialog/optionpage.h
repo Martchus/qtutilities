@@ -157,6 +157,21 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
     private:
 
 /*!
+ * \brief Declares a class inheriting from Dialogs::OptionPage in a convenient
+ * way.
+ * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
+ */
+#define BEGIN_DECLARE_OPTION_PAGE_CUSTOM_CTOR(SomeClass)                                                                                             \
+    typedef ::Dialogs::OptionPage SomeClass##Base;                                                                                                   \
+    class QT_UTILITIES_EXPORT SomeClass : public ::Dialogs::OptionPage {                                                                             \
+    public:                                                                                                                                          \
+        ~SomeClass();                                                                                                                                \
+        bool apply();                                                                                                                                \
+        void reset();                                                                                                                                \
+                                                                                                                                                     \
+    private:
+
+/*!
  * \brief Declares a class inheriting from Dialogs::UiFileBasedOptionPage in a
  * convenient way.
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
