@@ -54,10 +54,10 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
     }
     m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
     m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
-    m_ui->websiteLabel->setText(tr(
-        "For updates and bug reports visit the <a href=\"%1\" "
-        "style=\"text-decoration: underline; color: palette(link);\">project "
-        "website</a>.").arg(website.isEmpty() ? QApplication::organizationDomain() : website));
+    m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" "
+                                   "style=\"text-decoration: underline; color: palette(link);\">project "
+                                   "website</a>.")
+                                    .arg(website.isEmpty() ? QApplication::organizationDomain() : website));
     m_ui->descLabel->setText(description);
     m_iconScene = new QGraphicsScene(this);
     auto *item = image.isNull()
@@ -84,4 +84,4 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &description, const QIma
 AboutDialog::~AboutDialog()
 {
 }
-}
+} // namespace Dialogs

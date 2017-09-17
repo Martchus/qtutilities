@@ -54,4 +54,4 @@ bool ClearComboBox::isCleared() const
 {
     return currentText().isEmpty();
 }
-}
+} // namespace Widgets

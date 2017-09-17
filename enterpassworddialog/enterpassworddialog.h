@@ -99,6 +99,6 @@ inline void EnterPasswordDialog::abort()
     m_password.clear();
     done(QDialog::Rejected);
 }
-}
+} // namespace Dialogs
 
 #endif // DIALOGS_ENTERPASSWORDDIALOG_H

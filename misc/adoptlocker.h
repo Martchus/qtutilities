@@ -31,6 +31,6 @@ public:
 private:
     Mutex &m_mutex;
 };
-}
+} // namespace ThreadingUtils
 
 #endif // THEADING_UTILS_ADOPTLOCKER_H

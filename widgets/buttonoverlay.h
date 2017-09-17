@@ -67,6 +67,6 @@ inline bool ButtonOverlay::isInfoButtonEnabled() const
 {
     return m_infoButton != nullptr;
 }
-}
+} // namespace Widgets
 
 #endif // WIDGETS_BUTTONOVERLAY_H

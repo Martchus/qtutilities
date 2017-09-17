@@ -62,6 +62,6 @@ inline OptionCategory *OptionCategoryModel::category(int row) const
 {
     return row < m_categories.size() ? m_categories.at(row) : nullptr;
 }
-}
+} // namespace Dialogs
 
 #endif // DIALOGS_OPTIONCATEGORYMODEL_H

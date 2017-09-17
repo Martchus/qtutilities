@@ -170,4 +170,4 @@ void RecentMenuManager::handleActionTriggered()
  * \remarks Only emitted when the selected file still existed; otherwise the
  * user is ask whether to keep or delete the entry.
  */
-}
+} // namespace MiscUtils

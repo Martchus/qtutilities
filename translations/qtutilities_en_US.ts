@@ -111,12 +111,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="293"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="294"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="296"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="297"/>
         <source>You mistyped the password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -404,24 +404,24 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
 <context>
     <name>Widgets::PathSelection</name>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="55"/>
-        <location filename="../widgets/pathselection.cpp" line="75"/>
+        <location filename="../widgets/pathselection.cpp" line="56"/>
+        <location filename="../widgets/pathselection.cpp" line="76"/>
         <source>Select ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="80"/>
+        <location filename="../widgets/pathselection.cpp" line="81"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="83"/>
+        <location filename="../widgets/pathselection.cpp" line="84"/>
         <source>Explore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="119"/>
-        <location filename="../widgets/pathselection.cpp" line="121"/>
+        <location filename="../widgets/pathselection.cpp" line="120"/>
+        <location filename="../widgets/pathselection.cpp" line="122"/>
         <source>Select path</source>
         <translation type="unfinished"></translation>
     </message>

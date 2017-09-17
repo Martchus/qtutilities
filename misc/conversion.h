@@ -36,6 +36,6 @@ inline QString fromNativeFileName(const std::string &nativeFileName)
 #endif
 }
 
-} // namespace Dialogs
+} // namespace ConversionUtilities
 
 #endif // CONVERSION_H

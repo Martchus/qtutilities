@@ -171,6 +171,6 @@ inline bool DBusNotification::isVisible() const
 {
     return m_id != 0;
 }
-}
+} // namespace MiscUtils
 
 #endif // MISC_UTILS_NOTIFICATION_H

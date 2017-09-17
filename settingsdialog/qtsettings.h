@@ -55,7 +55,7 @@ public:
 private:
     std::unique_ptr<QtSettingsData> m_d;
 };
-}
+} // namespace Dialogs
 
 DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
 DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(QtLanguageOptionPage)

@@ -29,4 +29,4 @@ bool OptionCategoryFilterModel::filterAcceptsRow(int sourceRow, const QModelInde
     }
     return false;
 }
-}
+} // namespace Dialogs

@@ -225,4 +225,4 @@ void ChecklistModel::save(QSettings &settings, const QString &name) const
     }
     settings.endArray();
 }
-}
+} // namespace Models

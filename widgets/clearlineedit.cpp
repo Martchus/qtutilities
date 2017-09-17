@@ -42,4 +42,4 @@ bool ClearLineEdit::isCleared() const
 {
     return text().isEmpty();
 }
-}
+} // namespace Widgets

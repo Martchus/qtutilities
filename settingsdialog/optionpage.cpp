@@ -102,4 +102,4 @@ bool OptionPage::matches(const QString &searchKeyWord)
  * \brief Creates the widget for the page. Called in the first invocation of
  * widget().
  */
-}
+} // namespace Dialogs

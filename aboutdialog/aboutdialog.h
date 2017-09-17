@@ -28,6 +28,6 @@ private:
     std::unique_ptr<Ui::AboutDialog> m_ui;
     QGraphicsScene *m_iconScene;
 };
-}
+} // namespace Dialogs
 
 #endif // DIALOGS_ABOUTDIALOG_H

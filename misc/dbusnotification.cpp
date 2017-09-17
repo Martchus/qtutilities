@@ -309,4 +309,4 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
  * \fn DBusNotification::isVisible()
  * \brief Returns whether the notification is (still) visible.
  */
-}
+} // namespace MiscUtils

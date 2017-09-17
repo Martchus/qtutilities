@@ -72,6 +72,6 @@ inline void ClearSpinBox::setPlaceholderText(const QString &placeholderText)
 {
     lineEdit()->setPlaceholderText(placeholderText);
 }
-}
+} // namespace Widgets
 
 #endif // WIDGETS_CLEARSPINBOX_H

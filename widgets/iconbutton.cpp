@@ -76,4 +76,4 @@ void IconButton::keyReleaseEvent(QKeyEvent *event)
     QAbstractButton::keyReleaseEvent(event);
     event->accept();
 }
-}
+} // namespace Widgets

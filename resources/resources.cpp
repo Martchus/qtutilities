@@ -62,7 +62,7 @@ void cleanup()
 {
     cleanupResources();
 }
-}
+} // namespace QtUtilitiesResources
 
 /*!
  * \brief Convenience functions to load translations for Qt and the application.
@@ -232,7 +232,7 @@ void loadApplicationTranslationFile(const std::initializer_list<QString> &applic
         loadApplicationTranslationFile(applicationName, localeName);
     }
 }
-}
+} // namespace TranslationFiles
 
 /*!
  * \brief Convenience functions to check whether a
@@ -328,4 +328,4 @@ QString locateConfigFile(const QString &applicationName, const QString &fileName
 #endif
     }
 }
-}
+} // namespace ConfigFile

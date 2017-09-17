@@ -268,4 +268,4 @@ void SettingsDialog::reset()
     }
     emit resetted();
 }
-}
+} // namespace Dialogs

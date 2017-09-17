@@ -22,6 +22,6 @@ private Q_SLOTS:
     void handleTextChanged(const QString &text);
     void handleClearButtonClicked();
 };
-}
+} // namespace Widgets
 
 #endif // WIDGETS_CLEARLINEEDIT_H

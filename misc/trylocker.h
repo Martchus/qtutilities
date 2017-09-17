@@ -50,6 +50,6 @@ public:
 private:
     Mutex *m_mutex;
 };
-}
+} // namespace ThreadingUtils
 
 #endif // THREADING_UTILS_TRYLOCKER_H

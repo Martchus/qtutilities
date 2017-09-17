@@ -75,6 +75,6 @@ inline OptionCategoryModel *SettingsDialog::categoryModel()
 {
     return m_categoryModel;
 }
-}
+} // namespace Dialogs
 
 #endif // DIALOGS_SETTINGSDIALOG_H

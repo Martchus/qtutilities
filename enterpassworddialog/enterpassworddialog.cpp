@@ -290,8 +290,9 @@ void EnterPasswordDialog::confirm()
         } else {
             if (isVerificationRequired() && (password != repeatedPassword) && !m_ui->showPasswordCheckBox->isChecked()) {
                 if (repeatedPassword.isEmpty()) {
-                    QMessageBox::warning(this, windowTitle(), tr("You have to enter the new password twice to "
-                                                                 "ensure you enterd it correct."));
+                    QMessageBox::warning(this, windowTitle(),
+                        tr("You have to enter the new password twice to "
+                           "ensure you enterd it correct."));
                 } else {
                     QMessageBox::warning(this, windowTitle(), tr("You mistyped the password."));
                 }
@@ -340,4 +341,4 @@ bool EnterPasswordDialog::isCapslockPressed()
     return false;
 #endif
 }
-}
+} // namespace Dialogs

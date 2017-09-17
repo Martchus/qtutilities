@@ -138,7 +138,7 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
 {
     return m_ui.get();
 }
-}
+} // namespace Dialogs
 
 /*!
  * \brief Declares a class inheriting from Dialogs::OptionPage in a convenient

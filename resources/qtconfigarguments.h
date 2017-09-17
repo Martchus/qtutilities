@@ -61,7 +61,7 @@ inline bool QtConfigArguments::areQtGuiArgsPresent() const
 {
     return m_qtWidgetsGuiArg.isPresent() || m_qtQuickGuiArg.isPresent();
 }
-}
+} // namespace ApplicationUtilities
 
 #endif // APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
 

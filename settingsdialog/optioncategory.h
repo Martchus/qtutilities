@@ -105,6 +105,6 @@ inline void OptionCategory::setCurrentIndex(int currentIndex)
 {
     m_currentIndex = currentIndex;
 }
-}
+} // namespace Dialogs
 
 #endif // DIALOGS_OPTIONSCATEGORY_H

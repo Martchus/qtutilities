@@ -231,6 +231,6 @@ void ColorButton::dropEvent(QDropEvent *event)
     emit colorChanged(color());
 }
 #endif
-}
+} // namespace Widgets
 
 #include "moc_colorbutton.cpp"

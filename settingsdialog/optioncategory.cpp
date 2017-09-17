@@ -91,4 +91,4 @@ void OptionCategory::assignPages(const QList<OptionPage *> pages)
  * \fn OptionCategory::pagesChanged()
  * \brief Emitted when the pages changed.
  */
-}
+} // namespace Dialogs

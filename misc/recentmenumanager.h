@@ -33,6 +33,6 @@ private:
     QAction *m_sep;
     QAction *m_clearAction;
 };
-}
+} // namespace MiscUtils
 
 #endif // MISC_UTILS_RECENTMENUMANAGER_H

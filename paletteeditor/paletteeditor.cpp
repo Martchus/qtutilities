@@ -552,4 +552,4 @@ QSize ColorDelegate::sizeHint(const QStyleOptionViewItem &opt, const QModelIndex
 {
     return QItemDelegate::sizeHint(opt, index) + QSize(4, 4);
 }
-}
+} // namespace Dialogs

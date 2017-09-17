@@ -196,4 +196,4 @@ void ButtonOverlay::showInfo()
         QToolTip::showText(QCursor::pos(), m_infoButton->toolTip(), m_infoButton);
     }
 }
-}
+} // namespace Widgets

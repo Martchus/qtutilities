@@ -80,7 +80,7 @@ QVariant OptionCategoryModel::data(const QModelIndex &index, int role) const
 #else
                     QSize(32, 32)
 #endif
-                        );
+                );
             }
         }
         }
@@ -117,4 +117,4 @@ void OptionCategoryModel::categoryChangedIcon()
         }
     }
 }
-}
+} // namespace Dialogs

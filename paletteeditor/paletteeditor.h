@@ -180,6 +180,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const;
 };
-}
+} // namespace Dialogs
 
 #endif // WIDGETS_PALETTEEDITOR_H

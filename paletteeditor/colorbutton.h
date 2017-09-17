@@ -46,6 +46,6 @@ private:
     Q_DISABLE_COPY(ColorButton)
     Q_PRIVATE_SLOT(d_func(), void slotEditColor())
 };
-}
+} // namespace Widgets
 
 #endif // WIDGETS_COLORBUTTON_H

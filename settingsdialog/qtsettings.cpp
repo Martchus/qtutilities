@@ -407,7 +407,7 @@ void QtEnvOptionPage::reset()
         ui()->translationPathSelection->lineEdit()->setText(TranslationFiles::additionalTranslationFilePath());
     }
 }
-}
+} // namespace Dialogs
 
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtLanguageOptionPage)

@@ -109,6 +109,6 @@ constexpr int ChecklistModel::idRole()
 {
     return Qt::UserRole + 1;
 }
-}
+} // namespace Models
 
 #endif // MODELS_CHECKLISTMODEL_H

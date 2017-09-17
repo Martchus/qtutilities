@@ -28,15 +28,18 @@ QtConfigArguments::QtConfigArguments()
     : m_qtWidgetsGuiArg("qt-widgets-gui", 'g', "shows a Qt widgets based graphical user interface")
     , m_qtQuickGuiArg("qt-quick-gui", 'q', "shows a Qt quick based graphical user interface")
     , m_lngArg("lang", 'l', "sets the language for the Qt GUI")
-    , m_qmlDebuggerArg("qmljsdebugger", '\0', "enables QML debugging (see "
-                                              "http://doc.qt.io/qt-5/"
-                                              "qtquick-debugging.html)")
+    , m_qmlDebuggerArg("qmljsdebugger", '\0',
+          "enables QML debugging (see "
+          "http://doc.qt.io/qt-5/"
+          "qtquick-debugging.html)")
     , m_styleArg("style", '\0', "sets the Qt widgets style")
-    , m_iconThemeArg("icon-theme", '\0', "sets the icon theme and additional "
-                                         "theme search paths for the Qt GUI")
+    , m_iconThemeArg("icon-theme", '\0',
+          "sets the icon theme and additional "
+          "theme search paths for the Qt GUI")
     , m_fontArg("font", '\0', "sets the font family and size (point) for the Qt GUI")
-    , m_libraryPathsArg("library-paths", '\0', "sets the list of directories to search when loading "
-                                               "libraries (all existing paths will be deleted)")
+    , m_libraryPathsArg("library-paths", '\0',
+          "sets the list of directories to search when loading "
+          "libraries (all existing paths will be deleted)")
     , m_platformThemeArg("platformtheme", '\0', "specifies the Qt platform theme to be used")
 {
     // language
@@ -163,4 +166,4 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         QCoreApplication::setLibraryPaths(libraryPaths);
     }
 }
-}
+} // namespace ApplicationUtilities

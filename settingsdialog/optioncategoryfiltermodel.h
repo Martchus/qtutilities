@@ -13,6 +13,6 @@ public:
 protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const;
 };
-}
+} // namespace Dialogs
 
 #endif // DIALOGS_OPTIONCATEGORYFILTERMODEL_H

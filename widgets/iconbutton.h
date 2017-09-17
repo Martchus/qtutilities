@@ -45,6 +45,6 @@ inline void IconButton::setPixmap(const QPixmap &pixmap)
     m_pixmap = pixmap;
     update();
 }
-}
+} // namespace Widgets
 
 #endif // WIDGETS_ICONBUTTON_H

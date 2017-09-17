@@ -127,4 +127,4 @@ void PathSelection::showFileDialog()
         }
     }
 }
-}
+} // namespace Widgets

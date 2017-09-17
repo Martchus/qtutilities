@@ -75,4 +75,4 @@ QString ClearSpinBox::textFromValue(int val) const
         return QSpinBox::textFromValue(val);
     }
 }
-}
+} // namespace Widgets

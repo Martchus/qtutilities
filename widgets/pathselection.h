@@ -72,6 +72,6 @@ inline void PathSelection::provideCustomFileDialog(QFileDialog *customFileDialog
 {
     m_customDialog = customFileDialog;
 }
-}
+} // namespace Widgets
 
 #endif // WIDGETS_PATHSELECTION_H

@@ -32,7 +32,7 @@ namespace QtUtilitiesResources {
 
 QT_UTILITIES_EXPORT void init();
 QT_UTILITIES_EXPORT void cleanup();
-}
+} // namespace QtUtilitiesResources
 
 namespace TranslationFiles {
 
@@ -43,7 +43,7 @@ QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicati
 QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
 QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames);
 QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames, const QString &localeName);
-}
+} // namespace TranslationFiles
 
 namespace ApplicationInstances {
 
