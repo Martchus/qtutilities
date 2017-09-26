@@ -90,16 +90,26 @@ bool OptionPage::matches(const QString &searchKeyWord)
 /*!
  * \fn OptionPage::apply()
  * \brief Applies altered settings.
+ * \remarks
+ * The SettingsDialog and any other classes/functions of this library will not call
+ * this method if the option page has not been shown yet. Hence it is (no longer) necessary
+ * to use OptionPage::hasBeenShown() to check whether the page has been initialized
+ * yet.
  */
 
 /*!
  * \fn OptionPage::reset()
  * \brief Discards altered settings and resets relevant widgets.
+ * \remarks
+ * The SettingsDialog and any other classes/functions of this library will not call
+ * this method if the option page has not been shown yet. Hence it is (no longer) necessary
+ * to use OptionPage::hasBeenShown() to check whether the page has been initialized
+ * yet.
  */
 
 /*!
  * \fn OptionPage::setupWidget()
- * \brief Creates the widget for the page. Called in the first invocation of
+ * \brief Creates the widget for the page. Called on the first invocation of
  * widget().
  */
 } // namespace Dialogs

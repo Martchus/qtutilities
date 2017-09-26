@@ -27,11 +27,16 @@ OptionCategory::~OptionCategory()
 
 /*!
  * \brief Applies all pages.
+ * \remarks Pages which have not been shown yet must have not been initialized anyways
+ *          and hence are skipped.
  * \sa OptionPage::apply()
  */
 bool OptionCategory::applyAllPages()
 {
     for (OptionPage *page : m_pages) {
+        if (!page->hasBeenShown()) {
+            continue;
+        }
         if (!page->apply()) {
             return false;
         }
@@ -41,12 +46,16 @@ bool OptionCategory::applyAllPages()
 
 /*!
  * \brief Resets all pages.
+ * \remarks Pages which have not been shown yet must have not been initialized anyways
+ *          and hence are skipped.
  * \sa OptionPage::reset()
  */
 void OptionCategory::resetAllPages()
 {
     for (OptionPage *page : m_pages) {
-        page->reset();
+        if (page->hasBeenShown()) {
+            page->reset();
+        }
     }
 }
 

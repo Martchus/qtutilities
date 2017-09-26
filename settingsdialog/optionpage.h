@@ -50,6 +50,8 @@ inline QWidget *OptionPage::parentWindow() const
 
 /*!
  * \brief Returns an indication whether the option page has been shown yet.
+ * \remarks If this is true, the method OptionPage::setupWidget() has already
+ *          been called.
  */
 inline bool OptionPage::hasBeenShown() const
 {

@@ -111,7 +111,9 @@ void SettingsDialog::showEvent(QShowEvent *event)
     if (!event->spontaneous()) {
         for (OptionCategory *category : m_categoryModel->categories()) {
             for (OptionPage *page : category->pages()) {
-                page->reset();
+                if (page->hasBeenShown()) {
+                    page->reset();
+                }
             }
         }
     }
@@ -223,36 +225,46 @@ void SettingsDialog::updateTabWidget()
 }
 
 /*!
- * \brief Applies all changes. Calls OptionCategory::applyAllPages() for each
- * category.
+ * \brief Applies all changes. Calls OptionCategory::applyAllPages() for each category.
+ * \remarks Pages which have not been shown yet must have not been initialized anyways
+ *          and hence are skipped.
  */
 bool SettingsDialog::apply()
 {
+    // apply each page in each category and gather error messages
     QString errorMessage;
     for (OptionCategory *category : m_categoryModel->categories()) {
         for (OptionPage *page : category->pages()) {
-            if (!page->apply()) {
-                if (errorMessage.isEmpty()) {
-                    errorMessage = tr("<p><b>Errors occured when applying changes:</b></p><ul>");
-                }
-                QStringList &errors = const_cast<OptionPage *>(page)->errors();
-                if (errors.isEmpty()) {
+            if (!page->hasBeenShown() || page->apply()) {
+                // nothing to apply or no error
+                continue;
+            }
+
+            // add error message
+            if (errorMessage.isEmpty()) {
+                errorMessage = tr("<p><b>Errors occured when applying changes:</b></p><ul>");
+            }
+            QStringList &errors = const_cast<OptionPage *>(page)->errors();
+            if (errors.isEmpty()) {
+                errorMessage.append(QStringLiteral("<li><i>") % category->displayName() % QLatin1Char('/') % page->widget()->windowTitle()
+                    % QStringLiteral("</i>: ") % tr("unknonw error") % QStringLiteral("</li>"));
+            } else {
+                for (const QString &error : errors) {
                     errorMessage.append(QStringLiteral("<li><i>") % category->displayName() % QLatin1Char('/') % page->widget()->windowTitle()
-                        % QStringLiteral("</i>: ") % tr("unknonw error") % QStringLiteral("</li>"));
-                } else {
-                    for (const QString &error : errors) {
-                        errorMessage.append(QStringLiteral("<li><i>") % category->displayName() % QLatin1Char('/') % page->widget()->windowTitle()
-                            % QStringLiteral("</i>: ") % error % QStringLiteral("</li>"));
-                    }
-                    errors.clear();
+                        % QStringLiteral("</i>: ") % error % QStringLiteral("</li>"));
                 }
+                errors.clear();
             }
         }
     }
+
+    // show error messages (if errors occured)
     if (!errorMessage.isEmpty()) {
         errorMessage.append(QStringLiteral("</ul>"));
         QMessageBox::warning(this, windowTitle(), errorMessage);
     }
+
+    // return status
     emit applied();
     return errorMessage.isEmpty();
 }

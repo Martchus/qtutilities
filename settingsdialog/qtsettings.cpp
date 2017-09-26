@@ -231,42 +231,38 @@ QtAppearanceOptionPage::~QtAppearanceOptionPage()
 
 bool QtAppearanceOptionPage::apply()
 {
-    if (hasBeenShown()) {
-        m_settings.font = ui()->fontComboBox->font();
-        m_settings.customFont = !ui()->fontCheckBox->isChecked();
-        m_settings.widgetStyle = ui()->widgetStyleComboBox->currentText();
-        m_settings.customWidgetStyle = !ui()->widgetStyleCheckBox->isChecked();
-        m_settings.styleSheetPath = ui()->styleSheetPathSelection->lineEdit()->text();
-        m_settings.customStyleSheet = !ui()->styleSheetCheckBox->isChecked();
-        m_settings.palette = ui()->paletteToolButton->palette();
-        m_settings.customPalette = !ui()->paletteCheckBox->isChecked();
-        m_settings.iconTheme = ui()->iconThemeComboBox->currentIndex() != -1 ? ui()->iconThemeComboBox->currentData().toString()
-                                                                             : ui()->iconThemeComboBox->currentText();
-        m_settings.customIconTheme = !ui()->iconThemeCheckBox->isChecked();
-    }
+    m_settings.font = ui()->fontComboBox->font();
+    m_settings.customFont = !ui()->fontCheckBox->isChecked();
+    m_settings.widgetStyle = ui()->widgetStyleComboBox->currentText();
+    m_settings.customWidgetStyle = !ui()->widgetStyleCheckBox->isChecked();
+    m_settings.styleSheetPath = ui()->styleSheetPathSelection->lineEdit()->text();
+    m_settings.customStyleSheet = !ui()->styleSheetCheckBox->isChecked();
+    m_settings.palette = ui()->paletteToolButton->palette();
+    m_settings.customPalette = !ui()->paletteCheckBox->isChecked();
+    m_settings.iconTheme
+        = ui()->iconThemeComboBox->currentIndex() != -1 ? ui()->iconThemeComboBox->currentData().toString() : ui()->iconThemeComboBox->currentText();
+    m_settings.customIconTheme = !ui()->iconThemeCheckBox->isChecked();
     return true;
 }
 
 void QtAppearanceOptionPage::reset()
 {
-    if (hasBeenShown()) {
-        ui()->fontComboBox->setCurrentFont(m_settings.font);
-        ui()->fontCheckBox->setChecked(!m_settings.customFont);
-        ui()->widgetStyleComboBox->setCurrentText(
-            m_settings.widgetStyle.isEmpty() ? (QApplication::style() ? QApplication::style()->objectName() : QString()) : m_settings.widgetStyle);
-        ui()->widgetStyleCheckBox->setChecked(!m_settings.customWidgetStyle);
-        ui()->styleSheetPathSelection->lineEdit()->setText(m_settings.styleSheetPath);
-        ui()->styleSheetCheckBox->setChecked(!m_settings.customStyleSheet);
-        ui()->paletteToolButton->setPalette(m_settings.palette);
-        ui()->paletteCheckBox->setChecked(!m_settings.customPalette);
-        int iconThemeIndex = ui()->iconThemeComboBox->findData(m_settings.iconTheme);
-        if (iconThemeIndex != -1) {
-            ui()->iconThemeComboBox->setCurrentIndex(iconThemeIndex);
-        } else {
-            ui()->iconThemeComboBox->setCurrentText(m_settings.iconTheme);
-        }
-        ui()->iconThemeCheckBox->setChecked(!m_settings.customIconTheme);
+    ui()->fontComboBox->setCurrentFont(m_settings.font);
+    ui()->fontCheckBox->setChecked(!m_settings.customFont);
+    ui()->widgetStyleComboBox->setCurrentText(
+        m_settings.widgetStyle.isEmpty() ? (QApplication::style() ? QApplication::style()->objectName() : QString()) : m_settings.widgetStyle);
+    ui()->widgetStyleCheckBox->setChecked(!m_settings.customWidgetStyle);
+    ui()->styleSheetPathSelection->lineEdit()->setText(m_settings.styleSheetPath);
+    ui()->styleSheetCheckBox->setChecked(!m_settings.customStyleSheet);
+    ui()->paletteToolButton->setPalette(m_settings.palette);
+    ui()->paletteCheckBox->setChecked(!m_settings.customPalette);
+    int iconThemeIndex = ui()->iconThemeComboBox->findData(m_settings.iconTheme);
+    if (iconThemeIndex != -1) {
+        ui()->iconThemeComboBox->setCurrentIndex(iconThemeIndex);
+    } else {
+        ui()->iconThemeComboBox->setCurrentText(m_settings.iconTheme);
     }
+    ui()->iconThemeCheckBox->setChecked(!m_settings.customIconTheme);
 }
 
 QWidget *QtAppearanceOptionPage::setupWidget()
@@ -342,19 +338,15 @@ QtLanguageOptionPage::~QtLanguageOptionPage()
 
 bool QtLanguageOptionPage::apply()
 {
-    if (hasBeenShown()) {
-        m_settings.localeName = ui()->localeComboBox->currentText();
-        m_settings.customLocale = !ui()->localeCheckBox->isChecked();
-    }
+    m_settings.localeName = ui()->localeComboBox->currentText();
+    m_settings.customLocale = !ui()->localeCheckBox->isChecked();
     return true;
 }
 
 void QtLanguageOptionPage::reset()
 {
-    if (hasBeenShown()) {
-        ui()->localeComboBox->setCurrentText(m_settings.localeName);
-        ui()->localeCheckBox->setChecked(!m_settings.customLocale);
-    }
+    ui()->localeComboBox->setCurrentText(m_settings.localeName);
+    ui()->localeCheckBox->setChecked(!m_settings.customLocale);
 }
 
 QWidget *QtLanguageOptionPage::setupWidget()
@@ -391,21 +383,17 @@ QtEnvOptionPage::~QtEnvOptionPage()
 
 bool QtEnvOptionPage::apply()
 {
-    if (hasBeenShown()) {
-        m_settings.additionalPluginDirectory = ui()->pluginPathSelection->lineEdit()->text();
-        m_settings.additionalIconThemeSearchPath = ui()->iconThemeSearchPathSelection->lineEdit()->text();
-        TranslationFiles::additionalTranslationFilePath() = ui()->translationPathSelection->lineEdit()->text();
-    }
+    m_settings.additionalPluginDirectory = ui()->pluginPathSelection->lineEdit()->text();
+    m_settings.additionalIconThemeSearchPath = ui()->iconThemeSearchPathSelection->lineEdit()->text();
+    TranslationFiles::additionalTranslationFilePath() = ui()->translationPathSelection->lineEdit()->text();
     return true;
 }
 
 void QtEnvOptionPage::reset()
 {
-    if (hasBeenShown()) {
-        ui()->pluginPathSelection->lineEdit()->setText(m_settings.additionalPluginDirectory);
-        ui()->iconThemeSearchPathSelection->lineEdit()->setText(m_settings.additionalIconThemeSearchPath);
-        ui()->translationPathSelection->lineEdit()->setText(TranslationFiles::additionalTranslationFilePath());
-    }
+    ui()->pluginPathSelection->lineEdit()->setText(m_settings.additionalPluginDirectory);
+    ui()->iconThemeSearchPathSelection->lineEdit()->setText(m_settings.additionalIconThemeSearchPath);
+    ui()->translationPathSelection->lineEdit()->setText(TranslationFiles::additionalTranslationFilePath());
 }
 } // namespace Dialogs
 
