@@ -286,7 +286,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="53"/>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="148"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="150"/>
         <source>No category selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,12 +311,12 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="236"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="245"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occured when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="241"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="250"/>
         <source>unknonw error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -365,7 +365,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="375"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="367"/>
         <source>recognized by Qt as</source>
         <translation type="unfinished"></translation>
     </message>
