@@ -180,7 +180,12 @@ if(ENABLE_QT_TRANSLATIONS AND TS_FILES)
         ${TS_FILES}
         OPTIONS ${LUPDATE_OPTIONS}
     )
-    add_custom_target(${META_PROJECT_NAME}_translations ALL DEPENDS ${QM_FILES})
+    add_custom_target(${META_PROJECT_NAME}_translations DEPENDS ${QM_FILES})
+    if(NOT TARGET translations)
+        add_custom_target(translations DEPENDS ${META_PROJECT_NAME}_translations)
+    else()
+        add_dependencies(translations ${META_PROJECT_NAME}_translations)
+    endif()
 
     # add install target for translations
     if(NOT META_NO_INSTALL_TARGETS AND ENABLE_INSTALL_TARGETS)
