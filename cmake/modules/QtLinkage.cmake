@@ -66,6 +66,13 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
                     message(WARNING "Building static libs and/or static Qt linkage has been enabled. Hence assuming provided Qt 5 module ${MODULE} is static.")
                 endif()
             endif()
+
+            # use INTERFACE_LINK_LIBRARIES_RELEASE of the imported target as general INTERFACE_LINK_LIBRARIES to get correct transitive dependencies
+            # under any configuration
+            if(StaticQt5${MODULE}_FOUND OR Qt5${MODULE}_FOUND)
+                get_target_property(QT5_${MODULE}_STATIC_LIB_DEPS "${QT5_${MODULE}_STATIC_LIB}" INTERFACE_LINK_LIBRARIES_RELEASE)
+                set_target_properties("${QT5_${MODULE}_STATIC_LIB}" PROPERTIES INTERFACE_LINK_LIBRARIES "${QT5_${MODULE}_STATIC_LIB_DEPS}")
+            endif()
         endif()
 
         # find dynamic version
