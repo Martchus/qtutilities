@@ -98,6 +98,23 @@ if(USING_STATIC_QT_GUI_FOR_APPLICATION)
         message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
     endif()
 
+    # ensure all available widget style plugins are built-in when creating a Qt Widgets application
+    # note: required since Qt 5.10 because the styles have been "pluginized" (see commit 4f3249f)
+    set(KNOWN_WIDGET_STYLE_PLUGINS WindowsVistaStyle MacStyle AndroidStyle)
+    set(USED_WIDGET_STYLE_PLUGINS)
+    if(QT5_Widgets_STATIC_LIB IN_LIST LIBRARIES OR QT5_Widgets_STATIC_LIB IN_LIST PRIVATE_LIBRARIES)
+        foreach(WIDGET_STYLE_PLUGIN ${KNOWN_WIDGET_STYLE_PLUGINS})
+            if(TARGET "${QT5_Widgets_STATIC_PREFIX}Q${WIDGET_STYLE_PLUGIN}Plugin")
+                use_static_qt5_plugin(Widgets "${WIDGET_STYLE_PLUGIN}" ON OFF)
+                list(APPEND USED_WIDGET_STYLE_PLUGINS "${WIDGET_STYLE_PLUGIN}")
+            endif()
+        endforeach()
+
+        # allow importing image format plugins via config.h
+        include(ListToString)
+        list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${USED_WIDGET_STYLE_PLUGINS}" WIDGET_STYLE_PLUGINS_ARRAY)
+    endif()
+
     # ensure image format plugins (beside SVG) are built-in if configured
     if(IMAGE_FORMAT_SUPPORT)
         foreach(IMAGE_FORMAT ${IMAGE_FORMAT_SUPPORT})
