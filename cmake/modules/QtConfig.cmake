@@ -151,10 +151,17 @@ option(BUILTIN_TRANSLATIONS "enables/disables built-in translations when buildin
 set(QT_TRANSLATION_FILES)
 set(QT_TRANSLATION_SEARCH_PATHS)
 if(CMAKE_FIND_ROOT_PATH)
-    list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_FIND_ROOT_PATH}/share/qt/translations")
+    list(APPEND QT_TRANSLATION_SEARCH_PATHS
+        "${CMAKE_FIND_ROOT_PATH}/share/qt/translations"
+        "${CMAKE_FIND_ROOT_PATH}/share/qt5/translations"
+    )
 endif()
-list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_INSTALL_PREFIX}/share/qt/translations")
-list(APPEND QT_TRANSLATION_SEARCH_PATHS "/usr/share/qt/translations")
+list(APPEND QT_TRANSLATION_SEARCH_PATHS
+    "${CMAKE_INSTALL_PREFIX}/share/qt/translations"
+    "${CMAKE_INSTALL_PREFIX}/share/qt5/translations"
+    "/usr/share/qt/translations"
+    "/usr/share/qt5/translations"
+)
 foreach(QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
     if(IS_DIRECTORY "${QT_TRANSLATION_PATH}")
         foreach(QT_REPO ${QT_REPOS})
