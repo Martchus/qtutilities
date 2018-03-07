@@ -96,6 +96,7 @@ set(CMAKE_MODULE_FILES
 )
 
 set(CMAKE_TEMPLATE_FILES
+    cmake/templates/qtconfig.h.in
     cmake/templates/webviewdefs.h.in
     cmake/templates/webviewincludes.h.in
     cmake/templates/jsdefs.h.in
@@ -177,7 +178,7 @@ else()
 endif()
 
 # find c++utilities
-find_package(c++utilities 4.12.0 REQUIRED)
+find_package(c++utilities 4.13.0 REQUIRED)
 use_cpp_utilities()
 
 # include modules to apply configuration

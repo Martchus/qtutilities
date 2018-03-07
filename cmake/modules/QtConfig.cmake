@@ -408,4 +408,12 @@ if(WIDGETS_UI_FILES AND WIDGETS_GUI)
     endif()
 endif()
 
+# add configuration header for Qt-specific configuration
+include(TemplateFinder)
+find_template_file("qtconfig.h" QT_UTILITIES QT_CONFIG_H_TEMPLATE_FILE)
+configure_file(
+    "${QT_CONFIG_H_TEMPLATE_FILE}"
+    "${CMAKE_CURRENT_BINARY_DIR}/resources/qtconfig.h"
+)
+
 set(QT_CONFIGURED YES)
