@@ -5,7 +5,9 @@ cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 # this module must always be included before AppTarget/LibraryTarget
 
 # ensure generated sources are processed by AUTOMOC and AUTOUIC
-cmake_policy(SET CMP0071 NEW)
+if(POLICY CMP0071)
+    cmake_policy(SET CMP0071 NEW)
+endif()
 
 if(NOT BASIC_PROJECT_CONFIG_DONE)
     message(FATAL_ERROR "Before including the QtConfig module, the BasicConfig module must be included.")
