@@ -39,12 +39,18 @@ public:
     const QString &icon() const;
     void setIcon(const QString &icon);
     void setIcon(NotificationIcon icon);
+    const QImage image() const;
+    void setImage(const QImage &image);
+    const QString imagePath() const;
+    void setImagePath(const QString &imagePath);
     int timeout() const;
     void setTimeout(int timeout);
     const QStringList &actions() const;
     void setActions(const QStringList &actions);
     const QVariantMap &hints() const;
     QVariantMap &hints();
+    QVariant hint(const QString &name) const;
+    QVariant hint(const QString &name, const QString &fallbackNames...) const;
     bool isVisible() const;
     void deleteOnCloseOrError();
 
@@ -121,6 +127,42 @@ inline const QString &DBusNotification::icon() const
 inline void DBusNotification::setIcon(const QString &icon)
 {
     m_icon = icon;
+}
+
+/*!
+ * \brief Returns the hint with the specified \a name.
+ */
+inline QVariant DBusNotification::hint(const QString &name) const
+{
+    return m_hints[name];
+}
+
+/*!
+ * \brief Returns the hint with the specified \a name. If no hint is present, the \a fallbackNames are tried in the specified order.
+ */
+inline QVariant DBusNotification::hint(const QString &name, const QString &fallbackNames...) const
+{
+    const auto variant(m_hints[name]);
+    return variant.isNull() ? this->hint(fallbackNames) : variant;
+}
+
+/*!
+ * \brief Returns the image path.
+ * \sa setImagePath() for more details
+ */
+inline const QString DBusNotification::imagePath() const
+{
+    return hint(QStringLiteral("image-data"), QStringLiteral("image_path")).toString();
+}
+
+/*!
+ * \brief Sets the image path.
+ * \remarks
+ * Alternative way to define the notification image; setImage() precedes.
+ */
+inline void DBusNotification::setImagePath(const QString &imagePath)
+{
+    m_hints[QStringLiteral("image-path")] = imagePath;
 }
 
 inline int DBusNotification::timeout() const

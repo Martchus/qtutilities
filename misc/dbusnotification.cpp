@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QDBusConnection>
 #include <QDBusPendingReply>
+#include <QImage>
 
 #include <map>
 
@@ -37,6 +38,120 @@ namespace MiscUtils {
 static std::map<uint, DBusNotification *> pendingNotifications;
 OrgFreedesktopNotificationsInterface *DBusNotification::m_dbusInterface = nullptr;
 /// \endcond
+
+/*!
+ * \brief The SwappedImage struct represents RGB-interved version of the image specified on construction.
+ */
+struct SwappedImage : public QImage {
+    SwappedImage(const QImage &image);
+};
+
+inline SwappedImage::SwappedImage(const QImage &image)
+    : QImage(image.rgbSwapped())
+{
+}
+
+/*!
+ * \brief The ImageData struct is a raw data image format.
+ *
+ * It describes the width, height, rowstride, has alpha, bits per sample, channels and image data respectively.
+ */
+struct NotificationImage {
+    NotificationImage();
+    NotificationImage(const QVariant &imageData);
+    NotificationImage(SwappedImage image);
+    QImage toQImage() const;
+    QVariant toDBusArgument() const;
+
+    qint32 width;
+    qint32 height;
+    qint32 rowstride;
+    bool hasAlpha;
+    qint32 channels;
+    qint32 bitsPerSample;
+    QByteArray data;
+    bool isValid;
+
+private:
+    NotificationImage(const QImage &image);
+};
+
+QDBusArgument &operator<<(QDBusArgument &argument, const NotificationImage &img)
+{
+    argument.beginStructure();
+    argument << img.width;
+    argument << img.height;
+    argument << img.rowstride;
+    argument << img.hasAlpha;
+    argument << img.bitsPerSample;
+    argument << img.channels;
+    argument << img.data;
+    argument.endStructure();
+    return argument;
+}
+
+const QDBusArgument &operator>>(const QDBusArgument &argument, NotificationImage &img)
+{
+    argument.beginStructure();
+    argument >> img.width;
+    argument >> img.height;
+    argument >> img.rowstride;
+    argument >> img.hasAlpha;
+    argument >> img.bitsPerSample;
+    argument >> img.channels;
+    argument >> img.data;
+    argument.endStructure();
+    return argument;
+}
+
+inline NotificationImage::NotificationImage()
+    : isValid(false)
+{
+}
+
+inline NotificationImage::NotificationImage(const QVariant &imageData)
+    : isValid(imageData.canConvert<QDBusArgument>())
+{
+    if (isValid) {
+        imageData.value<QDBusArgument>() >> *this;
+    }
+}
+
+NotificationImage::NotificationImage(SwappedImage image)
+    : NotificationImage(static_cast<const QImage &>(image))
+{
+}
+
+inline NotificationImage::NotificationImage(const QImage &image)
+    : width(image.width())
+    , height(image.height())
+    , rowstride(image.bytesPerLine())
+    , hasAlpha(image.hasAlphaChannel())
+    , channels(image.isGrayscale() ? 1 : hasAlpha ? 4 : 3)
+    , bitsPerSample(image.depth() / channels)
+    , data(reinterpret_cast<const char *>(image.bits()), image.byteCount())
+    , isValid(!image.isNull())
+{
+}
+
+inline QImage NotificationImage::toQImage() const
+{
+    return isValid ? QImage(reinterpret_cast<const uchar *>(data.constData()), width, height, hasAlpha ? QImage::Format_ARGB32 : QImage::Format_RGB32)
+                         .rgbSwapped()
+                   : QImage();
+}
+
+inline QVariant NotificationImage::toDBusArgument() const
+{
+    QDBusArgument arg;
+    return QVariant::fromValue(isValid ? arg << *this : arg);
+}
+
+} // namespace MiscUtils
+
+Q_DECLARE_METATYPE(MiscUtils::NotificationImage);
+
+namespace MiscUtils {
 
 /*!
  * \brief Creates a new notification (which is *not* shown instantly).
@@ -117,6 +232,26 @@ void DBusNotification::setIcon(NotificationIcon icon)
         break;
     default:;
     }
+}
+
+/*!
+ * \brief Returns the image.
+ * \sa setImage() for more details
+ */
+const QImage DBusNotification::image() const
+{
+    return NotificationImage(hint(QStringLiteral("image-data"), QStringLiteral("image_data"))).toQImage();
+}
+
+/*!
+ * \brief Sets the image.
+ * \remarks
+ * \a image is a raw data image format which describes the width, height, rowstride,
+ * has alpha, bits per sample, channels and image data respectively.
+ */
+void DBusNotification::setImage(const QImage &image)
+{
+    m_hints[QStringLiteral("image-data")] = NotificationImage(SwappedImage(image)).toDBusArgument();
 }
 
 /*!
