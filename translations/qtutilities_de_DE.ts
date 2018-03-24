@@ -39,12 +39,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="55"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="60"/>
         <source>developed by %1</source>
         <translation>entwickelt von %1</translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="57"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="71"/>
+        <source>Linked against:</source>
+        <translation>Gegen folgende Bibliotheken gelinkt:</translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="74"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation>Für Aktualisierung und Melden von Fehlern besuche die &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;Webseite des Projekts&lt;/a&gt;.</translation>
     </message>
