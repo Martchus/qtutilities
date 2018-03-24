@@ -54,7 +54,7 @@ QT_UTILITIES_EXPORT bool hasWidgetsApp();
 QT_UTILITIES_EXPORT bool hasGuiApp();
 #endif
 QT_UTILITIES_EXPORT bool hasCoreApp();
-}
+} // namespace ApplicationInstances
 
 namespace ConfigFile {
 

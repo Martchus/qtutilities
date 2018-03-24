@@ -268,7 +268,7 @@ bool hasCoreApp()
 {
     return qobject_cast<QCoreApplication *>(QCoreApplication::instance()) != nullptr;
 }
-}
+} // namespace ApplicationInstances
 
 /*!
  * \brief Provides convenience functions for handling config files.
