@@ -4,6 +4,7 @@
 #include "../global.h"
 
 #include <QObject>
+#include <QSet>
 #include <QVariantMap>
 
 QT_FORWARD_DECLARE_CLASS(QDBusPendingCallWatcher)
@@ -26,6 +27,26 @@ class QT_UTILITIES_EXPORT DBusNotification : public QObject {
     Q_PROPERTY(bool visible READ isVisible)
 
 public:
+    class QT_UTILITIES_EXPORT Capabilities : public QSet<QString> {
+    public:
+        explicit Capabilities();
+        explicit Capabilities(const QStringList &capabilities);
+        bool isValid() const;
+        bool supportsBody() const;
+        bool supportsLinks() const;
+        bool supportsMarkup() const;
+        bool supportsImages() const;
+        bool supportsIcon() const;
+        bool supportsActions() const;
+        bool supportsAnimatedIcon() const;
+        bool supportsActionIcons() const;
+        bool supportsSound() const;
+        bool supportsPercistence() const;
+
+    private:
+        bool m_valid;
+    };
+
     explicit DBusNotification(
         const QString &title, NotificationIcon icon = NotificationIcon::Information, int timeout = 10000, QObject *parent = nullptr);
     explicit DBusNotification(const QString &title, const QString &icon, int timeout = 10000, QObject *parent = nullptr);
@@ -53,6 +74,7 @@ public:
     QVariant hint(const QString &name, const QString &fallbackNames...) const;
     bool isVisible() const;
     void deleteOnCloseOrError();
+    static bool queryCapabilities(const std::function<void(Capabilities &&capabilities)> &callback);
 
 public Q_SLOTS:
     bool show();
@@ -86,8 +108,74 @@ private:
     int m_timeout;
     QStringList m_actions;
     QVariantMap m_hints;
-    static OrgFreedesktopNotificationsInterface *m_dbusInterface;
+    static OrgFreedesktopNotificationsInterface *s_dbusInterface;
 };
+
+inline DBusNotification::Capabilities::Capabilities()
+    : m_valid(false)
+{
+}
+
+inline DBusNotification::Capabilities::Capabilities(const QStringList &capabilities)
+    : QSet<QString>(capabilities.toSet())
+    , m_valid(true)
+{
+}
+
+inline bool DBusNotification::Capabilities::isValid() const
+{
+    return m_valid;
+}
+
+inline bool DBusNotification::Capabilities::supportsBody() const
+{
+    return contains(QStringLiteral("body"));
+}
+
+inline bool DBusNotification::Capabilities::supportsLinks() const
+{
+    return contains(QStringLiteral("body-hyperlinks"));
+}
+
+inline bool DBusNotification::Capabilities::supportsMarkup() const
+{
+    return contains(QStringLiteral("body-markup"));
+}
+
+inline bool DBusNotification::Capabilities::supportsImages() const
+{
+    return contains(QStringLiteral("body-images"));
+}
+
+inline bool DBusNotification::Capabilities::supportsIcon() const
+{
+    return contains(QStringLiteral("icon-static")) || supportsAnimatedIcon();
+}
+
+inline bool DBusNotification::Capabilities::supportsActions() const
+{
+    return contains(QStringLiteral("actions"));
+}
+
+inline bool DBusNotification::Capabilities::supportsAnimatedIcon() const
+{
+    return contains(QStringLiteral("icon-multi"));
+}
+
+inline bool DBusNotification::Capabilities::supportsActionIcons() const
+{
+    return contains(QStringLiteral("action-icons"));
+}
+
+inline bool DBusNotification::Capabilities::supportsSound() const
+{
+    return contains(QStringLiteral("sound"));
+}
+
+inline bool DBusNotification::Capabilities::supportsPercistence() const
+{
+    return contains(QStringLiteral("persistence"));
+}
 
 inline const QString &DBusNotification::title() const
 {

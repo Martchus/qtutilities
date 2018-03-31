@@ -36,7 +36,7 @@ namespace MiscUtils {
 
 /// \cond
 static std::map<uint, DBusNotification *> pendingNotifications;
-OrgFreedesktopNotificationsInterface *DBusNotification::m_dbusInterface = nullptr;
+OrgFreedesktopNotificationsInterface *DBusNotification::s_dbusInterface = nullptr;
 /// \endcond
 
 /*!
@@ -186,11 +186,11 @@ DBusNotification::DBusNotification(const QString &title, const QString &icon, in
  */
 void DBusNotification::initInterface()
 {
-    if (!m_dbusInterface) {
-        m_dbusInterface = new OrgFreedesktopNotificationsInterface(
+    if (!s_dbusInterface) {
+        s_dbusInterface = new OrgFreedesktopNotificationsInterface(
             QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("/org/freedesktop/Notifications"), QDBusConnection::sessionBus());
-        connect(m_dbusInterface, &OrgFreedesktopNotificationsInterface::ActionInvoked, &DBusNotification::handleActionInvoked);
-        connect(m_dbusInterface, &OrgFreedesktopNotificationsInterface::NotificationClosed, &DBusNotification::handleNotificationClosed);
+        connect(s_dbusInterface, &OrgFreedesktopNotificationsInterface::ActionInvoked, &DBusNotification::handleActionInvoked);
+        connect(s_dbusInterface, &OrgFreedesktopNotificationsInterface::NotificationClosed, &DBusNotification::handleNotificationClosed);
     }
 }
 
@@ -212,7 +212,7 @@ DBusNotification::~DBusNotification()
 bool DBusNotification::isAvailable()
 {
     initInterface();
-    return m_dbusInterface->isValid();
+    return s_dbusInterface->isValid();
 }
 
 /*!
@@ -273,14 +273,14 @@ void DBusNotification::deleteOnCloseOrError()
  */
 bool DBusNotification::show()
 {
-    if (!m_dbusInterface->isValid()) {
+    if (!s_dbusInterface->isValid()) {
         emit error();
         return false;
     }
 
     delete m_watcher;
     m_watcher = new QDBusPendingCallWatcher(
-        m_dbusInterface->Notify(QCoreApplication::applicationName(), m_id, m_icon, m_title, m_msg, m_actions, m_hints, m_timeout), this);
+        s_dbusInterface->Notify(QCoreApplication::applicationName(), m_id, m_icon, m_title, m_msg, m_actions, m_hints, m_timeout), this);
     connect(m_watcher, &QDBusPendingCallWatcher::finished, this, &DBusNotification::handleNotifyResult);
     return true;
 }
@@ -324,15 +324,38 @@ bool DBusNotification::update(const QString &line)
     return show();
 }
 
+bool DBusNotification::queryCapabilities(const std::function<void(Capabilities &&capabilities)> &callback)
+{
+    // ensure DBus-interface is initialized and valid
+    initInterface();
+    if (!s_dbusInterface->isValid()) {
+        return false;
+    }
+
+    // invoke GetCapabilities() and pass the return value to the callback when available
+    const auto *const watcher = new QDBusPendingCallWatcher(s_dbusInterface->GetCapabilities());
+    connect(watcher, &QDBusPendingCallWatcher::finished, [&callback](QDBusPendingCallWatcher *watcher) {
+        watcher->deleteLater();
+        const QDBusPendingReply<QStringList> returnValue(*watcher);
+        if (returnValue.isError()) {
+            callback(Capabilities());
+        } else {
+            callback(Capabilities(move(returnValue.value())));
+        }
+    });
+    return true;
+}
+
 /*!
  * \brief Hides the notification (if still visible).
  * \remarks On success, the signal closed() is emitted with the reason
  * NotificationCloseReason::Manually.
+ * \todo Add return value in v6.
  */
 void DBusNotification::hide()
 {
     if (m_id) {
-        m_dbusInterface->CloseNotification(m_id);
+        s_dbusInterface->CloseNotification(m_id);
     }
 }
 
@@ -389,7 +412,7 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
         pendingNotifications.erase(i);
         // however, lxqt-notificationd does not close the notification
         // -> close manually for consistent behaviour
-        m_dbusInterface->CloseNotification(i->first);
+        s_dbusInterface->CloseNotification(i->first);
     }
 }
 
