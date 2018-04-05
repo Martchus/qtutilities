@@ -7,6 +7,8 @@
 #include <QSet>
 #include <QVariantMap>
 
+#include <functional>
+
 QT_FORWARD_DECLARE_CLASS(QDBusPendingCallWatcher)
 
 class OrgFreedesktopNotificationsInterface;
