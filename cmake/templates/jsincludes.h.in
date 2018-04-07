@@ -12,7 +12,7 @@
 #elif defined(@META_PROJECT_VARNAME_UPPER@_USE_SCRIPT)
 # include <QScriptEngine>
 # include <QScriptValue>
-#elif !defined(@META_PROJECT_VARNAME_UPPER@_NO_WEBVIEW)
+#elif !defined(@META_PROJECT_VARNAME_UPPER@_NO_JSENGINE)
 # error "No definition for JavaScript provider present."
 #endif
 

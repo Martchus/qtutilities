@@ -22,7 +22,7 @@
 # define @META_PROJECT_VARNAME_UPPER@_JS_QOBJECT(engine, obj) engine.newQObject(obj, QScriptEngine::ScriptOwnership)
 # define @META_PROJECT_VARNAME_UPPER@_JS_INT(value) value.toInt32()
 # define @META_PROJECT_VARNAME_UPPER@_JS_IS_VALID_PROG(program) (!program.isError() && program.isFunction())
-#elif !defined(@META_PROJECT_VARNAME_UPPER@_NO_WEBVIEW)
+#elif !defined(@META_PROJECT_VARNAME_UPPER@_NO_JSENGINE)
 # error "No definition for JavaScript provider present."
 #endif
 
