@@ -1,4 +1,4 @@
-// Created via CMake from template webviewdefs.h.in
+// Created via CMake from template jsincludes.h.in
 // WARNING! Any changes to this file will be overwritten by the next CMake run!
 
 #ifndef @META_PROJECT_VARNAME_UPPER@_JAVA_SCRIPT_INCLUDES
