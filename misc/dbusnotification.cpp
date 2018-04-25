@@ -52,7 +52,7 @@ inline SwappedImage::SwappedImage(const QImage &image)
 }
 
 /*!
- * \brief The ImageData struct is a raw data image format.
+ * \brief The NotificationImage struct is a raw data image format.
  *
  * It describes the width, height, rowstride, has alpha, bits per sample, channels and image data respectively.
  */
