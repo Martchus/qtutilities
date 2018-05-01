@@ -56,12 +56,12 @@ inline SwappedImage::SwappedImage(const QImage &image)
  *
  * It describes the width, height, rowstride, has alpha, bits per sample, channels and image data respectively.
  */
-struct NotificationImage {
+struct NotificationImage : public QDBusArgument {
     NotificationImage();
-    NotificationImage(const QVariant &imageData);
     NotificationImage(SwappedImage image);
     QImage toQImage() const;
     QVariant toDBusArgument() const;
+    static NotificationImage fromDBusArgument(const QVariant &variant);
 
     qint32 width;
     qint32 height;
@@ -79,13 +79,7 @@ private:
 QDBusArgument &operator<<(QDBusArgument &argument, const NotificationImage &img)
 {
     argument.beginStructure();
-    argument << img.width;
-    argument << img.height;
-    argument << img.rowstride;
-    argument << img.hasAlpha;
-    argument << img.bitsPerSample;
-    argument << img.channels;
-    argument << img.data;
+    argument << img.width << img.height << img.rowstride << img.hasAlpha << img.bitsPerSample << img.channels << img.data;
     argument.endStructure();
     return argument;
 }
@@ -93,13 +87,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const NotificationImage &img)
 const QDBusArgument &operator>>(const QDBusArgument &argument, NotificationImage &img)
 {
     argument.beginStructure();
-    argument >> img.width;
-    argument >> img.height;
-    argument >> img.rowstride;
-    argument >> img.hasAlpha;
-    argument >> img.bitsPerSample;
-    argument >> img.channels;
-    argument >> img.data;
+    argument >> img.width >> img.height >> img.rowstride >> img.hasAlpha >> img.bitsPerSample >> img.channels >> img.data;
     argument.endStructure();
     return argument;
 }
@@ -109,15 +97,7 @@ inline NotificationImage::NotificationImage()
 {
 }
 
-inline NotificationImage::NotificationImage(const QVariant &imageData)
-    : isValid(imageData.canConvert<QDBusArgument>())
-{
-    if (isValid) {
-        imageData.value<QDBusArgument>() >> *this;
-    }
-}
-
-NotificationImage::NotificationImage(SwappedImage image)
+inline NotificationImage::NotificationImage(SwappedImage image)
     : NotificationImage(static_cast<const QImage &>(image))
 {
 }
@@ -132,6 +112,11 @@ inline NotificationImage::NotificationImage(const QImage &image)
     , data(reinterpret_cast<const char *>(image.bits()), image.byteCount())
     , isValid(!image.isNull())
 {
+    if (isValid) {
+        // populate QDBusArgument structure
+        // note: Just use the operator overload which is required for qDBusMarshallHelper().
+        *this << *this;
+    }
 }
 
 inline QImage NotificationImage::toQImage() const
@@ -143,8 +128,12 @@ inline QImage NotificationImage::toQImage() const
 
 inline QVariant NotificationImage::toDBusArgument() const
 {
-    QDBusArgument arg;
-    return QVariant::fromValue(isValid ? arg << *this : arg);
+    return QVariant::fromValue(*this);
+}
+
+inline NotificationImage NotificationImage::fromDBusArgument(const QVariant &variant)
+{
+    return variant.canConvert<NotificationImage>() ? variant.value<NotificationImage>() : NotificationImage();
 }
 
 } // namespace MiscUtils
@@ -187,6 +176,7 @@ DBusNotification::DBusNotification(const QString &title, const QString &icon, in
 void DBusNotification::initInterface()
 {
     if (!s_dbusInterface) {
+        qDBusRegisterMetaType<NotificationImage>();
         s_dbusInterface = new OrgFreedesktopNotificationsInterface(
             QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("/org/freedesktop/Notifications"), QDBusConnection::sessionBus());
         connect(s_dbusInterface, &OrgFreedesktopNotificationsInterface::ActionInvoked, &DBusNotification::handleActionInvoked);
@@ -240,7 +230,7 @@ void DBusNotification::setIcon(NotificationIcon icon)
  */
 const QImage DBusNotification::image() const
 {
-    return NotificationImage(hint(QStringLiteral("image-data"), QStringLiteral("image_data"))).toQImage();
+    return NotificationImage::fromDBusArgument(hint(QStringLiteral("image-data"), QStringLiteral("image_data"))).toQImage();
 }
 
 /*!
