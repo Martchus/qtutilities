@@ -42,7 +42,7 @@ namespace Dialogs {
  * standard information icon will be used.
  */
 AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version,
-    std::initializer_list<const char *> dependencyVersions, const QString &website, const QString &description, const QImage &image)
+    const std::vector<const char *> &dependencyVersions, const QString &website, const QString &description, const QImage &image)
     : QDialog(parent)
     , m_ui(new Ui::AboutDialog)
 {
@@ -59,13 +59,11 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
     }
     m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
     m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
-    if (!dependencyVersions.size()) {
-        dependencyVersions = ApplicationUtilities::dependencyVersions;
-    }
-    if (dependencyVersions.size()) {
+    const auto &deps(dependencyVersions.size() ? dependencyVersions : ApplicationUtilities::dependencyVersions2);
+    if (deps.size()) {
         QStringList linkedAgainst;
-        linkedAgainst.reserve(dependencyVersions.size());
-        for (const auto &dependencyVersion : dependencyVersions) {
+        linkedAgainst.reserve(deps.size());
+        for (const auto &dependencyVersion : deps) {
             linkedAgainst << QString::fromUtf8(dependencyVersion);
         }
         m_ui->versionLabel->setToolTip(QStringLiteral("<p>") % tr("Linked against:") % QStringLiteral("</p><ul><li>")
@@ -89,6 +87,12 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
 AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version, const QString &website,
     const QString &description, const QImage &image)
     : AboutDialog(parent, applicationName, creator, version, {}, website, description, image)
+{
+}
+
+AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version,
+    std::initializer_list<const char *> dependencyVersions, const QString &website, const QString &description, const QImage &image)
+    : AboutDialog(parent, applicationName, creator, version, std::vector<const char *>(dependencyVersions), website, description, image)
 {
 }
 
