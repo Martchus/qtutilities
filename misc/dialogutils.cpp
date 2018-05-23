@@ -29,7 +29,7 @@ QString generateWindowTitle(DocumentStatus documentStatus, const QString &docume
         if (documentPath.isEmpty()) {
             return QCoreApplication::translate("Utilities::windowTitle", "Unsaved - %1").arg(QCoreApplication::applicationName());
         } else {
-            QFileInfo file(documentPath);
+            const QFileInfo file(documentPath);
             return QCoreApplication::translate("Utilities::windowTitle", "%1 - %2 - %3")
                 .arg(file.fileName(), file.dir().path(), QCoreApplication::applicationName());
         }
@@ -37,7 +37,7 @@ QString generateWindowTitle(DocumentStatus documentStatus, const QString &docume
         if (documentPath.isEmpty()) {
             return QCoreApplication::translate("Utilities::windowTitle", "*Unsaved - %1").arg(QCoreApplication::applicationName());
         } else {
-            QFileInfo file(documentPath);
+            const QFileInfo file(documentPath);
             return QCoreApplication::translate("Utilities::windowTitle", "*%1 - %2 - %3")
                 .arg(file.fileName(), file.dir().path(), QCoreApplication::applicationName());
         }
