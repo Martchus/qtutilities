@@ -36,6 +36,11 @@ if(QUICK_GUI)
         list(APPEND ADDITIONAL_QT_MODULES Quick)
         list(APPEND ADDITIONAL_QT_REPOS "declarative")
         message(STATUS "Building with Qt Quick GUI.")
+
+        # enable QML debugging
+        if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+            list(APPEND META_PRIVATE_COMPILE_DEFINITIONS QT_QML_DEBUG)
+        endif()
     else()
         message(STATUS "Qt Quick GUI is not available.")
     endif()
