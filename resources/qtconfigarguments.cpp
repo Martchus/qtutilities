@@ -28,7 +28,7 @@ QtConfigArguments::QtConfigArguments()
     : m_qtWidgetsGuiArg("qt-widgets-gui", 'g', "shows a Qt widgets based graphical user interface")
     , m_qtQuickGuiArg("qt-quick-gui", 'q', "shows a Qt quick based graphical user interface")
     , m_lngArg("lang", 'l', "sets the language for the Qt GUI")
-    , m_qmlDebuggerArg("qmljsdebugger", '\0',
+    , m_qmlDebuggerArg("qmljsdebugger", 'q',
           "enables QML debugging (see "
           "http://doc.qt.io/qt-5/"
           "qtquick-debugging.html)")
@@ -62,7 +62,7 @@ QtConfigArguments::QtConfigArguments()
     m_fontArg.setRequiredValueCount(2);
     m_fontArg.setCombinable(true);
     m_libraryPathsArg.setValueNames({ "path 1", "path 2" });
-    m_libraryPathsArg.setRequiredValueCount(-1);
+    m_libraryPathsArg.setRequiredValueCount(Argument::varValueCount);
     m_libraryPathsArg.setCombinable(true);
     m_platformThemeArg.setRequiredValueCount(1);
     m_platformThemeArg.setCombinable(true);
