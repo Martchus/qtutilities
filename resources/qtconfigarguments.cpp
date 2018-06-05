@@ -57,7 +57,7 @@ QtConfigArguments::QtConfigArguments()
     m_styleArg.setRequiredValueCount(1);
     m_styleArg.setCombinable(true);
     m_iconThemeArg.setValueNames({ "theme name", "search path 1", "search path 2" });
-    m_iconThemeArg.setRequiredValueCount(-1);
+    m_iconThemeArg.setRequiredValueCount(Argument::varValueCount);
     m_iconThemeArg.setCombinable(true);
     m_fontArg.setValueNames({ "name", "size" });
     m_fontArg.setRequiredValueCount(2);
