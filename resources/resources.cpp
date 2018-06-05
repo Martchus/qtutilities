@@ -4,6 +4,8 @@
 
 #include <QDir>
 #include <QFile>
+#include <QFont>
+#include <QIcon>
 #include <QLibraryInfo>
 #include <QLocale>
 #include <QSettings>
@@ -12,13 +14,8 @@
 #include <QTranslator>
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #include <QApplication>
-#include <QFont>
-#include <QIcon>
-#include <QStyleFactory>
 #elif defined(QT_UTILITIES_GUI_QTQUICK)
-#include <QFont>
 #include <QGuiApplication>
-#include <QIcon>
 #else
 #include <QCoreApplication>
 #endif

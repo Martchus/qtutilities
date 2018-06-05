@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QMetaProperty>
 #include <QPainter>
+#include <QStyle>
 #include <QToolButton>
 
 using namespace Widgets;

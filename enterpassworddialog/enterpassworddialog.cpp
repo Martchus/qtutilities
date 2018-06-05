@@ -3,11 +3,14 @@
 
 #include "ui_enterpassworddialog.h"
 
+#include <QApplication>
 #include <QEvent>
 #include <QGraphicsPixmapItem>
-#include <QGuiApplication>
+#include <QGraphicsScene>
+#include <QIcon>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QStyle>
 
 #ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
 #if defined(Q_OS_WIN32)

@@ -1,6 +1,7 @@
 #include "./iconbutton.h"
 
 #include <QKeyEvent>
+#include <QStyle>
 #include <QStyleOptionFocusRect>
 #include <QStylePainter>
 

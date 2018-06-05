@@ -8,6 +8,7 @@
 #include <QString>
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
 #include <QApplication>
+#include <QStyle>
 #include <QStyleFactory>
 #else
 #include <QGuiApplication>
