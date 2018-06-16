@@ -41,6 +41,11 @@ if(QUICK_GUI)
         if(CMAKE_BUILD_TYPE STREQUAL "Debug")
             list(APPEND META_PRIVATE_COMPILE_DEFINITIONS QT_QML_DEBUG)
         endif()
+
+        # enable Qt Quick Controls 2
+        if(META_USE_QQC2)
+            list(APPEND ADDITIONAL_QT_MODULES QuickControls2)
+        endif()
     else()
         message(STATUS "Qt Quick GUI is not available.")
     endif()
