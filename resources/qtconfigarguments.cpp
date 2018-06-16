@@ -128,7 +128,7 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         if (qEnvironmentVariableIsSet("ICON_THEME_SEARCH_PATH")) {
             QString path;
             path.append(qgetenv("ICON_THEME_SEARCH_PATH"));
-            QIcon::setThemeSearchPaths(QStringList() << path << QStringLiteral(":/icons"));
+            QIcon::setThemeSearchPaths(QStringList({ path, QStringLiteral(":/icons") }));
         } else {
             QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral("../share/icons") << QStringLiteral(":/icons"));
         }
@@ -150,9 +150,7 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         try {
             font.setPointSize(stringToNumber<int>(m_fontArg.values().back()));
         } catch (const ConversionException &) {
-            cerr << "Warning: The specified font size is no number and will be "
-                    "ignored."
-                 << endl;
+            cerr << Phrases::Warning << "The specified font size is no number and will be ignored." << Phrases::EndFlush;
         }
         QGuiApplication::setFont(font);
     }
