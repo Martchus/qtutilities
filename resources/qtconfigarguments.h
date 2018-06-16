@@ -9,9 +9,9 @@
 #include <QQuickStyle>
 
 #if defined(PLATFORM_ANDROID)
-#define QT_UTILITIES_DEFAULT_QCC2_STYLE "material"
+#define QT_UTILITIES_DEFAULT_QQC2_STYLE "material"
 #elif defined(PLATFORM_WINDOWS)
-#define QT_UTILITIES_DEFAULT_QCC2_STYLE "universal"
+#define QT_UTILITIES_DEFAULT_QQC2_STYLE "universal"
 #endif
 #endif
 
@@ -87,7 +87,7 @@ inline void QtConfigArguments::applySettingsForQuickGui() const
     if (m_styleArg.isPresent()) {
         QQuickStyle::setStyle(QString::fromLocal8Bit(m_styleArg.values().front()));
     }
-#ifdef QT_UTILITIES_DEFAULT_QCC2_STYLE
+#ifdef QT_UTILITIES_DEFAULT_QQC2_STYLE
     else if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
         QuickStyle::setStyle(QStringLiteral(QT_UTILITIES_DEFAULT_QCC2_STYLE));
     }
