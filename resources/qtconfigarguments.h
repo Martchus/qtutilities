@@ -8,6 +8,13 @@
 #ifdef QT_UTILITIES_GUI_QTQUICK
 #include <QQuickStyle>
 
+#if defined(PLATFORM_ANDROID)
+#define QT_UTILITIES_DEFAULT_QCC2_STYLE "material"
+#elif defined(PLATFORM_WINDOWS)
+#define QT_UTILITIES_DEFAULT_QCC2_STYLE "universal"
+#endif
+#endif
+
 namespace ApplicationUtilities {
 
 class QT_UTILITIES_EXPORT QtConfigArguments {
@@ -20,6 +27,9 @@ public:
 
     bool areQtGuiArgsPresent() const;
     void applySettings(bool preventApplyingDefaultFont = false) const;
+#ifdef QT_UTILITIES_GUI_QTQUICK
+    void applySettingsForQuickGui() const;
+#endif
 
 private:
     Argument m_qtWidgetsGuiArg;
@@ -77,6 +87,11 @@ inline void QtConfigArguments::applySettingsForQuickGui() const
     if (m_styleArg.isPresent()) {
         QQuickStyle::setStyle(QString::fromLocal8Bit(m_styleArg.values().front()));
     }
+#ifdef QT_UTILITIES_DEFAULT_QCC2_STYLE
+    else if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
+        QuickStyle::setStyle(QStringLiteral(QT_UTILITIES_DEFAULT_QCC2_STYLE));
+    }
+#endif
 }
 #endif
 
