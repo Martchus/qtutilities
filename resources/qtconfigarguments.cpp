@@ -56,13 +56,14 @@ QtConfigArguments::QtConfigArguments()
     m_qmlDebuggerArg.setRequiredValueCount(1);
     m_qmlDebuggerArg.setCombinable(true);
     // appearance
-    m_styleArg.setValueNames({ "style name" });
+    m_styleArg.setValueNames({ "breeze/cleanlooks/fusion/kvantum/oxygen/adwaita/windows/... or default/material/universal/org.kde.desktop" });
     m_styleArg.setRequiredValueCount(1);
     m_styleArg.setCombinable(true);
     m_styleArg.setEnvironmentVariable("QT_STYLE_OVERRIDE for Qt Widgets and QT_QUICK_CONTROLS_STYLE for Qt Quick");
     m_iconThemeArg.setValueNames({ "theme name", "search path 1", "search path 2" });
     m_iconThemeArg.setRequiredValueCount(Argument::varValueCount);
     m_iconThemeArg.setCombinable(true);
+    m_iconThemeArg.setEnvironmentVariable("ICON_THEME_SEARCH_PATH and ICON_THEME");
     m_fontArg.setValueNames({ "name", "size" });
     m_fontArg.setRequiredValueCount(2);
     m_fontArg.setCombinable(true);
@@ -73,6 +74,7 @@ QtConfigArguments::QtConfigArguments()
     m_platformThemeArg.setCombinable(true);
     m_platformThemeArg.setValueNames({ "qt5ct/kde/..." });
     m_platformThemeArg.setPreDefinedCompletionValues("qt5ct kde gnome");
+    m_platformThemeArg.setEnvironmentVariable("QT_QPA_PLATFORMTHEME");
     m_qtWidgetsGuiArg.setSubArguments(
         { &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
     m_qtQuickGuiArg.setSubArguments(
