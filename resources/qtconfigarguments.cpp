@@ -1,6 +1,7 @@
 #include "./qtconfigarguments.h"
 
 #include <c++utilities/conversion/stringconversion.h>
+#include <c++utilities/io/ansiescapecodes.h>
 
 #include <QFont>
 #include <QIcon>
@@ -19,11 +20,13 @@
 
 using namespace std;
 using namespace ConversionUtilities;
+using namespace EscapeCodes;
 
 namespace ApplicationUtilities {
 
 /*!
  * \brief Constructs new Qt config arguments.
+ * \todo Split style args in v6.
  */
 QtConfigArguments::QtConfigArguments()
     : m_qtWidgetsGuiArg("qt-widgets-gui", 'g', "shows a Qt widgets based graphical user interface")
@@ -33,7 +36,7 @@ QtConfigArguments::QtConfigArguments()
           "enables QML debugging (see "
           "http://doc.qt.io/qt-5/"
           "qtquick-debugging.html)")
-    , m_styleArg("style", '\0', "sets the Qt widgets style")
+    , m_styleArg("style", '\0', "sets the Qt Widgets or Qt Quick style")
     , m_iconThemeArg("icon-theme", '\0',
           "sets the icon theme and additional "
           "theme search paths for the Qt GUI")
@@ -56,6 +59,7 @@ QtConfigArguments::QtConfigArguments()
     m_styleArg.setValueNames({ "style name" });
     m_styleArg.setRequiredValueCount(1);
     m_styleArg.setCombinable(true);
+    m_styleArg.setEnvironmentVariable("QT_STYLE_OVERRIDE for Qt Widgets and QT_QUICK_CONTROLS_STYLE for Qt Quick");
     m_iconThemeArg.setValueNames({ "theme name", "search path 1", "search path 2" });
     m_iconThemeArg.setRequiredValueCount(Argument::varValueCount);
     m_iconThemeArg.setCombinable(true);
@@ -71,7 +75,8 @@ QtConfigArguments::QtConfigArguments()
     m_platformThemeArg.setPreDefinedCompletionValues("qt5ct kde gnome");
     m_qtWidgetsGuiArg.setSubArguments(
         { &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
-    m_qtQuickGuiArg.setSubArguments({ &m_lngArg, &m_qmlDebuggerArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
+    m_qtQuickGuiArg.setSubArguments(
+        { &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
 #if defined QT_UTILITIES_GUI_QTWIDGETS
@@ -94,15 +99,13 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
     }
     if (m_styleArg.isPresent()) {
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
-        if (QStyle *style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front()))) {
-            QApplication::setStyle(style);
-        } else {
-            cerr << "Warning: Can not find the specified style." << endl;
+        if (m_qtWidgetsGuiArg.isPresent()) {
+            if (QStyle *const style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front()))) {
+                QApplication::setStyle(style);
+            } else {
+                cerr << Phrases::Warning << "Can not find the specified Qt Widgets style." << Phrases::EndFlush;
+            }
         }
-#else
-#ifdef QT_UTILITIES_GUI_QTQUICK
-        cerr << "Warning: Can not set a style for the Qt Quick GUI." << endl;
-#endif
 #endif
     }
     if (m_iconThemeArg.isPresent()) {

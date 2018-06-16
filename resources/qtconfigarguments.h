@@ -5,6 +5,9 @@
 
 #include <c++utilities/application/argumentparser.h>
 
+#ifdef QT_UTILITIES_GUI_QTQUICK
+#include <QQuickStyle>
+
 namespace ApplicationUtilities {
 
 class QT_UTILITIES_EXPORT QtConfigArguments {
@@ -61,6 +64,22 @@ inline bool QtConfigArguments::areQtGuiArgsPresent() const
 {
     return m_qtWidgetsGuiArg.isPresent() || m_qtQuickGuiArg.isPresent();
 }
+
+#ifdef QT_UTILITIES_GUI_QTQUICK
+/*!
+ * \brief Applies settings the for Qt Quick GUI.
+ */
+inline void QtConfigArguments::applySettingsForQuickGui() const
+{
+    if (!m_qtQuickGuiArg.isPresent()) {
+        return;
+    }
+    if (m_styleArg.isPresent()) {
+        QQuickStyle::setStyle(QString::fromLocal8Bit(m_styleArg.values().front()));
+    }
+}
+#endif
+
 } // namespace ApplicationUtilities
 
 #endif // APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
