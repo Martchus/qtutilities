@@ -184,8 +184,10 @@ use_cpp_utilities()
 # include modules to apply configuration
 include(BasicConfig)
 include(QtGuiConfig)
-# apply Qt utilities specific configuration
+
+# add further Qt modules (which are not automatically detected)
 set(META_PUBLIC_QT_MODULES Core ${ADDITIONAL_QT_MODULES})
+
 # include further modules to apply configuration
 include(QtConfig)
 include(WindowsResources)

@@ -1,4 +1,4 @@
-#include "recentmenumanager.h"
+#include "./recentmenumanager.h"
 
 #include <QAction>
 #include <QCoreApplication>

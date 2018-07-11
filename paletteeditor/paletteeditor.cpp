@@ -417,7 +417,7 @@ RoleEditor::RoleEditor(QWidget *parent)
     // textMargin in QItemDelegate
     setFocusProxy(m_label);
 
-    QToolButton *button = new QToolButton(this);
+    auto *const button = new QToolButton(this);
     button->setToolButtonStyle(Qt::ToolButtonIconOnly);
     button->setIcon(QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/actions/edit-clear.png")));
     button->setIconSize(QSize(8, 8));
@@ -460,36 +460,32 @@ ColorDelegate::ColorDelegate(QObject *parent)
 
 QWidget *ColorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &index) const
 {
-    QWidget *ed = nullptr;
     if (index.column() == 0) {
-        RoleEditor *editor = new RoleEditor(parent);
+        auto *const editor = new RoleEditor(parent);
         connect(editor, &RoleEditor::changed, this, &ColorDelegate::commitData);
-        // editor->setFocusPolicy(Qt::NoFocus);
-        // editor->installEventFilter(const_cast<ColorDelegate *>(this));
-        ed = editor;
-    } else {
-        typedef void (BrushEditor::*BrushEditorWidgetSignal)(QWidget *);
-
-        BrushEditor *editor = new BrushEditor(parent);
-        connect(editor, static_cast<BrushEditorWidgetSignal>(&BrushEditor::changed), this, &ColorDelegate::commitData);
-        editor->setFocusPolicy(Qt::NoFocus);
-        editor->installEventFilter(const_cast<ColorDelegate *>(this));
-        ed = editor;
+        return editor;
     }
-    return ed;
+
+    using BrushEditorWidgetSignal = void (BrushEditor::*)(QWidget *);
+
+    auto *const editor = new BrushEditor(parent);
+    connect(editor, static_cast<BrushEditorWidgetSignal>(&BrushEditor::changed), this, &ColorDelegate::commitData);
+    editor->setFocusPolicy(Qt::NoFocus);
+    editor->installEventFilter(const_cast<ColorDelegate *>(this));
+    return editor;
 }
 
 void ColorDelegate::setEditorData(QWidget *ed, const QModelIndex &index) const
 {
     if (index.column() == 0) {
-        const bool mask = qvariant_cast<bool>(index.model()->data(index, Qt::EditRole));
-        RoleEditor *editor = static_cast<RoleEditor *>(ed);
+        const auto mask = qvariant_cast<bool>(index.model()->data(index, Qt::EditRole));
+        auto *const editor = static_cast<RoleEditor *>(ed);
         editor->setEdited(mask);
-        const QString colorName = qvariant_cast<QString>(index.model()->data(index, Qt::DisplayRole));
+        const auto colorName = qvariant_cast<QString>(index.model()->data(index, Qt::DisplayRole));
         editor->setLabel(colorName);
     } else {
-        const QBrush br = qvariant_cast<QBrush>(index.model()->data(index, BrushRole));
-        BrushEditor *editor = static_cast<BrushEditor *>(ed);
+        const auto br = qvariant_cast<QBrush>(index.model()->data(index, BrushRole));
+        auto *const editor = static_cast<BrushEditor *>(ed);
         editor->setBrush(br);
     }
 }
@@ -497,11 +493,11 @@ void ColorDelegate::setEditorData(QWidget *ed, const QModelIndex &index) const
 void ColorDelegate::setModelData(QWidget *ed, QAbstractItemModel *model, const QModelIndex &index) const
 {
     if (index.column() == 0) {
-        RoleEditor *editor = static_cast<RoleEditor *>(ed);
-        const bool mask = editor->edited();
+        const auto *const editor = static_cast<RoleEditor *>(ed);
+        const auto mask = editor->edited();
         model->setData(index, mask, Qt::EditRole);
     } else {
-        BrushEditor *editor = static_cast<BrushEditor *>(ed);
+        const auto *const editor = static_cast<BrushEditor *>(ed);
         if (editor->changed()) {
             QBrush br = editor->brush();
             model->setData(index, br, BrushRole);
@@ -518,11 +514,11 @@ void ColorDelegate::updateEditorGeometry(QWidget *ed, const QStyleOptionViewItem
 void ColorDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
     QStyleOptionViewItem option = opt;
-    const bool mask = qvariant_cast<bool>(index.model()->data(index, Qt::EditRole));
+    const auto mask = qvariant_cast<bool>(index.model()->data(index, Qt::EditRole));
     if (index.column() == 0 && mask) {
         option.font.setBold(true);
     }
-    QBrush br = qvariant_cast<QBrush>(index.model()->data(index, BrushRole));
+    auto br = qvariant_cast<QBrush>(index.model()->data(index, BrushRole));
     if (br.style() == Qt::LinearGradientPattern || br.style() == Qt::RadialGradientPattern || br.style() == Qt::ConicalGradientPattern) {
         painter->save();
         painter->translate(option.rect.x(), option.rect.y());
