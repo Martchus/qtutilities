@@ -150,7 +150,7 @@ else()
 endif()
 
 # configure support for D-Bus notifications
-if(UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE AND NOT ANDROID)
     set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT ON)
 else()
     set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT OFF)
