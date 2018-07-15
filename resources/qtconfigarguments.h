@@ -7,6 +7,7 @@
 
 #ifdef QT_UTILITIES_GUI_QTQUICK
 #include <QQuickStyle>
+#include <QString>
 
 #if defined(PLATFORM_ANDROID)
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE "material"
@@ -89,11 +90,11 @@ inline void QtConfigArguments::applySettingsForQuickGui() const
     }
 #ifdef QT_UTILITIES_DEFAULT_QQC2_STYLE
     else if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
-        QuickStyle::setStyle(QStringLiteral(QT_UTILITIES_DEFAULT_QCC2_STYLE));
+        QQuickStyle::setStyle(QStringLiteral(QT_UTILITIES_DEFAULT_QQC2_STYLE));
     }
-#endif
+#endif // QT_UTILITIES_DEFAULT_QQC2_STYLE
 }
-#endif
+#endif // QT_UTILITIES_GUI_QTQUICK
 
 } // namespace ApplicationUtilities
 
