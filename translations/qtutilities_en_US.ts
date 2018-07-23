@@ -39,12 +39,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="71"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="69"/>
         <source>Linked against:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="74"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="72"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -54,8 +54,8 @@
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="12"/>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="51"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="187"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="202"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
         <source>Enter the password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -100,28 +100,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="187"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="202"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
         <source>Enter the new password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="287"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="290"/>
         <source>You didn&apos;t enter a user name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="289"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="292"/>
         <source>You didn&apos;t enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="294"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="297"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="297"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
         <source>You mistyped the password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -157,22 +157,22 @@
 <context>
     <name>Dialogs::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="324"/>
         <source>Color Role</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="326"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="328"/>
         <source>Inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="329"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="330"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -317,7 +317,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.cpp" line="245"/>
-        <source>&lt;p&gt;&lt;b&gt;Errors occured when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
+        <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

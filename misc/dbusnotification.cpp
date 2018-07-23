@@ -246,7 +246,7 @@ void DBusNotification::setImage(const QImage &image)
 
 /*!
  * \brief Makes the notification object delete itself when the notification has
- * been closed or an error occured.
+ * been closed or an error occurred.
  */
 void DBusNotification::deleteOnCloseOrError()
 {

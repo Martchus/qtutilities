@@ -242,7 +242,7 @@ bool SettingsDialog::apply()
 
             // add error message
             if (errorMessage.isEmpty()) {
-                errorMessage = tr("<p><b>Errors occured when applying changes:</b></p><ul>");
+                errorMessage = tr("<p><b>Errors occurred when applying changes:</b></p><ul>");
             }
             QStringList &errors = const_cast<OptionPage *>(page)->errors();
             if (errors.isEmpty()) {
@@ -258,7 +258,7 @@ bool SettingsDialog::apply()
         }
     }
 
-    // show error messages (if errors occured)
+    // show error messages (if errors occurred)
     if (!errorMessage.isEmpty()) {
         errorMessage.append(QStringLiteral("</ul>"));
         QMessageBox::warning(this, windowTitle(), errorMessage);
