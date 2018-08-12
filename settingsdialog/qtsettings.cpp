@@ -34,30 +34,30 @@ struct QtSettingsData {
     QtSettingsData();
 
     QFont font;
-    bool customFont;
     QPalette palette;
-    bool customPalette;
     QString widgetStyle;
-    bool customWidgetStyle;
     QString styleSheetPath;
-    bool customStyleSheet;
     QString iconTheme;
-    bool customIconTheme;
     QLocale defaultLocale;
     QString localeName;
-    bool customLocale;
     QString additionalPluginDirectory;
     QString additionalIconThemeSearchPath;
+    bool customFont;
+    bool customPalette;
+    bool customWidgetStyle;
+    bool customStyleSheet;
+    bool customIconTheme;
+    bool customLocale;
 };
 
 inline QtSettingsData::QtSettingsData()
-    : customFont(false)
+    : iconTheme(QIcon::themeName())
+    , localeName(defaultLocale.name())
+    , customFont(false)
     , customPalette(false)
     , customWidgetStyle(false)
     , customStyleSheet(false)
-    , iconTheme(QIcon::themeName())
     , customIconTheme(false)
-    , localeName(defaultLocale.name())
     , customLocale(false)
 {
 }
