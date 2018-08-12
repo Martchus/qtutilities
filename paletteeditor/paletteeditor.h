@@ -34,7 +34,7 @@ class QT_UTILITIES_EXPORT PaletteEditor : public QDialog {
     Q_OBJECT
 public:
     PaletteEditor(QWidget *parent);
-    ~PaletteEditor();
+    ~PaletteEditor() override;
 
     static QPalette getPalette(QWidget *parent, const QPalette &init = QPalette(), const QPalette &parentPal = QPalette(), int *result = nullptr);
 
@@ -43,12 +43,12 @@ public:
     void setPalette(const QPalette &palette, const QPalette &parentPalette);
 
 private Q_SLOTS:
-    void on_buildButton_colorChanged(const QColor &);
-    void on_activeRadio_clicked();
-    void on_inactiveRadio_clicked();
-    void on_disabledRadio_clicked();
-    void on_computeRadio_clicked();
-    void on_detailsRadio_clicked();
+    void handleBuildButtonColorChanged(const QColor &);
+    void handleActiveRadioClicked();
+    void handleInactiveRadioClicked();
+    void handleDisabledRadioClicked();
+    void handleComputeRadioClicked();
+    void handleDetailsRadioClicked();
 
     void paletteChanged(const QPalette &palette);
 
@@ -82,12 +82,12 @@ class QT_UTILITIES_EXPORT PaletteModel : public QAbstractTableModel {
 public:
     explicit PaletteModel(QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     QPalette getPalette() const;
     void setPalette(const QPalette &palette, const QPalette &parentPalette);
@@ -150,7 +150,7 @@ public:
     void setEdited(bool on);
     bool edited() const;
 
-signals:
+Q_SIGNALS:
     void changed(QWidget *widget);
 
 private Q_SLOTS:
@@ -170,15 +170,15 @@ class QT_UTILITIES_EXPORT ColorDelegate : public QItemDelegate {
 public:
     explicit ColorDelegate(QObject *parent = nullptr);
 
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    void setEditorData(QWidget *ed, const QModelIndex &index) const;
-    void setModelData(QWidget *ed, QAbstractItemModel *model, const QModelIndex &index) const;
+    void setEditorData(QWidget *ed, const QModelIndex &index) const override;
+    void setModelData(QWidget *ed, QAbstractItemModel *model, const QModelIndex &index) const override;
 
-    void updateEditorGeometry(QWidget *ed, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void updateEditorGeometry(QWidget *ed, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const override;
 };
 } // namespace Dialogs
 
