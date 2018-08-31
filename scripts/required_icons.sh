@@ -21,10 +21,14 @@ for srcdir in "$@"; do
     done
 done
 
+# sort results
+sorted_icon_names=("${!icon_names[@]}")
+IFS=$'\n' sorted_icon_names=($(sort <<<"${sorted_icon_names[*]}"))
+unset IFS
+
 # print results
 echo 'set(REQUIRED_ICONS'
-for icon_name in "${!icon_names[@]}"
-do
+for icon_name in "${sorted_icon_names[@]}"; do
   echo "    ${icon_name}"
 done
 echo ')'
