@@ -33,7 +33,7 @@ if(QUICK_GUI)
     list(APPEND QML_FILES ${QML_HEADER_FILES} ${QML_SRC_FILES} ${QML_RES_FILES})
     list(APPEND ADDITIONAL_HEADER_FILES ${QML_HEADER_FILES})
     if(QML_FILES)
-        list(APPEND ADDITIONAL_QT_MODULES Quick)
+        list(APPEND ADDITIONAL_QT_MODULES Qml Quick)
         list(APPEND ADDITIONAL_QT_REPOS "declarative")
         message(STATUS "Building with Qt Quick GUI.")
 
