@@ -1,0 +1,23 @@
+{
+   "qt": "@ANDROID_APK_QT_INSTALL_PREFIX@",
+   "sdk": "@CMAKE_ANDROID_SDK@",
+   "ndk": "@CMAKE_ANDROID_NDK@",
+   "toolchain-prefix": "@ANDROID_APK_TOOL_PREFIX@",
+   "tool-prefix": "@ANDROID_APK_TOOL_PREFIX@",
+   "toolchain-version": "@CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION@",
+   "ndk-host": "@CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG@",
+   "target-architecture": "@CMAKE_ANDROID_ARCH_ABI@",
+   "application-binary": "$<TARGET_FILE:@TARGET_PREFIX@@META_PROJECT_NAME@@TARGET_SUFFIX@>",
+   "qml-root-path": "@CMAKE_CURRENT_SOURCE_DIR@",
+   "qml-import-paths": "@CMAKE_INSTALL_PREFIX@/lib/qml",
+   "android-extra-libs": "@ANDROID_APK_EXTRA_LIBS@",
+   "android-extra-plugins": "@CMAKE_INSTALL_PREFIX@/share,@CMAKE_INSTALL_PREFIX@/lib/qml",
+   "android-package-source-directory": "@ANDROID_APK_SUBDIR@",
+   "stdcpp-path":"@ANDROID_APK_CXX_STANDARD_LIBRARY@",
+   "sdkBuildToolsRevision": "@ANDROID_APK_BUILD_TOOLS_VERSION@",
+   "extraPrefixDirs": [@ANDROID_APK_BINARY_DIRS@
+        "@CMAKE_ANDROID_NDK@/sysroot",
+        "@CMAKE_INSTALL_PREFIX@",
+        "@ANDROID_APK_QT_INSTALL_PREFIX@"
+    ]
+}

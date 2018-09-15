@@ -88,13 +88,13 @@ set(WIDGETS_UI_FILES
 )
 
 set(CMAKE_MODULE_FILES
+    cmake/modules/AndroidApk.cmake
     cmake/modules/QtConfig.cmake
     cmake/modules/QtGuiConfig.cmake
     cmake/modules/QtLinkage.cmake
     cmake/modules/JsProviderConfig.cmake
     cmake/modules/WebViewProviderConfig.cmake
 )
-
 set(CMAKE_TEMPLATE_FILES
     cmake/templates/qtconfig.h.in
     cmake/templates/webviewdefs.h.in
@@ -102,6 +102,13 @@ set(CMAKE_TEMPLATE_FILES
     cmake/templates/jsdefs.h.in
     cmake/templates/jsincludes.h.in
 )
+if(ANDROID)
+    list(APPEND CMAKE_MODULE_FILES
+    )
+    list(APPEND CMAKE_TEMPLATE_FILES
+        cmake/templates/android-deployment.json.in
+    )
+endif()
 
 set(TS_FILES
     translations/${META_PROJECT_NAME}_de_DE.ts
