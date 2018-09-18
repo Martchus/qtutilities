@@ -122,8 +122,29 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(ANDROID_APK_FILE_PATH "${ANDROID_APK_BUILD_DIR}/build/outputs/apk/apk-debug.apk")
     set(ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS)
 else()
-    set(ANDROID_APK_FILE_PATH "${ANDROID_APK_BUILD_DIR}/build/outputs/apk/apk-release-unsigned.apk")
     set(ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS --release)
+    set(ANDROID_APK_KEYSTORE_URL "" CACHE STRING "keystore URL for signing the Android APK")
+    set(ANDROID_APK_KEYSTORE_ALIAS "" CACHE STRING "keystore alias for signing the Android APK")
+    set(ANDROID_APK_KEYSTORE_PASSWORD "" CACHE STRING "keystore password for signing the Android APK")
+    set(ANDROID_APK_KEYSTORE_KEY_PASSWORD "" CACHE STRING "keystore key password for signing the Android APK")
+
+    if(ANDROID_APK_KEYSTORE_URL AND ANDROID_APK_KEYSTORE_ALIAS)
+        set(ANDROID_APK_FILE_PATH "${ANDROID_APK_BUILD_DIR}/build/outputs/apk/apk-release-signed.apk")
+        list(APPEND ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS
+            --sign "${ANDROID_APK_KEYSTORE_URL}" "${ANDROID_APK_KEYSTORE_ALIAS}")
+        if(ANDROID_APK_KEYSTORE_PASSWORD)
+            list(APPEND ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS
+                --storepass "${ANDROID_APK_KEYSTORE_PASSWORD}")
+        endif()
+        if(ANDROID_APK_KEYSTORE_KEY_PASSWORD)
+            list(APPEND ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS
+                --keypass "${ANDROID_APK_KEYSTORE_KEY_PASSWORD}")
+        endif()
+    else()
+        set(ANDROID_APK_FILE_PATH "${ANDROID_APK_BUILD_DIR}/build/outputs/apk/apk-release-unsigned.apk")
+        message(WARNING "Set ANDROID_APK_KEYSTORE_URL/ANDROID_APK_KEYSTORE_ALIAS to sign Android APK release.")
+    endif()
+
 endif()
 set(ANDROID_APK_BINARY_PATH "${ANDROID_APK_BUILD_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/lib${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX}.so")
 add_custom_command(OUTPUT "${ANDROID_APK_BINARY_PATH}"
