@@ -16,14 +16,14 @@ class QT_UTILITIES_EXPORT OptionCategoryModel : public QAbstractListModel {
 public:
     explicit OptionCategoryModel(QObject *parent = nullptr);
     explicit OptionCategoryModel(const QList<OptionCategory *> &categories, QObject *parent = nullptr);
-    virtual ~OptionCategoryModel();
+    virtual ~OptionCategoryModel() override;
 
     const QList<OptionCategory *> &categories() const;
     OptionCategory *category(const QModelIndex &index) const;
     OptionCategory *category(int row) const;
     void setCategories(const QList<OptionCategory *> categories);
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 private Q_SLOTS:
     void categoryChangedName();

@@ -28,7 +28,7 @@ public:
         const std::vector<const char *> &dependencyVersions, const QString &website = QString(), const QString &description = QString(),
         const QImage &image = QImage());
     explicit AboutDialog(QWidget *parent, const QString &description = QString(), const QImage &image = QImage());
-    ~AboutDialog();
+    ~AboutDialog() override;
 
 private:
     std::unique_ptr<Ui::AboutDialog> m_ui;

@@ -17,7 +17,7 @@ class QT_UTILITIES_EXPORT ColorButton : public QToolButton {
     Q_PROPERTY(bool backgroundCheckered READ isBackgroundCheckered WRITE setBackgroundCheckered)
 public:
     ColorButton(QWidget *parent = nullptr);
-    ~ColorButton();
+    ~ColorButton() override;
 
     bool isBackgroundCheckered() const;
     void setBackgroundCheckered(bool checkered);
@@ -31,13 +31,13 @@ Q_SIGNALS:
     void colorChanged(const QColor &color);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 #ifndef QT_NO_DRAGANDDROP
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    void dropEvent(QDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 #endif
 
 private:

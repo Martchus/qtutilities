@@ -24,7 +24,7 @@ class QT_UTILITIES_EXPORT SettingsDialog : public QDialog {
 
 public:
     explicit SettingsDialog(QWidget *parent = nullptr);
-    ~SettingsDialog();
+    ~SettingsDialog() override;
     bool isTabBarAlwaysVisible() const;
     void setTabBarAlwaysVisible(bool value);
     OptionCategoryModel *categoryModel();
@@ -38,7 +38,7 @@ Q_SIGNALS:
     void resetted();
 
 protected:
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private Q_SLOTS:
     void currentCategoryChanged(const QModelIndex &index);

@@ -74,18 +74,18 @@ class QT_UTILITIES_EXPORT ChecklistModel : public QAbstractListModel {
 public:
     explicit ChecklistModel(QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    QMap<int, QVariant> itemData(const QModelIndex &index) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole);
-    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QMap<int, QVariant> itemData(const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole) override;
+    bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles) override;
     bool setChecked(int row, bool checked);
     bool setChecked(int row, Qt::CheckState checked);
     virtual QString labelForId(const QVariant &id) const;
-    Qt::DropActions supportedDropActions() const;
-    bool insertRows(int row, int count, const QModelIndex &parent);
-    bool removeRows(int row, int count, const QModelIndex &parent);
+    Qt::DropActions supportedDropActions() const override;
+    bool insertRows(int row, int count, const QModelIndex &parent) override;
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
     const QList<ChecklistItem> &items() const;
     void setItems(const QList<ChecklistItem> &items);
     void restore(QSettings &settings, const QString &name);

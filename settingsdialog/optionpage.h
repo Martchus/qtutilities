@@ -91,13 +91,13 @@ inline QStringList &OptionPage::errors()
 template <class UiClass> class QT_UTILITIES_EXPORT UiFileBasedOptionPage : public OptionPage {
 public:
     explicit UiFileBasedOptionPage(QWidget *parentWindow = nullptr);
-    ~UiFileBasedOptionPage();
+    ~UiFileBasedOptionPage() override;
 
-    bool apply() = 0;
-    void reset() = 0;
+    bool apply() override = 0;
+    void reset() override = 0;
 
 protected:
-    QWidget *setupWidget();
+    QWidget *setupWidget() override;
     UiClass *ui();
 
 private:
@@ -152,9 +152,9 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
     class QT_UTILITIES_EXPORT SomeClass : public ::Dialogs::OptionPage {                                                                             \
     public:                                                                                                                                          \
         explicit SomeClass(QWidget *parentWidget = nullptr);                                                                                         \
-        ~SomeClass();                                                                                                                                \
-        bool apply();                                                                                                                                \
-        void reset();                                                                                                                                \
+        ~SomeClass() override;                                                                                                                       \
+        bool apply() override;                                                                                                                       \
+        void reset() override;                                                                                                                       \
                                                                                                                                                      \
     private:
 
@@ -167,9 +167,9 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
     typedef ::Dialogs::OptionPage SomeClass##Base;                                                                                                   \
     class QT_UTILITIES_EXPORT SomeClass : public ::Dialogs::OptionPage {                                                                             \
     public:                                                                                                                                          \
-        ~SomeClass();                                                                                                                                \
-        bool apply();                                                                                                                                \
-        void reset();                                                                                                                                \
+        ~SomeClass() override;                                                                                                                       \
+        bool apply() override;                                                                                                                       \
+        void reset() override;                                                                                                                       \
                                                                                                                                                      \
     private:
 
@@ -185,9 +185,9 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
     typedef ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> SomeClass##Base;                                                                         \
     class QT_UTILITIES_EXPORT SomeClass : public ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> {                                                   \
     public:                                                                                                                                          \
-        ~SomeClass();                                                                                                                                \
-        bool apply();                                                                                                                                \
-        void reset();                                                                                                                                \
+        ~SomeClass() override;                                                                                                                       \
+        bool apply() override;                                                                                                                       \
+        void reset() override;                                                                                                                       \
                                                                                                                                                      \
     private:
 
@@ -268,7 +268,7 @@ private:
  */
 #define DECLARE_SETUP_WIDGETS                                                                                                                        \
 protected:                                                                                                                                           \
-    QWidget *setupWidget();                                                                                                                          \
+    QWidget *setupWidget() override;                                                                                                                 \
                                                                                                                                                      \
 private:
 

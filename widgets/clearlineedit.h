@@ -15,12 +15,12 @@ class QT_UTILITIES_EXPORT ClearLineEdit : public QLineEdit, public ButtonOverlay
     Q_OBJECT
 public:
     explicit ClearLineEdit(QWidget *parent = nullptr);
-    ~ClearLineEdit();
-    bool isCleared() const;
+    ~ClearLineEdit() override;
+    bool isCleared() const override;
 
 private Q_SLOTS:
     void handleTextChanged(const QString &text);
-    void handleClearButtonClicked();
+    void handleClearButtonClicked() override;
 };
 } // namespace Widgets
 

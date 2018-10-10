@@ -14,16 +14,16 @@ class QT_UTILITIES_EXPORT IconButton : public QAbstractButton {
 
 public:
     explicit IconButton(QWidget *parent = nullptr);
-    ~IconButton();
+    ~IconButton() override;
 
     const QPixmap &pixmap() const;
     void setPixmap(const QPixmap &pixmap);
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
     QPixmap m_pixmap;

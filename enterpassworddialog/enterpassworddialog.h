@@ -26,7 +26,7 @@ class QT_UTILITIES_EXPORT EnterPasswordDialog : public QDialog {
 
 public:
     explicit EnterPasswordDialog(QWidget *parent = nullptr);
-    ~EnterPasswordDialog();
+    ~EnterPasswordDialog() override;
     const QString &userName() const;
     const QString &password() const;
     QString description() const;
@@ -42,8 +42,8 @@ public:
     static bool isCapslockPressed();
 
 protected:
-    bool event(QEvent *event);
-    bool eventFilter(QObject *sender, QEvent *event);
+    bool event(QEvent *event) override;
+    bool eventFilter(QObject *sender, QEvent *event) override;
 
 private Q_SLOTS:
     void updateShowPassword();

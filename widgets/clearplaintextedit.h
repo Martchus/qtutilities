@@ -11,12 +11,12 @@ class QT_UTILITIES_EXPORT ClearPlainTextEdit : public QPlainTextEdit, public But
     Q_OBJECT
 public:
     explicit ClearPlainTextEdit(QWidget *parent = nullptr);
-    ~ClearPlainTextEdit();
-    bool isCleared() const;
+    ~ClearPlainTextEdit() override;
+    bool isCleared() const override;
 
 private Q_SLOTS:
     void handleTextChanged();
-    void handleClearButtonClicked();
+    void handleClearButtonClicked() override;
     void handleScroll();
 };
 

@@ -11,12 +11,12 @@ class QT_UTILITIES_EXPORT ClearComboBox : public QComboBox, public ButtonOverlay
     Q_OBJECT
 public:
     explicit ClearComboBox(QWidget *parent = nullptr);
-    ~ClearComboBox();
-    bool isCleared() const;
+    ~ClearComboBox() override;
+    bool isCleared() const override;
 
 private Q_SLOTS:
     void handleTextChanged(const QString &text);
-    void handleClearButtonClicked();
+    void handleClearButtonClicked() override;
 };
 
 } // namespace Widgets

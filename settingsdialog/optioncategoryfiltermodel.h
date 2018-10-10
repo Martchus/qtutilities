@@ -11,7 +11,7 @@ public:
     explicit OptionCategoryFilterModel(QObject *parent = nullptr);
 
 protected:
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const;
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const override;
 };
 } // namespace Dialogs
 

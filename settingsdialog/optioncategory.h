@@ -19,7 +19,7 @@ class QT_UTILITIES_EXPORT OptionCategory : public QObject {
 
 public:
     explicit OptionCategory(QObject *parent = nullptr);
-    ~OptionCategory();
+    ~OptionCategory() override;
 
     const QString &displayName() const;
     void setDisplayName(const QString &displayName);
