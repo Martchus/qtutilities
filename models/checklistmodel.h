@@ -90,6 +90,8 @@ public:
     void setItems(const QList<ChecklistItem> &items);
     void restore(QSettings &settings, const QString &name);
     void save(QSettings &settings, const QString &name) const;
+    QVariantList toVariantList() const;
+    void applyVariantList(const QVariantList &checkedIds);
     static constexpr int idRole();
 
 private:

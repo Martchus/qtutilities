@@ -246,4 +246,31 @@ void ChecklistModel::save(QSettings &settings, const QString &name) const
     }
     settings.endArray();
 }
+
+/*!
+ * \brief Returns the checked IDs.
+ */
+QVariantList ChecklistModel::toVariantList() const
+{
+    QVariantList checkedIds;
+    checkedIds.reserve(m_items.size());
+    for (const auto &item : m_items) {
+        if (item.isChecked()) {
+            checkedIds << item.id();
+        }
+    }
+    return checkedIds;
+}
+
+/*!
+ * \brief Checks all items contained by \a checkedIds and unchecks other items.
+ */
+void ChecklistModel::applyVariantList(const QVariantList &checkedIds)
+{
+    for (auto &item : m_items) {
+        item.m_checkState = checkedIds.contains(item.id()) ? Qt::Checked : Qt::Unchecked;
+    }
+    emit dataChanged(index(0), index(m_items.size()), { Qt::CheckStateRole });
+}
+
 } // namespace Models
