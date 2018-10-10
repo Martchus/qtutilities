@@ -80,6 +80,8 @@ public:
     QMap<int, QVariant> itemData(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole);
     bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles);
+    bool setChecked(int row, bool checked);
+    bool setChecked(int row, Qt::CheckState checked);
     virtual QString labelForId(const QVariant &id) const;
     Qt::DropActions supportedDropActions() const;
     bool insertRows(int row, int count, const QModelIndex &parent);
@@ -100,6 +102,14 @@ private:
 inline const QList<ChecklistItem> &ChecklistModel::items() const
 {
     return m_items;
+}
+
+/*!
+ * \brief Sets the checked state of the specified item.
+ */
+inline bool ChecklistModel::setChecked(int row, bool checked)
+{
+    return setChecked(row, checked ? Qt::Checked : Qt::Unchecked);
 }
 
 /*!

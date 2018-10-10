@@ -73,8 +73,7 @@ QMap<int, QVariant> ChecklistModel::itemData(const QModelIndex &index) const
 bool ChecklistModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     bool success = false;
-    QVector<int> roles;
-    roles << role;
+    QVector<int> roles{ role };
     if (index.isValid() && index.row() < m_items.size()) {
         switch (role) {
         case Qt::DisplayRole:
@@ -90,9 +89,9 @@ bool ChecklistModel::setData(const QModelIndex &index, const QVariant &value, in
         case idRole(): {
             m_items[index.row()].m_id = value;
             success = true;
-            QString label = labelForId(value);
+            auto label = labelForId(value);
             if (!label.isEmpty()) {
-                m_items[index.row()].m_label = label;
+                m_items[index.row()].m_label = std::move(label);
                 roles << Qt::DisplayRole;
             }
             break;
@@ -115,14 +114,31 @@ bool ChecklistModel::setItemData(const QModelIndex &index, const QMap<int, QVari
 }
 
 /*!
+ * \brief Sets the checked state of the specified item.
+ */
+bool ChecklistModel::setChecked(int row, Qt::CheckState checked)
+{
+    if (row < 0 || row >= m_items.size()) {
+        return false;
+    }
+    m_items[row].m_checkState = checked ? Qt::Checked : Qt::Unchecked;
+    const auto index(this->index(row));
+    dataChanged(index, index, QVector<int>{ Qt::CheckStateRole });
+    return true;
+}
+
+/*!
  * \brief Returns the label for the specified \a id.
  *
  * This method might be reimplemented when subclassing to provide labels
  * for the item IDs.
  *
- * If an item's ID is set (using setData() and idRole()) this method is called
- * to update the item's label as well. If this method returns an empty string
- * (default behaviour) the item's label will not be updated.
+ * If an item's ID is set (using setData() with idRole() or setItems()) this method
+ * is called to update or initialize the item's label as well. If this method returns
+ * an empty string (default behaviour) the item's label will not be updated.
+ *
+ * This is useful when items are moved by the view (eg. for Drag & Drop) and to
+ * initialize the ChecklistItem labels more conveniently.
  */
 QString ChecklistModel::labelForId(const QVariant &) const
 {
@@ -167,6 +183,11 @@ void ChecklistModel::setItems(const QList<ChecklistItem> &items)
 {
     beginResetModel();
     m_items = items;
+    for (auto &item : m_items) {
+        if (item.m_label.isEmpty()) {
+            item.m_label = labelForId(item.id());
+        }
+    }
     endResetModel();
 }
 
