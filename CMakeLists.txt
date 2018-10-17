@@ -143,17 +143,32 @@ set(SCRIPT_FILES
 # required to include CMake modules from own project directory
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
 
-# configure platform specific capslock detection
-if(WIN32)
-    # WinAPI provides functions required for capslock detection
-    list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+# configure platform specific capslock detection for enterpassworddialog.cpp
+if(WIN32 OR (UNIX AND NOT APPLE AND NOT ANDROID))
+    set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT ON)
 else()
-    # X11 can provide functions required for capslock detection under non-Windows environments
-    find_package(X11)
-    if(X11_FOUND)
-        list(APPEND LIBRARIES ${X11_LIBRARIES})
-        list(APPEND META_PRIVATE_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+    set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT OFF)
+endif()
+option(CAPSLOCK_DETECTION "enables capslock detection" ${ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT})
+if(CAPSLOCK_DETECTION)
+    if(WIN32)
+        # WinAPI provides functions to provide capslock detection
+        set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
+    else()
+        # X11 can provide functions for capslock detection under non-Windows environments
+        find_package(X11)
+        if(X11_FOUND)
+            list(APPEND LIBRARIES ${X11_LIBRARIES})
+            set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
+        endif()
     endif()
+    if(NOT HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+        message(FATAL_ERROR "No backend for capslock detection found (WinAPI or X11 must be provided)")
+    endif()
+    set_property(
+        SOURCE enterpassworddialog/enterpassworddialog.cpp
+        APPEND PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
+    )
 endif()
 
 # configure support for D-Bus notifications
