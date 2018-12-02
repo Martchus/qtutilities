@@ -38,11 +38,19 @@ get_filename_component(ANDROID_APK_QT_CMAKE_DIR "${Qt5Core_DIR}" DIRECTORY)
 get_filename_component(ANDROID_APK_QT_LIBRARY_DIR "${ANDROID_APK_QT_CMAKE_DIR}" DIRECTORY)
 get_filename_component(ANDROID_APK_QT_INSTALL_PREFIX "${ANDROID_APK_QT_LIBRARY_DIR}" DIRECTORY)
 
-# deduce Android toolchain prefix from "CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX"
+# deduce Android toolchain prefix and version from "CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX"
+message(STATUS "Android toolchain prefix: ${CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX}")
 if(CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/(.+)-")
     set(ANDROID_APK_TOOL_PREFIX "${CMAKE_MATCH_1}")
 else()
     set(ANDROID_APK_TOOL_PREFIX "${CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX}")
+endif()
+if(CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/.+-linux-android-([^/]+)/.*")
+    set(ANDROID_APK_TOOLCHAIN_VERSION "${CMAKE_MATCH_1}")
+elseif(NOT CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION MATCHES "clang.*")
+    set(ANDROID_APK_TOOLCHAIN_VERSION "${CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION}")
+else()
+    message(FATAL_ERROR "Unable to detect the toolchain version for making the APK.")
 endif()
 
 # determine Android build tools version

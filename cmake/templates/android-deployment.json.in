@@ -4,7 +4,7 @@
    "ndk": "@CMAKE_ANDROID_NDK@",
    "toolchain-prefix": "@ANDROID_APK_TOOL_PREFIX@",
    "tool-prefix": "@ANDROID_APK_TOOL_PREFIX@",
-   "toolchain-version": "@CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION@",
+   "toolchain-version": "@ANDROID_APK_TOOLCHAIN_VERSION@",
    "ndk-host": "@CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG@",
    "target-architecture": "@CMAKE_ANDROID_ARCH_ABI@",
    "application-binary": "$<TARGET_FILE:@TARGET_PREFIX@@META_PROJECT_NAME@@TARGET_SUFFIX@>",
