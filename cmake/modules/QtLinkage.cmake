@@ -109,5 +109,19 @@ if(NOT DEFINED QT_LINKAGE_DETERMINED)
         endif()
     endmacro()
 
+    macro(query_qmake_variable QMAKE_VARIABLE)
+        get_target_property(QMAKE_BIN Qt5::qmake IMPORTED_LOCATION)
+        execute_process(
+            COMMAND "${QMAKE_BIN}" -query "${QMAKE_VARIABLE}"
+            RESULT_VARIABLE "${QMAKE_VARIABLE}_RESULT"
+            OUTPUT_VARIABLE "${QMAKE_VARIABLE}"
+        )
+        if(NOT "${${QMAKE_VARIABLE}_RESULT}" STREQUAL 0 OR "${${QMAKE_VARIABLE}}" STREQUAL "")
+            message(FATAL_ERROR "Unable to read qmake variable ${QMAKE_VARIABLE} via \"${QMAKE_BIN} -query ${QMAKE_VARIABLE}\"; output was \"${${QMAKE_VARIABLE}}\".")
+        endif()
+        string(REGEX REPLACE "\n$" "" "${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}")
+        message(STATUS "qmake variable ${QMAKE_VARIABLE} is ${${QMAKE_VARIABLE}}")
+    endmacro()
+
     set(QT_LINKAGE_DETERMINED YES)
 endif(NOT DEFINED QT_LINKAGE_DETERMINED)

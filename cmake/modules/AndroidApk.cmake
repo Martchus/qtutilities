@@ -115,6 +115,62 @@ endfunction()
 add_android_apk_extra_libs("${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX}")
 list_to_string("," "" "" "${ANDROID_APK_EXTRA_LIBS}" ANDROID_APK_EXTRA_LIBS)
 
+# query certain qmake variables
+foreach(QMAKE_VARIABLE QT_INSTALL_QML QT_INSTALL_PLUGINS QT_INSTALL_IMPORTS)
+    query_qmake_variable(${QMAKE_VARIABLE})
+endforeach()
+
+# define function to get a list of (existing) paths
+function(compose_dirs_for_android_apk)
+    # parse arguments
+    set(OPTIONAL_ARGS)
+    set(ONE_VALUE_ARGS OUTPUT_VARIABLE)
+    set(MULTI_VALUE_ARGS POSSIBLE_DIRS)
+    cmake_parse_arguments(ARGS "${OPTIONAL_ARGS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}" ${ARGN})
+
+    list(REMOVE_DUPLICATES ARGS_POSSIBLE_DIRS)
+    unset(DIRS)
+    foreach(POSSIBLE_DIR ${ARGS_POSSIBLE_DIRS})
+        if(IS_DIRECTORY "${POSSIBLE_DIR}")
+            list(APPEND DIRS "${POSSIBLE_DIR}")
+        endif()
+    endforeach()
+
+    list_to_string("," "" "" "${DIRS}" DIRS)
+    set("${ARGS_OUTPUT_VARIABLE}" "${DIRS}" PARENT_SCOPE)
+endfunction()
+
+# pick QML import paths from install prefix
+compose_dirs_for_android_apk(
+    OUTPUT_VARIABLE ANDROID_APK_QML_IMPORT_DIRS
+    POSSIBLE_DIRS
+        "${QT_INSTALL_IMPORTS}"
+        "${QT_INSTALL_QML}"
+        "${CMAKE_INSTALL_PREFIX}/lib/qt/imports"
+        "${CMAKE_INSTALL_PREFIX}/lib/imports"
+        "${CMAKE_INSTALL_PREFIX}/lib/qt/qml"
+        "${CMAKE_INSTALL_PREFIX}/lib/qml"
+)
+if(NOT ANDROID_APK_QML_IMPORT_DIRS)
+    message(WARNING "Unable to find QML import directories for making the APK.")
+endif()
+
+# pick extra plugins from install prefix
+compose_dirs_for_android_apk(
+    OUTPUT_VARIABLE ANDROID_APK_EXTRA_PLUGIN_DIRS
+    POSSIBLE_DIRS
+        "${QT_INSTALL_PLUGINS}"
+        "${QT_INSTALL_QML}"
+        "${CMAKE_INSTALL_PREFIX}/lib/qt/plugins"
+        "${CMAKE_INSTALL_PREFIX}/lib/plugins"
+        "${CMAKE_INSTALL_PREFIX}/lib/qt/qml"
+        "${CMAKE_INSTALL_PREFIX}/lib/qml"
+        "${CMAKE_INSTALL_PREFIX}/share"
+)
+if(NOT ANDROID_APK_EXTRA_PLUGIN_DIRS)
+    message(WARNING "Unable to find extra plugin directories for making the APK.")
+endif()
+
 # find template for deployment JSON
 find_template_file("android-deployment.json" QT_UTILITIES ANDROID_DEPLOYMENT_JSON_TEMPLATE_FILE)
 set(ANDROID_DEPLOYMENT_JSON_FILE "${CMAKE_CURRENT_BINARY_DIR}/android-deployment.json")
