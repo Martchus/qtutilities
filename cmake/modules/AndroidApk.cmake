@@ -12,6 +12,13 @@ if(ANDROID_APK_CONFIGURED)
     message(FATAL_ERROR "The AndroidApk module mustn't be included twice.")
 endif()
 
+if(NOT EXISTS "${CMAKE_ANDROID_SDK}")
+    message(FATAL_ERROR "CMAKE_ANDROID_SDK must contain the path of the Android SDK.")
+endif()
+if(NOT EXISTS "${CMAKE_ANDROID_NDK}")
+    message(FATAL_ERROR "CMAKE_ANDROID_NDK must contain the path of the Android NDK.")
+endif()
+
 # find "android" subdirectory in the source directory and check for AndroidManifest.xml
 set(ANDROID_APK_SUBDIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 if(NOT IS_DIRECTORY "${ANDROID_APK_SUBDIR}")
