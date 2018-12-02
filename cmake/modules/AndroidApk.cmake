@@ -133,7 +133,8 @@ if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
 endif()
 
 # add rules to make APK
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+option(ANDROID_APK_FORCE_DEBUG "specifies whether a debug APK should be created even when building in release mode" OFF)
+if(ANDROID_APK_FORCE_DEBUG OR CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(ANDROID_APK_FILE_PATH "${ANDROID_APK_BUILD_DIR}/build/outputs/apk/apk-debug.apk")
     set(ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS)
 else()
