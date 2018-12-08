@@ -28,6 +28,11 @@ set(ANDROID_APK_MANIFEST_PATH "${ANDROID_APK_SUBDIR}/AndroidManifest.xml")
 if(NOT EXISTS "${ANDROID_APK_MANIFEST_PATH}")
     message(FATAL_ERROR "The Android manifest doesn't exist at \"${ANDROID_APK_SUBDIR}/AndroidManifest.xml\".")
 endif()
+# caveat: adding new files or removing files requires to re-run CMake manually
+file(GLOB_RECURSE ANDROID_APK_FILES
+    LIST_DIRECTORIES false
+    "${ANDROID_APK_SUBDIR}/*"
+)
 
 # make subdirectory to store build artefacts for APK
 set(ANDROID_APK_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/apk")
@@ -235,7 +240,7 @@ add_custom_command(OUTPUT "${ANDROID_APK_FILE_PATH}"
         ${ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS}
     WORKING_DIRECTORY "${ANDROID_APK_BUILD_DIR}"
     COMMENT "Creating Android APK ${ANDROID_APK_FILE_PATH} using androiddeployqt"
-    DEPENDS "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH}"
+    DEPENDS "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH};${ANDROID_APK_FILES}"
     COMMAND_EXPAND_LISTS
     VERBATIM
 )
