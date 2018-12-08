@@ -81,9 +81,9 @@ QtConfigArguments::QtConfigArguments()
         { &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
-#if defined QT_UTILITIES_GUI_QTWIDGETS
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     m_qtWidgetsGuiArg.setImplicit(true);
-#elif defined QT_UTILITIES_GUI_QTQUICK
+#elif defined(QT_UTILITIES_GUI_QTQUICK)
     m_qtQuickGuiArg.setImplicit(true);
 #endif
 }
