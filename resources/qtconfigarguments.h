@@ -82,7 +82,7 @@ inline bool QtConfigArguments::areQtGuiArgsPresent() const
  */
 inline void QtConfigArguments::applySettingsForQuickGui() const
 {
-    if (!m_qtQuickGuiArg.isPresent() && m_styleArg.isPresent()) {
+    if (m_qtQuickGuiArg.isPresent() && m_styleArg.isPresent()) {
         QQuickStyle::setStyle(QString::fromLocal8Bit(m_styleArg.values().front()));
     }
 #ifdef QT_UTILITIES_DEFAULT_QQC2_STYLE
