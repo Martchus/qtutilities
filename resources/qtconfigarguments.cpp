@@ -99,17 +99,15 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
     if (m_lngArg.isPresent()) {
         QLocale::setDefault(QLocale(QString::fromLocal8Bit(m_lngArg.values().front())));
     }
-    if (m_styleArg.isPresent()) {
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
-        if (m_qtWidgetsGuiArg.isPresent()) {
-            if (QStyle *const style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front()))) {
-                QApplication::setStyle(style);
-            } else {
-                cerr << Phrases::Warning << "Can not find the specified Qt Widgets style." << Phrases::EndFlush;
-            }
+    if (m_qtWidgetsGuiArg.isPresent() && m_styleArg.isPresent()) {
+        if (QStyle *const style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front()))) {
+            QApplication::setStyle(style);
+        } else {
+            cerr << Phrases::Warning << "Can not find the specified Qt Widgets style." << Phrases::EndFlush;
         }
-#endif
     }
+#endif
     if (m_iconThemeArg.isPresent()) {
         auto i = m_iconThemeArg.values().cbegin(), end = m_iconThemeArg.values().end();
         if (i != end) {
