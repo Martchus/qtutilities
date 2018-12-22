@@ -162,22 +162,22 @@
 <context>
     <name>Dialogs::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="324"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
         <source>Color Role</source>
         <translation>Farbrolle</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="326"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="328"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
         <source>Inactive</source>
         <translation>Inaktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="330"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="329"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
