@@ -246,6 +246,7 @@ add_custom_command(OUTPUT "${ANDROID_APK_FILE_PATH}"
         --input "${ANDROID_DEPLOYMENT_JSON_FILE}"
         --output "${ANDROID_APK_BUILD_DIR}"
         --deployment bundled ${MAKE_ARGUMENTS}
+        --verbose
         ${ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS}
     WORKING_DIRECTORY "${ANDROID_APK_BUILD_DIR}"
     COMMENT "Creating Android APK ${ANDROID_APK_FILE_PATH} using androiddeployqt"
