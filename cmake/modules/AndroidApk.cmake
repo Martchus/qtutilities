@@ -89,11 +89,21 @@ if(NOT ANDROID_APK_CXX_STANDARD_LIBRARY)
 endif()
 
 # determine extra prefix dirs
-include(ListToString)
 set(ANDROID_APK_BINARY_DIRS "${RUNTIME_LIBRARY_PATH}")
 if(NOT CMAKE_CURRENT_BINARY_DIR IN_LIST ANDROID_APK_BINARY_DIRS)
     list(APPEND ANDROID_APK_BINARY_DIRS "${CMAKE_CURRENT_BINARY_DIR}")
 endif()
+set(ANDROID_APK_BINARY_DIRS_DEPENDS "")
+foreach(PATH ${ANDROID_APK_BINARY_DIRS})
+    # symlink "lib" subdirectory so androiddeployqt finds the library in the runtime path
+    # when specified via "extraPrefixDirs"
+    list(APPEND ANDROID_APK_BINARY_DIRS_DEPENDS "${PATH}/lib")
+    add_custom_command(
+        OUTPUT "${PATH}/lib"
+        COMMAND "${CMAKE_COMMAND}" -E create_symlink "${PATH}" "${PATH}/lib"
+    )
+endforeach()
+include(ListToString)
 list_to_string("" "\n        \"" "\"," "${ANDROID_APK_BINARY_DIRS}" ANDROID_APK_BINARY_DIRS)
 
 # find dependencies
@@ -250,7 +260,7 @@ add_custom_command(OUTPUT "${ANDROID_APK_FILE_PATH}"
         ${ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS}
     WORKING_DIRECTORY "${ANDROID_APK_BUILD_DIR}"
     COMMENT "Creating Android APK ${ANDROID_APK_FILE_PATH} using androiddeployqt"
-    DEPENDS "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH};${ANDROID_APK_FILES}"
+    DEPENDS "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH};${ANDROID_APK_FILES};${ANDROID_APK_BINARY_DIRS_DEPENDS}"
     COMMAND_EXPAND_LISTS
     VERBATIM
 )
