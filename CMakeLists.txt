@@ -6,7 +6,8 @@ set(META_PROJECT_VARNAME QT_UTILITIES)
 set(META_APP_NAME "Qt Utilities")
 set(META_APP_AUTHOR "Martchus")
 set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
-set(META_APP_DESCRIPTION "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
+set(META_APP_DESCRIPTION
+    "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
 set(META_VERSION_MAJOR 5)
 set(META_VERSION_MINOR 12)
 set(META_VERSION_PATCH 1)
@@ -24,18 +25,14 @@ set(HEADER_FILES
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
-    resources/importplugin.h
-)
+    resources/importplugin.h)
 set(SRC_FILES
     misc/dialogutils.cpp
     misc/desktoputils.cpp
     models/checklistmodel.cpp
     resources/qtconfigarguments.cpp
-    resources/resources.cpp
-)
-set(RES_FILES
-    resources/qtutilsicons.qrc
-)
+    resources/resources.cpp)
+set(RES_FILES resources/qtutilsicons.qrc)
 
 set(WIDGETS_HEADER_FILES
     aboutdialog/aboutdialog.h
@@ -55,8 +52,7 @@ set(WIDGETS_HEADER_FILES
     widgets/pathselection.h
     paletteeditor/paletteeditor.h
     paletteeditor/colorbutton.h
-    misc/recentmenumanager.h
-)
+    misc/recentmenumanager.h)
 set(WIDGETS_SRC_FILES
     aboutdialog/aboutdialog.cpp
     enterpassworddialog/enterpassworddialog.cpp
@@ -75,8 +71,7 @@ set(WIDGETS_SRC_FILES
     widgets/pathselection.cpp
     paletteeditor/paletteeditor.cpp
     paletteeditor/colorbutton.cpp
-    misc/recentmenumanager.cpp
-)
+    misc/recentmenumanager.cpp)
 set(WIDGETS_UI_FILES
     aboutdialog/aboutdialog.ui
     enterpassworddialog/enterpassworddialog.ui
@@ -84,8 +79,7 @@ set(WIDGETS_UI_FILES
     settingsdialog/qtappearanceoptionpage.ui
     settingsdialog/qtlanguageoptionpage.ui
     settingsdialog/qtenvoptionpage.ui
-    paletteeditor/paletteeditor.ui
-)
+    paletteeditor/paletteeditor.ui)
 
 set(CMAKE_MODULE_FILES
     cmake/modules/AndroidApk.cmake
@@ -93,31 +87,21 @@ set(CMAKE_MODULE_FILES
     cmake/modules/QtGuiConfig.cmake
     cmake/modules/QtLinkage.cmake
     cmake/modules/JsProviderConfig.cmake
-    cmake/modules/WebViewProviderConfig.cmake
-)
+    cmake/modules/WebViewProviderConfig.cmake)
 set(CMAKE_TEMPLATE_FILES
     cmake/templates/qtconfig.h.in
     cmake/templates/webviewdefs.h.in
     cmake/templates/webviewincludes.h.in
     cmake/templates/jsdefs.h.in
-    cmake/templates/jsincludes.h.in
-)
-if(ANDROID)
-    list(APPEND CMAKE_MODULE_FILES
-    )
-    list(APPEND CMAKE_TEMPLATE_FILES
-        cmake/templates/android-deployment.json.in
-    )
-endif()
+    cmake/templates/jsincludes.h.in)
+if (ANDROID)
+    list(APPEND CMAKE_MODULE_FILES)
+    list(APPEND CMAKE_TEMPLATE_FILES cmake/templates/android-deployment.json.in)
+endif ()
 
-set(TS_FILES
-    translations/${META_PROJECT_NAME}_de_DE.ts
-    translations/${META_PROJECT_NAME}_en_US.ts
-)
+set(TS_FILES translations/${META_PROJECT_NAME}_de_DE.ts translations/${META_PROJECT_NAME}_en_US.ts)
 
-set(DOC_FILES
-    README.md
-)
+set(DOC_FILES README.md)
 
 set(REQUIRED_ICONS
     dialog-cancel
@@ -133,71 +117,58 @@ set(REQUIRED_ICONS
     system-file-manager
     system-run
     system-search
-    window-close
-)
+    window-close)
 
-set(SCRIPT_FILES
-    scripts/required_icons.sh
-)
+set(SCRIPT_FILES scripts/required_icons.sh)
 
 # required to include CMake modules from own project directory
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
 
 # configure platform specific capslock detection for enterpassworddialog.cpp
-if(WIN32 OR (UNIX AND NOT APPLE AND NOT ANDROID))
+if (WIN32 OR (UNIX AND NOT APPLE AND NOT ANDROID))
     set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT ON)
-else()
+else ()
     set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT OFF)
-endif()
+endif ()
 option(CAPSLOCK_DETECTION "enables capslock detection" ${ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT})
-if(CAPSLOCK_DETECTION)
-    if(WIN32)
+if (CAPSLOCK_DETECTION)
+    if (WIN32)
         # WinAPI provides functions to provide capslock detection
         set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
-    else()
+    else ()
         # X11 can provide functions for capslock detection under non-Windows environments
         find_package(X11)
-        if(X11_FOUND)
+        if (X11_FOUND)
             list(APPEND LIBRARIES ${X11_LIBRARIES})
             set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
-        endif()
-    endif()
-    if(NOT HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+        endif ()
+    endif ()
+    if (NOT HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
         message(FATAL_ERROR "No backend for capslock detection found (WinAPI or X11 must be provided)")
-    endif()
-    set_property(
-        SOURCE enterpassworddialog/enterpassworddialog.cpp
-        APPEND PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
-    )
-endif()
+    endif ()
+    set_property(SOURCE enterpassworddialog/enterpassworddialog.cpp
+                 APPEND
+                 PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+endif ()
 
 # configure support for D-Bus notifications
-if(UNIX AND NOT APPLE AND NOT ANDROID)
+if (UNIX AND NOT APPLE AND NOT ANDROID)
     set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT ON)
-else()
+else ()
     set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT OFF)
-endif()
+endif ()
 option(DBUS_NOTIFICATIONS "enables support for D-Bus notifications" ${ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT})
 set(DBUS_NOTIFICATIONS_FILE_NAME misc/dbusnotification)
-if(DBUS_NOTIFICATIONS)
-    list(APPEND HEADER_FILES
-        ${DBUS_NOTIFICATIONS_FILE_NAME}.h
-    )
-    list(APPEND SRC_FILES
-        ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp
-    )
-    list(APPEND DBUS_FILES
-        dbus/org.freedesktop.Notifications.xml
-    )
+if (DBUS_NOTIFICATIONS)
+    list(APPEND HEADER_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.h)
+    list(APPEND SRC_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp)
+    list(APPEND DBUS_FILES dbus/org.freedesktop.Notifications.xml)
     list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SUPPORT_DBUS_NOTIFICATIONS)
     message(STATUS "D-Bus notifications enabled")
-else()
-    list(APPEND DOC_ONLY_FILES
-        ${DBUS_NOTIFICATIONS_FILE_NAME}.h
-        ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp
-    )
+else ()
+    list(APPEND DOC_ONLY_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.h ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp)
     message(STATUS "D-Bus notifications disabled")
-endif()
+endif ()
 
 # find c++utilities
 find_package(c++utilities 4.13.0 REQUIRED)
