@@ -57,7 +57,13 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
     } else {
         m_ui->productNameLabel->setText(QApplication::applicationName());
     }
-    m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
+    if (creator.startsWith(QLatin1Char('<'))) {
+        // assing rich text as-is
+        m_ui->creatorLabel->setText(creator);
+    } else {
+        // add "developed by " before creator name
+        m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
+    }
     m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
     const auto &deps(dependencyVersions.size() ? dependencyVersions : ApplicationUtilities::dependencyVersions2);
     if (deps.size()) {
