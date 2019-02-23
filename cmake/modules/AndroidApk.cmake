@@ -247,6 +247,7 @@ add_custom_command(OUTPUT "${ANDROID_APK_BINARY_PATH}"
                    VERBATIM)
 add_custom_command(
     OUTPUT "${ANDROID_APK_FILE_PATH}"
+    COMMAND rm -r "${ANDROID_APK_BUILD_DIR}/assets/--Added-by-androiddeployqt--/lib" || true
     COMMAND $<TARGET_FILE_DIR:Qt5::qmake>/androiddeployqt
             --gradle
             --input "${ANDROID_DEPLOYMENT_JSON_FILE}"
