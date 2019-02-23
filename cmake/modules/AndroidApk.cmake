@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 
-# add a target to create an Android API with the help of androiddeployqt if target platform is Android
+# adds a target to create an Android APK with the help of androiddeployqt if target platform is Android
 
 if (NOT ANDROID)
     return()
@@ -179,12 +179,8 @@ compose_dirs_for_android_apk(OUTPUT_VARIABLE
                              ANDROID_APK_EXTRA_PLUGIN_DIRS
                              POSSIBLE_DIRS
                              "${QT_INSTALL_PLUGINS}"
-                             "${QT_INSTALL_QML}"
                              "${CMAKE_INSTALL_PREFIX}/lib/qt/plugins"
-                             "${CMAKE_INSTALL_PREFIX}/lib/plugins"
-                             "${CMAKE_INSTALL_PREFIX}/lib/qt/qml"
-                             "${CMAKE_INSTALL_PREFIX}/lib/qml"
-                             "${CMAKE_INSTALL_PREFIX}/share")
+                             "${CMAKE_INSTALL_PREFIX}/lib/plugins")
 if (NOT ANDROID_APK_EXTRA_PLUGIN_DIRS)
     message(WARNING "Unable to find extra plugin directories for making the APK.")
 endif ()
