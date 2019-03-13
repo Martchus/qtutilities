@@ -3,8 +3,6 @@
 
 #include "../global.h"
 
-#include <c++utilities/conversion/types.h>
-
 #include <QDialog>
 #include <QItemDelegate>
 
