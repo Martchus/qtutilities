@@ -8,136 +8,103 @@ if (DEFINED QT_LINKAGE_DETERMINED)
 endif ()
 set(QT_LINKAGE_DETERMINED ON)
 
-include(3rdParty)
-
 # by default, require Qt 5.6 or higher
 if (NOT META_QT5_VERSION)
     set(META_QT5_VERSION 5.6)
 endif ()
 
-# determine whether to use dynamic or shared version of Qt (or both)
-set(QT_LINKAGE "AUTO_LINKAGE" CACHE STRING "specifies whether to link statically or dynamically against Qt 5")
-if (BUILD_STATIC_LIBS
-    OR ("${QT_LINKAGE}" STREQUAL "AUTO_LINKAGE"
-        AND ((STATIC_LINKAGE AND "${META_PROJECT_TYPE}" STREQUAL "application")
-             OR (STATIC_LIBRARY_LINKAGE
-                 AND ("${META_PROJECT_TYPE}" STREQUAL "" OR "${META_PROJECT_TYPE}" STREQUAL "library"))))
-    OR ("${QT_LINKAGE}" STREQUAL "STATIC"))
-    set(USE_STATIC_QT_BUILD ON)
-    message(
-        STATUS "Checking for static Qt 5 libraries to use in project ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX}")
-endif ()
-if (("${QT_LINKAGE}" STREQUAL "AUTO_LINKAGE"
-     AND (NOT
-          (STATIC_LINKAGE AND "${META_PROJECT_TYPE}" STREQUAL "application")
-          OR NOT
-             (STATIC_LIBRARY_LINKAGE AND ("${META_PROJECT_TYPE}" STREQUAL "" OR "${META_PROJECT_TYPE}" STREQUAL "library"))))
-    OR ("${QT_LINKAGE}" STREQUAL "SHARED"))
-    set(USE_SHARED_QT_BUILD ON)
-    message(
-        STATUS "Checking for dynamic Qt 5 libraries to use in project ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX}")
-endif ()
+# define function for using Qt and KDE Frameworks modules and static plugins
+include(3rdParty)
+macro (use_qt_module)
+    # parse arguments
+    set(OPTIONAL_ARGS ONLY_PLUGINS)
+    set(ONE_VALUE_ARGS PREFIX MODULE VISIBILITY LIBRARIES_VARIABLE)
+    set(MULTI_VALUE_ARGS TARGETS PLUGINS)
+    cmake_parse_arguments(ARGS "${OPTIONAL_ARGS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}" ${ARGN})
 
-macro (find_qt5_module MODULE REQUIRED)
-    # determine whether the library is required or optional FIXME: improve passing required argument
-    if ("${REQUIRED}" STREQUAL "OPTIONAL")
-        unset(QT_5_${MODULE}_REQUIRED)
-    elseif ("${REQUIRED}" STREQUAL "REQUIRED")
-        set(QT_5_${MODULE}_REQUIRED "REQUIRED")
-    else ()
-        message(FATAL_ERROR "Invalid use of link_against_library; must specify either REQUIRED or OPTIONAL.")
-    endif ()
+    # validate values
+    if (NOT ARGS_PREFIX)
+        message(FATAL_ERROR "use_qt_module called without PREFIX.")
+    endif()
+    if (NOT ARGS_MODULE)
+        message(FATAL_ERROR "use_qt_module called without MODULE.")
+    endif()
+    if (ARGS_VISIBILITY)
+        validate_visibility(${ARGS_VISIBILITY})
+    else()
+        set (ARGS_VISIBILITY PRIVATE)
+    endif()
+    if (NOT ARGS_LIBRARIES_VARIABLE)
+        set (ARGS_LIBRARIES_VARIABLE "${ARGS_VISIBILITY}_LIBRARIES")
+    endif()
+    if (NOT ARGS_TARGETS)
+        if (${MODULE}_MODULE_TARGETS)
+            set(ARGS_TARGETS "${${MODULE}_MODULE_TARGETS}")
+        else()
+            set(ARGS_TARGETS "${ARGS_PREFIX}::${ARGS_MODULE}")
+        endif()
+    endif()
+    if (ARGS_ONLY_PLUGINS AND NOT ARGS_PLUGINS)
+        message(FATAL_ERROR "ONLY_PLUGINS specified but no plugins.")
+    endif()
 
-    # find static version
-    if (USE_STATIC_QT_BUILD)
-        # check for 'Static'-prefixed CMake module first - patched mingw-w64-qt5 packages providing those files are available
-        # in my PKGBUILDs repository - has the advantage that usage of dynamic and static Qt during the same build is
-        # possible
-        find_package(StaticQt5${MODULE} ${META_QT5_VERSION})
-        if (StaticQt5${MODULE}_FOUND)
-            if (TARGET StaticQt5::${MODULE})
-                set(QT5_${MODULE}_STATIC_PREFIX "StaticQt5::")
-            else ()
-                set(QT5_${MODULE}_STATIC_PREFIX "Qt5::static::")
-            endif ()
-            set(QT5_${MODULE}_STATIC_LIB "${QT5_${MODULE}_STATIC_PREFIX}${MODULE}")
-            set(QT5_${MODULE}_ASSUME_STATIC OFF)
-            set(QT5_${MODULE}_FOUND ON)
-            # reverse lookup for pkg-config
-            set(PC_PKG_STATIC_Qt5_${MODULE} "StaticQt5${MODULE}")
-            set(PC_PKG_STATIC_StaticQt5_${MODULE} "StaticQt5${MODULE}")
-            set(PC_PKG_STATIC_Qt5_static_${MODULE} "StaticQt5${MODULE}")
-        else ()
-            # consider the regular Qt package (without "Static" prefix) the static version if static Qt is required and Qt
-            # package with "Static" prefix doesn't exist (fallback if not using patched version of Qt mentioned above)
-            find_package(Qt5${MODULE} ${META_QT5_VERSION} ${QT_5_${MODULE}_REQUIRED})
-            if (Qt5${MODULE}_FOUND)
-                set(QT5_${MODULE}_STATIC_PREFIX "Qt5::")
-                set(QT5_${MODULE}_STATIC_LIB "${QT5_${MODULE}_STATIC_PREFIX}${MODULE}")
-                set(QT5_${MODULE}_ASSUME_STATIC ON)
-                set(QT5_${MODULE}_FOUND ON)
-                # reverse lookup for pkg-config
-                set(PC_PKG_STATIC_Qt5_${MODULE} "Qt5${MODULE}")
-                message(
-                    WARNING
-                        "Building static libs and/or static Qt linkage has been enabled. Hence assuming provided Qt 5 module ${MODULE} is static."
-                    )
-            endif ()
-        endif ()
-
-        # use INTERFACE_LINK_LIBRARIES_RELEASE of the imported target as general INTERFACE_LINK_LIBRARIES to get correct
-        # transitive dependencies under any configuration
-        if (StaticQt5${MODULE}_FOUND OR Qt5${MODULE}_FOUND)
-            get_target_property(QT5_${MODULE}_STATIC_LIB_DEPS "${QT5_${MODULE}_STATIC_LIB}" INTERFACE_LINK_LIBRARIES_RELEASE)
-            set_target_properties("${QT5_${MODULE}_STATIC_LIB}"
-                                  PROPERTIES INTERFACE_LINK_LIBRARIES "${QT5_${MODULE}_STATIC_LIB_DEPS}")
-        endif ()
-    endif ()
-
-    # find dynamic version
-    if (USE_SHARED_QT_BUILD)
-        if (QT5_${MODULE}_ASSUME_STATIC)
+    # find and use module
+    if (NOT ONLY_PLUGINS)
+        find_package("${ARGS_PREFIX}${ARGS_MODULE}" "${META_QT5_VERSION}" REQUIRED)
+        foreach(TARGET ${ARGS_TARGETS})
+            if (NOT TARGET "${TARGET}")
+                message(FATAL_ERROR "The ${ARGS_PREFIX}${ARGS_MODULE} does not provide the target ${TARGET}.")
+            endif()
+            if ("${TARGET}" IN_LIST "${ARGS_LIBRARIES_VARIABLE}")
+                continue()
+            endif()
+            set("${ARGS_LIBRARIES_VARIABLE}" "${${ARGS_LIBRARIES_VARIABLE}};${TARGET}")
+            set("PKG_CONFIG_${ARGS_PREFIX}_${ARGS_MODULE}" "${ARGS_PREFIX}${ARGS_MODULE}")
             message(
-                FATAL_ERROR
-                    "The provided Qt 5 module ${MODULE} is assumed to be static. However, a shared version is required for building dynamic libs and/or dynamic Qt linkage."
+                STATUS
+                    "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against Qt 5 module ${TARGET}."
                 )
-        endif ()
-        find_package(Qt5${MODULE} ${META_QT5_VERSION} ${QT_5_${MODULE}_REQUIRED})
-        if (Qt5${MODULE}_FOUND)
-            set(QT5_${MODULE}_DYNAMIC_LIB Qt5::${MODULE})
-            set(QT5_${MODULE}_FOUND ON)
-            # reverse lookup for pkg-config
-            set(PC_PKG_SHARED_Qt5_${MODULE} "Qt5${MODULE}")
-        endif ()
-    endif ()
-endmacro ()
 
-macro (use_qt5_module MODULE REQUIRED)
-    if (${MODULE} IN_LIST META_PUBLIC_QT_MODULES)
-        list(APPEND META_PUBLIC_SHARED_LIB_DEPENDS "${QT5_${MODULE}_DYNAMIC_LIB}")
-        list(APPEND META_PUBLIC_STATIC_LIB_DEPENDS "${QT5_${MODULE}_STATIC_LIB}")
-    endif ()
-    link_against_library("QT5_${MODULE}" "${QT_LINKAGE}" "${REQUIRED}")
-endmacro ()
+            # hack for "StaticQt5": re-assign INTERFACE_LINK_LIBRARIES_RELEASE to INTERFACE_LINK_LIBRARIES
+            get_target_property("${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE" "${TARGET}" INTERFACE_LINK_LIBRARIES_RELEASE)
+            if ("${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE")
+                set_target_properties("${TARGET}" PROPERTIES INTERFACE_LINK_LIBRARIES "${${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE}")
+            endif ()
+        endforeach()
+    endif()
 
-macro (use_static_qt5_plugin MODULE PLUGIN FOR_SHARED_TARGET FOR_STATIC_TARGET)
-    if ("${FOR_SHARED_TARGET}")
-        list(APPEND PRIVATE_LIBRARIES "${QT5_${MODULE}_STATIC_PREFIX}Q${PLUGIN}Plugin")
+    # find and use plugins
+    foreach (PLUGIN ${ARGS_PLUGINS})
+        if (NOT TARGET "${ARGS_PREFIX}::Q${PLUGIN}Plugin")
+            find_package("${PREFIX}${MODULE}" "${META_QT5_VERSION}" REQUIRED)
+        endif()
+        if (NOT TARGET "${ARGS_PREFIX}::Q${PLUGIN}Plugin")
+            message(FATAL_ERROR "The ${ARGS_PREFIX}${MODULE} does not provide the target ${ARGS_PREFIX}::Q${PLUGIN}Plugin.")
+        endif()
+        if ("${ARGS_PREFIX}::Q${PLUGIN}Plugin" IN_LIST "${ARGS_LIBRARIES_VARIABLE}")
+            continue()
+        endif()
+        set("${ARGS_LIBRARIES_VARIABLE}" "${${ARGS_LIBRARIES_VARIABLE}};${ARGS_PREFIX}::Q${PLUGIN}Plugin")
         message(
             STATUS
-                "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against static Qt 5 plugin ${QT5_${MODULE}_STATIC_PREFIX}Q${PLUGIN}Plugin"
+                "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against Qt 5 plugin ${ARGS_PREFIX}::Q${PLUGIN}Plugin."
             )
-    endif ()
-    if ("${FOR_STATIC_TARGET}")
-        list(APPEND PRIVATE_STATIC_LIBRARIES "${QT5_${MODULE}_STATIC_PREFIX}Q${PLUGIN}Plugin")
-        message(
-            STATUS
-                "Adding static Qt 5 plugin ${QT5_${MODULE}_STATIC_PREFIX}Q${PLUGIN}Plugin to dependencies of static ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX}"
-            )
-    endif ()
-endmacro ()
+    endforeach()
 
-macro (query_qmake_variable QMAKE_VARIABLE)
+    # unset variables (can not simply use a function because Qt's variables need to be exported)
+    foreach (ARGUMENT ${OPTIONAL_ARGS} ${ONE_VALUE_ARGS} ${MULTI_VALUE_ARGS})
+        unset(ARGS_${ARGUMENT})
+    endforeach()
+endmacro()
+
+# define function to make qmake variable available within CMake
+function (query_qmake_variable QMAKE_VARIABLE)
+    # prevent queries for variables already known
+    if (NOT "${${QMAKE_VARIABLE}}" STREQUAL "")
+        return()
+    endif()
+
+    # execute qmake
     get_target_property(QMAKE_BIN Qt5::qmake IMPORTED_LOCATION)
     execute_process(COMMAND "${QMAKE_BIN}" -query "${QMAKE_VARIABLE}"
                     RESULT_VARIABLE "${QMAKE_VARIABLE}_RESULT"
@@ -148,10 +115,15 @@ macro (query_qmake_variable QMAKE_VARIABLE)
                 "Unable to read qmake variable ${QMAKE_VARIABLE} via \"${QMAKE_BIN} -query ${QMAKE_VARIABLE}\"; output was \"${${QMAKE_VARIABLE}}\"."
             )
     endif ()
+
+    # remove new-line character at the end
     string(REGEX
            REPLACE "\n$"
                    ""
                    "${QMAKE_VARIABLE}"
                    "${${QMAKE_VARIABLE}}")
+
+    # export variable to parent scope
+    set("${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}" PARENT_SCOPE)
     message(STATUS "qmake variable ${QMAKE_VARIABLE} is ${${QMAKE_VARIABLE}}")
-endmacro ()
+endfunction()

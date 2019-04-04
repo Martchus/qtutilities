@@ -8,8 +8,8 @@ set(META_APP_AUTHOR "Martchus")
 set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION
     "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
-set(META_VERSION_MAJOR 5)
-set(META_VERSION_MINOR 13)
+set(META_VERSION_MAJOR 6)
+set(META_VERSION_MINOR 0)
 set(META_VERSION_PATCH 0)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
@@ -86,8 +86,8 @@ set(CMAKE_MODULE_FILES
     cmake/modules/QtConfig.cmake
     cmake/modules/QtGuiConfig.cmake
     cmake/modules/QtLinkage.cmake
-    cmake/modules/JsProviderConfig.cmake
-    cmake/modules/WebViewProviderConfig.cmake)
+    cmake/modules/QtWebViewProviderConfig.cmake
+    cmake/modules/QtJsProviderConfig.cmake)
 set(CMAKE_TEMPLATE_FILES
     cmake/templates/qtconfig.h.in
     cmake/templates/webviewdefs.h.in

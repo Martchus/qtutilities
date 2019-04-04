@@ -10,6 +10,13 @@ if (TARGET_CONFIG_DONE)
     message(FATAL_ERROR "Can not include QtGuiConfig module when targets are already configured.")
 endif ()
 
+if (NOT WIDGETS_GUI AND NOT QUICK_GUI)
+    message(STATUS "GUI is completely disabled.")
+    return()
+endif()
+
+list(APPEND ADDITIONAL_QT_MODULES Gui)
+
 # enable Qt Widgets GUI
 if (WIDGETS_GUI)
     list(APPEND META_PRIVATE_COMPILE_DEFINITIONS GUI_QTWIDGETS)
@@ -60,28 +67,26 @@ else ()
     message(STATUS "Building WITHOUT Qt Quick GUI.")
 endif ()
 
-# do further GUI-related configuration only if at least one kind of GUI is enabled (tageditor allows building without GUI so
-# this is a valid configuration)
-if (WIDGETS_GUI OR QUICK_GUI)
-    if (WIN32)
-        # set "GUI-type" to WIN32 to hide console under Windows
-        set(GUI_TYPE WIN32)
-    elseif (APPLE)
-        # make the GUI application a "bundle" under MacOSX
-        set(GUI_TYPE MACOSX_BUNDLE)
-    endif ()
+# set platform-specific GUI-type
+if (WIN32)
+    # set "GUI-type" to WIN32 to hide console under Windows
+    set(GUI_TYPE WIN32)
+elseif (APPLE)
+    # make the GUI application a "bundle" under MacOSX
+    set(GUI_TYPE MACOSX_BUNDLE)
+endif ()
 
-    # add source files requried by both GUI variants
-    list(APPEND SRC_FILES ${GUI_SRC_FILES})
-    list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
+# add source files requried by both GUI variants
+list(APPEND SRC_FILES ${GUI_SRC_FILES})
+list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
 
-    # add option for enabling/disabling static Qt plugins
-    option(SVG_SUPPORT "whether to link against the SVG image format plugin (only relevant when using static Qt)" ON)
-    option(SVG_ICON_SUPPORT "whether to link against the SVG icon engine (only relevant when using static Qt)" ON)
-    set(IMAGE_FORMAT_SUPPORT "Gif;ICO;Jpeg"
-        CACHE STRING "specifies the image format plugins to link against (only relevant when using static Qt)")
+# add option for enabling/disabling static Qt plugins
+option(SVG_SUPPORT "whether to link against the SVG image format plugin (only relevant when using static Qt)" ON)
+option(SVG_ICON_SUPPORT "whether to link against the SVG icon engine (only relevant when using static Qt)" ON)
+set(IMAGE_FORMAT_SUPPORT "Gif;ICO;Jpeg"
+    CACHE STRING "specifies the image format plugins to link against (only relevant when using static Qt)")
 
-    if (ANDROID)
-        list(APPEND ADDITIONAL_QT_MODULES Svg)
-    endif ()
+# always enable the Svg module under Android
+if (ANDROID)
+    list(APPEND ADDITIONAL_QT_MODULES Svg)
 endif ()

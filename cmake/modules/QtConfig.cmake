@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 
-# applies Qt specific configuration for GUI applications, QtGuiAppConfig must be included before this module must always be
-# included before AppTarget/LibraryTarget
+# applies Qt specific configuration
+# notes: For GUI applications, QtGuiConfig must be included before.
+#        This module must always be included before AppTarget/LibraryTarget.
 
 # ensure generated sources are processed by AUTOMOC and AUTOUIC
 if (POLICY CMP0071)
@@ -18,9 +19,10 @@ if (TARGET_CONFIG_DONE)
     message(FATAL_ERROR "Can not include QtConfig module when targets are already configured.")
 endif ()
 
-# add the Core module as it is always required also add additional Qt/KF modules which must have been specified before if
-# required the Gui/Widgets/Quick modules should be added by including QtGuiAppConfig
-set(QT_REPOS base ${ADDITIONAL_QT_REPOS})
+# add the Core module as it is always required and also add additional Qt/KF modules
+# which must have been specified before if required
+# note: The Gui/Widgets/Quick modules should be added by including QtGuiConfig.
+set(QT_REPOS ${ADDITIONAL_QT_REPOS} base)
 set(QT_MODULES ${ADDITIONAL_QT_MODULES} Core)
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
 
@@ -49,73 +51,74 @@ if (IMPORTED_KF_MODULES)
     list(REMOVE_DUPLICATES IMPORTED_KF_MODULES)
 endif ()
 
-# actually find the required Qt/KF modules
-foreach (QT_MODULE ${QT_MODULES})
-    # using those helpers allows using static Qt 5 build
-    find_qt5_module(${QT_MODULE} REQUIRED)
-    use_qt5_module(${QT_MODULE} REQUIRED)
+# find and use the required Qt/KF modules
+set(QT_PACKAGE_PREFIX "Qt5" CACHE STRING "specifies the prefix for Qt packages")
+foreach (MODULE ${QT_MODULES})
+    unset(MODULE_OPTIONS)
+    if ("${MODULE}" IN_LIST META_PUBLIC_QT_MODULES)
+        list(APPEND MODULE_OPTIONS VISIBILITY PUBLIC)
+    endif()
+    use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
 endforeach ()
-foreach (QT_MODULE ${IMPORTED_QT_MODULES})
+set(KF_PACKAGE_PREFIX "KF5" CACHE STRING "specifies the prefix for KDE Frameworks packages")
+foreach (MODULE ${KF_MODULES})
+    unset(MODULE_OPTIONS)
+    if ("${MODULE}" IN_LIST META_PUBLIC_KF_MODULES)
+        list(APPEND MODULE_OPTIONS VISIBILITY PUBLIC)
+    endif()
+    use_qt_module(PREFIX "${KF_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
+endforeach ()
+
+# hack for using static Qt via "StaticQt5" prefix: find regular Qt5Core module as well so Qt version is defined
+if (QT_PACKAGE_PREFIX STREQUAL "StaticQt5")
+    find_package(Qt5Core)
+endif()
+
+# find transitively required Qt/KF modules
+foreach (MODULE ${IMPORTED_QT_MODULES})
     if (NOT "${QT_MODULE}" IN_LIST QT_MODULES)
-        find_qt5_module(${QT_MODULE} REQUIRED)
+        find_package("${QT_PACKAGE_PREFIX}${MODULE}" REQUIRED)
     endif ()
 endforeach ()
-foreach (KF_MODULE ${KF_MODULES})
-    # only shared KF5 modules supported
-    find_package(KF5${KF_MODULE} REQUIRED)
-    set(KF5_${KF_MODULE}_DYNAMIC_LIB KF5::${KF_MODULE})
-    link_against_library(KF5_${KF_MODULE} "AUTO_LINKAGE" REQUIRED)
-endforeach ()
-foreach (KF_MODULE ${IMPORTED_KF_MODULES})
+foreach (MODULE ${IMPORTED_KF_MODULES})
     if (NOT "${KF_MODULE}" IN_LIST KF_MODULES)
-        find_package(KF5${KF_MODULE} REQUIRED)
+        find_package("${KF_PACKAGE_PREFIX}${MODULE}" REQUIRED)
     endif ()
 endforeach ()
 
-# built-in platform, imageformat and iconengine plugins when linking statically against Qt Gui -> determine whether
-# application target links statically against Qt Gui
-if (META_PROJECT_TYPE STREQUAL "application")
-    set(USING_STATIC_QT_GUI_FOR_APPLICATION NO)
-    foreach (MODULE Gui Widgets Quick)
-        if (QT5_${MODULE}_STATIC_LIB IN_LIST LIBRARIES OR QT5_${MODULE}_STATIC_LIB IN_LIST PRIVATE_LIBRARIES)
-            set(USING_STATIC_QT_GUI_FOR_APPLICATION YES)
-            message(STATUS "Linking application ${META_PROJECT_NAME} against static Qt 5 plugins.")
-            break()
-        endif ()
-    endforeach ()
-endif ()
-# -> link against plugins according to platform and configuration
-if (USING_STATIC_QT_GUI_FOR_APPLICATION)
-    if (NOT USE_STATIC_QT5_Gui)
-        find_qt5_module(Gui REQUIRED)
-    endif ()
+# built-in platform, imageformat and iconengine plugins when linking statically against Qt
+if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
+    message(STATUS "Linking application ${META_PROJECT_NAME} against Qt 5 plugins because static linkage is enabled.")
 
-    # ensure platform integration plugins for corresponding platforms are built-in when creating a GUI application
-    if (WIN32)
-        use_static_qt5_plugin(Gui WindowsIntegration ON OFF)
-    elseif (APPLE)
-        use_static_qt5_plugin(Gui CocoaIntegration ON OFF)
-    elseif (TARGET ${QT5_Gui_STATIC_PREFIX}QXcbIntegrationPlugin)
-        use_static_qt5_plugin(Gui XcbIntegration ON OFF)
-    else ()
-        message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
-    endif ()
+    if (Gui IN_LIST QT_MODULES OR Widgets IN_LIST QT_MODULES OR Quick IN_LIST QT_MODULES)
+        if (WIN32)
+            use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS WindowsIntegration ONLY_PLUGINS)
+        elseif (APPLE)
+            use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS CocoaIntegration ONLY_PLUGINS)
+        elseif (TARGET ${QT5_Gui_STATIC_PREFIX}QXcbIntegrationPlugin)
+            use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS XcbIntegration ONLY_PLUGINS)
+        else ()
+            message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
+        endif ()
+    endif()
 
     # ensure all available widget style plugins are built-in when creating a Qt Widgets application note: required since Qt
     # 5.10 because the styles have been "pluginized" (see commit 4f3249f)
     set(KNOWN_WIDGET_STYLE_PLUGINS WindowsVistaStyle MacStyle AndroidStyle)
     set(USED_WIDGET_STYLE_PLUGINS)
-    if (QT5_Widgets_STATIC_LIB IN_LIST LIBRARIES OR QT5_Widgets_STATIC_LIB IN_LIST PRIVATE_LIBRARIES)
+    if (Widgets IN_LIST QT_MODULES)
         foreach (WIDGET_STYLE_PLUGIN ${KNOWN_WIDGET_STYLE_PLUGINS})
-            if (TARGET "${QT5_Widgets_STATIC_PREFIX}Q${WIDGET_STYLE_PLUGIN}Plugin")
-                use_static_qt5_plugin(Widgets "${WIDGET_STYLE_PLUGIN}" ON OFF)
+            if (TARGET "${QT_PACKAGE_PREFIX}::Q${WIDGET_STYLE_PLUGIN}Plugin")
+                use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Widgets PLUGINS ${WIDGET_STYLE_PLUGIN} ONLY_PLUGINS)
                 list(APPEND USED_WIDGET_STYLE_PLUGINS "${WIDGET_STYLE_PLUGIN}")
             endif ()
         endforeach ()
 
         # allow importing image format plugins via config.h
-        include(ListToString)
-        list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${USED_WIDGET_STYLE_PLUGINS}" WIDGET_STYLE_PLUGINS_ARRAY)
+        if (USED_WIDGET_STYLE_PLUGINS)
+            include(ListToString)
+            list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${USED_WIDGET_STYLE_PLUGINS}" WIDGET_STYLE_PLUGINS_ARRAY)
+        endif ()
     endif ()
 
     # ensure image format plugins (beside SVG) are built-in if configured
@@ -126,7 +129,7 @@ if (USING_STATIC_QT_GUI_FOR_APPLICATION)
                 set(SVG_SUPPORT ON)
                 list(REMOVE_ITEM IMAGE_FORMAT_SUPPORT Svg)
             else ()
-                use_static_qt5_plugin(Gui "${IMAGE_FORMAT}" ON OFF)
+                use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS ${IMAGE_FORMAT} ONLY_PLUGINS)
             endif ()
         endforeach ()
 
@@ -136,14 +139,14 @@ if (USING_STATIC_QT_GUI_FOR_APPLICATION)
     endif ()
 
     # ensure SVG plugins are built-in if configured
-    if ((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND NOT USE_STATIC_QT5_Svg)
-        find_qt5_module(Svg REQUIRED)
+    if ((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND NOT Svg IN_LIST QT_MODULES)
+        use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg)
     endif ()
     if (SVG_SUPPORT)
-        use_static_qt5_plugin(Svg Svg ON OFF)
+        use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg PLUGINS Svg ONLY_PLUGINS)
     endif ()
     if (SVG_ICON_SUPPORT)
-        use_static_qt5_plugin(Svg SvgIcon ON OFF)
+        use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg PLUGINS SvgIcon ONLY_PLUGINS)
     endif ()
 endif ()
 
@@ -153,6 +156,10 @@ option(BUILTIN_TRANSLATIONS "enables/disables built-in translations when buildin
 # determine relevant Qt translation files
 set(QT_TRANSLATION_FILES)
 set(QT_TRANSLATION_SEARCH_PATHS)
+query_qmake_variable(QT_INSTALL_TRANSLATIONS)
+if (QT_INSTALL_TRANSLATIONS)
+    list(APPEND QT_TRANSLATION_SEARCH_PATHS "${QT_INSTALL_TRANSLATIONS}")
+endif ()
 if (CMAKE_FIND_ROOT_PATH)
     list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_FIND_ROOT_PATH}/share/qt/translations"
                 "${CMAKE_FIND_ROOT_PATH}/share/qt5/translations")
@@ -411,28 +418,23 @@ foreach (RES_FILE ${RES_FILES})
 endforeach ()
 
 # export Qt resources required by static libraries the static library depends on
-if (STATIC_LIBRARIES_QT_RESOURCES)
+if (META_PROJECT_IS_LIBRARY AND NOT BUILD_SHARED_LIBS AND STATIC_LIBRARIES_QT_RESOURCES)
     list(REMOVE_DUPLICATES STATIC_LIBRARIES_QT_RESOURCES)
     list(APPEND QT_RESOURCES ${STATIC_LIBRARIES_QT_RESOURCES})
 endif ()
 
-# enable Qt resources required by static libraries the shared library or application depends on
-if (LIBRARIES_QT_RESOURCES)
-    list(REMOVE_DUPLICATES LIBRARIES_QT_RESOURCES)
+# enable Qt resources required by libraries the application depends on
+if (QT_RESOURCES)
+    list(REMOVE_DUPLICATES QT_RESOURCES)
 
     # make enabling resources of static dependencies available via config.h
     unset(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES)
-    foreach (QT_RESOURCE ${LIBRARIES_QT_RESOURCES})
+    foreach (QT_RESOURCE ${STATIC_LIBRARIES_QT_RESOURCES})
         set(
             ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
             "${ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES} \\\n    struct initializer_${QT_RESOURCE} { \\\n        initializer_${QT_RESOURCE}() { Q_INIT_RESOURCE(${QT_RESOURCE}); } \\\n        ~initializer_${QT_RESOURCE}() { Q_CLEANUP_RESOURCE(${QT_RESOURCE}); } \\\n    } dummy_${QT_RESOURCE};"
             )
     endforeach ()
-endif ()
-
-# prevent duplicated resources
-if (QT_RESOURCES)
-    list(REMOVE_DUPLICATES QT_RESOURCES)
 endif ()
 
 # enable moc, uic and rcc by default for all targets
