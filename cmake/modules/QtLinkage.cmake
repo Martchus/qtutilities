@@ -8,13 +8,15 @@ if (DEFINED QT_LINKAGE_DETERMINED)
 endif ()
 set(QT_LINKAGE_DETERMINED ON)
 
+# include validate_visibility from c++utilities' 3rdParty module
+include(3rdParty)
+
 # by default, require Qt 5.6 or higher
 if (NOT META_QT5_VERSION)
     set(META_QT5_VERSION 5.6)
 endif ()
 
 # define function for using Qt and KDE Frameworks modules and static plugins
-include(3rdParty)
 macro (use_qt_module)
     # parse arguments
     set(OPTIONAL_ARGS ONLY_PLUGINS)
@@ -62,7 +64,7 @@ macro (use_qt_module)
             set("PKG_CONFIG_${ARGS_PREFIX}_${ARGS_MODULE}" "${ARGS_PREFIX}${ARGS_MODULE}")
             message(
                 STATUS
-                    "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against Qt 5 module ${TARGET}."
+                    "Linking ${META_TARGET_NAME} against Qt 5 module ${TARGET}."
                 )
 
             # hack for "StaticQt5": re-assign INTERFACE_LINK_LIBRARIES_RELEASE to INTERFACE_LINK_LIBRARIES
@@ -87,7 +89,7 @@ macro (use_qt_module)
         set("${ARGS_LIBRARIES_VARIABLE}" "${${ARGS_LIBRARIES_VARIABLE}};${ARGS_PREFIX}::Q${PLUGIN}Plugin")
         message(
             STATUS
-                "Linking ${TARGET_PREFIX}${META_PROJECT_NAME}${TARGET_SUFFIX} against Qt 5 plugin ${ARGS_PREFIX}::Q${PLUGIN}Plugin."
+                "Linking ${META_TARGET_NAME} against Qt 5 plugin ${ARGS_PREFIX}::Q${PLUGIN}Plugin."
             )
     endforeach()
 

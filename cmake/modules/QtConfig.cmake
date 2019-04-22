@@ -9,6 +9,7 @@ if (POLICY CMP0071)
     cmake_policy(SET CMP0071 NEW)
 endif ()
 
+# verify inclusion order
 if (NOT BASIC_PROJECT_CONFIG_DONE)
     message(FATAL_ERROR "Before including the QtConfig module, the BasicConfig module must be included.")
 endif ()
@@ -19,6 +20,11 @@ if (TARGET_CONFIG_DONE)
     message(FATAL_ERROR "Can not include QtConfig module when targets are already configured.")
 endif ()
 
+# include required modules
+include(ListToString)
+include(TemplateFinder)
+include(QtLinkage)
+
 # add the Core module as it is always required and also add additional Qt/KF modules
 # which must have been specified before if required
 # note: The Gui/Widgets/Quick modules should be added by including QtGuiConfig.
@@ -28,8 +34,6 @@ set(KF_MODULES ${ADDITIONAL_KF_MODULES})
 
 # allow specifying a custom directory for Qt plugins
 set(QT_PLUGIN_DIR "" CACHE STRING "specifies the directory to install Qt plugins")
-
-include(QtLinkage)
 
 # check whether D-Bus interfaces need to be processed
 if (DBUS_FILES)
@@ -116,7 +120,6 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
 
         # allow importing image format plugins via config.h
         if (USED_WIDGET_STYLE_PLUGINS)
-            include(ListToString)
             list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${USED_WIDGET_STYLE_PLUGINS}" WIDGET_STYLE_PLUGINS_ARRAY)
         endif ()
     endif ()
@@ -134,7 +137,6 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
         endforeach ()
 
         # allow importing image format plugins via config.h
-        include(ListToString)
         list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${IMAGE_FORMAT_SUPPORT}" IMAGE_FORMAT_SUPPORT_ARRAY)
     endif ()
 
@@ -188,7 +190,6 @@ foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
 endforeach ()
 
 # make relevant Qt translations available as array via config.h
-include(ListToString)
 list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${QT_TRANSLATION_FILES}" QT_TRANSLATION_FILES_ARRAY)
 
 # enable lrelease and add install target for localization
@@ -455,7 +456,6 @@ if (WIDGETS_UI_FILES AND WIDGETS_GUI)
 endif ()
 
 # add configuration header for Qt-specific configuration
-include(TemplateFinder)
 find_template_file("qtconfig.h" QT_UTILITIES QT_CONFIG_H_TEMPLATE_FILE)
 configure_file("${QT_CONFIG_H_TEMPLATE_FILE}" "${CMAKE_CURRENT_BINARY_DIR}/resources/qtconfig.h")
 
