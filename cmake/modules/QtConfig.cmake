@@ -225,7 +225,7 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
 
     # add install target for translations
     if (NOT META_NO_INSTALL_TARGETS AND ENABLE_INSTALL_TARGETS)
-        install(FILES ${QM_FILES} DESTINATION share/${META_PROJECT_NAME}/translations COMPONENT localization)
+        install(FILES ${QM_FILES} DESTINATION "${META_DATA_DIR}/translations" COMPONENT localization)
         if (NOT TARGET install-localization)
             set(LOCALIZATION_TARGET "install-localization")
             add_custom_target(${LOCALIZATION_TARGET}
@@ -419,7 +419,7 @@ foreach (RES_FILE ${RES_FILES})
 endforeach ()
 
 # export Qt resources required by static libraries the static library depends on
-if (META_PROJECT_IS_LIBRARY AND NOT BUILD_SHARED_LIBS AND STATIC_LIBRARIES_QT_RESOURCES)
+if (STATIC_LIBRARIES_QT_RESOURCES)
     list(REMOVE_DUPLICATES STATIC_LIBRARIES_QT_RESOURCES)
     list(APPEND QT_RESOURCES ${STATIC_LIBRARIES_QT_RESOURCES})
 endif ()
