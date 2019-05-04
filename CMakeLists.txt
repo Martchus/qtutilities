@@ -171,7 +171,8 @@ else ()
 endif ()
 
 # find c++utilities
-set(CONFIGURATION_PACKAGE_SUFFIX "" CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
+set(CONFIGURATION_PACKAGE_SUFFIX ""
+    CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
 find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
 use_cpp_utilities()
 

@@ -239,11 +239,9 @@ else ()
     endif ()
 
 endif ()
-set(ANDROID_APK_BINARY_PATH
-    "${ANDROID_APK_BUILD_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/lib${META_TARGET_NAME}.so")
+set(ANDROID_APK_BINARY_PATH "${ANDROID_APK_BUILD_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/lib${META_TARGET_NAME}.so")
 add_custom_command(OUTPUT "${ANDROID_APK_BINARY_PATH}"
-                   COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:${META_TARGET_NAME}>"
-                           "${ANDROID_APK_BINARY_PATH}"
+                   COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:${META_TARGET_NAME}>" "${ANDROID_APK_BINARY_PATH}"
                    COMMENT "Preparing build dir for Android APK"
                    DEPENDS "${META_TARGET_NAME}" COMMAND_EXPAND_LISTS
                    VERBATIM)
@@ -262,9 +260,7 @@ add_custom_command(
         "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH};${ANDROID_APK_FILES};${ANDROID_APK_BINARY_DIRS_DEPENDS}"
         COMMAND_EXPAND_LISTS
     VERBATIM)
-add_custom_target("${META_TARGET_NAME}_apk"
-                  COMMENT "Android APK"
-                  DEPENDS "${ANDROID_APK_FILE_PATH}")
+add_custom_target("${META_TARGET_NAME}_apk" COMMENT "Android APK" DEPENDS "${ANDROID_APK_FILE_PATH}")
 if (NOT TARGET apk)
     add_custom_target(apk)
 endif ()
@@ -279,8 +275,7 @@ endif ()
 install(FILES "${ANDROID_APK_FILE_PATH}" DESTINATION "share/apk" RENAME "${ANDROID_APK_FINAL_NAME}" COMPONENT apk)
 add_custom_target("${META_TARGET_NAME}_install_apk"
                   COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=apk -P "${CMAKE_BINARY_DIR}/cmake_install.cmake")
-add_dependencies("${META_TARGET_NAME}_install_apk"
-                 "${META_TARGET_NAME}_apk")
+add_dependencies("${META_TARGET_NAME}_install_apk" "${META_TARGET_NAME}_apk")
 if (NOT TARGET install-apk)
     add_custom_target(install-apk)
 endif ()

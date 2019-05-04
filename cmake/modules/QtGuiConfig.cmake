@@ -13,7 +13,7 @@ endif ()
 if (NOT WIDGETS_GUI AND NOT QUICK_GUI)
     message(STATUS "GUI is completely disabled.")
     return()
-endif()
+endif ()
 
 list(APPEND ADDITIONAL_QT_MODULES Gui)
 

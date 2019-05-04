@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 
-# applies Qt specific configuration
-# notes: For GUI applications, QtGuiConfig must be included before.
-#        This module must always be included before AppTarget/LibraryTarget.
+# applies Qt specific configuration notes: For GUI applications, QtGuiConfig must be included before. This module must always
+# be included before AppTarget/LibraryTarget.
 
 # ensure generated sources are processed by AUTOMOC and AUTOUIC
 if (POLICY CMP0071)
@@ -25,9 +24,8 @@ include(ListToString)
 include(TemplateFinder)
 include(QtLinkage)
 
-# add the Core module as it is always required and also add additional Qt/KF modules
-# which must have been specified before if required
-# note: The Gui/Widgets/Quick modules should be added by including QtGuiConfig.
+# add the Core module as it is always required and also add additional Qt/KF modules which must have been specified before if
+# required note: The Gui/Widgets/Quick modules should be added by including QtGuiConfig.
 set(QT_REPOS ${ADDITIONAL_QT_REPOS} base)
 set(QT_MODULES ${ADDITIONAL_QT_MODULES} Core)
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
@@ -61,7 +59,7 @@ foreach (MODULE ${QT_MODULES})
     unset(MODULE_OPTIONS)
     if ("${MODULE}" IN_LIST META_PUBLIC_QT_MODULES)
         list(APPEND MODULE_OPTIONS VISIBILITY PUBLIC)
-    endif()
+    endif ()
     use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
 endforeach ()
 set(KF_PACKAGE_PREFIX "KF5" CACHE STRING "specifies the prefix for KDE Frameworks packages")
@@ -69,14 +67,14 @@ foreach (MODULE ${KF_MODULES})
     unset(MODULE_OPTIONS)
     if ("${MODULE}" IN_LIST META_PUBLIC_KF_MODULES)
         list(APPEND MODULE_OPTIONS VISIBILITY PUBLIC)
-    endif()
+    endif ()
     use_qt_module(PREFIX "${KF_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
 endforeach ()
 
 # hack for using static Qt via "StaticQt5" prefix: find regular Qt5Core module as well so Qt version is defined
 if (QT_PACKAGE_PREFIX STREQUAL "StaticQt5")
     find_package(Qt5Core)
-endif()
+endif ()
 
 # find transitively required Qt/KF modules
 foreach (MODULE ${IMPORTED_QT_MODULES})
@@ -104,7 +102,7 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
         else ()
             message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
         endif ()
-    endif()
+    endif ()
 
     # ensure all available widget style plugins are built-in when creating a Qt Widgets application note: required since Qt
     # 5.10 because the styles have been "pluginized" (see commit 4f3249f)
@@ -120,7 +118,11 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
 
         # allow importing image format plugins via config.h
         if (USED_WIDGET_STYLE_PLUGINS)
-            list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${USED_WIDGET_STYLE_PLUGINS}" WIDGET_STYLE_PLUGINS_ARRAY)
+            list_to_string(" "
+                           "\\\n    Q_IMPORT_PLUGIN(Q"
+                           "Plugin)"
+                           "${USED_WIDGET_STYLE_PLUGINS}"
+                           WIDGET_STYLE_PLUGINS_ARRAY)
         endif ()
     endif ()
 
@@ -141,7 +143,11 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
     endif ()
 
     # ensure SVG plugins are built-in if configured
-    if ((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND NOT Svg IN_LIST QT_MODULES)
+    if ((SVG_SUPPORT OR SVG_ICON_SUPPORT)
+        AND NOT
+            Svg
+            IN_LIST
+            QT_MODULES)
         use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg)
     endif ()
     if (SVG_SUPPORT)
