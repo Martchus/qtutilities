@@ -65,10 +65,10 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
     }
     m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
-    const auto &deps(dependencyVersions.size() ? dependencyVersions : ApplicationUtilities::dependencyVersions2);
-    if (deps.size()) {
+    const auto &deps(dependencyVersions.size() ? dependencyVersions : ApplicationUtilities::dependencyVersions);
+    if (!deps.empty()) {
         QStringList linkedAgainst;
-        linkedAgainst.reserve(deps.size());
+        linkedAgainst.reserve(static_cast<int>(deps.size()));
         for (const auto &dependencyVersion : deps) {
             linkedAgainst << QString::fromUtf8(dependencyVersion);
         }
@@ -86,8 +86,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         : new QGraphicsPixmapItem(QPixmap::fromImage(image));
     m_iconScene->addItem(item);
     m_ui->graphicsView->setScene(m_iconScene);
-    setGeometry(QStyle::alignedRect(
-        Qt::LeftToRight, Qt::AlignCenter, size(), parentWidget() ? parentWidget()->geometry() : QApplication::desktop()->availableGeometry()));
+    centerWidget(this, parentWidget());
 }
 
 AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version, const QString &website,

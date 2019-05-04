@@ -1,20 +1,22 @@
 #include "./dialogutils.h"
 
-#if !defined(QT_UTILITIES_GUI_QTWIDGETS) && !defined(QT_UTILITIES_GUI_QTQUICK)
 #include <QCoreApplication>
-#else
+#include <QDir>
+#include <QFileInfo>
+
+#if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 #include <QGuiApplication>
 #include <QPalette>
-#include <QStyle>
-#include <QWidget>
-#ifdef QT_UTILITIES_GUI_QTWIDGETS
+#endif
+
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #include <QApplication>
 #include <QCursor>
 #include <QDesktopWidget>
+#include <QScreen>
+#include <QStyle>
+#include <QWidget>
 #endif
-#endif
-#include <QDir>
-#include <QFileInfo>
 
 namespace Dialogs {
 
@@ -97,29 +99,44 @@ const QString &dialogStyle()
 
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
 
+QRect availableScreenGeometryAtPoint(const QPoint &point)
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    QScreen *const screen = QGuiApplication::screenAt(point);
+    if (!screen) {
+        return QRect();
+    }
+    return screen->availableGeometry();
+#else
+    return QApplication::desktop()->availableGeometry(point);
+#endif
+}
+
 /*!
  * \brief Moves the specified \a widget in the middle of the (available) screen
- * area. If there are multiple
- *        screens available, the screen where the cursor currently is located is
- * chosen.
+ * area or \a parent if specified.
+ *
+ * If there are multiple screens available, the screen where the cursor currently
+ * is located is chosen.
  */
-void centerWidget(QWidget *widget)
+void centerWidget(QWidget *widget, const QWidget *parent)
 {
-    widget->setGeometry(
-        QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, widget->size(), QApplication::desktop()->availableGeometry(QCursor::pos())));
+    widget->setGeometry(QStyle::alignedRect(
+        Qt::LeftToRight, Qt::AlignCenter, widget->size(), parent ? parent->geometry() : availableScreenGeometryAtPoint(QCursor::pos())));
 }
 
 /*!
  * \brief Moves the specified \a widget to the corner which is closest to the
  * current cursor position.
- *        If there are multiple screens available, the screen where the cursor
- * currently is located is chosen.
+ *
+ * If there are multiple screens available, the screen where the cursor currently
+ * is located is chosen.
  */
 void cornerWidget(QWidget *widget)
 {
     const QPoint cursorPos(QCursor::pos());
-    const QRect availableGeometry(QApplication::desktop()->availableGeometry(cursorPos));
-    Qt::Alignment alignment = 0;
+    const QRect availableGeometry(availableScreenGeometryAtPoint(cursorPos));
+    Qt::Alignment alignment = nullptr;
     alignment |= (cursorPos.x() - availableGeometry.left() < availableGeometry.right() - cursorPos.x() ? Qt::AlignLeft : Qt::AlignRight);
     alignment |= (cursorPos.y() - availableGeometry.top() < availableGeometry.bottom() - cursorPos.y() ? Qt::AlignTop : Qt::AlignBottom);
     widget->setGeometry(QStyle::alignedRect(Qt::LeftToRight, alignment, widget->size(), availableGeometry));

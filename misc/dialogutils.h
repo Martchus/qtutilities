@@ -8,6 +8,8 @@
 QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QWidget)
 QT_FORWARD_DECLARE_CLASS(QColor)
+QT_FORWARD_DECLARE_CLASS(QPoint)
+QT_FORWARD_DECLARE_CLASS(QRect)
 
 namespace Dialogs {
 
@@ -33,7 +35,8 @@ QColor QT_UTILITIES_EXPORT instructionTextColor();
 #endif
 const QString QT_UTILITIES_EXPORT &dialogStyle();
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
-void QT_UTILITIES_EXPORT centerWidget(QWidget *widget);
+QRect QT_UTILITIES_EXPORT availableScreenGeometryAtPoint(const QPoint &point);
+void QT_UTILITIES_EXPORT centerWidget(QWidget *widget, const QWidget *parent = nullptr);
 void QT_UTILITIES_EXPORT cornerWidget(QWidget *widget);
 void QT_UTILITIES_EXPORT makeHeading(QWidget *widget);
 void QT_UTILITIES_EXPORT updateStyle(QWidget *widget);
