@@ -37,7 +37,8 @@ private:
     Argument m_qtQuickGuiArg;
     Argument m_lngArg;
     Argument m_qmlDebuggerArg;
-    Argument m_styleArg;
+    Argument m_widgetsStyleArg;
+    Argument m_quickControls2StyleArg;
     Argument m_iconThemeArg;
     Argument m_fontArg;
     Argument m_libraryPathsArg;
@@ -83,8 +84,8 @@ inline bool QtConfigArguments::areQtGuiArgsPresent() const
  */
 inline void QtConfigArguments::applySettingsForQuickGui() const
 {
-    if (m_qtQuickGuiArg.isPresent() && m_styleArg.isPresent()) {
-        QQuickStyle::setStyle(QString::fromLocal8Bit(m_styleArg.values().front()));
+    if (m_quickControls2StyleArg.isPresent()) {
+        QQuickStyle::setStyle(QString::fromLocal8Bit(m_quickControls2StyleArg.values().front()));
     }
 #ifdef QT_UTILITIES_DEFAULT_QQC2_STYLE
     else if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {

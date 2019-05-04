@@ -26,7 +26,6 @@ namespace ApplicationUtilities {
 
 /*!
  * \brief Constructs new Qt config arguments.
- * \todo Split style args in v6.
  */
 QtConfigArguments::QtConfigArguments()
     : m_qtWidgetsGuiArg("qt-widgets-gui", 'g', "shows a Qt widgets based graphical user interface")
@@ -36,7 +35,8 @@ QtConfigArguments::QtConfigArguments()
           "enables QML debugging (see "
           "http://doc.qt.io/qt-5/"
           "qtquick-debugging.html)")
-    , m_styleArg("style", '\0', "sets the Qt Widgets or Qt Quick style")
+    , m_widgetsStyleArg("widgets-style", '\0', "sets the Qt Widgets style")
+    , m_quickControls2StyleArg("qqc2-style", '\0', "sets the Qt Quick Controls 2 style")
     , m_iconThemeArg("icon-theme", '\0',
           "sets the icon theme and additional "
           "theme search paths for the Qt GUI")
@@ -57,10 +57,14 @@ QtConfigArguments::QtConfigArguments()
     m_qmlDebuggerArg.setRequiredValueCount(1);
     m_qmlDebuggerArg.setCombinable(true);
     // appearance
-    m_styleArg.setValueNames({ "breeze/cleanlooks/fusion/kvantum/oxygen/adwaita/windows/... or default/material/universal/org.kde.desktop" });
-    m_styleArg.setRequiredValueCount(1);
-    m_styleArg.setCombinable(true);
-    m_styleArg.setEnvironmentVariable("QT_STYLE_OVERRIDE for Qt Widgets and QT_QUICK_CONTROLS_STYLE for Qt Quick");
+    m_widgetsStyleArg.setValueNames({ "breeze/cleanlooks/fusion/kvantum/oxygen/adwaita/windows/..." });
+    m_widgetsStyleArg.setRequiredValueCount(1);
+    m_widgetsStyleArg.setCombinable(true);
+    m_widgetsStyleArg.setEnvironmentVariable("QT_STYLE_OVERRIDE");
+    m_quickControls2StyleArg.setValueNames({ "default/material/universal/org.kde.desktop/..." });
+    m_quickControls2StyleArg.setRequiredValueCount(1);
+    m_quickControls2StyleArg.setCombinable(true);
+    m_quickControls2StyleArg.setEnvironmentVariable("QT_QUICK_CONTROLS_STYLE");
     m_iconThemeArg.setValueNames({ "theme name", "search path 1", "search path 2" });
     m_iconThemeArg.setRequiredValueCount(Argument::varValueCount);
     m_iconThemeArg.setCombinable(true);
@@ -82,9 +86,9 @@ QtConfigArguments::QtConfigArguments()
     m_sceneGraphRenderLoopArg.setPreDefinedCompletionValues("basic windows threaded");
     m_sceneGraphRenderLoopArg.setEnvironmentVariable("QSG_RENDER_LOOP");
     m_qtWidgetsGuiArg.setSubArguments(
-        { &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
-    m_qtQuickGuiArg.setSubArguments({ &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg,
-        &m_sceneGraphRenderLoopArg });
+        { &m_lngArg, &m_qmlDebuggerArg, &m_widgetsStyleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
+    m_qtQuickGuiArg.setSubArguments({ &m_lngArg, &m_qmlDebuggerArg, &m_quickControls2StyleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg,
+        &m_platformThemeArg, &m_sceneGraphRenderLoopArg });
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
@@ -106,8 +110,8 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         QLocale::setDefault(QLocale(QString::fromLocal8Bit(m_lngArg.values().front())));
     }
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
-    if (m_qtWidgetsGuiArg.isPresent() && m_styleArg.isPresent()) {
-        if (QStyle *const style = QStyleFactory::create(QString::fromLocal8Bit(m_styleArg.values().front()))) {
+    if (m_widgetsStyleArg.isPresent()) {
+        if (QStyle *const style = QStyleFactory::create(QString::fromLocal8Bit(m_widgetsStyleArg.values().front()))) {
             QApplication::setStyle(style);
         } else {
             cerr << Phrases::Warning << "Can not find the specified Qt Widgets style." << Phrases::EndFlush;
