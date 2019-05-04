@@ -42,6 +42,7 @@ private:
     Argument m_fontArg;
     Argument m_libraryPathsArg;
     Argument m_platformThemeArg;
+    Argument m_sceneGraphRenderLoopArg;
 };
 
 /*!

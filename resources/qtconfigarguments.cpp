@@ -45,6 +45,7 @@ QtConfigArguments::QtConfigArguments()
           "sets the list of directories to search when loading "
           "libraries (all existing paths will be deleted)")
     , m_platformThemeArg("platformtheme", '\0', "specifies the Qt platform theme to be used")
+    , m_sceneGraphRenderLoopArg("scene-graph-render-loop", '\0', "sets the loop for the Qt Quick Scene Graph OpenGL Renderer")
 {
     // language
     m_lngArg.setValueNames({ "language" });
@@ -75,10 +76,15 @@ QtConfigArguments::QtConfigArguments()
     m_platformThemeArg.setValueNames({ "qt5ct/kde/..." });
     m_platformThemeArg.setPreDefinedCompletionValues("qt5ct kde gnome");
     m_platformThemeArg.setEnvironmentVariable("QT_QPA_PLATFORMTHEME");
+    m_sceneGraphRenderLoopArg.setRequiredValueCount(1);
+    m_sceneGraphRenderLoopArg.setCombinable(true);
+    m_sceneGraphRenderLoopArg.setValueNames({ "basic/windows/threaded" });
+    m_sceneGraphRenderLoopArg.setPreDefinedCompletionValues("basic windows threaded");
+    m_sceneGraphRenderLoopArg.setEnvironmentVariable("QSG_RENDER_LOOP");
     m_qtWidgetsGuiArg.setSubArguments(
         { &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
-    m_qtQuickGuiArg.setSubArguments(
-        { &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg });
+    m_qtQuickGuiArg.setSubArguments({ &m_lngArg, &m_qmlDebuggerArg, &m_styleArg, &m_iconThemeArg, &m_fontArg, &m_libraryPathsArg, &m_platformThemeArg,
+        &m_sceneGraphRenderLoopArg });
     m_qtWidgetsGuiArg.setDenotesOperation(true);
     m_qtQuickGuiArg.setDenotesOperation(true);
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
@@ -166,6 +172,9 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
             libraryPaths << QString::fromLocal8Bit(path);
         }
         QCoreApplication::setLibraryPaths(libraryPaths);
+    }
+    if (m_sceneGraphRenderLoopArg.isPresent()) {
+        qputenv(m_sceneGraphRenderLoopArg.environmentVariable(), QByteArray(m_sceneGraphRenderLoopArg.firstValue()));
     }
 }
 } // namespace ApplicationUtilities
