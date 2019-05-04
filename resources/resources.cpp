@@ -189,7 +189,8 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
         QCoreApplication::installTranslator(appTranslator);
     } else if (appTranslator->load(fileName, QStringLiteral("./translations"))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral(APP_INSTALL_PREFIX "/" APP_DATA_DIR) % applicationName % QStringLiteral("/translations"))) {
+    } else if (appTranslator->load(
+                   fileName, QStringLiteral(APP_INSTALL_PREFIX "/" APP_DATA_DIR) % applicationName % QStringLiteral("/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
     } else if (appTranslator->load(fileName, QStringLiteral("../" APP_DATA_DIR "/") % applicationName % QStringLiteral("/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
