@@ -65,7 +65,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
     }
     m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
-    const auto &deps(dependencyVersions.size() ? dependencyVersions : ApplicationUtilities::dependencyVersions);
+    const auto &deps(dependencyVersions.size() ? dependencyVersions : ApplicationUtilities::applicationInfo.dependencyVersions);
     if (!deps.empty()) {
         QStringList linkedAgainst;
         linkedAgainst.reserve(static_cast<int>(deps.size()));
