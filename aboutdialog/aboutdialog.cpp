@@ -79,7 +79,9 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
                                    "style=\"text-decoration: underline; color: palette(link);\">project "
                                    "website</a>.")
                                     .arg(website.isEmpty() ? QApplication::organizationDomain() : website));
-    m_ui->descLabel->setText(description);
+    m_ui->descLabel->setText(description.isEmpty() && ApplicationUtilities::applicationInfo.description
+            ? QString::fromUtf8(ApplicationUtilities::applicationInfo.description)
+            : description);
     m_iconScene = new QGraphicsScene(this);
     auto *item = image.isNull()
         ? new QGraphicsPixmapItem(QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, this).pixmap(128))
@@ -89,6 +91,9 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
     centerWidget(this, parentWidget());
 }
 
+/*!
+ * \brief Constructs an about dialog with the specified information.
+ */
 AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version, const QString &website,
     const QString &description, const QImage &image)
     : AboutDialog(parent, applicationName, creator, version, {}, website, description, image)
