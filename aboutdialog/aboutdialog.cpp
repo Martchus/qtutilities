@@ -34,7 +34,7 @@ namespace Dialogs {
  * \param version Specifies the version of the application. If empty,
  * QApplication::applicationVersion() will be used.
  * \param dependencyVersions Specifies the dependency versions which were present at link-time. If empty,
- * ApplicationUtilities::dependencyVersions will be used.
+ * ApplicationUtilities::applicationInfo.dependencyVersions will be used.
  * \param description Specifies a short description about the application.
  * \param website Specifies the URL to the website of the application. If empty,
  * QApplication::organizationDomain() will be used.
@@ -92,12 +92,6 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
 AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version, const QString &website,
     const QString &description, const QImage &image)
     : AboutDialog(parent, applicationName, creator, version, {}, website, description, image)
-{
-}
-
-AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version,
-    std::initializer_list<const char *> dependencyVersions, const QString &website, const QString &description, const QImage &image)
-    : AboutDialog(parent, applicationName, creator, version, std::vector<const char *>(dependencyVersions), website, description, image)
 {
 }
 

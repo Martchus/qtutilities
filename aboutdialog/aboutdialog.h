@@ -22,9 +22,6 @@ public:
     explicit AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version,
         const QString &website = QString(), const QString &description = QString(), const QImage &image = QImage());
     explicit AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version,
-        std::initializer_list<const char *> dependencyVersions, const QString &website = QString(), const QString &description = QString(),
-        const QImage &image = QImage());
-    explicit AboutDialog(QWidget *parent, const QString &applicationName, const QString &creator, const QString &version,
         const std::vector<const char *> &dependencyVersions, const QString &website = QString(), const QString &description = QString(),
         const QImage &image = QImage());
     explicit AboutDialog(QWidget *parent, const QString &description = QString(), const QImage &image = QImage());
