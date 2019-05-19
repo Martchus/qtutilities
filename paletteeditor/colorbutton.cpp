@@ -36,7 +36,6 @@ void ColorButtonPrivate::slotEditColor()
     if (!newColor.isValid() || newColor == q_ptr->color())
         return;
     q_ptr->setColor(newColor);
-    emit q_ptr->colorChanged(m_color);
 }
 
 QColor ColorButtonPrivate::shownColor() const
@@ -102,8 +101,8 @@ void ColorButton::setColor(const QColor &color)
 {
     if (d_ptr->m_color == color)
         return;
-    d_ptr->m_color = color;
     update();
+    emit colorChanged(d_ptr->m_color = color);
 }
 
 QColor ColorButton::color() const
@@ -228,7 +227,6 @@ void ColorButton::dropEvent(QDropEvent *event)
     if (d_ptr->m_dragColor == color())
         return;
     setColor(d_ptr->m_dragColor);
-    emit colorChanged(color());
 }
 #endif
 } // namespace Widgets
