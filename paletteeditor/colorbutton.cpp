@@ -148,23 +148,6 @@ void ColorButton::paintEvent(QPaintEvent *event)
     p.setBrushOrigin((r.width() % pixSize + pixSize) / 2 + corr, (r.height() % pixSize + pixSize) / 2 + corr);
     p.fillRect(r, br);
 
-    // const int adjX = qRound(r.width() / 4.0);
-    // const int adjY = qRound(r.height() / 4.0);
-    // p.fillRect(r.adjusted(adjX, adjY, -adjX, -adjY),
-    //           QColor(d_ptr->shownColor().rgb()));
-    /*
-  p.fillRect(r.adjusted(0, r.height() * 3 / 4, 0, 0),
-             QColor(d_ptr->shownColor().rgb()));
-  p.fillRect(r.adjusted(0, 0, 0, -r.height() * 3 / 4),
-             QColor(d_ptr->shownColor().rgb()));
-             */
-    /*
-  const QColor frameColor0(0, 0, 0, qRound(0.2 * (0xFF -
-  d_ptr->shownColor().alpha())));
-  p.setPen(frameColor0);
-  p.drawRect(r.adjusted(adjX, adjY, -adjX - 1, -adjY - 1));
-  */
-
     const QColor frameColor1(0, 0, 0, 26);
     p.setPen(frameColor1);
     p.drawRect(r.adjusted(1, 1, -2, -2));
