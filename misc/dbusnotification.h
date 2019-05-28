@@ -52,7 +52,7 @@ public:
     explicit DBusNotification(
         const QString &title, NotificationIcon icon = NotificationIcon::Information, int timeout = 10000, QObject *parent = nullptr);
     explicit DBusNotification(const QString &title, const QString &icon, int timeout = 10000, QObject *parent = nullptr);
-    ~DBusNotification();
+    ~DBusNotification() override;
 
     static bool isAvailable();
     const QString &title() const;
