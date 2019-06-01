@@ -63,7 +63,11 @@ foreach (MODULE ${QT_MODULES})
     if ("${MODULE}" IN_LIST META_PUBLIC_QT_MODULES)
         list(APPEND MODULE_OPTIONS VISIBILITY PUBLIC)
     endif ()
-    use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
+    use_qt_module(PREFIX
+                  "${QT_PACKAGE_PREFIX}"
+                  MODULE
+                  "${MODULE}"
+                  ${MODULE_OPTIONS})
 endforeach ()
 set(KF_PACKAGE_PREFIX "KF5" CACHE STRING "specifies the prefix for KDE Frameworks packages")
 foreach (MODULE ${KF_MODULES})
@@ -71,7 +75,11 @@ foreach (MODULE ${KF_MODULES})
     if ("${MODULE}" IN_LIST META_PUBLIC_KF_MODULES)
         list(APPEND MODULE_OPTIONS VISIBILITY PUBLIC)
     endif ()
-    use_qt_module(PREFIX "${KF_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
+    use_qt_module(PREFIX
+                  "${KF_PACKAGE_PREFIX}"
+                  MODULE
+                  "${MODULE}"
+                  ${MODULE_OPTIONS})
 endforeach ()
 
 # hack for using static Qt via "StaticQt5" prefix: find regular Qt5Core module as well so Qt version is defined
@@ -97,11 +105,29 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
 
     if (Gui IN_LIST QT_MODULES OR Widgets IN_LIST QT_MODULES OR Quick IN_LIST QT_MODULES)
         if (WIN32)
-            use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS WindowsIntegration ONLY_PLUGINS)
+            use_qt_module(PREFIX
+                          "${QT_PACKAGE_PREFIX}"
+                          MODULE
+                          Gui
+                          PLUGINS
+                          WindowsIntegration
+                          ONLY_PLUGINS)
         elseif (APPLE)
-            use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS CocoaIntegration ONLY_PLUGINS)
+            use_qt_module(PREFIX
+                          "${QT_PACKAGE_PREFIX}"
+                          MODULE
+                          Gui
+                          PLUGINS
+                          CocoaIntegration
+                          ONLY_PLUGINS)
         elseif (TARGET ${QT5_Gui_STATIC_PREFIX}QXcbIntegrationPlugin)
-            use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS XcbIntegration ONLY_PLUGINS)
+            use_qt_module(PREFIX
+                          "${QT_PACKAGE_PREFIX}"
+                          MODULE
+                          Gui
+                          PLUGINS
+                          XcbIntegration
+                          ONLY_PLUGINS)
         else ()
             message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
         endif ()
@@ -114,7 +140,13 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
     if (Widgets IN_LIST QT_MODULES)
         foreach (WIDGET_STYLE_PLUGIN ${KNOWN_WIDGET_STYLE_PLUGINS})
             if (TARGET "${QT_PACKAGE_PREFIX}::Q${WIDGET_STYLE_PLUGIN}Plugin")
-                use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Widgets PLUGINS ${WIDGET_STYLE_PLUGIN} ONLY_PLUGINS)
+                use_qt_module(PREFIX
+                              "${QT_PACKAGE_PREFIX}"
+                              MODULE
+                              Widgets
+                              PLUGINS
+                              ${WIDGET_STYLE_PLUGIN}
+                              ONLY_PLUGINS)
                 list(APPEND USED_WIDGET_STYLE_PLUGINS "${WIDGET_STYLE_PLUGIN}")
             endif ()
         endforeach ()
@@ -137,27 +169,48 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
                 set(SVG_SUPPORT ON)
                 list(REMOVE_ITEM IMAGE_FORMAT_SUPPORT Svg)
             else ()
-                use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Gui PLUGINS ${IMAGE_FORMAT} ONLY_PLUGINS)
+                use_qt_module(PREFIX
+                              "${QT_PACKAGE_PREFIX}"
+                              MODULE
+                              Gui
+                              PLUGINS
+                              ${IMAGE_FORMAT}
+                              ONLY_PLUGINS)
             endif ()
         endforeach ()
 
         # allow importing image format plugins via config.h
-        list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${IMAGE_FORMAT_SUPPORT}" IMAGE_FORMAT_SUPPORT_ARRAY)
+        list_to_string(" "
+                       "\\\n    Q_IMPORT_PLUGIN(Q"
+                       "Plugin)"
+                       "${IMAGE_FORMAT_SUPPORT}"
+                       IMAGE_FORMAT_SUPPORT_ARRAY)
     endif ()
 
     # ensure SVG plugins are built-in if configured
-    if ((SVG_SUPPORT OR SVG_ICON_SUPPORT)
-        AND NOT
-            Svg
-            IN_LIST
-            QT_MODULES)
-        use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg)
+    if ((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND NOT Svg IN_LIST QT_MODULES)
+        use_qt_module(PREFIX
+                      "${QT_PACKAGE_PREFIX}"
+                      MODULE
+                      Svg)
     endif ()
     if (SVG_SUPPORT)
-        use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg PLUGINS Svg ONLY_PLUGINS)
+        use_qt_module(PREFIX
+                      "${QT_PACKAGE_PREFIX}"
+                      MODULE
+                      Svg
+                      PLUGINS
+                      Svg
+                      ONLY_PLUGINS)
     endif ()
     if (SVG_ICON_SUPPORT)
-        use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg PLUGINS SvgIcon ONLY_PLUGINS)
+        use_qt_module(PREFIX
+                      "${QT_PACKAGE_PREFIX}"
+                      MODULE
+                      Svg
+                      PLUGINS
+                      SvgIcon
+                      ONLY_PLUGINS)
     endif ()
 endif ()
 
@@ -199,7 +252,11 @@ foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
 endforeach ()
 
 # make relevant Qt translations available as array via config.h
-list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${QT_TRANSLATION_FILES}" QT_TRANSLATION_FILES_ARRAY)
+list_to_string(","
+               " \\\n    QStringLiteral(\""
+               "\")"
+               "${QT_TRANSLATION_FILES}"
+               QT_TRANSLATION_FILES_ARRAY)
 
 # enable lrelease and add install target for localization
 option(ENABLE_QT_TRANSLATIONS "specifies whether Qt translations should be updated/released" ON)
@@ -238,7 +295,8 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
         if (NOT TARGET install-localization)
             set(LOCALIZATION_TARGET "install-localization")
             add_custom_target(${LOCALIZATION_TARGET}
-                              COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=localization -P
+                              COMMAND "${CMAKE_COMMAND}"
+                                      -DCMAKE_INSTALL_COMPONENT=localization -P
                                       "${CMAKE_BINARY_DIR}/cmake_install.cmake")
             add_dependencies(${LOCALIZATION_TARGET} ${META_PROJECT_NAME}_translations)
         endif ()
@@ -321,16 +379,11 @@ if (REQUIRED_ICONS)
                     # find index files
                     if (NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
                         file(GLOB GLOBBED_ICON_THEME_INDEX_FILES
-                                  LIST_DIRECTORIES
-                                  false
-                                  "${ICON_THEME_PATH}/index.theme"
-                                  "${ICON_THEME_PATH}/icon-theme.cache")
+                             LIST_DIRECTORIES false
+                             "${ICON_THEME_PATH}/index.theme" "${ICON_THEME_PATH}/icon-theme.cache")
                     else ()
                         # only index.theme required when icons are provided as fallback anyways
-                        file(GLOB GLOBBED_ICON_THEME_INDEX_FILES
-                                  LIST_DIRECTORIES
-                                  false
-                                  "${ICON_THEME_PATH}/index.theme")
+                        file(GLOB GLOBBED_ICON_THEME_INDEX_FILES LIST_DIRECTORIES false "${ICON_THEME_PATH}/index.theme")
                     endif ()
                     # make the first specified built-in the default theme
                     if (NOT EXISTS "${DEFAULT_THEME_INDEX_FILE}")
@@ -348,10 +401,7 @@ if (REQUIRED_ICONS)
                                         "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
                                         "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*")
                         endforeach ()
-                        file(GLOB_RECURSE GLOBBED_ICON_THEME_FILES
-                                          LIST_DIRECTORIES
-                                          false
-                                          ${GLOB_PATTERNS})
+                        file(GLOB_RECURSE GLOBBED_ICON_THEME_FILES LIST_DIRECTORIES false ${GLOB_PATTERNS})
                     else ()
                         message(
                             STATUS

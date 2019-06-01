@@ -20,9 +20,17 @@ endif ()
 macro (use_qt_module)
     # parse arguments
     set(OPTIONAL_ARGS ONLY_PLUGINS)
-    set(ONE_VALUE_ARGS PREFIX MODULE VISIBILITY LIBRARIES_VARIABLE)
+    set(ONE_VALUE_ARGS
+        PREFIX
+        MODULE
+        VISIBILITY
+        LIBRARIES_VARIABLE)
     set(MULTI_VALUE_ARGS TARGETS PLUGINS)
-    cmake_parse_arguments(ARGS "${OPTIONAL_ARGS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}" ${ARGN})
+    cmake_parse_arguments(ARGS
+                          "${OPTIONAL_ARGS}"
+                          "${ONE_VALUE_ARGS}"
+                          "${MULTI_VALUE_ARGS}"
+                          ${ARGN})
 
     # validate values
     if (NOT ARGS_PREFIX)
@@ -91,7 +99,10 @@ macro (use_qt_module)
     endforeach ()
 
     # unset variables (can not simply use a function because Qt's variables need to be exported)
-    foreach (ARGUMENT ${OPTIONAL_ARGS} ${ONE_VALUE_ARGS} ${MULTI_VALUE_ARGS})
+    foreach (ARGUMENT
+             ${OPTIONAL_ARGS}
+             ${ONE_VALUE_ARGS}
+             ${MULTI_VALUE_ARGS})
         unset(ARGS_${ARGUMENT})
     endforeach ()
 endmacro ()

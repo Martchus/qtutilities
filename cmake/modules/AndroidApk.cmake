@@ -31,10 +31,7 @@ if (NOT EXISTS "${ANDROID_APK_MANIFEST_PATH}")
     message(FATAL_ERROR "The Android manifest doesn't exist at \"${ANDROID_APK_SUBDIR}/AndroidManifest.xml\".")
 endif ()
 # caveat: adding new files or removing files requires to re-run CMake manually
-file(GLOB_RECURSE ANDROID_APK_FILES
-                  LIST_DIRECTORIES
-                  false
-                  "${ANDROID_APK_SUBDIR}/*")
+file(GLOB_RECURSE ANDROID_APK_FILES LIST_DIRECTORIES false "${ANDROID_APK_SUBDIR}/*")
 
 # make subdirectory to store build artefacts for APK
 set(ANDROID_APK_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/apk")
@@ -67,8 +64,10 @@ if (NOT ANDROID_APK_TOOLCHAIN_VERSION)
 endif ()
 
 # determine Android build tools version note: Assuming the build tools are installed under "${CMAKE_ANDROID_SDK}/build-tools"
-file(GLOB ANDROID_APK_BUILD_TOOLS_VERSIONS LIST_DIRECTORIES TRUE
-     RELATIVE "${CMAKE_ANDROID_SDK}/build-tools" "${CMAKE_ANDROID_SDK}/build-tools/*")
+file(GLOB ANDROID_APK_BUILD_TOOLS_VERSIONS
+     LIST_DIRECTORIES TRUE
+     RELATIVE "${CMAKE_ANDROID_SDK}/build-tools"
+     "${CMAKE_ANDROID_SDK}/build-tools/*")
 if (NOT ANDROID_APK_BUILD_TOOLS_VERSIONS)
     message(FATAL_ERROR "No build-tools present under \"${CMAKE_ANDROID_SDK}/build-tools\".")
 endif ()
@@ -105,11 +104,14 @@ foreach (PATH ${ANDROID_APK_BINARY_DIRS})
     # symlink "lib" subdirectory so androiddeployqt finds the library in the runtime path when specified via
     # "extraPrefixDirs"
     list(APPEND ANDROID_APK_BINARY_DIRS_DEPENDS "${PATH}/lib")
-    add_custom_command(OUTPUT "${PATH}/lib"
-                       COMMAND "${CMAKE_COMMAND}" -E create_symlink "${PATH}" "${PATH}/lib")
+    add_custom_command(OUTPUT "${PATH}/lib" COMMAND "${CMAKE_COMMAND}" -E create_symlink "${PATH}" "${PATH}/lib")
 endforeach ()
 include(ListToString)
-list_to_string("" "\n        \"" "\"," "${ANDROID_APK_BINARY_DIRS}" ANDROID_APK_BINARY_DIRS)
+list_to_string(""
+               "\n        \""
+               "\","
+               "${ANDROID_APK_BINARY_DIRS}"
+               ANDROID_APK_BINARY_DIRS)
 
 # find dependencies note: androiddeployqt seems to find only Qt libraries and plugins but misses other target_link_libraries
 set(ANDROID_APK_ADDITIONAL_LIBS "" CACHE STRING "additional libraries to be bundled into the Android APK")
@@ -135,10 +137,17 @@ function (add_android_apk_extra_libs TARGET_NAME)
     set(ANDROID_APK_EXTRA_LIBS "${ANDROID_APK_EXTRA_LIBS}" PARENT_SCOPE)
 endfunction ()
 add_android_apk_extra_libs("${META_TARGET_NAME}")
-list_to_string("," "" "" "${ANDROID_APK_EXTRA_LIBS}" ANDROID_APK_EXTRA_LIBS)
+list_to_string(","
+               ""
+               ""
+               "${ANDROID_APK_EXTRA_LIBS}"
+               ANDROID_APK_EXTRA_LIBS)
 
 # query certain qmake variables
-foreach (QMAKE_VARIABLE QT_INSTALL_QML QT_INSTALL_PLUGINS QT_INSTALL_IMPORTS)
+foreach (QMAKE_VARIABLE
+         QT_INSTALL_QML
+         QT_INSTALL_PLUGINS
+         QT_INSTALL_IMPORTS)
     query_qmake_variable(${QMAKE_VARIABLE})
 endforeach ()
 
@@ -148,7 +157,11 @@ function (compose_dirs_for_android_apk)
     set(OPTIONAL_ARGS)
     set(ONE_VALUE_ARGS OUTPUT_VARIABLE)
     set(MULTI_VALUE_ARGS POSSIBLE_DIRS)
-    cmake_parse_arguments(ARGS "${OPTIONAL_ARGS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}" ${ARGN})
+    cmake_parse_arguments(ARGS
+                          "${OPTIONAL_ARGS}"
+                          "${ONE_VALUE_ARGS}"
+                          "${MULTI_VALUE_ARGS}"
+                          ${ARGN})
 
     list(REMOVE_DUPLICATES ARGS_POSSIBLE_DIRS)
     unset(DIRS)
@@ -158,7 +171,11 @@ function (compose_dirs_for_android_apk)
         endif ()
     endforeach ()
 
-    list_to_string("," "" "" "${DIRS}" DIRS)
+    list_to_string(","
+                   ""
+                   ""
+                   "${DIRS}"
+                   DIRS)
     set("${ARGS_OUTPUT_VARIABLE}" "${DIRS}" PARENT_SCOPE)
 endfunction ()
 

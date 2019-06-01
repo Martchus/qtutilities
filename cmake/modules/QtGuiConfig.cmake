@@ -83,7 +83,8 @@ list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
 # add option for enabling/disabling static Qt plugins
 option(SVG_SUPPORT "whether to link against the SVG image format plugin (only relevant when using static Qt)" ON)
 option(SVG_ICON_SUPPORT "whether to link against the SVG icon engine (only relevant when using static Qt)" ON)
-set(IMAGE_FORMAT_SUPPORT "Gif;ICO;Jpeg"
+set(IMAGE_FORMAT_SUPPORT
+    "Gif;ICO;Jpeg"
     CACHE STRING "specifies the image format plugins to link against (only relevant when using static Qt)")
 
 # always enable the Svg module under Android
