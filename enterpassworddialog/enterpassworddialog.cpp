@@ -24,10 +24,10 @@
 #endif
 #endif
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
- * \class Dialogs::EnterPasswordDialog
+ * \class EnterPasswordDialog
  * \brief The EnterPasswordDialog class provides a simple dialog to ask the user
  * for a password.
  */
@@ -344,4 +344,4 @@ bool EnterPasswordDialog::isCapslockPressed()
     return false;
 #endif
 }
-} // namespace Dialogs
+} // namespace QtUtilities

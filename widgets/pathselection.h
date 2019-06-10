@@ -8,7 +8,7 @@
 QT_FORWARD_DECLARE_CLASS(QPushButton)
 QT_FORWARD_DECLARE_CLASS(QCompleter)
 
-namespace Widgets {
+namespace QtUtilities {
 
 class ClearLineEdit;
 
@@ -72,6 +72,6 @@ inline void PathSelection::provideCustomFileDialog(QFileDialog *customFileDialog
 {
     m_customDialog = customFileDialog;
 }
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_PATHSELECTION_H

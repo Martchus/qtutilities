@@ -28,7 +28,7 @@
 
 using namespace std;
 
-namespace Dialogs {
+namespace QtUtilities {
 
 struct QtSettingsData {
     QtSettingsData();
@@ -395,7 +395,7 @@ void QtEnvOptionPage::reset()
     ui()->iconThemeSearchPathSelection->lineEdit()->setText(m_settings.additionalIconThemeSearchPath);
     ui()->translationPathSelection->lineEdit()->setText(TranslationFiles::additionalTranslationFilePath());
 }
-} // namespace Dialogs
+} // namespace QtUtilities
 
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtLanguageOptionPage)

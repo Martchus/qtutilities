@@ -21,10 +21,10 @@
 
 using namespace std;
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
- * \class Widgets::PathSelection
+ * \class PathSelection
  * \brief A QLineEdit with a QPushButton next to it which allows to select
  * file/directory via QFileDialog.
  */
@@ -79,10 +79,10 @@ bool PathSelection::eventFilter(QObject *obj, QEvent *event)
             if (fileInfo.exists()) {
                 if (fileInfo.isFile()) {
                     connect(menu->addAction(QIcon::fromTheme(QStringLiteral("system-run")), tr("Open")), &QAction::triggered,
-                        bind(&DesktopUtils::openLocalFileOrDir, m_lineEdit->text()));
+                        bind(&openLocalFileOrDir, m_lineEdit->text()));
                 } else if (fileInfo.isDir()) {
                     connect(menu->addAction(QIcon::fromTheme(QStringLiteral("system-file-manager")), tr("Explore")), &QAction::triggered,
-                        bind(&DesktopUtils::openLocalFileOrDir, m_lineEdit->text()));
+                        bind(&openLocalFileOrDir, m_lineEdit->text()));
                 }
             }
             menu->exec(static_cast<QContextMenuEvent *>(event)->globalPos());
@@ -127,4 +127,4 @@ void PathSelection::showFileDialog()
         }
     }
 }
-} // namespace Widgets
+} // namespace QtUtilities

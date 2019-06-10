@@ -13,7 +13,7 @@ QT_FORWARD_DECLARE_CLASS(QDBusPendingCallWatcher)
 
 class OrgFreedesktopNotificationsInterface;
 
-namespace MiscUtils {
+namespace QtUtilities {
 
 enum class NotificationIcon { NoIcon, Information, Warning, Critical };
 
@@ -303,6 +303,6 @@ inline bool DBusNotification::isVisible() const
 {
     return m_id != 0;
 }
-} // namespace MiscUtils
+} // namespace QtUtilities
 
 #endif // MISC_UTILS_NOTIFICATION_H

@@ -2,10 +2,10 @@
 #include "./optioncategory.h"
 #include "./optioncategorymodel.h"
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
- * \class Dialogs::OptionCategoryFilterModel
+ * \class OptionCategoryFilterModel
  * \brief The OptionCategoryFilterModel class is used by SettingsDialog to
  * filter option categories.
  */
@@ -29,4 +29,4 @@ bool OptionCategoryFilterModel::filterAcceptsRow(int sourceRow, const QModelInde
     }
     return false;
 }
-} // namespace Dialogs
+} // namespace QtUtilities

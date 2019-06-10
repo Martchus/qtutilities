@@ -7,7 +7,7 @@
     \brief Provides common models.
 */
 
-namespace Models {
+namespace QtUtilities {
 
 /*!
  * \class Models::ChecklistItem
@@ -273,4 +273,4 @@ void ChecklistModel::applyVariantList(const QVariantList &checkedIds)
     emit dataChanged(index(0), index(m_items.size()), { Qt::CheckStateRole });
 }
 
-} // namespace Models
+} // namespace QtUtilities

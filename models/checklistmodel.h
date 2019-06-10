@@ -8,7 +8,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
-namespace Models {
+namespace QtUtilities {
 
 class ChecklistModel;
 
@@ -121,6 +121,6 @@ constexpr int ChecklistModel::idRole()
 {
     return Qt::UserRole + 1;
 }
-} // namespace Models
+} // namespace QtUtilities
 
 #endif // MODELS_CHECKLISTMODEL_H

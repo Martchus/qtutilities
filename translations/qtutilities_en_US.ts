@@ -2,55 +2,79 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
-    <name>Dialogs::AboutDialog</name>
+    <name>QObject</name>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="32"/>
+        <location filename="../widgets/buttonoverlay.cpp" line="78"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtGui::QtLanguageOptionPage</name>
+    <message>
+        <location filename="../settingsdialog/qtsettings.cpp" line="367"/>
+        <source>recognized by Qt as</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtGui::QtOptionCategory</name>
+    <message>
+        <location filename="../settingsdialog/qtsettings.cpp" line="215"/>
+        <source>Qt</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::AboutDialog</name>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.ui" line="24"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="135"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="127"/>
         <source>application name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="145"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="137"/>
         <source>version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="171"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="163"/>
         <source>description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="193"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="185"/>
         <source>website link</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="231"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="226"/>
         <source>creators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="60"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="62"/>
         <source>developed by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="69"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="72"/>
         <source>Linked against:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="72"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="75"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>Dialogs::EnterPasswordDialog</name>
+    <name>QtUtilities::EnterPasswordDialog</name>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="12"/>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="51"/>
@@ -127,7 +151,7 @@
     </message>
 </context>
 <context>
-    <name>Dialogs::PaletteEditor</name>
+    <name>QtUtilities::PaletteEditor</name>
     <message>
         <location filename="../paletteeditor/paletteeditor.ui" line="20"/>
         <source>Edit Palette</source>
@@ -155,30 +179,55 @@
     </message>
 </context>
 <context>
-    <name>Dialogs::PaletteModel</name>
+    <name>QtUtilities::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="321"/>
         <source>Color Role</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
         <source>Inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="329"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>Dialogs::QtAppearanceOptionPage</name>
+    <name>QtUtilities::PathSelection</name>
+    <message>
+        <location filename="../widgets/pathselection.cpp" line="56"/>
+        <location filename="../widgets/pathselection.cpp" line="76"/>
+        <source>Select ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widgets/pathselection.cpp" line="81"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widgets/pathselection.cpp" line="84"/>
+        <source>Explore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../widgets/pathselection.cpp" line="120"/>
+        <location filename="../widgets/pathselection.cpp" line="122"/>
+        <source>Select path</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::QtAppearanceOptionPage</name>
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="6"/>
         <source>Appearance</source>
@@ -232,7 +281,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
 </context>
 <context>
-    <name>Dialogs::QtEnvOptionPage</name>
+    <name>QtUtilities::QtEnvOptionPage</name>
     <message>
         <location filename="../settingsdialog/qtenvoptionpage.ui" line="14"/>
         <source>Environment/paths</source>
@@ -260,7 +309,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
 </context>
 <context>
-    <name>Dialogs::QtLanguageOptionPage</name>
+    <name>QtUtilities::QtLanguageOptionPage</name>
     <message>
         <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="6"/>
         <source>Localization</source>
@@ -283,7 +332,40 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
 </context>
 <context>
-    <name>Dialogs::SettingsDialog</name>
+    <name>QtUtilities::RecentMenuManager</name>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="35"/>
+        <source>&amp;Recent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="38"/>
+        <source>&amp;Clear list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="144"/>
+        <source>Recently opened files - </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="145"/>
+        <source>The selected file can&apos;t be found anymore. Do you want to delete the obsolete entry from the list?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="148"/>
+        <source>keep entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="149"/>
+        <source>delete entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::SettingsDialog</name>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="14"/>
         <source>Settings</source>
@@ -327,107 +409,25 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
 </context>
 <context>
-    <name>MiscUtils::RecentMenuManager</name>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="35"/>
-        <source>&amp;Recent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="38"/>
-        <source>&amp;Clear list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="144"/>
-        <source>Recently opened files - </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="145"/>
-        <source>The selected file can&apos;t be found anymore. Do you want to delete the obsolete entry from the list?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="148"/>
-        <source>keep entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="149"/>
-        <source>delete entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <location filename="../widgets/buttonoverlay.cpp" line="84"/>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QtGui::QtLanguageOptionPage</name>
-    <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="367"/>
-        <source>recognized by Qt as</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QtGui::QtOptionCategory</name>
-    <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="215"/>
-        <source>Qt</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Utilities::windowTitle</name>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="30"/>
+        <location filename="../misc/dialogutils.cpp" line="32"/>
         <source>Unsaved - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="33"/>
+        <location filename="../misc/dialogutils.cpp" line="35"/>
         <source>%1 - %2 - %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="38"/>
+        <location filename="../misc/dialogutils.cpp" line="40"/>
         <source>*Unsaved - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="41"/>
+        <location filename="../misc/dialogutils.cpp" line="43"/>
         <source>*%1 - %2 - %3</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Widgets::PathSelection</name>
-    <message>
-        <location filename="../widgets/pathselection.cpp" line="56"/>
-        <location filename="../widgets/pathselection.cpp" line="76"/>
-        <source>Select ...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgets/pathselection.cpp" line="81"/>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgets/pathselection.cpp" line="84"/>
-        <source>Explore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../widgets/pathselection.cpp" line="120"/>
-        <location filename="../widgets/pathselection.cpp" line="122"/>
-        <source>Select path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

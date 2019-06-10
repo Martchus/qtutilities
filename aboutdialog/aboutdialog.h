@@ -9,7 +9,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QGraphicsScene)
 
-namespace Dialogs {
+namespace QtUtilities {
 
 namespace Ui {
 class AboutDialog;
@@ -31,6 +31,6 @@ private:
     std::unique_ptr<Ui::AboutDialog> m_ui;
     QGraphicsScene *m_iconScene;
 };
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // DIALOGS_ABOUTDIALOG_H

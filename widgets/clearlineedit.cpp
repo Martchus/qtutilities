@@ -1,9 +1,9 @@
 #include "./clearlineedit.h"
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
- * \class Widgets::ClearLineEdit
+ * \class ClearLineEdit
  * \brief A QLineEdit with an embedded button for clearing its contents.
  */
 
@@ -42,4 +42,4 @@ bool ClearLineEdit::isCleared() const
 {
     return text().isEmpty();
 }
-} // namespace Widgets
+} // namespace QtUtilities

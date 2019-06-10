@@ -12,15 +12,12 @@
 #include <QStyle>
 
 /*!
-    \namespace Dialogs
-    \brief Provides common dialogs such as AboutDialog, EnterPasswordDialog and
-   SettingsDialog.
-*/
-
-namespace Dialogs {
+ * \brief The QtUtilities namespace contains all utilities provided by the qtutilities library.
+ */
+namespace QtUtilities {
 
 /*!
- * \class Dialogs::AboutDialog
+ * \class AboutDialog
  * \brief The AboutDialog class provides a simple about dialog.
  */
 
@@ -65,7 +62,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
     }
     m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
-    const auto &deps(dependencyVersions.size() ? dependencyVersions : ApplicationUtilities::applicationInfo.dependencyVersions);
+    const auto &deps(dependencyVersions.size() ? dependencyVersions : CppUtilities::applicationInfo.dependencyVersions);
     if (!deps.empty()) {
         QStringList linkedAgainst;
         linkedAgainst.reserve(static_cast<int>(deps.size()));
@@ -79,8 +76,8 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
                                    "style=\"text-decoration: underline; color: palette(link);\">project "
                                    "website</a>.")
                                     .arg(website.isEmpty() ? QApplication::organizationDomain() : website));
-    m_ui->descLabel->setText(description.isEmpty() && ApplicationUtilities::applicationInfo.description
-            ? QString::fromUtf8(ApplicationUtilities::applicationInfo.description)
+    m_ui->descLabel->setText(description.isEmpty() && CppUtilities::applicationInfo.description
+            ? QString::fromUtf8(CppUtilities::applicationInfo.description)
             : description);
     m_iconScene = new QGraphicsScene(this);
     auto *item = image.isNull()
@@ -115,4 +112,4 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &description, const QIma
 AboutDialog::~AboutDialog()
 {
 }
-} // namespace Dialogs
+} // namespace QtUtilities

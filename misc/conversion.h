@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace ConversionUtilities {
+namespace QtUtilities {
 
 inline QByteArray toNativeFileName(const QString &fileName)
 {
@@ -36,6 +36,6 @@ inline QString fromNativeFileName(const std::string &nativeFileName)
 #endif
 }
 
-} // namespace ConversionUtilities
+} // namespace QtUtilities
 
 #endif // CONVERSION_H

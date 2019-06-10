@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 class OptionCategoryModel;
 class OptionCategoryFilterModel;
@@ -75,6 +75,6 @@ inline OptionCategoryModel *SettingsDialog::categoryModel()
 {
     return m_categoryModel;
 }
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // DIALOGS_SETTINGSDIALOG_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialogs::PaletteEditor</class>
- <widget class="QDialog" name="Dialogs::PaletteEditor">
+ <class>QtUtilities::PaletteEditor</class>
+ <widget class="QDialog" name="QtUtilities::PaletteEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -103,7 +103,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="Widgets::ColorButton" name="buildButton">
+       <widget class="QtUtilities::ColorButton" name="buildButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
           <horstretch>0</horstretch>
@@ -132,7 +132,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Widgets::ColorButton</class>
+   <class>QtUtilities::ColorButton</class>
    <extends>QToolButton</extends>
    <header>paletteeditor/colorbutton.h</header>
   </customwidget>
@@ -142,7 +142,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialogs::PaletteEditor</receiver>
+   <receiver>QtUtilities::PaletteEditor</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -158,7 +158,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialogs::PaletteEditor</receiver>
+   <receiver>QtUtilities::PaletteEditor</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

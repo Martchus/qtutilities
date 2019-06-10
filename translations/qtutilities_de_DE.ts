@@ -2,373 +2,9 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
-    <name>Dialogs::AboutDialog</name>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="32"/>
-        <source>About</source>
-        <translation>Über</translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="135"/>
-        <source>application name</source>
-        <translatorcomment>just a placeholder</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="145"/>
-        <source>version</source>
-        <translatorcomment>just a placeholder</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="171"/>
-        <source>description</source>
-        <translatorcomment>just a placeholder</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="193"/>
-        <source>website link</source>
-        <translatorcomment>just a placeholder</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="231"/>
-        <source>creators</source>
-        <translatorcomment>just a placeholder</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="60"/>
-        <source>developed by %1</source>
-        <translation>entwickelt von %1</translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="69"/>
-        <source>Linked against:</source>
-        <translation>Gegen folgende Bibliotheken gelinkt:</translation>
-    </message>
-    <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="72"/>
-        <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
-        <translation>Für Aktualisierung und Melden von Fehlern besuche die &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;Webseite des Projekts&lt;/a&gt;.</translation>
-    </message>
-</context>
-<context>
-    <name>Dialogs::EnterPasswordDialog</name>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="12"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="51"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
-        <source>Enter the password</source>
-        <translation>Passwort eingeben</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
-        <source>user name</source>
-        <translation>Benutzername</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
-        <source>password</source>
-        <translation>Passwort</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
-        <source>repeat password</source>
-        <translation>Password wiederholen</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
-        <source>show password</source>
-        <translation>Passwort zeigen</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
-        <source>don&apos;t use a password</source>
-        <translation>Kein Passwort verwenden</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="213"/>
-        <source>Capslock is active</source>
-        <translation>Feststelltaste ist aktiviert</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="239"/>
-        <source>Abort</source>
-        <translation>Abbrechen</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
-        <source>Confirm</source>
-        <translation>Bestätigen</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
-        <source>Enter the new password</source>
-        <translation>Neues Passwort festlegen</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="290"/>
-        <source>You didn&apos;t enter a user name.</source>
-        <translation>Es wurde kein Benutzername eingegeben.</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="292"/>
-        <source>You didn&apos;t enter a password.</source>
-        <translation>Es wurde kein Passwort eingegeben.</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="297"/>
-        <source>You have to enter the new password twice to ensure you enterd it correct.</source>
-        <translation>Um sicher zu stellen, dass das neue Passwort richtig eingegeben wurde, muss es zweimal eingegeben werden.</translation>
-    </message>
-    <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
-        <source>You mistyped the password.</source>
-        <translation>Erstes und zweites Passwort stimmen nicht überein.</translation>
-    </message>
-</context>
-<context>
-    <name>Dialogs::PaletteEditor</name>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.ui" line="20"/>
-        <source>Edit Palette</source>
-        <translation>Palette ändern</translation>
-    </message>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.ui" line="53"/>
-        <source>Tune Palette</source>
-        <translation>Palette</translation>
-    </message>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.ui" line="84"/>
-        <source>Show Detai&amp;ls</source>
-        <translation>Details einblenden</translation>
-    </message>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.ui" line="91"/>
-        <source>&amp;Compute Details</source>
-        <translation>Details berechnen</translation>
-    </message>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.ui" line="101"/>
-        <source>Quick</source>
-        <translation>Einfach</translation>
-    </message>
-</context>
-<context>
-    <name>Dialogs::PaletteModel</name>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
-        <source>Color Role</source>
-        <translation>Farbrolle</translation>
-    </message>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
-        <source>Active</source>
-        <translation>Aktiv</translation>
-    </message>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
-        <source>Inactive</source>
-        <translation>Inaktiv</translation>
-    </message>
-    <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="329"/>
-        <source>Disabled</source>
-        <translation>Deaktiviert</translation>
-    </message>
-</context>
-<context>
-    <name>Dialogs::QtAppearanceOptionPage</name>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="6"/>
-        <source>Appearance</source>
-        <translation>Erscheinungsbild</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="21"/>
-        <source>Use system default</source>
-        <translation>Verwende Systemvorgabe</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="34"/>
-        <source>Font</source>
-        <translation>Schriftart</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="71"/>
-        <source>More options ...</source>
-        <translation>Weitere Optionen ...</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="93"/>
-        <source>Widget style</source>
-        <translation>Widget-Stil</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="132"/>
-        <source>Style sheet</source>
-        <translation>Stylesheet</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="162"/>
-        <source>Palette</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="175"/>
-        <source>select ...</source>
-        <translation>Bearbeiten ...</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="195"/>
-        <source>Icon theme</source>
-        <translation>Symbole</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="249"/>
-        <source>These settings take effect after restarting the application.
-These settings might be overwritten by your Qt 5 platfrom integration plugin and hence have no effect.</source>
-        <translation>Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.
-Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren daher nicht.</translation>
-    </message>
-</context>
-<context>
-    <name>Dialogs::QtEnvOptionPage</name>
-    <message>
-        <location filename="../settingsdialog/qtenvoptionpage.ui" line="14"/>
-        <source>Environment/paths</source>
-        <translation>Umgebung/Pfade</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtenvoptionpage.ui" line="28"/>
-        <source>Additional plugin directory</source>
-        <translation>Zusätzliches Plugin-Verzeichnis</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtenvoptionpage.ui" line="38"/>
-        <source>Additional icon theme search path</source>
-        <translation>Zusätzliches Verzeichnis für Symbole</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtenvoptionpage.ui" line="48"/>
-        <source>Additional translation search path</source>
-        <translation>Zusätzliches Verzeichnis für Übersetzungen</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtenvoptionpage.ui" line="79"/>
-        <source>These settings take effect after restarting the application.</source>
-        <translation>Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.</translation>
-    </message>
-</context>
-<context>
-    <name>Dialogs::QtLanguageOptionPage</name>
-    <message>
-        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="6"/>
-        <source>Localization</source>
-        <translation>Lokalisierung</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="43"/>
-        <source>Locale</source>
-        <translation>Gebietsschema</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="53"/>
-        <source>Use system default</source>
-        <translation>Verwende Systemvorgabe</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="98"/>
-        <source>These settings take effect after restarting the application.</source>
-        <translation>Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.</translation>
-    </message>
-</context>
-<context>
-    <name>Dialogs::SettingsDialog</name>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="14"/>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="53"/>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="150"/>
-        <source>No category selected</source>
-        <translation>Keine Kategorie gewählt</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="69"/>
-        <source>Filter</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="136"/>
-        <source>Abort</source>
-        <translation>Abbrechen</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="150"/>
-        <source>Apply</source>
-        <translation>Anwenden</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="161"/>
-        <source>OK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="245"/>
-        <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Beim Anwenden der Einstellungen sind Fehler aufgetreten:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
-    </message>
-    <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="250"/>
-        <source>unknonw error</source>
-        <translation>unbekannter Fehler</translation>
-    </message>
-</context>
-<context>
-    <name>MiscUtils::RecentMenuManager</name>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="35"/>
-        <source>&amp;Recent</source>
-        <translation>&amp;Zuletzt verwendet</translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="38"/>
-        <source>&amp;Clear list</source>
-        <translation>&amp;Liste löschen</translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="144"/>
-        <source>Recently opened files - </source>
-        <translation>Kürzlich geöffnete Dateien - </translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="145"/>
-        <source>The selected file can&apos;t be found anymore. Do you want to delete the obsolete entry from the list?</source>
-        <translation>Die ausgewählte Datei kann nicht mehr gefunden werden. Soll die Datei aus der Liste gelöscht werden?</translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="148"/>
-        <source>keep entry</source>
-        <translation>Eintrag behalten</translation>
-    </message>
-    <message>
-        <location filename="../misc/recentmenumanager.cpp" line="149"/>
-        <source>delete entry</source>
-        <translation>Eintrag löschen</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
-        <location filename="../widgets/buttonoverlay.cpp" line="84"/>
+        <location filename="../widgets/buttonoverlay.cpp" line="78"/>
         <source>Clear</source>
         <translation>Text löschen</translation>
     </message>
@@ -390,51 +26,410 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     </message>
 </context>
 <context>
-    <name>Utilities::windowTitle</name>
+    <name>QtUtilities::AboutDialog</name>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="30"/>
-        <source>Unsaved - %1</source>
-        <translation>Nicht gespeichert - %1</translation>
+        <location filename="../aboutdialog/aboutdialog.ui" line="24"/>
+        <source>About</source>
+        <translation type="unfinished">Über</translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="33"/>
-        <source>%1 - %2 - %3</source>
-        <translation></translation>
+        <location filename="../aboutdialog/aboutdialog.ui" line="127"/>
+        <source>application name</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="38"/>
-        <source>*Unsaved - %1</source>
-        <translation>*Nicht gespeichert - %1</translation>
+        <location filename="../aboutdialog/aboutdialog.ui" line="137"/>
+        <source>version</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="41"/>
-        <source>*%1 - %2 - %3</source>
-        <translation></translation>
+        <location filename="../aboutdialog/aboutdialog.ui" line="163"/>
+        <source>description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.ui" line="185"/>
+        <source>website link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.ui" line="226"/>
+        <source>creators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="62"/>
+        <source>developed by %1</source>
+        <translation type="unfinished">entwickelt von %1</translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="72"/>
+        <source>Linked against:</source>
+        <translation type="unfinished">Gegen folgende Bibliotheken gelinkt:</translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="75"/>
+        <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
+        <translation type="unfinished">Für Aktualisierung und Melden von Fehlern besuche die &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;Webseite des Projekts&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>
-    <name>Widgets::PathSelection</name>
+    <name>QtUtilities::EnterPasswordDialog</name>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="12"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="51"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
+        <source>Enter the password</source>
+        <translation type="unfinished">Passwort eingeben</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
+        <source>user name</source>
+        <translation type="unfinished">Benutzername</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
+        <source>password</source>
+        <translation type="unfinished">Passwort</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
+        <source>repeat password</source>
+        <translation type="unfinished">Password wiederholen</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
+        <source>show password</source>
+        <translation type="unfinished">Passwort zeigen</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
+        <source>don&apos;t use a password</source>
+        <translation type="unfinished">Kein Passwort verwenden</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="213"/>
+        <source>Capslock is active</source>
+        <translation type="unfinished">Feststelltaste ist aktiviert</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="239"/>
+        <source>Abort</source>
+        <translation type="unfinished">Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
+        <source>Confirm</source>
+        <translation type="unfinished">Bestätigen</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
+        <source>Enter the new password</source>
+        <translation type="unfinished">Neues Passwort festlegen</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="290"/>
+        <source>You didn&apos;t enter a user name.</source>
+        <translation type="unfinished">Es wurde kein Benutzername eingegeben.</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="292"/>
+        <source>You didn&apos;t enter a password.</source>
+        <translation type="unfinished">Es wurde kein Passwort eingegeben.</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="297"/>
+        <source>You have to enter the new password twice to ensure you enterd it correct.</source>
+        <translation type="unfinished">Um sicher zu stellen, dass das neue Passwort richtig eingegeben wurde, muss es zweimal eingegeben werden.</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
+        <source>You mistyped the password.</source>
+        <translation type="unfinished">Erstes und zweites Passwort stimmen nicht überein.</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::PaletteEditor</name>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.ui" line="20"/>
+        <source>Edit Palette</source>
+        <translation type="unfinished">Palette ändern</translation>
+    </message>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.ui" line="53"/>
+        <source>Tune Palette</source>
+        <translation type="unfinished">Palette</translation>
+    </message>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.ui" line="84"/>
+        <source>Show Detai&amp;ls</source>
+        <translation type="unfinished">Details einblenden</translation>
+    </message>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.ui" line="91"/>
+        <source>&amp;Compute Details</source>
+        <translation type="unfinished">Details berechnen</translation>
+    </message>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.ui" line="101"/>
+        <source>Quick</source>
+        <translation type="unfinished">Einfach</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::PaletteModel</name>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="321"/>
+        <source>Color Role</source>
+        <translation type="unfinished">Farbrolle</translation>
+    </message>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
+        <source>Active</source>
+        <translation type="unfinished">Aktiv</translation>
+    </message>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
+        <source>Inactive</source>
+        <translation type="unfinished">Inaktiv</translation>
+    </message>
+    <message>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
+        <source>Disabled</source>
+        <translation type="unfinished">Deaktiviert</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::PathSelection</name>
     <message>
         <location filename="../widgets/pathselection.cpp" line="56"/>
         <location filename="../widgets/pathselection.cpp" line="76"/>
         <source>Select ...</source>
-        <translation>Wählen ...</translation>
+        <translation type="unfinished">Wählen ...</translation>
     </message>
     <message>
         <location filename="../widgets/pathselection.cpp" line="81"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation type="unfinished">Öffnen</translation>
     </message>
     <message>
         <location filename="../widgets/pathselection.cpp" line="84"/>
         <source>Explore</source>
-        <translation>Im Dateibrowser öffnen</translation>
+        <translation type="unfinished">Im Dateibrowser öffnen</translation>
     </message>
     <message>
         <location filename="../widgets/pathselection.cpp" line="120"/>
         <location filename="../widgets/pathselection.cpp" line="122"/>
         <source>Select path</source>
-        <translation>Pfad auswählen</translation>
+        <translation type="unfinished">Pfad auswählen</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::QtAppearanceOptionPage</name>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="6"/>
+        <source>Appearance</source>
+        <translation type="unfinished">Erscheinungsbild</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="21"/>
+        <source>Use system default</source>
+        <translation type="unfinished">Verwende Systemvorgabe</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="34"/>
+        <source>Font</source>
+        <translation type="unfinished">Schriftart</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="71"/>
+        <source>More options ...</source>
+        <translation type="unfinished">Weitere Optionen ...</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="93"/>
+        <source>Widget style</source>
+        <translation type="unfinished">Widget-Stil</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="132"/>
+        <source>Style sheet</source>
+        <translation type="unfinished">Stylesheet</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="162"/>
+        <source>Palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="175"/>
+        <source>select ...</source>
+        <translation type="unfinished">Bearbeiten ...</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="195"/>
+        <source>Icon theme</source>
+        <translation type="unfinished">Symbole</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="249"/>
+        <source>These settings take effect after restarting the application.
+These settings might be overwritten by your Qt 5 platfrom integration plugin and hence have no effect.</source>
+        <translation type="unfinished">Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.
+Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren daher nicht.</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::QtEnvOptionPage</name>
+    <message>
+        <location filename="../settingsdialog/qtenvoptionpage.ui" line="14"/>
+        <source>Environment/paths</source>
+        <translation type="unfinished">Umgebung/Pfade</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtenvoptionpage.ui" line="28"/>
+        <source>Additional plugin directory</source>
+        <translation type="unfinished">Zusätzliches Plugin-Verzeichnis</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtenvoptionpage.ui" line="38"/>
+        <source>Additional icon theme search path</source>
+        <translation type="unfinished">Zusätzliches Verzeichnis für Symbole</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtenvoptionpage.ui" line="48"/>
+        <source>Additional translation search path</source>
+        <translation type="unfinished">Zusätzliches Verzeichnis für Übersetzungen</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtenvoptionpage.ui" line="79"/>
+        <source>These settings take effect after restarting the application.</source>
+        <translation type="unfinished">Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::QtLanguageOptionPage</name>
+    <message>
+        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="6"/>
+        <source>Localization</source>
+        <translation type="unfinished">Lokalisierung</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="43"/>
+        <source>Locale</source>
+        <translation type="unfinished">Gebietsschema</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="53"/>
+        <source>Use system default</source>
+        <translation type="unfinished">Verwende Systemvorgabe</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="98"/>
+        <source>These settings take effect after restarting the application.</source>
+        <translation type="unfinished">Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::RecentMenuManager</name>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="35"/>
+        <source>&amp;Recent</source>
+        <translation type="unfinished">&amp;Zuletzt verwendet</translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="38"/>
+        <source>&amp;Clear list</source>
+        <translation type="unfinished">&amp;Liste löschen</translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="144"/>
+        <source>Recently opened files - </source>
+        <translation type="unfinished">Kürzlich geöffnete Dateien - </translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="145"/>
+        <source>The selected file can&apos;t be found anymore. Do you want to delete the obsolete entry from the list?</source>
+        <translation type="unfinished">Die ausgewählte Datei kann nicht mehr gefunden werden. Soll die Datei aus der Liste gelöscht werden?</translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="148"/>
+        <source>keep entry</source>
+        <translation type="unfinished">Eintrag behalten</translation>
+    </message>
+    <message>
+        <location filename="../misc/recentmenumanager.cpp" line="149"/>
+        <source>delete entry</source>
+        <translation type="unfinished">Eintrag löschen</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::SettingsDialog</name>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.ui" line="14"/>
+        <source>Settings</source>
+        <translation type="unfinished">Einstellungen</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.ui" line="53"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="150"/>
+        <source>No category selected</source>
+        <translation type="unfinished">Keine Kategorie gewählt</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.ui" line="69"/>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.ui" line="136"/>
+        <source>Abort</source>
+        <translation type="unfinished">Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.ui" line="150"/>
+        <source>Apply</source>
+        <translation type="unfinished">Anwenden</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.ui" line="161"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="245"/>
+        <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
+        <translation type="unfinished">&lt;p&gt;&lt;b&gt;Beim Anwenden der Einstellungen sind Fehler aufgetreten:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
+    </message>
+    <message>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="250"/>
+        <source>unknonw error</source>
+        <translation type="unfinished">unbekannter Fehler</translation>
+    </message>
+</context>
+<context>
+    <name>Utilities::windowTitle</name>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="32"/>
+        <source>Unsaved - %1</source>
+        <translation>Nicht gespeichert - %1</translation>
+    </message>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="35"/>
+        <source>%1 - %2 - %3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="40"/>
+        <source>*Unsaved - %1</source>
+        <translation>*Nicht gespeichert - %1</translation>
+    </message>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="43"/>
+        <source>*%1 - %2 - %3</source>
+        <translation></translation>
     </message>
 </context>
 </TS>

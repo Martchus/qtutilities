@@ -19,10 +19,12 @@
 #include <iostream>
 
 using namespace std;
-using namespace ConversionUtilities;
-using namespace EscapeCodes;
+using namespace CppUtilities::EscapeCodes;
 
-namespace ApplicationUtilities {
+/*!
+ * \brief The CppUtilities namespace contains addons to the c++utilities library provided by the qtutilities library.
+ */
+namespace CppUtilities {
 
 /*!
  * \brief Constructs new Qt config arguments.
@@ -181,4 +183,4 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         qputenv(m_sceneGraphRenderLoopArg.environmentVariable(), QByteArray(m_sceneGraphRenderLoopArg.firstValue()));
     }
 }
-} // namespace ApplicationUtilities
+} // namespace CppUtilities

@@ -15,10 +15,10 @@
 #include <QShowEvent>
 #include <QStringBuilder>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
- * \class Dialogs::SettingsDialog
+ * \class SettingsDialog
  * \brief The SettingsDialog class provides a framework for creating settings
  * dialogs with different categories and subcategories.
  */
@@ -280,4 +280,4 @@ void SettingsDialog::reset()
     }
     emit resetted();
 }
-} // namespace Dialogs
+} // namespace QtUtilities

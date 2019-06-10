@@ -11,11 +11,9 @@
 QT_FORWARD_DECLARE_CLASS(QListView)
 QT_FORWARD_DECLARE_CLASS(QLabel)
 
-namespace Widgets {
-class ColorButton;
-}
+namespace QtUtilities {
 
-namespace Dialogs {
+class ColorButton;
 
 namespace Ui {
 class PaletteEditor;
@@ -132,7 +130,7 @@ private Q_SLOTS:
     void brushChanged();
 
 private:
-    Widgets::ColorButton *m_button;
+    ColorButton *m_button;
     bool m_changed;
 };
 
@@ -178,6 +176,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &opt, const QModelIndex &index) const override;
 };
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // WIDGETS_PALETTEEDITOR_H

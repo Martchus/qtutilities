@@ -10,7 +10,7 @@
 
 using namespace std;
 
-namespace MiscUtils {
+namespace QtUtilities {
 
 /*!
  * \class DBusNotification
@@ -140,11 +140,11 @@ inline NotificationImage NotificationImage::fromDBusArgument(const QVariant &var
     return variant.canConvert<NotificationImage>() ? variant.value<NotificationImage>() : NotificationImage();
 }
 
-} // namespace MiscUtils
+} // namespace QtUtilities
 
-Q_DECLARE_METATYPE(MiscUtils::NotificationImage);
+Q_DECLARE_METATYPE(QtUtilities::NotificationImage);
 
-namespace MiscUtils {
+namespace QtUtilities {
 
 /*!
  * \brief Creates a new notification (which is *not* shown instantly).
@@ -461,4 +461,4 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
  * \fn DBusNotification::isVisible()
  * \brief Returns whether the notification is (still) visible.
  */
-} // namespace MiscUtils
+} // namespace QtUtilities

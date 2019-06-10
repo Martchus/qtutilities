@@ -11,7 +11,7 @@ QT_FORWARD_DECLARE_CLASS(QColor)
 QT_FORWARD_DECLARE_CLASS(QPoint)
 QT_FORWARD_DECLARE_CLASS(QRect)
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
  * \brief The DocumentStatus enum specifies the status of the document in a
@@ -43,6 +43,6 @@ void QT_UTILITIES_EXPORT updateStyle(QWidget *widget);
 #endif
 #endif
 
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // DIALOGS_DIALOGUTILS_H

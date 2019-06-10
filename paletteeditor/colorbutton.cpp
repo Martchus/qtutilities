@@ -7,7 +7,7 @@
 #include <QMimeData>
 #include <QPainter>
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
  * \cond
@@ -212,6 +212,6 @@ void ColorButton::dropEvent(QDropEvent *event)
     setColor(d_ptr->m_dragColor);
 }
 #endif
-} // namespace Widgets
+} // namespace QtUtilities
 
 #include "moc_colorbutton.cpp"

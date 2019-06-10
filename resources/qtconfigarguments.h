@@ -16,7 +16,7 @@
 #endif
 #endif
 
-namespace ApplicationUtilities {
+namespace CppUtilities {
 
 class QT_UTILITIES_EXPORT QtConfigArguments {
 public:
@@ -95,11 +95,11 @@ inline void QtConfigArguments::applySettingsForQuickGui() const
 }
 #endif // QT_UTILITIES_GUI_QTQUICK
 
-} // namespace ApplicationUtilities
+} // namespace CppUtilities
 
 #endif // APPLICATION_UTILITIES_QTCONFIGARGUMENTS_H
 
 #ifdef QT_CONFIG_ARGUMENTS
 #undef QT_CONFIG_ARGUMENTS
 #endif
-#define QT_CONFIG_ARGUMENTS ApplicationUtilities::QtConfigArguments
+#define QT_CONFIG_ARGUMENTS CppUtilities::QtConfigArguments

@@ -6,7 +6,7 @@
 #include <QAbstractButton>
 #include <QPixmap>
 
-namespace Widgets {
+namespace QtUtilities {
 
 class QT_UTILITIES_EXPORT IconButton : public QAbstractButton {
     Q_OBJECT
@@ -45,6 +45,6 @@ inline void IconButton::setPixmap(const QPixmap &pixmap)
     m_pixmap = pixmap;
     update();
 }
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_ICONBUTTON_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialogs::QtLanguageOptionPage</class>
- <widget class="QWidget" name="Dialogs::QtLanguageOptionPage">
+ <class>QtUtilities::QtLanguageOptionPage</class>
+ <widget class="QWidget" name="QtUtilities::QtLanguageOptionPage">
   <property name="windowTitle">
    <string>Localization</string>
   </property>

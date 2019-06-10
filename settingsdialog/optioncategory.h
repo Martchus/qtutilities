@@ -7,7 +7,7 @@
 #include <QList>
 #include <QObject>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 class OptionPage;
 
@@ -105,6 +105,6 @@ inline void OptionCategory::setCurrentIndex(int currentIndex)
 {
     m_currentIndex = currentIndex;
 }
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // DIALOGS_OPTIONSCATEGORY_H

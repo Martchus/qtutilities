@@ -6,10 +6,10 @@
 #include <QStyle>
 #endif
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
- * \class Dialogs::OptionCategoryModel
+ * \class OptionCategoryModel
  * \brief The OptionCategoryModel class is used by SettingsDialog to store and
  * display option categories.
  */
@@ -117,4 +117,4 @@ void OptionCategoryModel::categoryChangedIcon()
         }
     }
 }
-} // namespace Dialogs
+} // namespace QtUtilities

@@ -3,7 +3,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-namespace DesktopUtils {
+namespace QtUtilities {
 
 /*!
  * \brief Shows the specified file or directory using the default file browser.
@@ -26,4 +26,4 @@ bool openLocalFileOrDir(const QString &path)
     return QDesktopServices::openUrl(url);
 #endif
 }
-} // namespace DesktopUtils
+} // namespace QtUtilities

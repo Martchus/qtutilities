@@ -10,9 +10,7 @@
 #include <QStyle>
 #include <QToolButton>
 
-using namespace Widgets;
-
-namespace Dialogs {
+namespace QtUtilities {
 
 enum { BrushRole = 33 };
 
@@ -543,4 +541,4 @@ QSize ColorDelegate::sizeHint(const QStyleOptionViewItem &opt, const QModelIndex
     return QItemDelegate::sizeHint(opt, index) + QSize(4, 4);
 }
 
-} // namespace Dialogs
+} // namespace QtUtilities

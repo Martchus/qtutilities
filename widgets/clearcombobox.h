@@ -5,7 +5,7 @@
 
 #include <QComboBox>
 
-namespace Widgets {
+namespace QtUtilities {
 
 class QT_UTILITIES_EXPORT ClearComboBox : public QComboBox, public ButtonOverlay {
     Q_OBJECT
@@ -19,6 +19,6 @@ private Q_SLOTS:
     void handleClearButtonClicked() override;
 };
 
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_CLEARCOMBOBOX_H

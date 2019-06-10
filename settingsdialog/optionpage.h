@@ -8,7 +8,7 @@
 
 #include <memory>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 class SettingsDialog;
 
@@ -140,7 +140,7 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
 {
     return m_ui.get();
 }
-} // namespace Dialogs
+} // namespace QtUtilities
 
 /*!
  * \brief Declares a class inheriting from Dialogs::OptionPage in a convenient
@@ -148,8 +148,8 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
  */
 #define BEGIN_DECLARE_OPTION_PAGE(SomeClass)                                                                                                         \
-    typedef ::Dialogs::OptionPage SomeClass##Base;                                                                                                   \
-    class QT_UTILITIES_EXPORT SomeClass : public ::Dialogs::OptionPage {                                                                             \
+    typedef ::QtUtilities::OptionPage SomeClass##Base;                                                                                               \
+    class QT_UTILITIES_EXPORT SomeClass : public ::QtUtilities::OptionPage {                                                                         \
     public:                                                                                                                                          \
         explicit SomeClass(QWidget *parentWidget = nullptr);                                                                                         \
         ~SomeClass() override;                                                                                                                       \
@@ -164,8 +164,8 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
  */
 #define BEGIN_DECLARE_OPTION_PAGE_CUSTOM_CTOR(SomeClass)                                                                                             \
-    typedef ::Dialogs::OptionPage SomeClass##Base;                                                                                                   \
-    class QT_UTILITIES_EXPORT SomeClass : public ::Dialogs::OptionPage {                                                                             \
+    typedef ::QtUtilities::OptionPage SomeClass##Base;                                                                                               \
+    class QT_UTILITIES_EXPORT SomeClass : public ::QtUtilities::OptionPage {                                                                         \
     public:                                                                                                                                          \
         ~SomeClass() override;                                                                                                                       \
         bool apply() override;                                                                                                                       \
@@ -182,8 +182,8 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
     namespace Ui {                                                                                                                                   \
     class SomeClass;                                                                                                                                 \
     }                                                                                                                                                \
-    typedef ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> SomeClass##Base;                                                                         \
-    class QT_UTILITIES_EXPORT SomeClass : public ::Dialogs::UiFileBasedOptionPage<Ui::SomeClass> {                                                   \
+    typedef ::QtUtilities::UiFileBasedOptionPage<Ui::SomeClass> SomeClass##Base;                                                                     \
+    class QT_UTILITIES_EXPORT SomeClass : public ::QtUtilities::UiFileBasedOptionPage<Ui::SomeClass> {                                               \
     public:                                                                                                                                          \
         ~SomeClass() override;                                                                                                                       \
         bool apply() override;                                                                                                                       \
@@ -217,7 +217,7 @@ private:
  * \remarks Might be required when the class is used by another application.
  */
 #define INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(SomeClass)                                                                                             \
-    namespace Dialogs {                                                                                                                              \
+    namespace QtUtilities {                                                                                                                          \
     template class UiFileBasedOptionPage<Ui::SomeClass>;                                                                                             \
     }
 
@@ -228,7 +228,7 @@ private:
  * \remarks Might be required when the class is used by another application.
  */
 #define INSTANTIATE_UI_FILE_BASED_OPTION_PAGE_NS(SomeNamespace, SomeClass)                                                                           \
-    namespace Dialogs {                                                                                                                              \
+    namespace QtUtilities {                                                                                                                          \
     template class UiFileBasedOptionPage<::SomeNamespace::Ui::SomeClass>;                                                                            \
     }
 
@@ -238,7 +238,7 @@ private:
  * \remarks Might be required when the class comes from an external library.
  */
 #define DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(SomeClass)                                                                                          \
-    namespace Dialogs {                                                                                                                              \
+    namespace QtUtilities {                                                                                                                          \
     namespace Ui {                                                                                                                                   \
     class SomeClass;                                                                                                                                 \
     }                                                                                                                                                \
@@ -257,7 +257,7 @@ private:
     class SomeClass;                                                                                                                                 \
     }                                                                                                                                                \
     }                                                                                                                                                \
-    namespace Dialogs {                                                                                                                              \
+    namespace QtUtilities {                                                                                                                          \
     extern template class UiFileBasedOptionPage<::SomeNamespace::Ui::SomeClass>;                                                                     \
     }
 

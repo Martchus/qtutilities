@@ -3,7 +3,7 @@
 
 #include <QSortFilterProxyModel>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 class OptionCategoryFilterModel : public QSortFilterProxyModel {
     Q_OBJECT
@@ -11,8 +11,8 @@ public:
     explicit OptionCategoryFilterModel(QObject *parent = nullptr);
 
 protected:
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const override;
+    bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const override;
 };
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // DIALOGS_OPTIONCATEGORYFILTERMODEL_H

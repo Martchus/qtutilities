@@ -6,7 +6,7 @@
 #include <QAbstractListModel>
 #include <QList>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 class OptionPage;
 class OptionCategory;
@@ -16,7 +16,7 @@ class QT_UTILITIES_EXPORT OptionCategoryModel : public QAbstractListModel {
 public:
     explicit OptionCategoryModel(QObject *parent = nullptr);
     explicit OptionCategoryModel(const QList<OptionCategory *> &categories, QObject *parent = nullptr);
-    virtual ~OptionCategoryModel() override;
+    ~OptionCategoryModel() override;
 
     const QList<OptionCategory *> &categories() const;
     OptionCategory *category(const QModelIndex &index) const;
@@ -62,6 +62,6 @@ inline OptionCategory *OptionCategoryModel::category(int row) const
 {
     return row < m_categories.size() ? m_categories.at(row) : nullptr;
 }
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // DIALOGS_OPTIONCATEGORYMODEL_H

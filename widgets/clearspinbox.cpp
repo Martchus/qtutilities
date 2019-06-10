@@ -4,10 +4,10 @@
 #include <QStyle>
 #include <QStyleOptionSpinBox>
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
- * \class Widgets::ClearSpinBox
+ * \class ClearSpinBox
  * \brief A QSpinBox with an embedded button for clearing its contents and the
  * ability to hide
  *        the minimum value.
@@ -75,4 +75,4 @@ QString ClearSpinBox::textFromValue(int val) const
         return QSpinBox::textFromValue(val);
     }
 }
-} // namespace Widgets
+} // namespace QtUtilities

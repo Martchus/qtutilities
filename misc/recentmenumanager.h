@@ -8,7 +8,7 @@
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QAction)
 
-namespace MiscUtils {
+namespace QtUtilities {
 
 class QT_UTILITIES_EXPORT RecentMenuManager : public QObject {
     Q_OBJECT
@@ -33,6 +33,6 @@ private:
     QAction *m_sep;
     QAction *m_clearAction;
 };
-} // namespace MiscUtils
+} // namespace QtUtilities
 
 #endif // MISC_UTILS_RECENTMENUMANAGER_H

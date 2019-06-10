@@ -25,8 +25,10 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
  * \brief Loads translations for Qt, other dependencies and the application.
  */
 #define LOAD_QT_TRANSLATIONS                                                                                                                         \
-    TranslationFiles::loadQtTranslationFile(QT_TRANSLATION_FILES);                                                                                   \
-    TranslationFiles::loadApplicationTranslationFile(APP_SPECIFIC_QT_TRANSLATION_FILES)
+    QtUtilities::TranslationFiles::loadQtTranslationFile(QT_TRANSLATION_FILES);                                                                      \
+    QtUtilities::TranslationFiles::loadApplicationTranslationFile(APP_SPECIFIC_QT_TRANSLATION_FILES)
+
+namespace QtUtilities {
 
 namespace QtUtilitiesResources {
 
@@ -60,5 +62,7 @@ namespace ConfigFile {
 
 QT_UTILITIES_EXPORT QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings = nullptr);
 }
+
+} // namespace QtUtilities
 
 #endif // APPLICATION_UTILITIES_RESOURCES_H

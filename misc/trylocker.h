@@ -5,7 +5,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QMutex)
 
-namespace ThreadingUtils {
+namespace QtUtilities {
 
 /*!
  * \brief Like QMutexLocker, but it just tries to lock the mutex.
@@ -50,6 +50,6 @@ public:
 private:
     Mutex *m_mutex;
 };
-} // namespace ThreadingUtils
+} // namespace QtUtilities
 
 #endif // THREADING_UTILS_TRYLOCKER_H

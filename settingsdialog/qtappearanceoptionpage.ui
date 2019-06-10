@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialogs::QtAppearanceOptionPage</class>
- <widget class="QWidget" name="Dialogs::QtAppearanceOptionPage">
+ <class>QtUtilities::QtAppearanceOptionPage</class>
+ <widget class="QWidget" name="QtUtilities::QtAppearanceOptionPage">
   <property name="windowTitle">
    <string>Appearance</string>
   </property>
@@ -137,7 +137,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="Widgets::PathSelection" name="styleSheetPathSelection" native="true">
+      <widget class="QtUtilities::PathSelection" name="styleSheetPathSelection" native="true">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -261,7 +261,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Widgets::PathSelection</class>
+   <class>QtUtilities::PathSelection</class>
    <extends>QWidget</extends>
    <header>widgets/pathselection.h</header>
    <container>1</container>

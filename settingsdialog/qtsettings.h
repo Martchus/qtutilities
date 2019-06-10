@@ -8,7 +8,7 @@
 QT_FORWARD_DECLARE_CLASS(QFontDialog)
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
-namespace Dialogs {
+namespace QtUtilities {
 
 class OptionCategory;
 struct QtSettingsData;
@@ -55,7 +55,7 @@ public:
 private:
     std::unique_ptr<QtSettingsData> m_d;
 };
-} // namespace Dialogs
+} // namespace QtUtilities
 
 DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
 DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(QtLanguageOptionPage)

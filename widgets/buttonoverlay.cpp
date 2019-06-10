@@ -10,16 +10,10 @@
 
 #include <functional>
 
-/*!
- * \namespace Widgets
- * \brief Provides a set of extended widgets such as ClearLineEdit and
- * ClearComboBox.
- */
-
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
- * \class Widgets::ButtonOverlay
+ * \class ButtonOverlay
  * \brief The ButtonOverlay class is used to display buttons on top of other
  * widgets.
  *
@@ -196,4 +190,4 @@ void ButtonOverlay::showInfo()
         QToolTip::showText(QCursor::pos(), m_infoButton->toolTip(), m_infoButton);
     }
 }
-} // namespace Widgets
+} // namespace QtUtilities

@@ -1,10 +1,10 @@
 #include "./optioncategory.h"
 #include "./optionpage.h"
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
- * \class Dialogs::OptionCategory
+ * \class OptionCategory
  * \brief The OptionCategory class wraps associated option pages.
  */
 
@@ -100,4 +100,4 @@ void OptionCategory::assignPages(const QList<OptionPage *> pages)
  * \fn OptionCategory::pagesChanged()
  * \brief Emitted when the pages changed.
  */
-} // namespace Dialogs
+} // namespace QtUtilities

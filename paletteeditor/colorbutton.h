@@ -5,7 +5,7 @@
 
 #include <QToolButton>
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
  * \brief The ColorButton class is used by PaletteEditor.
@@ -46,6 +46,6 @@ private:
     Q_DISABLE_COPY(ColorButton)
     Q_PRIVATE_SLOT(d_func(), void slotEditColor())
 };
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_COLORBUTTON_H

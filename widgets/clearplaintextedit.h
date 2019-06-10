@@ -5,7 +5,7 @@
 
 #include <QPlainTextEdit>
 
-namespace Widgets {
+namespace QtUtilities {
 
 class QT_UTILITIES_EXPORT ClearPlainTextEdit : public QPlainTextEdit, public ButtonOverlay {
     Q_OBJECT
@@ -20,6 +20,6 @@ private Q_SLOTS:
     void handleScroll();
 };
 
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_CLEARPLAINTEXTEDIT_H

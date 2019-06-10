@@ -6,10 +6,10 @@
 #include <QPushButton>
 #include <QRadioButton>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
- * \class Dialogs::OptionPage
+ * \class OptionPage
  * \brief The OptionPage class is the base class for SettingsDialog pages.
  *
  * The specified \a parentWindow might be used by some implementations as parent
@@ -112,4 +112,4 @@ bool OptionPage::matches(const QString &searchKeyWord)
  * \brief Creates the widget for the page. Called on the first invocation of
  * widget().
  */
-} // namespace Dialogs
+} // namespace QtUtilities

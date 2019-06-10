@@ -7,7 +7,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 
-namespace Widgets {
+namespace QtUtilities {
 
 class IconButton;
 
@@ -22,6 +22,6 @@ private Q_SLOTS:
     void handleTextChanged(const QString &text);
     void handleClearButtonClicked() override;
 };
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_CLEARLINEEDIT_H

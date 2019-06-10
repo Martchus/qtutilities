@@ -7,7 +7,7 @@
 
 #include <memory>
 
-namespace Dialogs {
+namespace QtUtilities {
 
 namespace Ui {
 class EnterPasswordDialog;
@@ -99,6 +99,6 @@ inline void EnterPasswordDialog::abort()
     m_password.clear();
     done(QDialog::Rejected);
 }
-} // namespace Dialogs
+} // namespace QtUtilities
 
 #endif // DIALOGS_ENTERPASSWORDDIALOG_H

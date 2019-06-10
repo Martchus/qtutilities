@@ -8,7 +8,7 @@
 
 QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 
-namespace Widgets {
+namespace QtUtilities {
 
 class IconButton;
 
@@ -72,6 +72,6 @@ inline void ClearSpinBox::setPlaceholderText(const QString &placeholderText)
 {
     lineEdit()->setPlaceholderText(placeholderText);
 }
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_CLEARSPINBOX_H

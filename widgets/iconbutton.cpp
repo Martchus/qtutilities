@@ -5,10 +5,10 @@
 #include <QStyleOptionFocusRect>
 #include <QStylePainter>
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
- * \class Widgets::IconButton
+ * \class IconButton
  * \brief A simple QAbstractButton implementation displaying a QPixmap.
  */
 
@@ -77,4 +77,4 @@ void IconButton::keyReleaseEvent(QKeyEvent *event)
     QAbstractButton::keyReleaseEvent(event);
     event->accept();
 }
-} // namespace Widgets
+} // namespace QtUtilities

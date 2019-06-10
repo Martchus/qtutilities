@@ -4,10 +4,10 @@
 #include <QStyle>
 #include <QStyleOptionComboBox>
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
- * \class Widgets::ClearComboBox
+ * \class ClearComboBox
  * \brief A QComboBox with an embedded button for clearing its contents.
  */
 
@@ -54,4 +54,4 @@ bool ClearComboBox::isCleared() const
 {
     return currentText().isEmpty();
 }
-} // namespace Widgets
+} // namespace QtUtilities

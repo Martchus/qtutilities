@@ -5,10 +5,10 @@
 
 using namespace std;
 
-namespace Widgets {
+namespace QtUtilities {
 
 /*!
- * \class Widgets::ClearPlainTextEdit
+ * \class ClearPlainTextEdit
  * \brief A QPlainTextEdit with an embedded button for clearing its contents.
  */
 
@@ -61,4 +61,4 @@ bool ClearPlainTextEdit::isCleared() const
     return document()->isEmpty();
 }
 
-} // namespace Widgets
+} // namespace QtUtilities

@@ -18,7 +18,7 @@
 #include <QWidget>
 #endif
 
-namespace Dialogs {
+namespace QtUtilities {
 
 /*!
  * \brief Generates the window title string for the specified \a documentStatus
@@ -167,4 +167,4 @@ void updateStyle(QWidget *widget)
 
 #endif
 
-} // namespace Dialogs
+} // namespace QtUtilities

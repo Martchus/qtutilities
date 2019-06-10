@@ -10,7 +10,7 @@ QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QPixmap)
 
-namespace Widgets {
+namespace QtUtilities {
 
 class IconButton;
 
@@ -67,6 +67,6 @@ inline bool ButtonOverlay::isInfoButtonEnabled() const
 {
     return m_infoButton != nullptr;
 }
-} // namespace Widgets
+} // namespace QtUtilities
 
 #endif // WIDGETS_BUTTONOVERLAY_H

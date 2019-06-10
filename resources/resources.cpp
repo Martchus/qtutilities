@@ -36,6 +36,8 @@ inline void cleanupResources()
 }
 ///! \endcond
 
+namespace QtUtilities {
+
 /*!
  * \brief Functions for using the resources provided by this library.
  * \deprecated Replaced by ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES macro.
@@ -327,3 +329,4 @@ QString locateConfigFile(const QString &applicationName, const QString &fileName
     }
 }
 } // namespace ConfigFile
+} // namespace QtUtilities
