@@ -169,7 +169,7 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         QGuiApplication::setFont(QFont(QStringLiteral("Segoe UI"), 9));
     }
 #else
-    VAR_UNUSED(preventApplyingDefaultFont)
+    CPP_UTILITIES_UNUSED(preventApplyingDefaultFont)
 #endif
     if (m_libraryPathsArg.isPresent()) {
         QStringList libraryPaths;
