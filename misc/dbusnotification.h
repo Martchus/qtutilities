@@ -21,6 +21,7 @@ enum class NotificationCloseReason { Undefined, Expired, Dismissed, Manually, Ac
 
 class QT_UTILITIES_EXPORT DBusNotification : public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString applicationName READ applicationName WRITE setApplicationName)
     Q_PROPERTY(QString title READ title WRITE setTitle)
     Q_PROPERTY(QString message READ message WRITE setMessage)
     Q_PROPERTY(QString icon READ icon WRITE setIcon)
@@ -55,6 +56,8 @@ public:
     ~DBusNotification() override;
 
     static bool isAvailable();
+    const QString &applicationName() const;
+    void setApplicationName(const QString &applicationName);
     const QString &title() const;
     void setTitle(const QString &title);
     const QString &message() const;
@@ -68,6 +71,12 @@ public:
     void setImagePath(const QString &imagePath);
     int timeout() const;
     void setTimeout(int timeout);
+    int urgency() const;
+    void setUrgency(quint8 urgency);
+    bool isResident() const;
+    void setResident(bool resident);
+    QString category() const;
+    void setCategory(const QString &category);
     const QStringList &actions() const;
     void setActions(const QStringList &actions);
     const QVariantMap &hints() const;
@@ -82,7 +91,7 @@ public Q_SLOTS:
     bool show();
     bool show(const QString &message);
     bool update(const QString &line);
-    void hide();
+    bool hide();
 
 Q_SIGNALS:
     /// \brief Emitted when the notification could be shown successful.
@@ -104,6 +113,7 @@ private:
 
     uint m_id;
     QDBusPendingCallWatcher *m_watcher;
+    QString m_applicationName;
     QString m_title;
     QString m_msg;
     QString m_icon;
@@ -177,6 +187,24 @@ inline bool DBusNotification::Capabilities::supportsSound() const
 inline bool DBusNotification::Capabilities::supportsPercistence() const
 {
     return contains(QStringLiteral("persistence"));
+}
+
+/*!
+ * \brief Returns the application name to be used.
+ * \remarks If the application name is empty (which is the default), QCoreApplication::applicationName() is used instead.
+ */
+inline const QString &DBusNotification::applicationName() const
+{
+    return m_applicationName;
+}
+
+/*!
+ * \brief Sets the application name to be used.
+ * \remarks If the application name is empty (which is the default), QCoreApplication::applicationName() is used instead.
+ */
+inline void DBusNotification::setApplicationName(const QString &applicationName)
+{
+    m_applicationName = applicationName;
 }
 
 inline const QString &DBusNotification::title() const
@@ -263,6 +291,56 @@ inline int DBusNotification::timeout() const
 inline void DBusNotification::setTimeout(int timeout)
 {
     m_timeout = timeout;
+}
+
+/*!
+ * \brief Returns the urgency level (0 = low, 1 = normal, 2 = critical).
+ */
+inline int DBusNotification::urgency() const
+{
+    return m_hints[QStringLiteral("urgency")].toInt();
+}
+
+/*!
+ * \brief Sets the urgency level (0 = low, 1 = normal, 2 = critical).
+ */
+inline void DBusNotification::setUrgency(quint8 urgency)
+{
+    m_hints[QStringLiteral("urgency")] = urgency;
+}
+
+/*!
+ * \brief Returns whether the notification will remain visible after an action has been clicked.
+ */
+inline bool DBusNotification::isResident() const
+{
+    return m_hints[QStringLiteral("resident")].toBool();
+}
+
+/*!
+ * \brief Sets whether the notification will remain visible after an action has been clicked.
+ */
+inline void DBusNotification::setResident(bool resident)
+{
+    m_hints[QStringLiteral("resident")] = resident;
+}
+
+/*!
+ * \brief Returns the category.
+ * \sa https://developer.gnome.org/notification-spec/#categories
+ */
+inline QString DBusNotification::category() const
+{
+    return m_hints[QStringLiteral("category")].toString();
+}
+
+/*!
+ * \brief Sets the category.
+ * \sa https://developer.gnome.org/notification-spec/#categories
+ */
+inline void DBusNotification::setCategory(const QString &category)
+{
+    m_hints[QStringLiteral("category")] = category;
 }
 
 /*!

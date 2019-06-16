@@ -273,8 +273,10 @@ bool DBusNotification::show()
     }
 
     delete m_watcher;
-    m_watcher = new QDBusPendingCallWatcher(
-        s_dbusInterface->Notify(QCoreApplication::applicationName(), m_id, m_icon, m_title, m_msg, m_actions, m_hints, m_timeout), this);
+    m_watcher
+        = new QDBusPendingCallWatcher(s_dbusInterface->Notify(m_applicationName.isEmpty() ? QCoreApplication::applicationName() : m_applicationName,
+                                          m_id, m_icon, m_title, m_msg, m_actions, m_hints, m_timeout),
+            this);
     connect(m_watcher, &QDBusPendingCallWatcher::finished, this, &DBusNotification::handleNotifyResult);
     return true;
 }
@@ -344,13 +346,14 @@ bool DBusNotification::queryCapabilities(const std::function<void(Capabilities &
  * \brief Hides the notification (if still visible).
  * \remarks On success, the signal closed() is emitted with the reason
  * NotificationCloseReason::Manually.
- * \todo Add return value in v6.
  */
-void DBusNotification::hide()
+bool DBusNotification::hide()
 {
     if (m_id) {
         s_dbusInterface->CloseNotification(m_id);
+        return true;
     }
+    return false;
 }
 
 /*!
