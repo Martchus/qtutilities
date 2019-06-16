@@ -114,17 +114,21 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
  */
 void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
-    for (const QString &repoName : repositoryNames) {
-        QTranslator *const qtTranslator = new QTranslator;
-        const QString fileName(repoName % QChar('_') % localeName);
-        if (!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, additionalTranslationFilePath())) {
+    const auto debugTranslations = qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS");
+    for (const auto &repoName : repositoryNames) {
+        auto *const qtTranslator = new QTranslator;
+        const auto fileName = repoName % QChar('_') % localeName;
+
+        QString path;
+        if ((!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, path = additionalTranslationFilePath()))
+            || qtTranslator->load(fileName, path = QLibraryInfo::location(QLibraryInfo::TranslationsPath))
+            || qtTranslator->load(fileName, path = QStringLiteral("../share/qt/translations"))
+            || qtTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
             QCoreApplication::installTranslator(qtTranslator);
-        } else if (qtTranslator->load(fileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
-            QCoreApplication::installTranslator(qtTranslator);
-        } else if (qtTranslator->load(fileName, QStringLiteral("../share/qt/translations"))) {
-            QCoreApplication::installTranslator(qtTranslator);
-        } else if (qtTranslator->load(fileName, QStringLiteral(":/translations"))) {
-            QCoreApplication::installTranslator(qtTranslator);
+            if (debugTranslations) {
+                cerr << "Loading translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and the locale \""
+                     << localeName.toLocal8Bit().data() << "\" from \"" << path.toLocal8Bit().data() << "\"." << endl;
+            }
         } else {
             delete qtTranslator;
             if (localeName.startsWith(QLatin1String("en"))) {
@@ -143,9 +147,12 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
  * \param applicationName Specifies the name of the application.
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
+ *    * ./
+ *    * ../$application
+ *    * ../../$application
  *    * ./translations
- *    * /usr/share/$application/translations (used in UNIX)
- *    * ../share/$application/translations (used in Windows)
+ *    * ../share/$application/translations
+ *    * $install_prefix/share/$application/translations
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
  *  - Translation files can also be built-in using by setting the CMake variable
@@ -171,9 +178,12 @@ void loadApplicationTranslationFile(const QString &applicationName)
  * \param localeName Specifies the name of the locale.
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
+ *    * ./
+ *    * ../$application
+ *    * ../../$application
  *    * ./translations
- *    * /usr/share/$application/translations (used in UNIX)
- *    * ../share/$application/translations (used in Windows)
+ *    * ../share/$application/translations
+ *    * $install_prefix/share/$application/translations
  *  - Translation files must be named using the following scheme:
  *    * $application_$language.qm
  *  - Translation files can also be built-in using by setting the CMake variable
@@ -183,20 +193,23 @@ void loadApplicationTranslationFile(const QString &applicationName)
  */
 void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
 {
-    QTranslator *const appTranslator = new QTranslator;
-    const QString fileName(applicationName % QChar('_') % localeName);
-    if (!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, additionalTranslationFilePath())) {
+    auto *const appTranslator = new QTranslator;
+    const auto fileName = applicationName % QChar('_') % localeName;
+
+    QString path;
+    if ((!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, path = additionalTranslationFilePath()))
+        || appTranslator->load(fileName, path = QStringLiteral(".")) || appTranslator->load(fileName, path = QStringLiteral("../") % applicationName)
+        || appTranslator->load(fileName, path = QStringLiteral("../") % applicationName)
+        || appTranslator->load(fileName, path = QStringLiteral("../../") % applicationName)
+        || appTranslator->load(fileName, path = QStringLiteral("./translations"))
+        || appTranslator->load(fileName, path = QStringLiteral("../share/") % applicationName % QStringLiteral("/translations"))
+        || appTranslator->load(fileName, path = QStringLiteral(APP_INSTALL_PREFIX "/share/") % applicationName % QStringLiteral("/translations"))
+        || appTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral("."))) {
-        QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral("./translations"))) {
-        QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral(APP_INSTALL_PREFIX "/share/") % applicationName % QStringLiteral("/translations"))) {
-        QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral("../share/") % applicationName % QStringLiteral("/translations"))) {
-        QCoreApplication::installTranslator(appTranslator);
-    } else if (appTranslator->load(fileName, QStringLiteral(":/translations"))) {
-        QCoreApplication::installTranslator(appTranslator);
+        if (qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS")) {
+            cerr << "Loading translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the locale \""
+                 << localeName.toLocal8Bit().data() << "\" from \"" << path.toLocal8Bit().data() << "\"." << endl;
+        }
     } else {
         delete appTranslator;
         if (localeName.startsWith(QLatin1String("en"))) {
