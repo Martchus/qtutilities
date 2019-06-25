@@ -31,7 +31,10 @@ set(QT_MODULES ${ADDITIONAL_QT_MODULES} Core)
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
 
 # disable deprecated features
-list(APPEND META_PRIVATE_COMPILE_DEFINITIONS QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x060000)
+option(DISABLE_DEPRECATED_QT_FEATURES "specifies whether deprecated Qt features should be disabled" OFF)
+if (DISABLE_DEPRECATED_QT_FEATURES)
+    list(APPEND META_PRIVATE_COMPILE_DEFINITIONS QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x060000)
+endif ()
 
 # allow specifying a custom directory for Qt plugins
 set(QT_PLUGIN_DIR "" CACHE STRING "specifies the directory to install Qt plugins")
