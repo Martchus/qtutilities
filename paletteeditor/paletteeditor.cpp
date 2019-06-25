@@ -366,8 +366,8 @@ BrushEditor::BrushEditor(QWidget *parent)
     , m_button(new ColorButton(this))
     , m_changed(false)
 {
-    QLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    auto *const layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(m_button);
     connect(m_button, &ColorButton::colorChanged, this, &BrushEditor::brushChanged);
     setFocusProxy(m_button);
@@ -401,7 +401,7 @@ RoleEditor::RoleEditor(QWidget *parent)
     , m_edited(false)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     layout->addWidget(m_label);

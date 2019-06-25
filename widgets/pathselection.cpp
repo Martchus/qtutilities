@@ -57,7 +57,7 @@ PathSelection::PathSelection(QWidget *parent)
 
     auto *layout = new QHBoxLayout(this);
     layout->setSpacing(3);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(m_lineEdit);
     layout->addWidget(m_button);
     setLayout(layout);
