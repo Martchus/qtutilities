@@ -13,6 +13,8 @@ class IconButton;
 
 class QT_UTILITIES_EXPORT ClearLineEdit : public QLineEdit, public ButtonOverlay {
     Q_OBJECT
+    Q_PROPERTY(bool cleared READ isCleared)
+
 public:
     explicit ClearLineEdit(QWidget *parent = nullptr);
     ~ClearLineEdit() override;

@@ -9,6 +9,8 @@ namespace QtUtilities {
 
 class QT_UTILITIES_EXPORT ClearPlainTextEdit : public QPlainTextEdit, public ButtonOverlay {
     Q_OBJECT
+    Q_PROPERTY(bool cleared READ isCleared)
+
 public:
     explicit ClearPlainTextEdit(QWidget *parent = nullptr);
     ~ClearPlainTextEdit() override;

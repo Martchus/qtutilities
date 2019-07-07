@@ -14,9 +14,9 @@ class IconButton;
 
 class QT_UTILITIES_EXPORT ClearSpinBox : public QSpinBox, public ButtonOverlay {
     Q_OBJECT
+    Q_PROPERTY(bool cleared READ isCleared)
     Q_PROPERTY(bool minimumHidden READ minimumHidden WRITE setMinimumHidden)
     Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
-    Q_PROPERTY(bool isCleared READ isCleared)
 
 public:
     explicit ClearSpinBox(QWidget *parent = nullptr);
