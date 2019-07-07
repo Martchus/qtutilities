@@ -14,6 +14,7 @@ class ClearLineEdit;
 
 class QT_UTILITIES_EXPORT PathSelection : public QWidget {
     Q_OBJECT
+
 public:
     explicit PathSelection(QWidget *parent = nullptr);
 
@@ -31,8 +32,8 @@ private slots:
 private:
     ClearLineEdit *m_lineEdit;
     QPushButton *m_button;
-    QFileDialog::FileMode m_customMode;
     QFileDialog *m_customDialog;
+    QFileDialog::FileMode m_customMode;
     static QCompleter *m_completer;
 };
 

@@ -38,8 +38,8 @@ PathSelection::PathSelection(QWidget *parent)
     : QWidget(parent)
     , m_lineEdit(new ClearLineEdit(this))
     , m_button(new QPushButton(this))
-    , m_customMode(QFileDialog::Directory)
     , m_customDialog(nullptr)
+    , m_customMode(QFileDialog::Directory)
 {
     if (!m_completer) {
         auto *fileSystemModel = new QFileSystemModel(m_completer);
