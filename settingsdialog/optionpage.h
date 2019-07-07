@@ -143,12 +143,17 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
 } // namespace QtUtilities
 
 /*!
+ * \brief Declares the base class for a class inheriting from Dialogs::OptionPage.
+ */
+#define BEGIN_DECLARE_TYPEDEF_OPTION_PAGE(SomeClass) using SomeClass##Base = ::QtUtilities::OptionPage;
+
+/*!
  * \brief Declares a class inheriting from Dialogs::OptionPage in a convenient
  * way.
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
  */
 #define BEGIN_DECLARE_OPTION_PAGE(SomeClass)                                                                                                         \
-    typedef ::QtUtilities::OptionPage SomeClass##Base;                                                                                               \
+    BEGIN_DECLARE_TYPEDEF_OPTION_PAGE(SomeClass)                                                                                                     \
     class QT_UTILITIES_EXPORT SomeClass : public ::QtUtilities::OptionPage {                                                                         \
     public:                                                                                                                                          \
         explicit SomeClass(QWidget *parentWidget = nullptr);                                                                                         \
@@ -164,7 +169,7 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
  */
 #define BEGIN_DECLARE_OPTION_PAGE_CUSTOM_CTOR(SomeClass)                                                                                             \
-    typedef ::QtUtilities::OptionPage SomeClass##Base;                                                                                               \
+    BEGIN_DECLARE_TYPEDEF_OPTION_PAGE(SomeClass)                                                                                                     \
     class QT_UTILITIES_EXPORT SomeClass : public ::QtUtilities::OptionPage {                                                                         \
     public:                                                                                                                                          \
         ~SomeClass() override;                                                                                                                       \
@@ -174,15 +179,21 @@ template <class UiClass> inline UiClass *UiFileBasedOptionPage<UiClass>::ui()
     private:
 
 /*!
+ * \brief Declares the base class for a class inheriting from Dialogs::UiFileBasedOptionPage.
+ */
+#define BEGIN_DECLARE_TYPEDEF_UI_FILE_BASED_OPTION_PAGE(SomeClass)                                                                                   \
+    namespace Ui {                                                                                                                                   \
+    class SomeClass;                                                                                                                                 \
+    }                                                                                                                                                \
+    using SomeClass##Base = ::QtUtilities::UiFileBasedOptionPage<Ui::SomeClass>;
+
+/*!
  * \brief Declares a class inheriting from Dialogs::UiFileBasedOptionPage in a
  * convenient way.
  * \remarks Must be closed with END_DECLARE_OPTION_PAGE.
  */
 #define BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(SomeClass)                                                                               \
-    namespace Ui {                                                                                                                                   \
-    class SomeClass;                                                                                                                                 \
-    }                                                                                                                                                \
-    typedef ::QtUtilities::UiFileBasedOptionPage<Ui::SomeClass> SomeClass##Base;                                                                     \
+    BEGIN_DECLARE_TYPEDEF_UI_FILE_BASED_OPTION_PAGE(SomeClass)                                                                                       \
     class QT_UTILITIES_EXPORT SomeClass : public ::QtUtilities::UiFileBasedOptionPage<Ui::SomeClass> {                                               \
     public:                                                                                                                                          \
         ~SomeClass() override;                                                                                                                       \
