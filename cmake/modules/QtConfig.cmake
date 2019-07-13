@@ -282,6 +282,7 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
                            ${QML_HEADER_FILES}
                            ${QML_SRC_FILES}
                            ${QML_RES_FILES}
+                           ${EXCLUDED_FILES}
                            ${TS_FILES}
                            OPTIONS
                            ${LUPDATE_OPTIONS})
