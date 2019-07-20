@@ -33,8 +33,7 @@ namespace QtUtilities {
  * \param dependencyVersions Specifies the dependency versions which were present at link-time. If empty,
  * ApplicationUtilities::applicationInfo.dependencyVersions will be used.
  * \param description Specifies a short description about the application.
- * \param website Specifies the URL to the website of the application. If empty,
- * QApplication::organizationDomain() will be used.
+ * \param website Specifies the URL to the website of the application.
  * \param image Specifies the application icon. If the image is null, the
  * standard information icon will be used.
  */
@@ -72,10 +71,14 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         m_ui->versionLabel->setToolTip(QStringLiteral("<p>") % tr("Linked against:") % QStringLiteral("</p><ul><li>")
             % linkedAgainst.join(QStringLiteral("</li><li>")) % QStringLiteral("</li></ul>"));
     }
-    m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" "
-                                   "style=\"text-decoration: underline; color: palette(link);\">project "
-                                   "website</a>.")
-                                    .arg(website.isEmpty() ? QApplication::organizationDomain() : website));
+    if (!website.isEmpty()) {
+        m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" "
+                                       "style=\"text-decoration: underline; color: palette(link);\">project "
+                                       "website</a>.")
+                                        .arg(website));
+    } else {
+        m_ui->websiteLabel->hide();
+    }
     m_ui->descLabel->setText(description.isEmpty() && CppUtilities::applicationInfo.description
             ? QString::fromUtf8(CppUtilities::applicationInfo.description)
             : description);
@@ -101,8 +104,8 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
  * \brief Constructs an about dialog with the specified \a parent, \a
  * description and \a image.
  */
-AboutDialog::AboutDialog(QWidget *parent, const QString &description, const QImage &image)
-    : AboutDialog(parent, QString(), QString(), QString(), QString(), description, image)
+AboutDialog::AboutDialog(QWidget *parent, const QString &website, const QString &description, const QImage &image)
+    : AboutDialog(parent, QString(), QString(), QString(), website, description, image)
 {
 }
 
