@@ -116,25 +116,25 @@ QRect availableScreenGeometryAtPoint(const QPoint &point)
  * \brief Moves the specified \a widget in the middle of the (available) screen
  * area or \a parent if specified.
  *
- * If there are multiple screens available, the screen where the cursor currently
- * is located is chosen.
+ * The screen containing the current cursor position is used unless \a position
+ * is specified.
  */
-void centerWidget(QWidget *widget, const QWidget *parent)
+void centerWidget(QWidget *widget, const QWidget *parent, const QPoint *position)
 {
-    widget->setGeometry(QStyle::alignedRect(
-        Qt::LeftToRight, Qt::AlignCenter, widget->size(), parent ? parent->geometry() : availableScreenGeometryAtPoint(QCursor::pos())));
+    widget->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, widget->size(),
+        parent ? parent->geometry() : availableScreenGeometryAtPoint(position ? *position : QCursor::pos())));
 }
 
 /*!
  * \brief Moves the specified \a widget to the corner which is closest to the
- * current cursor position.
+ * current cursor position or \a position if specified.
  *
  * If there are multiple screens available, the screen where the cursor currently
  * is located is chosen.
  */
-void cornerWidget(QWidget *widget)
+void cornerWidget(QWidget *widget, const QPoint *position)
 {
-    const QPoint cursorPos(QCursor::pos());
+    const QPoint cursorPos(position ? *position : QCursor::pos());
     const QRect availableGeometry(availableScreenGeometryAtPoint(cursorPos));
     Qt::Alignment alignment = nullptr;
     alignment |= (cursorPos.x() - availableGeometry.left() < availableGeometry.right() - cursorPos.x() ? Qt::AlignLeft : Qt::AlignRight);
