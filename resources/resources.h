@@ -16,7 +16,7 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
  */
 #define SET_QT_APPLICATION_INFO                                                                                                                      \
     QCoreApplication::setOrganizationName(QStringLiteral(APP_AUTHOR));                                                                               \
-    QCoreApplication::setOrganizationDomain(QStringLiteral(APP_URL));                                                                                \
+    QCoreApplication::setOrganizationDomain(QStringLiteral(APP_DOMAIN));                                                                             \
     QCoreApplication::setApplicationName(QStringLiteral(APP_NAME));                                                                                  \
     QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION));                                                                            \
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true)
