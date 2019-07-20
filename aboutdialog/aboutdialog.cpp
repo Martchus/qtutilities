@@ -71,11 +71,11 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         m_ui->versionLabel->setToolTip(QStringLiteral("<p>") % tr("Linked against:") % QStringLiteral("</p><ul><li>")
             % linkedAgainst.join(QStringLiteral("</li><li>")) % QStringLiteral("</li></ul>"));
     }
-    if (!website.isEmpty()) {
+    if (!website.isEmpty() || CppUtilities::applicationInfo.url) {
         m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" "
                                        "style=\"text-decoration: underline; color: palette(link);\">project "
                                        "website</a>.")
-                                        .arg(website));
+                                        .arg(!website.isEmpty() ? website : QString::fromUtf8(CppUtilities::applicationInfo.url)));
     } else {
         m_ui->websiteLabel->hide();
     }
