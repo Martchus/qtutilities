@@ -5,6 +5,8 @@
 #include <QDBusConnection>
 #include <QDBusPendingReply>
 #include <QImage>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <map>
 
@@ -17,24 +19,25 @@ namespace QtUtilities {
  * \brief The DBusNotification class emits D-Bus notifications.
  *
  * D-Bus notifications are only available if the library has been compiled with
- * support for it by specifying
- * CMake option `DBUS_NOTIFICATIONS`. If support is available, the macro
- * `QT_UTILITIES_SUPPORT_DBUS_NOTIFICATIONS`
- * is defined.
+ * support for it by specifying CMake option `DBUS_NOTIFICATIONS`. If support is
+ * available, the macro `QT_UTILITIES_SUPPORT_DBUS_NOTIFICATIONS` is defined.
  *
  * **Usage**
  *
  * First create a new instance. The constructor allows to set basic parameters.
- * To set more parameters, use
- * setter methods. Call show() to actually show the notification. This method
- * can also be used to update
- * the currently shown notification (it will not be updated automatically by
- * just using the setter methods).
+ * To set more parameters, use setter methods. Call show() to actually show the
+ * notification. This method can also be used to update the currently shown notification
+ * (it will not be updated automatically by just using the setter methods).
+ *
+ * Instances of this class share static data. So do not call the member functions
+ * from different threads without proper synchronization - even if using different
+ * instances. The destructor is safe to call, though.
  *
  * \sa https://developer.gnome.org/notification-spec
  */
 
 /// \cond
+static QMutex pendingNotificationsMutex;
 static std::map<uint, DBusNotification *> pendingNotifications;
 OrgFreedesktopNotificationsInterface *DBusNotification::s_dbusInterface = nullptr;
 /// \endcond
@@ -193,9 +196,12 @@ void DBusNotification::initInterface()
  */
 DBusNotification::~DBusNotification()
 {
-    auto i = pendingNotifications.find(m_id);
-    if (i != pendingNotifications.end()) {
-        pendingNotifications.erase(i);
+    {
+        QMutexLocker lock(&pendingNotificationsMutex);
+        auto i = pendingNotifications.find(m_id);
+        if (i != pendingNotifications.end()) {
+            pendingNotifications.erase(i);
+        }
     }
     hide();
 }
@@ -373,7 +379,10 @@ void DBusNotification::handleNotifyResult(QDBusPendingCallWatcher *watcher)
         deleteLater();
         emit error();
     } else {
-        pendingNotifications[m_id = returnValue.argumentAt<0>()] = this;
+        {
+            QMutexLocker lock(&pendingNotificationsMutex);
+            pendingNotifications[m_id = returnValue.argumentAt<0>()] = this;
+        }
         emit shown();
     }
 }
@@ -383,6 +392,7 @@ void DBusNotification::handleNotifyResult(QDBusPendingCallWatcher *watcher)
  */
 void DBusNotification::handleNotificationClosed(uint id, uint reason)
 {
+    QMutexLocker lock(&pendingNotificationsMutex);
     auto i = pendingNotifications.find(id);
     if (i != pendingNotifications.end()) {
         DBusNotification *notification = i->second;
@@ -397,6 +407,7 @@ void DBusNotification::handleNotificationClosed(uint id, uint reason)
  */
 void DBusNotification::handleActionInvoked(uint id, const QString &action)
 {
+    QMutexLocker lock(&pendingNotificationsMutex);
     auto i = pendingNotifications.find(id);
     if (i != pendingNotifications.end()) {
         DBusNotification *notification = i->second;
