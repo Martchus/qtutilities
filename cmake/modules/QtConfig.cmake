@@ -306,7 +306,7 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
         endif ()
     endif ()
 
-    list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}${META_CONFIG_SUFFIX}")
+    list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}")
 endif ()
 
 # make application specific translation available as array via config.h (even if this project has no translations, there

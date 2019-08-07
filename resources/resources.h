@@ -26,7 +26,7 @@ QT_FORWARD_DECLARE_CLASS(QSettings)
  */
 #define LOAD_QT_TRANSLATIONS                                                                                                                         \
     QtUtilities::TranslationFiles::loadQtTranslationFile(QT_TRANSLATION_FILES);                                                                      \
-    QtUtilities::TranslationFiles::loadApplicationTranslationFile(APP_SPECIFIC_QT_TRANSLATION_FILES)
+    QtUtilities::TranslationFiles::loadApplicationTranslationFile(QStringLiteral(PROJECT_CONFIG_NAME), APP_SPECIFIC_QT_TRANSLATION_FILES)
 
 namespace QtUtilities {
 
@@ -41,10 +41,11 @@ namespace TranslationFiles {
 QT_UTILITIES_EXPORT QString &additionalTranslationFilePath();
 QT_UTILITIES_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames);
 QT_UTILITIES_EXPORT void loadQtTranslationFile(std::initializer_list<QString> repositoryNames, const QString &localeName);
-QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicationName);
-QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName);
-QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames);
-QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames, const QString &localeName);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &configName, const QString &applicationName);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &configName, const QString &applicationName, const QString &localeName);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &configName, const std::initializer_list<QString> &applicationNames);
+QT_UTILITIES_EXPORT void loadApplicationTranslationFile(
+    const QString &configName, const std::initializer_list<QString> &applicationNames, const QString &localeName);
 } // namespace TranslationFiles
 
 namespace ApplicationInstances {

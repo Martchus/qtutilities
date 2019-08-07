@@ -160,16 +160,32 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
  *    In this case it is also necessary to load the translations using this
  *    function.
  */
-void loadApplicationTranslationFile(const QString &applicationName)
+void loadApplicationTranslationFile(const QString &configName, const QString &applicationName)
 {
     // load English translation files as fallback
-    loadApplicationTranslationFile(applicationName, QStringLiteral("en_US"));
+    loadApplicationTranslationFile(configName, applicationName, QStringLiteral("en_US"));
     // load translation files for current locale
     const auto defaultLocale(QLocale().name());
     if (defaultLocale != QLatin1String("en_US")) {
-        loadApplicationTranslationFile(applicationName, defaultLocale);
+        loadApplicationTranslationFile(configName, applicationName, defaultLocale);
     }
 }
+
+/// \cond
+void logTranslationEvent(
+    const char *event, const QString &configName, const QString &applicationName, const QString &localeName, const QString &path = QString())
+{
+    cerr << event << " translation file for \"" << applicationName.toLocal8Bit().data() << "\"";
+    if (!configName.isEmpty()) {
+        cerr << " (config \"" << configName.toLocal8Bit().data() << ')';
+    }
+    cerr << " and locale \"" << localeName.toLocal8Bit().data() << '\"';
+    if (!path.isEmpty()) {
+        cerr << " from \"" << path.toLocal8Bit().data() << '\"';
+    }
+    cerr << '.' << endl;
+}
+/// \endcond
 
 /*!
  * \brief Loads and installs the appropriate application translation file for
@@ -191,24 +207,24 @@ void loadApplicationTranslationFile(const QString &applicationName)
  *    In this case it is also necessary to load the translations using this
  *    function.
  */
-void loadApplicationTranslationFile(const QString &applicationName, const QString &localeName)
+void loadApplicationTranslationFile(const QString &configName, const QString &applicationName, const QString &localeName)
 {
     auto *const appTranslator = new QTranslator;
     const auto fileName = QString(applicationName % QChar('_') % localeName);
+    const auto directoryName = configName.isEmpty() ? applicationName : QString(applicationName % QChar('-') % configName);
 
     QString path;
     if ((!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, path = additionalTranslationFilePath()))
-        || appTranslator->load(fileName, path = QStringLiteral(".")) || appTranslator->load(fileName, path = QStringLiteral("../") % applicationName)
-        || appTranslator->load(fileName, path = QStringLiteral("../") % applicationName)
-        || appTranslator->load(fileName, path = QStringLiteral("../../") % applicationName)
+        || appTranslator->load(fileName, path = QStringLiteral(".")) || appTranslator->load(fileName, path = QStringLiteral("../") % directoryName)
+        || appTranslator->load(fileName, path = QStringLiteral("../") % directoryName)
+        || appTranslator->load(fileName, path = QStringLiteral("../../") % directoryName)
         || appTranslator->load(fileName, path = QStringLiteral("./translations"))
-        || appTranslator->load(fileName, path = QStringLiteral("../share/") % applicationName % QStringLiteral("/translations"))
-        || appTranslator->load(fileName, path = QStringLiteral(APP_INSTALL_PREFIX "/share/") % applicationName % QStringLiteral("/translations"))
+        || appTranslator->load(fileName, path = QStringLiteral("../share/") % directoryName % QStringLiteral("/translations"))
+        || appTranslator->load(fileName, path = QStringLiteral(APP_INSTALL_PREFIX "/share/") % directoryName % QStringLiteral("/translations"))
         || appTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
         if (qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS")) {
-            cerr << "Loading translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the locale \""
-                 << localeName.toLocal8Bit().data() << "\" from \"" << path.toLocal8Bit().data() << "\"." << endl;
+            logTranslationEvent("Loading", configName, applicationName, localeName, path);
         }
     } else {
         delete appTranslator;
@@ -216,8 +232,7 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
             // the translation file is probably just empty (English is built-in and usually only used for plural forms)
             return;
         }
-        cerr << "Unable to load translation file for \"" << applicationName.toLocal8Bit().data() << "\" and the locale \""
-             << localeName.toLocal8Bit().data() << "\"." << endl;
+        logTranslationEvent("Unable to load", configName, applicationName, localeName);
     }
 }
 
@@ -226,10 +241,10 @@ void loadApplicationTranslationFile(const QString &applicationName, const QStrin
  * the current locale.
  * \param applicationNames Specifies the names of the applications.
  */
-void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames)
+void loadApplicationTranslationFile(const QString &configName, const std::initializer_list<QString> &applicationNames)
 {
     for (const QString &applicationName : applicationNames) {
-        loadApplicationTranslationFile(applicationName);
+        loadApplicationTranslationFile(configName, applicationName);
     }
 }
 
@@ -239,10 +254,10 @@ void loadApplicationTranslationFile(const std::initializer_list<QString> &applic
  * \param applicationNames Specifies the names of the applications.
  * \param localeName Specifies the name of the locale.
  */
-void loadApplicationTranslationFile(const std::initializer_list<QString> &applicationNames, const QString &localeName)
+void loadApplicationTranslationFile(const QString &configName, const std::initializer_list<QString> &applicationNames, const QString &localeName)
 {
     for (const QString &applicationName : applicationNames) {
-        loadApplicationTranslationFile(applicationName, localeName);
+        loadApplicationTranslationFile(configName, applicationName, localeName);
     }
 }
 } // namespace TranslationFiles
