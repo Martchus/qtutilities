@@ -104,7 +104,12 @@ foreach (PATH ${ANDROID_APK_BINARY_DIRS})
     # symlink "lib" subdirectory so androiddeployqt finds the library in the runtime path when specified via
     # "extraPrefixDirs"
     list(APPEND ANDROID_APK_BINARY_DIRS_DEPENDS "${PATH}/lib")
-    add_custom_command(OUTPUT "${PATH}/lib" COMMAND "${CMAKE_COMMAND}" -E create_symlink "${PATH}" "${PATH}/lib")
+    add_custom_command(OUTPUT "${PATH}/lib"
+                       COMMAND "${CMAKE_COMMAND}"
+                               -E
+                               create_symlink
+                               "${PATH}"
+                               "${PATH}/lib")
 endforeach ()
 include(ListToString)
 list_to_string(""
@@ -258,19 +263,32 @@ else ()
 endif ()
 set(ANDROID_APK_BINARY_PATH "${ANDROID_APK_BUILD_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/lib${META_TARGET_NAME}.so")
 add_custom_command(OUTPUT "${ANDROID_APK_BINARY_PATH}"
-                   COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:${META_TARGET_NAME}>" "${ANDROID_APK_BINARY_PATH}"
+                   COMMAND "${CMAKE_COMMAND}"
+                           -E
+                           copy
+                           "$<TARGET_FILE:${META_TARGET_NAME}>"
+                           "${ANDROID_APK_BINARY_PATH}"
                    COMMENT "Preparing build dir for Android APK"
                    DEPENDS "${META_TARGET_NAME}" COMMAND_EXPAND_LISTS
                    VERBATIM)
 add_custom_command(
     OUTPUT "${ANDROID_APK_FILE_PATH}"
-    COMMAND rm -r "${ANDROID_APK_BUILD_DIR}/assets/--Added-by-androiddeployqt--/lib" || true
+    COMMAND rm
+            -r
+            "${ANDROID_APK_BUILD_DIR}/assets/--Added-by-androiddeployqt--/lib"
+            ||
+            true
     COMMAND $<TARGET_FILE_DIR:Qt5::qmake>/androiddeployqt
             --gradle
-            --input "${ANDROID_DEPLOYMENT_JSON_FILE}"
-            --output "${ANDROID_APK_BUILD_DIR}"
-            --deployment bundled ${MAKE_ARGUMENTS}
-            --verbose ${ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS}
+            --input
+            "${ANDROID_DEPLOYMENT_JSON_FILE}"
+            --output
+            "${ANDROID_APK_BUILD_DIR}"
+            --deployment
+            bundled
+            ${MAKE_ARGUMENTS}
+            --verbose
+            ${ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS}
     WORKING_DIRECTORY "${ANDROID_APK_BUILD_DIR}"
     COMMENT "Creating Android APK ${ANDROID_APK_FILE_PATH} using androiddeployqt"
     DEPENDS
@@ -291,7 +309,10 @@ else ()
 endif ()
 install(FILES "${ANDROID_APK_FILE_PATH}" DESTINATION "share/apk" RENAME "${ANDROID_APK_FINAL_NAME}" COMPONENT apk)
 add_custom_target("${META_TARGET_NAME}_install_apk"
-                  COMMAND "${CMAKE_COMMAND}" -DCMAKE_INSTALL_COMPONENT=apk -P "${CMAKE_BINARY_DIR}/cmake_install.cmake")
+                  COMMAND "${CMAKE_COMMAND}"
+                          -DCMAKE_INSTALL_COMPONENT=apk
+                          -P
+                          "${CMAKE_BINARY_DIR}/cmake_install.cmake")
 add_dependencies("${META_TARGET_NAME}_install_apk" "${META_TARGET_NAME}_apk")
 if (NOT TARGET install-apk)
     add_custom_target(install-apk)
@@ -301,7 +322,10 @@ add_dependencies(install-apk "${META_TARGET_NAME}_install_apk")
 # add deploy target for APK
 find_program(ADB_BIN adb)
 add_custom_target("${META_TARGET_NAME}_deploy_apk"
-                  COMMAND "${ADB_BIN}" install -r "${ANDROID_APK_FILE_PATH}"
+                  COMMAND "${ADB_BIN}"
+                          install
+                          -r
+                          "${ANDROID_APK_FILE_PATH}"
                   COMMENT "Deploying Android APK"
                   DEPENDS "${ANDROID_APK_FILE_PATH}")
 

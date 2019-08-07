@@ -300,7 +300,8 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
             set(LOCALIZATION_TARGET "install-localization")
             add_custom_target(${LOCALIZATION_TARGET}
                               COMMAND "${CMAKE_COMMAND}"
-                                      -DCMAKE_INSTALL_COMPONENT=localization -P
+                                      -DCMAKE_INSTALL_COMPONENT=localization
+                                      -P
                                       "${CMAKE_BINARY_DIR}/cmake_install.cmake")
             add_dependencies(${LOCALIZATION_TARGET} ${META_PROJECT_NAME}_translations)
         endif ()
