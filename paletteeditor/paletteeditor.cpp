@@ -411,7 +411,7 @@ RoleEditor::RoleEditor(QWidget *parent)
 
     auto *const button = new QToolButton(this);
     button->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    button->setIcon(QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/actions/edit-clear.png")));
+    button->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear")));
     button->setIconSize(QSize(8, 8));
     button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
     layout->addWidget(button);
