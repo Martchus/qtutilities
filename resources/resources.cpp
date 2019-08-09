@@ -177,7 +177,7 @@ void logTranslationEvent(
 {
     cerr << event << " translation file for \"" << applicationName.toLocal8Bit().data() << "\"";
     if (!configName.isEmpty()) {
-        cerr << " (config \"" << configName.toLocal8Bit().data() << ')';
+        cerr << " (config \"" << configName.toLocal8Bit().data() << "\")";
     }
     cerr << " and locale \"" << localeName.toLocal8Bit().data() << '\"';
     if (!path.isEmpty()) {
