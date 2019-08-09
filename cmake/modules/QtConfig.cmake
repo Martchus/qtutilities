@@ -236,30 +236,43 @@ list(APPEND QT_TRANSLATION_SEARCH_PATHS
             "${CMAKE_INSTALL_PREFIX}/share/qt5/translations"
             "/usr/share/qt/translations"
             "/usr/share/qt5/translations")
+list(REMOVE_DUPLICATES QT_TRANSLATION_SEARCH_PATHS)
 foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
-    if (IS_DIRECTORY "${QT_TRANSLATION_PATH}")
-        foreach (QT_REPO ${QT_REPOS})
-            file(GLOB QT_QM_FILES "${QT_TRANSLATION_PATH}/qt${QT_REPO}_*.qm")
-            if (QT_QM_FILES)
-                # add files to list of built-in translations but only if that configuration is enabled and if we're building
-                # the final application
-                if (BUILTIN_TRANSLATIONS AND "${META_PROJECT_TYPE}" STREQUAL "application")
-                    file(COPY ${QT_QM_FILES} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-                    list(APPEND EXTERNAL_QM_FILES ${QT_QM_FILES})
-                endif ()
-                list(APPEND QT_TRANSLATION_FILES "qt${QT_REPO}")
-            endif ()
-        endforeach ()
-        break()
+    if (NOT IS_DIRECTORY "${QT_TRANSLATION_PATH}")
+        continue()
     endif ()
+    foreach (QT_REPO ${QT_REPOS})
+        file(GLOB QT_QM_FILES "${QT_TRANSLATION_PATH}/qt${QT_REPO}_*.qm")
+        if (NOT QT_QM_FILES)
+            continue()
+        endif ()
+        # add files to list of built-in translations but only if that configuration is enabled and if we're building the
+        # final application
+        if (BUILTIN_TRANSLATIONS AND "${META_PROJECT_TYPE}" STREQUAL "application")
+            file(COPY ${QT_QM_FILES} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+            list(APPEND EXTERNAL_QM_FILES ${QT_QM_FILES})
+        endif ()
+        list(APPEND QT_TRANSLATION_FILES "qt${QT_REPO}")
+    endforeach ()
+    break()
 endforeach ()
 
+# emit warning if no Qt translations found but built-in translations are enabled
+if (BUILTIN_TRANSLATIONS AND NOT QT_TRANSLATION_FILES)
+    message(
+        WARNING
+            "Unable to find translations of Qt itself so Qt's translation files will not be built-in. Be sure Qt translations (https://code.qt.io/cgit/qt/qttranslations.git) are installed. Was looking under: ${QT_TRANSLATION_SEARCH_PATHS}"
+        )
+endif ()
+
 # make relevant Qt translations available as array via config.h
-list_to_string(","
-               " \\\n    QStringLiteral(\""
-               "\")"
-               "${QT_TRANSLATION_FILES}"
-               QT_TRANSLATION_FILES_ARRAY)
+if (QT_TRANSLATION_FILES)
+    list_to_string(","
+                   " \\\n    QStringLiteral(\""
+                   "\")"
+                   "${QT_TRANSLATION_FILES}"
+                   QT_TRANSLATION_FILES_ARRAY)
+endif ()
 
 # enable lrelease and add install target for localization
 option(ENABLE_QT_TRANSLATIONS "specifies whether Qt translations should be updated/released" ON)
