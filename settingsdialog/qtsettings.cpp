@@ -14,8 +14,6 @@
 #include "ui_qtenvoptionpage.h"
 #include "ui_qtlanguageoptionpage.h"
 
-#include <memory>
-
 #include <QDir>
 #include <QFileDialog>
 #include <QFontDialog>
@@ -25,6 +23,7 @@
 #include <QStyleFactory>
 
 #include <iostream>
+#include <memory>
 
 using namespace std;
 
@@ -70,7 +69,7 @@ inline QtSettingsData::QtSettingsData()
  * system-default.
  */
 QtSettings::QtSettings()
-    : m_d(new QtSettingsData())
+    : m_d(make_unique<QtSettingsData>())
 {
 }
 
@@ -214,7 +213,7 @@ OptionCategory *QtSettings::category()
     auto *category = new OptionCategory;
     category->setDisplayName(QCoreApplication::translate("QtGui::QtOptionCategory", "Qt"));
     category->setIcon(QIcon::fromTheme(QStringLiteral("qtcreator"), QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/apps/qtcreator.svg"))));
-    category->assignPages(QList<OptionPage *>() << new QtAppearanceOptionPage(*m_d) << new QtLanguageOptionPage(*m_d) << new QtEnvOptionPage(*m_d));
+    category->assignPages({ new QtAppearanceOptionPage(*m_d), new QtLanguageOptionPage(*m_d), new QtEnvOptionPage(*m_d) });
     return category;
 }
 
