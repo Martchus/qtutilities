@@ -38,9 +38,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_ui->setupUi(this);
     makeHeading(m_ui->headingLabel);
     setStyleSheet(dialogStyle());
+
     // setup models
     m_categoryFilterModel->setSourceModel(m_categoryModel);
     m_ui->categoriesListView->setModel(m_categoryFilterModel);
+
     // connect signals and slots
     //  selection models
     connect(m_ui->categoriesListView->selectionModel(), &QItemSelectionModel::currentChanged, this, &SettingsDialog::currentCategoryChanged);
@@ -95,7 +97,7 @@ OptionCategory *SettingsDialog::category(int categoryIndex) const
  */
 OptionPage *SettingsDialog::page(int categoryIndex, int pageIndex) const
 {
-    if (OptionCategory *category = this->category(categoryIndex)) {
+    if (OptionCategory *const category = this->category(categoryIndex)) {
         if (pageIndex < category->pages().length()) {
             return category->pages()[pageIndex];
         }
@@ -108,12 +110,13 @@ OptionPage *SettingsDialog::page(int categoryIndex, int pageIndex) const
  */
 void SettingsDialog::showEvent(QShowEvent *event)
 {
-    if (!event->spontaneous()) {
-        for (OptionCategory *category : m_categoryModel->categories()) {
-            for (OptionPage *page : category->pages()) {
-                if (page->hasBeenShown()) {
-                    page->reset();
-                }
+    if (event->spontaneous()) {
+        return;
+    }
+    for (OptionCategory *const category : m_categoryModel->categories()) {
+        for (OptionPage *const page : category->pages()) {
+            if (page->hasBeenShown()) {
+                page->reset();
             }
         }
     }
@@ -163,7 +166,7 @@ void SettingsDialog::showCategory(OptionCategory *category)
  */
 void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
 {
-    bool hasSingleCategory = singleCategory != nullptr;
+    const bool hasSingleCategory = singleCategory != nullptr;
     m_ui->filterLineEdit->setHidden(hasSingleCategory);
     m_ui->categoriesListView->setHidden(hasSingleCategory);
     m_ui->headingLabel->setHidden(hasSingleCategory);
@@ -179,49 +182,49 @@ void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
  */
 void SettingsDialog::updateTabWidget()
 {
-    if (m_currentCategory) {
-        m_ui->pagesTabWidget->setUpdatesEnabled(false);
-        const QString searchKeyWord = m_ui->filterLineEdit->text();
-        int index = 0, pageIndex = 0;
-        for (OptionPage *page : m_currentCategory->pages()) {
-            if (page->matches(searchKeyWord)) {
-                QScrollArea *scrollArea;
-                if (index < m_ui->pagesTabWidget->count()) {
-                    scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
-                    scrollArea->takeWidget();
-                    m_ui->pagesTabWidget->setTabText(index, page->widget()->windowTitle());
-                    m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
-                } else {
-                    scrollArea = new QScrollArea(m_ui->pagesTabWidget);
-                    scrollArea->setFrameStyle(QFrame::NoFrame);
-                    scrollArea->setBackgroundRole(QPalette::Base);
-                    scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                    scrollArea->setWidgetResizable(true);
-                    m_ui->pagesTabWidget->addTab(scrollArea, page->widget()->windowTitle());
-                    m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
-                }
-                if (page->widget()->layout()) {
-                    page->widget()->layout()->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-                }
-                scrollArea->setWidget(page->widget());
-                ++index;
-            }
-            if (pageIndex == m_currentCategory->currentIndex()) {
-                m_ui->pagesTabWidget->setCurrentIndex(pageIndex);
-            }
-            ++pageIndex;
-        }
-        while (index < m_ui->pagesTabWidget->count()) {
-            QScrollArea *scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
-            scrollArea->takeWidget();
-            m_ui->pagesTabWidget->removeTab(index);
-            delete scrollArea;
-        }
-        m_ui->pagesTabWidget->tabBar()->setHidden(!m_tabBarAlwaysVisible && m_ui->pagesTabWidget->count() == 1);
-        m_ui->pagesTabWidget->setUpdatesEnabled(true);
-    } else {
+    if (!m_currentCategory) {
         m_ui->pagesTabWidget->clear();
+        return;
     }
+    m_ui->pagesTabWidget->setUpdatesEnabled(false);
+    const QString searchKeyWord = m_ui->filterLineEdit->text();
+    int index = 0, pageIndex = 0;
+    for (OptionPage *const page : m_currentCategory->pages()) {
+        if (page->matches(searchKeyWord)) {
+            QScrollArea *scrollArea;
+            if (index < m_ui->pagesTabWidget->count()) {
+                scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
+                scrollArea->takeWidget();
+                m_ui->pagesTabWidget->setTabText(index, page->widget()->windowTitle());
+                m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
+            } else {
+                scrollArea = new QScrollArea(m_ui->pagesTabWidget);
+                scrollArea->setFrameStyle(QFrame::NoFrame);
+                scrollArea->setBackgroundRole(QPalette::Base);
+                scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                scrollArea->setWidgetResizable(true);
+                m_ui->pagesTabWidget->addTab(scrollArea, page->widget()->windowTitle());
+                m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
+            }
+            if (page->widget()->layout()) {
+                page->widget()->layout()->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+            }
+            scrollArea->setWidget(page->widget());
+            ++index;
+        }
+        if (pageIndex == m_currentCategory->currentIndex()) {
+            m_ui->pagesTabWidget->setCurrentIndex(pageIndex);
+        }
+        ++pageIndex;
+    }
+    while (index < m_ui->pagesTabWidget->count()) {
+        QScrollArea *const scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
+        scrollArea->takeWidget();
+        m_ui->pagesTabWidget->removeTab(index);
+        delete scrollArea;
+    }
+    m_ui->pagesTabWidget->tabBar()->setHidden(!m_tabBarAlwaysVisible && m_ui->pagesTabWidget->count() == 1);
+    m_ui->pagesTabWidget->setUpdatesEnabled(true);
 }
 
 /*!
@@ -233,8 +236,8 @@ bool SettingsDialog::apply()
 {
     // apply each page in each category and gather error messages
     QString errorMessage;
-    for (OptionCategory *category : m_categoryModel->categories()) {
-        for (OptionPage *page : category->pages()) {
+    for (OptionCategory *const category : m_categoryModel->categories()) {
+        for (OptionPage *const page : category->pages()) {
             if (!page->hasBeenShown() || page->apply()) {
                 // nothing to apply or no error
                 continue;
@@ -275,7 +278,7 @@ bool SettingsDialog::apply()
  */
 void SettingsDialog::reset()
 {
-    for (OptionCategory *category : m_categoryModel->categories()) {
+    for (OptionCategory *const category : m_categoryModel->categories()) {
         category->resetAllPages();
     }
     emit resetted();
