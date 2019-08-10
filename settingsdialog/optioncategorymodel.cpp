@@ -52,7 +52,7 @@ void OptionCategoryModel::setCategories(const QList<OptionCategory *> &categorie
     beginResetModel();
     qDeleteAll(m_categories);
     m_categories = categories;
-    for (OptionCategory *category : m_categories) {
+    for (OptionCategory *const category : m_categories) {
         category->setParent(this);
         connect(category, &OptionCategory::displayNameChanged, this, &OptionCategoryModel::categoryChangedName);
         connect(category, &OptionCategory::iconChanged, this, &OptionCategoryModel::categoryChangedIcon);
@@ -67,23 +67,24 @@ int OptionCategoryModel::rowCount(const QModelIndex &parent) const
 
 QVariant OptionCategoryModel::data(const QModelIndex &index, int role) const
 {
-    if (index.isValid() && index.row() < m_categories.size()) {
-        switch (role) {
-        case Qt::DisplayRole:
-            return m_categories.at(index.row())->displayName();
-        case Qt::DecorationRole: {
-            const QIcon &icon = m_categories.at(index.row())->icon();
-            if (!icon.isNull()) {
-                return icon.pixmap(
+    if (!index.isValid() || index.row() >= m_categories.size()) {
+        return QVariant();
+    }
+    switch (role) {
+    case Qt::DisplayRole:
+        return m_categories.at(index.row())->displayName();
+    case Qt::DecorationRole: {
+        const QIcon &icon = m_categories.at(index.row())->icon();
+        if (!icon.isNull()) {
+            return icon.pixmap(
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
-                    QApplication::style()->pixelMetric(QStyle::PM_LargeIconSize)
+                QApplication::style()->pixelMetric(QStyle::PM_LargeIconSize)
 #else
-                    QSize(32, 32)
+                QSize(32, 32)
 #endif
-                );
-            }
+            );
         }
-        }
+    }
     }
     return QVariant();
 }
@@ -93,12 +94,14 @@ QVariant OptionCategoryModel::data(const QModelIndex &index, int role) const
  */
 void OptionCategoryModel::categoryChangedName()
 {
-    if (OptionCategory *senderCategory = qobject_cast<OptionCategory *>(QObject::sender())) {
-        for (int i = 0, end = m_categories.size(); i < end; ++i) {
-            if (senderCategory == m_categories.at(i)) {
-                QModelIndex index = this->index(i);
-                emit dataChanged(index, index, QVector<int>({ Qt::DisplayRole }));
-            }
+    const auto *const senderCategory = qobject_cast<const OptionCategory *>(QObject::sender());
+    if (!senderCategory) {
+        return;
+    }
+    for (int i = 0, end = m_categories.size(); i < end; ++i) {
+        if (senderCategory == m_categories.at(i)) {
+            QModelIndex index = this->index(i);
+            emit dataChanged(index, index, QVector<int>({ Qt::DisplayRole }));
         }
     }
 }
@@ -108,12 +111,14 @@ void OptionCategoryModel::categoryChangedName()
  */
 void OptionCategoryModel::categoryChangedIcon()
 {
-    if (OptionCategory *senderCategory = qobject_cast<OptionCategory *>(QObject::sender())) {
-        for (int i = 0, end = m_categories.size(); i < end; ++i) {
-            if (senderCategory == m_categories.at(i)) {
-                QModelIndex index = this->index(i);
-                emit dataChanged(index, index, QVector<int>({ Qt::DecorationRole }));
-            }
+    const auto *const senderCategory = qobject_cast<const OptionCategory *>(QObject::sender());
+    if (!senderCategory) {
+        return;
+    }
+    for (int i = 0, end = m_categories.size(); i < end; ++i) {
+        if (senderCategory == m_categories.at(i)) {
+            QModelIndex index = this->index(i);
+            emit dataChanged(index, index, QVector<int>({ Qt::DecorationRole }));
         }
     }
 }
