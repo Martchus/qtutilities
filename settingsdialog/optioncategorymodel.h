@@ -13,6 +13,7 @@ class OptionCategory;
 
 class QT_UTILITIES_EXPORT OptionCategoryModel : public QAbstractListModel {
     Q_OBJECT
+    Q_PROPERTY(QList<OptionCategory *> categories READ categories WRITE setCategories)
 public:
     explicit OptionCategoryModel(QObject *parent = nullptr);
     explicit OptionCategoryModel(const QList<OptionCategory *> &categories, QObject *parent = nullptr);
