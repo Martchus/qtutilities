@@ -47,7 +47,7 @@ OptionCategoryModel::~OptionCategoryModel()
  *
  * The model takes ownership over the given \a categories.
  */
-void OptionCategoryModel::setCategories(const QList<OptionCategory *> categories)
+void OptionCategoryModel::setCategories(const QList<OptionCategory *> &categories)
 {
     beginResetModel();
     qDeleteAll(m_categories);
@@ -97,7 +97,7 @@ void OptionCategoryModel::categoryChangedName()
         for (int i = 0, end = m_categories.size(); i < end; ++i) {
             if (senderCategory == m_categories.at(i)) {
                 QModelIndex index = this->index(i);
-                emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+                emit dataChanged(index, index, QVector<int>({ Qt::DisplayRole }));
             }
         }
     }
@@ -112,7 +112,7 @@ void OptionCategoryModel::categoryChangedIcon()
         for (int i = 0, end = m_categories.size(); i < end; ++i) {
             if (senderCategory == m_categories.at(i)) {
                 QModelIndex index = this->index(i);
-                emit dataChanged(index, index, QVector<int>() << Qt::DecorationRole);
+                emit dataChanged(index, index, QVector<int>({ Qt::DecorationRole }));
             }
         }
     }

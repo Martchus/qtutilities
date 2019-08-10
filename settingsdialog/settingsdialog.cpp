@@ -172,7 +172,7 @@ void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
     m_ui->headingLabel->setHidden(hasSingleCategory);
     if (hasSingleCategory) {
         m_ui->filterLineEdit->clear();
-        categoryModel()->setCategories(QList<OptionCategory *>() << singleCategory);
+        categoryModel()->setCategories(QList<OptionCategory *>({ singleCategory }));
         showCategory(singleCategory);
     }
 }

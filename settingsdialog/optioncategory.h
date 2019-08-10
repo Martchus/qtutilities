@@ -25,8 +25,8 @@ public:
     void setDisplayName(const QString &displayName);
     const QIcon &icon() const;
     void setIcon(const QIcon &icon);
-    const QList<OptionPage *> pages() const;
-    void assignPages(const QList<OptionPage *> pages);
+    const QList<OptionPage *> &pages() const;
+    void assignPages(const QList<OptionPage *> &pages);
     bool applyAllPages();
     void resetAllPages();
     bool matches(const QString &searchKeyWord) const;
@@ -34,9 +34,9 @@ public:
     void setCurrentIndex(int currentIndex);
 
 Q_SIGNALS:
-    void displayNameChanged();
-    void iconChanged();
-    void pagesChanged();
+    void displayNameChanged(const QString &displayName);
+    void iconChanged(const QIcon &icon);
+    void pagesChanged(const QList<OptionPage *> &pages);
 
 private:
     QString m_displayName;
@@ -58,8 +58,7 @@ inline const QString &OptionCategory::displayName() const
  */
 inline void OptionCategory::setDisplayName(const QString &displayName)
 {
-    m_displayName = displayName;
-    emit displayNameChanged();
+    emit displayNameChanged(m_displayName = displayName);
 }
 
 /*!
@@ -75,14 +74,13 @@ inline const QIcon &OptionCategory::icon() const
  */
 inline void OptionCategory::setIcon(const QIcon &icon)
 {
-    m_icon = icon;
-    emit iconChanged();
+    emit iconChanged(m_icon = icon);
 }
 
 /*!
  * \brief Returns the assigned pages.
  */
-inline const QList<OptionPage *> OptionCategory::pages() const
+inline const QList<OptionPage *> &OptionCategory::pages() const
 {
     return m_pages;
 }

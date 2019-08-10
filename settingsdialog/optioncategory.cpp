@@ -79,11 +79,10 @@ bool OptionCategory::matches(const QString &searchKeyWord) const
  * Previously assigned pages get deleted. The pagesChanged() signal is emitted.
  * The category takes ownership over the given \a pages.
  */
-void OptionCategory::assignPages(const QList<OptionPage *> pages)
+void OptionCategory::assignPages(const QList<OptionPage *> &pages)
 {
     qDeleteAll(m_pages);
-    m_pages = pages;
-    emit pagesChanged();
+    emit pagesChanged(m_pages = pages);
 }
 
 /*!
