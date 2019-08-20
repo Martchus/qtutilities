@@ -59,11 +59,6 @@ QT_UTILITIES_EXPORT bool hasGuiApp();
 QT_UTILITIES_EXPORT bool hasCoreApp();
 } // namespace ApplicationInstances
 
-namespace ConfigFile {
-
-QT_UTILITIES_EXPORT QString locateConfigFile(const QString &applicationName, const QString &fileName, const QSettings *settings = nullptr);
-}
-
 } // namespace QtUtilities
 
 #endif // APPLICATION_UTILITIES_RESOURCES_H
