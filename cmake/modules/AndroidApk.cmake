@@ -19,9 +19,12 @@ if (NOT EXISTS "${CMAKE_ANDROID_NDK}")
     message(FATAL_ERROR "CMAKE_ANDROID_NDK must contain the path of the Android NDK.")
 endif ()
 
+# determine some variables
 if (NOT META_ANDROID_PACKAGE_NAME)
     message(FATAL_ERROR "Attempt to load AndroidApk.cmake without having set ANDROID_PACKAGE_NAME.")
 endif ()
+set(ANDROID_APK_APPLICATION_ID_SUFFIX "" CACHE STRING "suffix for Android APK ID, use e.g. \".debug\" to produce a co-installable debug version")
+set(ANDROID_APK_APPLICATION_LABEL "${META_APP_NAME}" CACHE STRING "user visible name for the APK")
 
 # find "android" subdirectory in the source directory and check for AndroidManifest.xml
 set(ANDROID_APK_SUBDIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
