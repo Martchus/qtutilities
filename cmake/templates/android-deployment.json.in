@@ -12,7 +12,7 @@
    "qml-import-paths": "@ANDROID_APK_QML_IMPORT_DIRS@",
    "android-extra-libs": "@ANDROID_APK_EXTRA_LIBS@",
    "android-extra-plugins": "@ANDROID_APK_EXTRA_PLUGIN_DIRS@",
-   "android-package-source-directory": "@ANDROID_APK_SUBDIR@",
+   "android-package-source-directory": "@ANDROID_PACKAGE_SOURCE_DIRECTORY@",
    "stdcpp-path":"@ANDROID_APK_CXX_STANDARD_LIBRARY@",
    "sdkBuildToolsRevision": "@ANDROID_APK_BUILD_TOOLS_VERSION@",
    "extraPrefixDirs": [@ANDROID_APK_BINARY_DIRS@

@@ -27,11 +27,39 @@ if (NOT IS_DIRECTORY "${ANDROID_APK_SUBDIR}")
             "The directory containing Android-specific files is expected to be \"${ANDROID_APK_SUBDIR}\" but doesn't exist.")
 endif ()
 set(ANDROID_APK_MANIFEST_PATH "${ANDROID_APK_SUBDIR}/AndroidManifest.xml")
-if (NOT EXISTS "${ANDROID_APK_MANIFEST_PATH}")
+if (NOT EXISTS "${ANDROID_APK_MANIFEST_PATH}" AND NOT EXISTS "${ANDROID_APK_MANIFEST_PATH}.in")
     message(FATAL_ERROR "The Android manifest doesn't exist at \"${ANDROID_APK_SUBDIR}/AndroidManifest.xml\".")
 endif ()
-# caveat: adding new files or removing files requires to re-run CMake manually
-file(GLOB_RECURSE ANDROID_APK_FILES LIST_DIRECTORIES false "${ANDROID_APK_SUBDIR}/*")
+
+# link Android package directory to binary directory evaluating templates on top-level
+set(ANDROID_PACKAGE_SOURCE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/android-package-source-directory")
+file(MAKE_DIRECTORY "${ANDROID_PACKAGE_SOURCE_DIRECTORY}")
+file(GLOB_RECURSE ANDROID_APK_FILES LIST_DIRECTORIES false RELATIVE "${ANDROID_APK_SUBDIR}" "${ANDROID_APK_SUBDIR}/*")
+set(ANDROID_SOURCE_DIRECTORY_FILES)
+foreach (ANDROID_APK_FILE ${ANDROID_APK_FILES})
+    if (IS_DIRECTORY "${ANDROID_APK_FILE}")
+        continue()
+    endif ()
+    get_filename_component(ANDROID_APK_FILE_DIR ${ANDROID_APK_FILE} DIRECTORY)
+    if (ANDROID_APK_FILE_DIR)
+        set(ANDROID_APK_FILE_DESTINATION "${ANDROID_PACKAGE_SOURCE_DIRECTORY}/${ANDROID_APK_FILE_DIR}")
+        file(MAKE_DIRECTORY "${ANDROID_APK_FILE_DESTINATION}")
+    else ()
+        set(ANDROID_APK_FILE_DESTINATION "${ANDROID_PACKAGE_SOURCE_DIRECTORY}")
+    endif ()
+    get_filename_component(ANDROID_APK_FILE_EXT ${ANDROID_APK_FILE} LAST_EXT)
+    if (ANDROID_APK_FILE_EXT STREQUAL ".in")
+        string(LENGTH "${ANDROID_APK_FILE}" ANDROID_APK_FILE_LENGTH)
+        math(EXPR ANDROID_APK_FILE_LENGTH "${ANDROID_APK_FILE_LENGTH} - 3")
+        string(SUBSTRING "${ANDROID_APK_FILE}" 0 ${ANDROID_APK_FILE_LENGTH} ANDROID_APK_FILE_NAME)
+        configure_file("${ANDROID_APK_SUBDIR}/${ANDROID_APK_FILE}" "${ANDROID_PACKAGE_SOURCE_DIRECTORY}/${ANDROID_APK_FILE_NAME}")
+        set(ANDROID_APK_FILE "${ANDROID_APK_FILE_NAME}")
+    else ()
+        file(COPY "${ANDROID_APK_SUBDIR}/${ANDROID_APK_FILE}" DESTINATION "${ANDROID_APK_FILE_DESTINATION}")
+    endif ()
+    # FIXME: tracking these deps doesn't work
+    #list(APPEND ANDROID_SOURCE_DIRECTORY_FILES "${CMAKE_BINARY_DIR}/${ANDROID_APK_FILE_DESTINATION}/${ANDROID_APK_FILE}")
+endforeach ()
 
 # make subdirectory to store build artefacts for APK
 set(ANDROID_APK_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/apk")
@@ -292,7 +320,7 @@ add_custom_command(
     WORKING_DIRECTORY "${ANDROID_APK_BUILD_DIR}"
     COMMENT "Creating Android APK ${ANDROID_APK_FILE_PATH} using androiddeployqt"
     DEPENDS
-        "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH};${ANDROID_APK_FILES};${ANDROID_APK_BINARY_DIRS_DEPENDS}"
+        "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH};${ANDROID_SOURCE_DIRECTORY_FILES};${ANDROID_APK_BINARY_DIRS_DEPENDS}"
         COMMAND_EXPAND_LISTS
     VERBATIM)
 add_custom_target("${META_TARGET_NAME}_apk" COMMENT "Android APK" DEPENDS "${ANDROID_APK_FILE_PATH}")
