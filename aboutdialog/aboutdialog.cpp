@@ -31,7 +31,7 @@ namespace QtUtilities {
  * \param version Specifies the version of the application. If empty,
  * QApplication::applicationVersion() will be used.
  * \param dependencyVersions Specifies the dependency versions which were present at link-time. If empty,
- * ApplicationUtilities::applicationInfo.dependencyVersions will be used.
+ * the application info from c++utilities is used.
  * \param description Specifies a short description about the application.
  * \param website Specifies the URL to the website of the application.
  * \param image Specifies the application icon. If the image is null, the
