@@ -27,6 +27,9 @@ public:
     explicit AboutDialog(QWidget *parent, const QString &website = QString(), const QString &description = QString(), const QImage &image = QImage());
     ~AboutDialog() override;
 
+private Q_SLOTS:
+    void linkActivated(const QString &link);
+
 private:
     std::unique_ptr<Ui::AboutDialog> m_ui;
     QGraphicsScene *m_iconScene;

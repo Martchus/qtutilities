@@ -239,6 +239,30 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QLabel" name="qtVersionLabel">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">font-size: 8pt;</string>
+           </property>
+           <property name="text">
+            <string>using Qt</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
