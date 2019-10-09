@@ -179,11 +179,6 @@ set(CONFIGURATION_PACKAGE_SUFFIX
 find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
 use_cpp_utilities()
 
-# configure use of std::filesystem (so far only required on Windows)
-if (WIN32)
-    use_standard_filesystem()
-endif ()
-
 # include modules to apply configuration
 include(BasicConfig)
 include(QtGuiConfig)

@@ -2,9 +2,8 @@
 
 #include <QDesktopServices>
 #include <QUrl>
-
 #ifdef Q_OS_WIN32
-#include <filesystem>
+#include <QFileInfo>
 #endif
 
 namespace QtUtilities {
@@ -29,7 +28,7 @@ bool openLocalFileOrDir(const QString &path)
     tmp.replace(QChar('\\'), QChar('/'));
 
     // add a slash before the drive letter of an absolute path
-    if (std::filesystem::path(path.toStdString()).is_absolute()) {
+    if (QFileInfo(path).isAbsolute()) {
         tmp = QStringLiteral("/") + tmp;
     }
     url.setPath(tmp, QUrl::DecodedMode);
