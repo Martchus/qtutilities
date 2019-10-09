@@ -10,7 +10,7 @@ set(META_APP_DESCRIPTION
     "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
 set(META_VERSION_MAJOR 6)
 set(META_VERSION_MINOR 0)
-set(META_VERSION_PATCH 1)
+set(META_VERSION_PATCH 2)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 project(${META_PROJECT_NAME})
@@ -178,6 +178,11 @@ set(CONFIGURATION_PACKAGE_SUFFIX
     CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
 find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
 use_cpp_utilities()
+
+# configure use of std::filesystem (so far only required on Windows)
+if (WIN32)
+    use_standard_filesystem()
+endif ()
 
 # include modules to apply configuration
 include(BasicConfig)
