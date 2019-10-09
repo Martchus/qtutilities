@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QGraphicsPixmapItem>
+#include <QMessageBox>
 #include <QStringBuilder>
 #include <QStyle>
 
@@ -121,7 +122,7 @@ AboutDialog::~AboutDialog()
 void AboutDialog::linkActivated(const QString &link)
 {
     if (link == QLatin1String("qtversion")) {
-        QApplication::aboutQt();
+        QMessageBox::aboutQt(nullptr);
     }
 }
 
