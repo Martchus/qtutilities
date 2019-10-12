@@ -23,7 +23,9 @@ endif ()
 if (NOT META_ANDROID_PACKAGE_NAME)
     message(FATAL_ERROR "Attempt to load AndroidApk.cmake without having set ANDROID_PACKAGE_NAME.")
 endif ()
-set(ANDROID_APK_APPLICATION_ID_SUFFIX "" CACHE STRING "suffix for Android APK ID, use e.g. \".debug\" to produce a co-installable debug version")
+set(ANDROID_APK_APPLICATION_ID_SUFFIX
+    ""
+    CACHE STRING "suffix for Android APK ID, use e.g. \".debug\" to produce a co-installable debug version")
 set(ANDROID_APK_APPLICATION_LABEL "${META_APP_NAME}" CACHE STRING "user visible name for the APK")
 
 # find "android" subdirectory in the source directory and check for AndroidManifest.xml
@@ -58,14 +60,17 @@ foreach (ANDROID_APK_FILE ${ANDROID_APK_FILES})
     if (ANDROID_APK_FILE_EXT STREQUAL ".in")
         string(LENGTH "${ANDROID_APK_FILE}" ANDROID_APK_FILE_LENGTH)
         math(EXPR ANDROID_APK_FILE_LENGTH "${ANDROID_APK_FILE_LENGTH} - 3")
-        string(SUBSTRING "${ANDROID_APK_FILE}" 0 ${ANDROID_APK_FILE_LENGTH} ANDROID_APK_FILE_NAME)
-        configure_file("${ANDROID_APK_SUBDIR}/${ANDROID_APK_FILE}" "${ANDROID_PACKAGE_SOURCE_DIRECTORY}/${ANDROID_APK_FILE_NAME}")
+        string(SUBSTRING "${ANDROID_APK_FILE}"
+                         0
+                         ${ANDROID_APK_FILE_LENGTH}
+                         ANDROID_APK_FILE_NAME)
+        configure_file("${ANDROID_APK_SUBDIR}/${ANDROID_APK_FILE}"
+                       "${ANDROID_PACKAGE_SOURCE_DIRECTORY}/${ANDROID_APK_FILE_NAME}")
         set(ANDROID_APK_FILE "${ANDROID_APK_FILE_NAME}")
     else ()
         file(COPY "${ANDROID_APK_SUBDIR}/${ANDROID_APK_FILE}" DESTINATION "${ANDROID_APK_FILE_DESTINATION}")
     endif ()
     # FIXME: tracking these deps doesn't work
-    #list(APPEND ANDROID_SOURCE_DIRECTORY_FILES "${CMAKE_BINARY_DIR}/${ANDROID_APK_FILE_DESTINATION}/${ANDROID_APK_FILE}")
 endforeach ()
 
 # make subdirectory to store build artefacts for APK
