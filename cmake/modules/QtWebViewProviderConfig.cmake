@@ -5,7 +5,9 @@ if (TARGET_CONFIG_DONE)
 endif ()
 
 # configure the specified web view provider
-set(WEBVIEW_PROVIDER "webengine" CACHE STRING "specifies the web view provider: webengine (default), webkit or none")
+set(WEBVIEW_PROVIDER
+    "webengine"
+    CACHE STRING "specifies the web view provider: webengine (default), webkit or none")
 if (WEBVIEW_PROVIDER STREQUAL "webkit")
     set(WEBVIEW_PROVIDER WebKitWidgets)
     set(WEBVIEW_DEFINITION "${META_PROJECT_VARNAME_UPPER}_USE_WEBKIT")
@@ -35,15 +37,16 @@ if (WEBVIEW_PROVIDER)
 
     include(TemplateFinder)
     find_template_file("webviewdefs.h" QT_UTILITIES WEBVIEWDEFS_H_TEMPLATE_FILE)
-    configure_file("${WEBVIEWDEFS_H_TEMPLATE_FILE}"
-                   "${WEBVIEW_HEADER_DIR}/webviewdefs.h" # simply add this to source to ease inclusion
-                   NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
-                   )
+    configure_file(
+        "${WEBVIEWDEFS_H_TEMPLATE_FILE}" "${WEBVIEW_HEADER_DIR}/webviewdefs.h" # simply add this to source to ease inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
     find_template_file("webviewincludes.h" QT_UTILITIES WEBVIEWINCLUDES_H_TEMPLATE_FILE)
-    configure_file("${WEBVIEWINCLUDES_H_TEMPLATE_FILE}"
-                   "${WEBVIEW_HEADER_DIR}/webviewincludes.h" # simply add this to source to ease inclusion
-                   NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
-                   )
+    configure_file(
+        "${WEBVIEWINCLUDES_H_TEMPLATE_FILE}" "${WEBVIEW_HEADER_DIR}/webviewincludes.h" # simply add this to source to ease
+                                                                                       # inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
     list(APPEND WIDGETS_FILES "${WEBVIEW_HEADER_DIR}/webviewdefs.h" "${WEBVIEW_HEADER_DIR}/webviewincludes.h")
 endif ()
 

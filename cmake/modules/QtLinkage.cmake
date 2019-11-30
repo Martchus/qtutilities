@@ -20,17 +20,9 @@ endif ()
 macro (use_qt_module)
     # parse arguments
     set(OPTIONAL_ARGS ONLY_PLUGINS)
-    set(ONE_VALUE_ARGS
-        PREFIX
-        MODULE
-        VISIBILITY
-        LIBRARIES_VARIABLE)
+    set(ONE_VALUE_ARGS PREFIX MODULE VISIBILITY LIBRARIES_VARIABLE)
     set(MULTI_VALUE_ARGS TARGETS PLUGINS)
-    cmake_parse_arguments(ARGS
-                          "${OPTIONAL_ARGS}"
-                          "${ONE_VALUE_ARGS}"
-                          "${MULTI_VALUE_ARGS}"
-                          ${ARGN})
+    cmake_parse_arguments(ARGS "${OPTIONAL_ARGS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}" ${ARGN})
 
     # validate values
     if (NOT ARGS_PREFIX)
@@ -76,9 +68,8 @@ macro (use_qt_module)
             get_target_property("${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE" "${TARGET}"
                                 INTERFACE_LINK_LIBRARIES_RELEASE)
             if ("${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE")
-                set_target_properties("${TARGET}"
-                                      PROPERTIES INTERFACE_LINK_LIBRARIES
-                                                 "${${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE}")
+                set_target_properties("${TARGET}" PROPERTIES INTERFACE_LINK_LIBRARIES
+                                                             "${${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE}")
             endif ()
         endforeach ()
     endif ()
@@ -99,10 +90,7 @@ macro (use_qt_module)
     endforeach ()
 
     # unset variables (can not simply use a function because Qt's variables need to be exported)
-    foreach (ARGUMENT
-             ${OPTIONAL_ARGS}
-             ${ONE_VALUE_ARGS}
-             ${MULTI_VALUE_ARGS})
+    foreach (ARGUMENT ${OPTIONAL_ARGS} ${ONE_VALUE_ARGS} ${MULTI_VALUE_ARGS})
         unset(ARGS_${ARGUMENT})
     endforeach ()
 endmacro ()
@@ -116,24 +104,23 @@ function (query_qmake_variable QMAKE_VARIABLE)
 
     # execute qmake
     get_target_property(QMAKE_BIN Qt5::qmake IMPORTED_LOCATION)
-    execute_process(COMMAND "${QMAKE_BIN}" -query "${QMAKE_VARIABLE}"
-                    RESULT_VARIABLE "${QMAKE_VARIABLE}_RESULT"
-                    OUTPUT_VARIABLE "${QMAKE_VARIABLE}")
+    execute_process(
+        COMMAND "${QMAKE_BIN}" -query "${QMAKE_VARIABLE}"
+        RESULT_VARIABLE "${QMAKE_VARIABLE}_RESULT"
+        OUTPUT_VARIABLE "${QMAKE_VARIABLE}")
     if (NOT "${${QMAKE_VARIABLE}_RESULT}" STREQUAL 0 OR "${${QMAKE_VARIABLE}}" STREQUAL "")
         message(
             FATAL_ERROR
                 "Unable to read qmake variable ${QMAKE_VARIABLE} via \"${QMAKE_BIN} -query ${QMAKE_VARIABLE}\"; output was \"${${QMAKE_VARIABLE}}\"."
-            )
+        )
     endif ()
 
     # remove new-line character at the end
-    string(REGEX
-           REPLACE "\n$"
-                   ""
-                   "${QMAKE_VARIABLE}"
-                   "${${QMAKE_VARIABLE}}")
+    string(REGEX REPLACE "\n$" "" "${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}")
 
     # export variable to parent scope
-    set("${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}" PARENT_SCOPE)
+    set("${QMAKE_VARIABLE}"
+        "${${QMAKE_VARIABLE}}"
+        PARENT_SCOPE)
     message(STATUS "qmake variable ${QMAKE_VARIABLE} is ${${QMAKE_VARIABLE}}")
 endfunction ()

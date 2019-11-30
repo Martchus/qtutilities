@@ -5,7 +5,9 @@ if (TARGET_CONFIG_DONE)
 endif ()
 
 # configure the specified JavaScript provider
-set(JS_PROVIDER "qml" CACHE STRING "specifies the JavaScript provider: qml (default), script or none")
+set(JS_PROVIDER
+    "qml"
+    CACHE STRING "specifies the JavaScript provider: qml (default), script or none")
 if (JS_PROVIDER STREQUAL "script")
     set(JS_PROVIDER Script)
     set(JS_DEFINITION "${META_PROJECT_VARNAME_UPPER}_USE_SCRIPT")
@@ -36,15 +38,15 @@ if (JS_PROVIDER)
 
     include(TemplateFinder)
     find_template_file("jsdefs.h" QT_UTILITIES JS_DEFS_H_TEMPLATE_FILE)
-    configure_file("${JS_DEFS_H_TEMPLATE_FILE}"
-                   "${JS_HEADER_DIR}/jsdefs.h" # simply add this to source to ease inclusion
-                   NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
-                   )
+    configure_file(
+        "${JS_DEFS_H_TEMPLATE_FILE}" "${JS_HEADER_DIR}/jsdefs.h" # simply add this to source to ease inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
     find_template_file("jsincludes.h" QT_UTILITIES JS_INCLUDES_H_TEMPLATE_FILE)
-    configure_file("${JS_INCLUDES_H_TEMPLATE_FILE}"
-                   "${JS_HEADER_DIR}/jsincludes.h" # simply add this to source to ease inclusion
-                   NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
-                   )
+    configure_file(
+        "${JS_INCLUDES_H_TEMPLATE_FILE}" "${JS_HEADER_DIR}/jsincludes.h" # simply add this to source to ease inclusion
+        NEWLINE_STYLE UNIX # since this goes to sources ensure consistency
+    )
     list(APPEND WIDGETS_FILES "${JS_HEADER_DIR}/jsdefs.h" "${JS_HEADER_DIR}/jsincludes.h")
 endif ()
 

@@ -28,12 +28,8 @@ set(HEADER_FILES
     resources/qtconfigarguments.h
     resources/resources.h
     resources/importplugin.h)
-set(SRC_FILES
-    misc/dialogutils.cpp
-    misc/desktoputils.cpp
-    models/checklistmodel.cpp
-    resources/qtconfigarguments.cpp
-    resources/resources.cpp)
+set(SRC_FILES misc/dialogutils.cpp misc/desktoputils.cpp models/checklistmodel.cpp resources/qtconfigarguments.cpp
+              resources/resources.cpp)
 set(RES_FILES resources/qtutilsicons.qrc)
 
 set(WIDGETS_HEADER_FILES
@@ -84,18 +80,10 @@ set(WIDGETS_UI_FILES
     paletteeditor/paletteeditor.ui)
 
 set(CMAKE_MODULE_FILES
-    cmake/modules/AndroidApk.cmake
-    cmake/modules/QtConfig.cmake
-    cmake/modules/QtGuiConfig.cmake
-    cmake/modules/QtLinkage.cmake
-    cmake/modules/QtWebViewProviderConfig.cmake
-    cmake/modules/QtJsProviderConfig.cmake)
-set(CMAKE_TEMPLATE_FILES
-    cmake/templates/qtconfig.h.in
-    cmake/templates/webviewdefs.h.in
-    cmake/templates/webviewincludes.h.in
-    cmake/templates/jsdefs.h.in
-    cmake/templates/jsincludes.h.in)
+    cmake/modules/AndroidApk.cmake cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake
+    cmake/modules/QtLinkage.cmake cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
+set(CMAKE_TEMPLATE_FILES cmake/templates/qtconfig.h.in cmake/templates/webviewdefs.h.in cmake/templates/webviewincludes.h.in
+                         cmake/templates/jsdefs.h.in cmake/templates/jsincludes.h.in)
 if (ANDROID)
     list(APPEND CMAKE_MODULE_FILES)
     list(APPEND CMAKE_TEMPLATE_FILES cmake/templates/android-deployment.json.in)
@@ -127,7 +115,10 @@ set(SCRIPT_FILES scripts/required_icons.sh)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
 
 # configure platform specific capslock detection for enterpassworddialog.cpp
-if (WIN32 OR (UNIX AND NOT APPLE AND NOT ANDROID))
+if (WIN32
+    OR (UNIX
+        AND NOT APPLE
+        AND NOT ANDROID))
     set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT ON)
 else ()
     set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT OFF)
@@ -148,13 +139,16 @@ if (CAPSLOCK_DETECTION)
     if (NOT HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
         message(FATAL_ERROR "No backend for capslock detection found (WinAPI or X11 must be provided)")
     endif ()
-    set_property(SOURCE enterpassworddialog/enterpassworddialog.cpp
-                 APPEND
-                 PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
+    set_property(
+        SOURCE enterpassworddialog/enterpassworddialog.cpp
+        APPEND
+        PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
 endif ()
 
 # configure support for D-Bus notifications
-if (UNIX AND NOT APPLE AND NOT ANDROID)
+if (UNIX
+    AND NOT APPLE
+    AND NOT ANDROID)
     set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT ON)
 else ()
     set(ENABLE_DBUS_NOTIFICATIONS_BY_DEFAULT OFF)
