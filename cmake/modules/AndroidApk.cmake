@@ -302,8 +302,8 @@ add_custom_command(
     OUTPUT "${ANDROID_APK_BINARY_PATH}"
     COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:${META_TARGET_NAME}>" "${ANDROID_APK_BINARY_PATH}"
     COMMENT "Preparing build dir for Android APK"
-    DEPENDS "${META_TARGET_NAME}" COMMAND_EXPAND_LISTS
-    VERBATIM)
+    DEPENDS "${META_TARGET_NAME}"
+    COMMAND_EXPAND_LISTS VERBATIM)
 add_custom_command(
     OUTPUT "${ANDROID_APK_FILE_PATH}"
     COMMAND rm -r "${ANDROID_APK_BUILD_DIR}/assets/--Added-by-androiddeployqt--/lib" || true
@@ -315,8 +315,7 @@ add_custom_command(
     COMMENT "Creating Android APK ${ANDROID_APK_FILE_PATH} using androiddeployqt"
     DEPENDS
         "${ANDROID_DEPLOYMENT_JSON_FILE};${ANDROID_APK_BINARY_PATH};${ANDROID_SOURCE_DIRECTORY_FILES};${ANDROID_APK_BINARY_DIRS_DEPENDS}"
-        COMMAND_EXPAND_LISTS
-    VERBATIM)
+    COMMAND_EXPAND_LISTS VERBATIM)
 add_custom_target(
     "${META_TARGET_NAME}_apk"
     COMMENT "Android APK"
