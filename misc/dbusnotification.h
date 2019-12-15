@@ -129,7 +129,7 @@ inline DBusNotification::Capabilities::Capabilities()
 }
 
 inline DBusNotification::Capabilities::Capabilities(const QStringList &capabilities)
-    : QSet<QString>(capabilities.toSet())
+    : QSet<QString>(capabilities.begin(), capabilities.end())
     , m_valid(true)
 {
 }
