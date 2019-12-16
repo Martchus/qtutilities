@@ -129,7 +129,11 @@ inline DBusNotification::Capabilities::Capabilities()
 }
 
 inline DBusNotification::Capabilities::Capabilities(const QStringList &capabilities)
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    : QSet<QString>(capabilities.toSet())
+#else
     : QSet<QString>(capabilities.begin(), capabilities.end())
+#endif
     , m_valid(true)
 {
 }
