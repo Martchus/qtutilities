@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+
 # determines the JavaScript provider (either Qt Script or Qt Declarative)
 
 if (TARGET_CONFIG_DONE)
