@@ -9,7 +9,7 @@ QT_FORWARD_DECLARE_CLASS(QString)
 
 namespace QtUtilities {
 
-bool QT_UTILITIES_EXPORT openLocalFileOrDir(const QString &path);
+QT_UTILITIES_EXPORT bool openLocalFileOrDir(const QString &path);
 }
 
 #endif // DESKTOP_UTILS_DESKTOPSERVICES_H

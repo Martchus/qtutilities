@@ -26,20 +26,20 @@ enum class DocumentStatus {
              */
 };
 
-QString QT_UTILITIES_EXPORT generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath);
+QT_UTILITIES_EXPORT QString generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath);
 
 #if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 #ifdef Q_OS_WIN32
-QColor QT_UTILITIES_EXPORT windowFrameColor();
-QColor QT_UTILITIES_EXPORT instructionTextColor();
+QT_UTILITIES_EXPORT QColor windowFrameColor();
+QT_UTILITIES_EXPORT QColor instructionTextColor();
 #endif
-const QString QT_UTILITIES_EXPORT &dialogStyle();
+QT_UTILITIES_EXPORT const QString &dialogStyle();
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
-QRect QT_UTILITIES_EXPORT availableScreenGeometryAtPoint(const QPoint &point);
-void QT_UTILITIES_EXPORT centerWidget(QWidget *widget, const QWidget *parent = nullptr, const QPoint *position = nullptr);
-void QT_UTILITIES_EXPORT cornerWidget(QWidget *widget, const QPoint *position = nullptr);
-void QT_UTILITIES_EXPORT makeHeading(QWidget *widget);
-void QT_UTILITIES_EXPORT updateStyle(QWidget *widget);
+QT_UTILITIES_EXPORT QRect availableScreenGeometryAtPoint(const QPoint &point);
+QT_UTILITIES_EXPORT void centerWidget(QWidget *widget, const QWidget *parent = nullptr, const QPoint *position = nullptr);
+QT_UTILITIES_EXPORT void cornerWidget(QWidget *widget, const QPoint *position = nullptr);
+QT_UTILITIES_EXPORT void makeHeading(QWidget *widget);
+QT_UTILITIES_EXPORT void updateStyle(QWidget *widget);
 #endif
 #endif
 
