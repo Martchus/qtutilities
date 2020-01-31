@@ -221,17 +221,18 @@ compose_dirs_for_android_apk(
     POSSIBLE_DIRS
     "${QT_INSTALL_IMPORTS}"
     "${QT_INSTALL_QML}"
-    "${CMAKE_INSTALL_PREFIX}/lib/qt/imports"
-    "${CMAKE_INSTALL_PREFIX}/lib/imports"
-    "${CMAKE_INSTALL_PREFIX}/lib/qt/qml"
-    "${CMAKE_INSTALL_PREFIX}/lib/qml")
+    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/qt/imports"
+    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/imports"
+    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/qt/qml"
+    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/qml")
 if (NOT ANDROID_APK_QML_IMPORT_DIRS)
     message(WARNING "Unable to find QML import directories for making the APK.")
 endif ()
 
 # pick extra plugins from install prefix
 compose_dirs_for_android_apk(OUTPUT_VARIABLE ANDROID_APK_EXTRA_PLUGIN_DIRS POSSIBLE_DIRS "${QT_INSTALL_PLUGINS}"
-                             "${CMAKE_INSTALL_PREFIX}/lib/qt/plugins" "${CMAKE_INSTALL_PREFIX}/lib/plugins")
+                             "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/qt/plugins"
+                             "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/plugins")
 if (NOT ANDROID_APK_EXTRA_PLUGIN_DIRS)
     message(WARNING "Unable to find extra plugin directories for making the APK.")
 endif ()

@@ -228,8 +228,9 @@ if (CMAKE_FIND_ROOT_PATH)
     list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_FIND_ROOT_PATH}/share/qt/translations"
                 "${CMAKE_FIND_ROOT_PATH}/share/qt5/translations")
 endif ()
-list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_INSTALL_PREFIX}/share/qt/translations"
-            "${CMAKE_INSTALL_PREFIX}/share/qt5/translations" "/usr/share/qt/translations" "/usr/share/qt5/translations")
+list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
+            "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations" "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
+            "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations")
 list(REMOVE_DUPLICATES QT_TRANSLATION_SEARCH_PATHS)
 foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
     if (NOT IS_DIRECTORY "${QT_TRANSLATION_PATH}")
@@ -502,7 +503,7 @@ if (WIDGETS_UI_FILES AND WIDGETS_GUI)
             get_filename_component(UI_NAME "${UI_FILE}" NAME_WE)
             install(
                 FILES "${CMAKE_CURRENT_BINARY_DIR}/ui_${UI_NAME}.h"
-                DESTINATION "include/${META_PROJECT_NAME}/ui"
+                DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${META_PROJECT_NAME}/ui"
                 COMPONENT ui-header)
         endforeach ()
     endif ()
