@@ -376,15 +376,15 @@ void DBusNotification::handleNotifyResult(QDBusPendingCallWatcher *watcher)
 
     QDBusPendingReply<uint> returnValue = *watcher;
     if (returnValue.isError()) {
-        deleteLater();
         emit error();
-    } else {
-        {
-            QMutexLocker lock(&pendingNotificationsMutex);
-            pendingNotifications[m_id = returnValue.argumentAt<0>()] = this;
-        }
-        emit shown();
+        return;
     }
+
+    {
+        QMutexLocker lock(&pendingNotificationsMutex);
+        pendingNotifications[m_id = returnValue.argumentAt<0>()] = this;
+    }
+    emit shown();
 }
 
 /*!
