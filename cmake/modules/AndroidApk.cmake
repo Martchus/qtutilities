@@ -230,9 +230,10 @@ if (NOT ANDROID_APK_QML_IMPORT_DIRS)
 endif ()
 
 # pick extra plugins from install prefix
-compose_dirs_for_android_apk(OUTPUT_VARIABLE ANDROID_APK_EXTRA_PLUGIN_DIRS POSSIBLE_DIRS "${QT_INSTALL_PLUGINS}"
-                             "${CMAKE_INSTALL_FULL_LIBDIR}${SELECTED_LIB_SUFFIX}/qt/plugins"
-                             "${CMAKE_INSTALL_FULL_LIBDIR}${SELECTED_LIB_SUFFIX}/plugins")
+compose_dirs_for_android_apk(
+    OUTPUT_VARIABLE ANDROID_APK_EXTRA_PLUGIN_DIRS POSSIBLE_DIRS "${QT_INSTALL_PLUGINS}"
+    "${CMAKE_INSTALL_FULL_LIBDIR}${SELECTED_LIB_SUFFIX}/qt/plugins"
+    "${CMAKE_INSTALL_FULL_LIBDIR}${SELECTED_LIB_SUFFIX}/plugins")
 if (NOT ANDROID_APK_EXTRA_PLUGIN_DIRS)
     message(WARNING "Unable to find extra plugin directories for making the APK.")
 endif ()
@@ -284,7 +285,7 @@ else ()
         set(ANDROID_APK_FILE_PATH
             "${ANDROID_APK_BUILD_DIR}/build/outputs/apk/${ANDROID_APK_FILE_DIRECTORY}apk-release-signed.apk")
         list(APPEND ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS --sign "${ANDROID_APK_KEYSTORE_URL}"
-                    "${ANDROID_APK_KEYSTORE_ALIAS}")
+             "${ANDROID_APK_KEYSTORE_ALIAS}")
         if (ANDROID_APK_KEYSTORE_PASSWORD)
             list(APPEND ANDROID_APK_ADDITIONAL_ANDROIDDEPOYQT_OPTIONS --storepass "${ANDROID_APK_KEYSTORE_PASSWORD}")
         endif ()

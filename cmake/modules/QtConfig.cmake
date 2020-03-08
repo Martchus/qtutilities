@@ -226,11 +226,11 @@ if (QT_INSTALL_TRANSLATIONS)
 endif ()
 if (CMAKE_FIND_ROOT_PATH)
     list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_FIND_ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
-                "${CMAKE_FIND_ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations")
+         "${CMAKE_FIND_ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations")
 endif ()
 list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt/translations"
-            "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt5/translations" "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
-            "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations")
+     "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt5/translations" "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
+     "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations")
 list(REMOVE_DUPLICATES QT_TRANSLATION_SEARCH_PATHS)
 foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
     if (NOT IS_DIRECTORY "${QT_TRANSLATION_PATH}")
@@ -361,7 +361,8 @@ if (REQUIRED_ICONS)
             list(APPEND ICON_SEARCH_PATHS "${CMAKE_FIND_ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
         endif ()
         list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
-        list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when cross-compiling
+        list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when cross-
+                                                                                 # compiling
         list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
         set(BUILTIN_ICONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
         set(DEFAULT_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default/index.theme")
@@ -408,8 +409,8 @@ if (REQUIRED_ICONS)
                         set(GLOB_PATTERNS)
                         foreach (REQUIRED_ICON ${REQUIRED_ICONS})
                             list(APPEND GLOB_PATTERNS "${ICON_THEME_PATH}/${REQUIRED_ICON}"
-                                        "${ICON_THEME_PATH}/${REQUIRED_ICON}.*" "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
-                                        "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*")
+                                 "${ICON_THEME_PATH}/${REQUIRED_ICON}.*" "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
+                                 "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*")
                         endforeach ()
                         file(
                             GLOB_RECURSE GLOBBED_ICON_THEME_FILES
@@ -444,7 +445,7 @@ if (REQUIRED_ICONS)
                         file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
                         file(COPY "${ICON_THEME_FILE}" DESTINATION "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
                         list(APPEND ICON_THEME_FILES
-                                    "<file${ICON_THEME_FILE_ALIAS}>${NEW_ICON_THEME_FILE_RELATIVE_PATH}</file>")
+                             "<file${ICON_THEME_FILE_ALIAS}>${NEW_ICON_THEME_FILE_RELATIVE_PATH}</file>")
                     endforeach ()
                     break()
                 endif ()
