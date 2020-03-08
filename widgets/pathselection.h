@@ -26,7 +26,7 @@ public:
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
-private slots:
+private Q_SLOTS:
     void showFileDialog();
 
 private:
