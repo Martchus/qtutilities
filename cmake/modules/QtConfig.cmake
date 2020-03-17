@@ -158,7 +158,7 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
             endif ()
         endforeach ()
 
-        # allow importing image format plugins via config.h
+        # allow importing image format plugins via qtconfig.h
         if (USED_WIDGET_STYLE_PLUGINS)
             list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${USED_WIDGET_STYLE_PLUGINS}"
                            WIDGET_STYLE_PLUGINS_ARRAY)
@@ -184,7 +184,7 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
             endif ()
         endforeach ()
 
-        # allow importing image format plugins via config.h
+        # allow importing image format plugins via qtconfig.h
         list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${IMAGE_FORMAT_SUPPORT}" IMAGE_FORMAT_SUPPORT_ARRAY)
     endif ()
 
@@ -260,7 +260,7 @@ if (BUILTIN_TRANSLATIONS AND NOT QT_TRANSLATION_FILES)
     )
 endif ()
 
-# make relevant Qt translations available as array via config.h
+# make relevant Qt translations available as array via qtconfig.h
 if (QT_TRANSLATION_FILES)
     list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${QT_TRANSLATION_FILES}" QT_TRANSLATION_FILES_ARRAY)
 endif ()
@@ -317,7 +317,7 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
     list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}")
 endif ()
 
-# make application specific translation available as array via config.h (even if this project has no translations, there
+# make application specific translation available as array via qtconfig.h (even if this project has no translations, there
 # might be some from dependencies)
 if (APP_SPECIFIC_QT_TRANSLATION_FILES)
     list_to_string("," " \\\n    QStringLiteral(\"" "\")" "${APP_SPECIFIC_QT_TRANSLATION_FILES}"
@@ -483,7 +483,7 @@ endif ()
 if (QT_RESOURCES)
     list(REMOVE_DUPLICATES QT_RESOURCES)
 
-    # make enabling resources of static dependencies available via config.h
+    # make enabling resources of static dependencies available via qtconfig.h
     unset(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES)
     foreach (QT_RESOURCE ${STATIC_LIBRARIES_QT_RESOURCES})
         set(ENABLE_QT_RESOURCES_OF_STATIC_DEPENDENCIES
