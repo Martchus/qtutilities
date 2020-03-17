@@ -250,7 +250,7 @@
             <string notr="true">font-size: 8pt;</string>
            </property>
            <property name="text">
-            <string>using Qt</string>
+            <string>Using Qt</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

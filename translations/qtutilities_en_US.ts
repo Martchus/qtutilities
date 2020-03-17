@@ -4,7 +4,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../widgets/buttonoverlay.cpp" line="78"/>
+        <location filename="../widgets/buttonoverlay.cpp" line="75"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12,7 +12,7 @@
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="367"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="366"/>
         <source>recognized by Qt as</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="215"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="214"/>
         <source>Qt</source>
         <translation type="unfinished"></translation>
     </message>
@@ -28,33 +28,38 @@
 <context>
     <name>QtUtilities::AboutDialog</name>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="24"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="32"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="127"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="135"/>
         <source>application name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="137"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="145"/>
         <source>version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="163"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="171"/>
         <source>description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="185"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="193"/>
         <source>website link</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="226"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="234"/>
         <source>creators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.ui" line="261"/>
+        <source>Using Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -68,8 +73,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="75"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="76"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="92"/>
+        <source>Using &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -373,7 +383,7 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="53"/>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="150"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="153"/>
         <source>No category selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -398,12 +408,12 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="245"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="248"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="250"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="253"/>
         <source>unknonw error</source>
         <translation type="unfinished"></translation>
     </message>

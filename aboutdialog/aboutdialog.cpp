@@ -89,7 +89,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         : new QGraphicsPixmapItem(QPixmap::fromImage(image));
     m_iconScene->addItem(item);
     m_ui->graphicsView->setScene(m_iconScene);
-    m_ui->qtVersionLabel->setText(tr("using <a href=\"qtversion\">Qt %1</a>").arg(QString::fromUtf8(qVersion())));
+    m_ui->qtVersionLabel->setText(tr("Using <a href=\"qtversion\">Qt %1</a>").arg(QString::fromUtf8(qVersion())));
     connect(m_ui->qtVersionLabel, &QLabel::linkActivated, this, &AboutDialog::linkActivated);
     centerWidget(this, parentWidget());
 }
