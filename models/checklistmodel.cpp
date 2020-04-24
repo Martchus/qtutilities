@@ -211,8 +211,19 @@ void ChecklistModel::restore(QSettings &settings, const QString &name)
     m_items.reserve(rows);
     for (int i = 0; i < rows; ++i) {
         settings.setArrayIndex(i);
-        QVariant id = settings.value(QStringLiteral("id"));
-        QVariant selected = settings.value(QStringLiteral("selected"));
+        const auto id = settings.value(QStringLiteral("id"));
+        const auto isIdValid = [&] {
+            for (const auto &item : currentItems) {
+                if (item.id() == id) {
+                    return true;
+                }
+            }
+            return false;
+        }();
+        if (!isIdValid) {
+            continue;
+        }
+        const auto selected = settings.value(QStringLiteral("selected"));
         if (!id.isNull() && !selected.isNull() && selected.canConvert(QMetaType::Bool) && !restoredIds.contains(id)) {
             m_items << ChecklistItem(id, labelForId(id), selected.toBool() ? Qt::Checked : Qt::Unchecked);
             restoredIds << id;
