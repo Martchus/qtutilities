@@ -65,6 +65,8 @@ endif ()
 set(QT_PACKAGE_PREFIX
     "Qt5"
     CACHE STRING "specifies the prefix for Qt packages")
+set(QT_LINGUIST_TOOLS_PACKAGE "${QT_PACKAGE_PREFIX}LinguistTools")
+set(QT_QMAKE_TARGET "${QT_PACKAGE_PREFIX}::qmake")
 foreach (MODULE ${QT_MODULES})
     unset(MODULE_OPTIONS)
     if ("${MODULE}" IN_LIST META_PUBLIC_QT_MODULES)
@@ -83,9 +85,12 @@ foreach (MODULE ${KF_MODULES})
     use_qt_module(PREFIX "${KF_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
 endforeach ()
 
-# hack for using static Qt via "StaticQt5" prefix: find regular Qt5Core module as well so Qt version is defined
+# hacks for using static Qt 5 via "StaticQt5" prefix: find regular Qt5Core module as well so Qt version is defined and use
+# regular Qt5LinguistTools module and regular qmake target
 if (QT_PACKAGE_PREFIX STREQUAL "StaticQt5")
     find_package(Qt5Core)
+    set(QT_LINGUIST_TOOLS_PACKAGE Qt5LinguistTools)
+    set(QT_QMAKE_TARGET Qt5::qmake)
 endif ()
 
 # find transitively required Qt/KF modules
@@ -102,7 +107,7 @@ endforeach ()
 
 # built-in platform, imageformat and iconengine plugins when linking statically against Qt
 if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
-    message(STATUS "Linking application ${META_PROJECT_NAME} against Qt 5 plugins because static linkage is enabled.")
+    message(STATUS "Linking application ${META_PROJECT_NAME} against Qt plugins because static linkage is enabled.")
 
     if (Gui IN_LIST QT_MODULES
         OR Widgets IN_LIST QT_MODULES
@@ -272,14 +277,20 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
     set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE YES)
 
     # the LinguistTools module is required (but not add it to QT_MODULES because we don't link against it)
-    find_package(Qt5LinguistTools REQUIRED)
+    find_package("${QT_LINGUIST_TOOLS_PACKAGE}" REQUIRED)
+
+    if (NOT COMMAND qt_create_translation)
+        macro (qt_create_translation)
+            qt5_create_translation(${ARGV})
+        endmacro ()
+    endif ()
 
     set(LUPDATE_OPTIONS
         ""
         CACHE STRING "specifies options passed to lupdate")
 
     # adds the translations and a target for it
-    qt5_create_translation(
+    qt_create_translation(
         QM_FILES
         ${HEADER_FILES}
         ${SRC_FILES}
@@ -344,7 +355,12 @@ endif ()
 
 # generate DBus interfaces
 if (DBUS_FILES)
-    qt5_add_dbus_interfaces(GENERATED_DBUS_FILES ${DBUS_FILES})
+    if (NOT COMMAND qt_add_dbus_interfaces)
+        macro (qt_add_dbus_interfaces)
+            qt5_add_dbus_interfaces(${ARGV})
+        endmacro ()
+    endif ()
+    qt_add_dbus_interfaces(GENERATED_DBUS_FILES ${DBUS_FILES})
 endif ()
 
 # add icons to be built-in

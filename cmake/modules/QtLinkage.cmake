@@ -103,7 +103,7 @@ function (query_qmake_variable QMAKE_VARIABLE)
     endif ()
 
     # execute qmake
-    get_target_property(QMAKE_BIN Qt5::qmake IMPORTED_LOCATION)
+    get_target_property(QMAKE_BIN "${QT_QMAKE_TARGET}" IMPORTED_LOCATION)
     execute_process(
         COMMAND "${QMAKE_BIN}" -query "${QMAKE_VARIABLE}"
         RESULT_VARIABLE "${QMAKE_VARIABLE}_RESULT"
