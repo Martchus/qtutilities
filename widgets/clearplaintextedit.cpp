@@ -2,6 +2,8 @@
 
 #include <QHBoxLayout>
 #include <QScrollBar>
+#include <QStyle>
+#include <QStyleOptionFrame>
 
 using namespace std;
 
@@ -21,6 +23,11 @@ ClearPlainTextEdit::ClearPlainTextEdit(QWidget *parent)
 {
     // set alignment to show buttons in the bottom right corner
     ButtonOverlay::buttonLayout()->setAlignment(Qt::AlignBottom | Qt::AlignRight);
+    const QStyle *const s = style();
+    QStyleOptionFrame opt;
+    opt.initFrom(this);
+    setContentsMarginsFromEditFieldRectAndFrameWidth(s->subElementRect(QStyle::SE_FrameContents, &opt, this),
+        s->pixelMetric(QStyle::PM_DefaultFrameWidth, &opt, m_widget), s->pixelMetric(QStyle::PM_LayoutVerticalSpacing, &opt, m_widget));
     ButtonOverlay::setClearButtonEnabled(true);
     connect(this, &QPlainTextEdit::textChanged, this, &ClearPlainTextEdit::handleTextChanged);
     // ensure button layout is realigned when scrolling

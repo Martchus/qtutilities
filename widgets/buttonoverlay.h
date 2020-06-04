@@ -9,12 +9,24 @@ QT_FORWARD_DECLARE_CLASS(QWidget)
 QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QPixmap)
+QT_FORWARD_DECLARE_CLASS(QMargins)
+QT_FORWARD_DECLARE_CLASS(QRect)
 
 namespace QtUtilities {
 
 class IconButton;
+class ClearComboBox;
+class ClearSpinBox;
+class ClearPlainTextEdit;
+class ClearLineEdit;
 
 class QT_UTILITIES_EXPORT ButtonOverlay {
+    // allow these derived classes to use private helpers provided by ButtonOverlay
+    friend class ClearComboBox;
+    friend class ClearSpinBox;
+    friend class ClearPlainTextEdit;
+    friend class ClearLineEdit;
+
 public:
     explicit ButtonOverlay(QWidget *widget);
     virtual ~ButtonOverlay();
@@ -36,6 +48,7 @@ protected:
 
 private:
     void showInfo();
+    void setContentsMarginsFromEditFieldRectAndFrameWidth(const QRect &editFieldRect, int frameWidth, int padding = 0);
 
     QWidget *m_widget;
     QWidget *m_buttonWidget;

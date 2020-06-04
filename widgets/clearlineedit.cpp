@@ -1,5 +1,8 @@
 #include "./clearlineedit.h"
 
+#include <QStyle>
+#include <QStyleOptionFrame>
+
 namespace QtUtilities {
 
 /*!
@@ -14,6 +17,11 @@ ClearLineEdit::ClearLineEdit(QWidget *parent)
     : QLineEdit(parent)
     , ButtonOverlay(this)
 {
+    const QStyle *const s = style();
+    QStyleOptionFrame opt;
+    opt.initFrom(this);
+    setContentsMarginsFromEditFieldRectAndFrameWidth(s->subElementRect(QStyle::SE_LineEditContents, &opt, this),
+        s->pixelMetric(QStyle::PM_DefaultFrameWidth, &opt, m_widget), s->pixelMetric(QStyle::PM_LayoutVerticalSpacing, &opt, m_widget));
     ButtonOverlay::setClearButtonEnabled(true);
     connect(this, &ClearLineEdit::textChanged, this, &ClearLineEdit::handleTextChanged);
 }

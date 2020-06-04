@@ -18,14 +18,11 @@ ClearComboBox::ClearComboBox(QWidget *parent)
     : QComboBox(parent)
     , ButtonOverlay(this)
 {
-    const QMargins margins = contentsMargins();
+    const QStyle *const s = style();
     QStyleOptionComboBox opt;
     opt.initFrom(this);
-    const int frameWidth = style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth, &opt, this);
-    const int pad = 2;
-    const int buttonWidth = style()->subControlRect(QStyle::CC_ComboBox, &opt, QStyle::SC_ComboBoxArrow, this).width();
-    buttonLayout()->setContentsMargins(margins.left() + frameWidth + pad, margins.top() + frameWidth,
-        margins.right() + frameWidth + pad + buttonWidth, margins.bottom() + frameWidth);
+    setContentsMarginsFromEditFieldRectAndFrameWidth(
+        s->subControlRect(QStyle::CC_ComboBox, &opt, QStyle::SC_ComboBoxEditField, this), s->pixelMetric(QStyle::PM_ComboBoxFrameWidth, &opt, this));
     setClearButtonEnabled(isEditable());
     connect(this, &ClearComboBox::currentTextChanged, this, &ClearComboBox::handleTextChanged);
 }

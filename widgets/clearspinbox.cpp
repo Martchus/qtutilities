@@ -21,14 +21,11 @@ ClearSpinBox::ClearSpinBox(QWidget *parent)
     , ButtonOverlay(this)
     , m_minimumHidden(false)
 {
-    const QMargins margins = contentsMargins();
-    QStyleOptionComboBox opt;
+    const QStyle *const s = style();
+    QStyleOptionSpinBox opt;
     opt.initFrom(this);
-    const int frameWidth = style()->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &opt, this);
-    const int pad = 5;
-    const int buttonWidth = style()->subControlRect(QStyle::CC_SpinBox, &opt, QStyle::SC_SpinBoxUp, this).width() + 10;
-    buttonLayout()->setContentsMargins(margins.left() + frameWidth + pad, margins.top() + frameWidth,
-        margins.right() + frameWidth + pad + buttonWidth, margins.bottom() + frameWidth);
+    setContentsMarginsFromEditFieldRectAndFrameWidth(
+        s->subControlRect(QStyle::CC_SpinBox, &opt, QStyle::SC_SpinBoxEditField, this), s->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &opt, this));
     setClearButtonEnabled(true);
     connect(this, static_cast<void (ClearSpinBox::*)(int)>(&ClearSpinBox::valueChanged), this, &ClearSpinBox::handleValueChanged);
 }

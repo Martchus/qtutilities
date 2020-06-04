@@ -37,15 +37,7 @@ ButtonOverlay::ButtonOverlay(QWidget *widget)
     , m_clearButton(nullptr)
     , m_infoButton(nullptr)
 {
-    // setup button widget and layout
-    const QMargins margins = widget->contentsMargins();
-    QStyleOption opt;
-    opt.initFrom(m_widget);
-    const int frameWidth = widget->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, &opt, m_widget);
-    const int pad = 2;
-    m_buttonLayout->setContentsMargins(
-        margins.left() + frameWidth + pad, margins.top() + frameWidth, margins.right() + frameWidth + pad, margins.bottom() + frameWidth);
-    m_buttonLayout->setAlignment(Qt::AlignCenter | Qt::AlignRight);
+    buttonLayout()->setAlignment(Qt::AlignCenter | Qt::AlignRight);
     widget->setLayout(m_buttonLayout);
 }
 
@@ -187,4 +179,17 @@ void ButtonOverlay::showInfo()
         QToolTip::showText(QCursor::pos(), m_infoButton->toolTip(), m_infoButton);
     }
 }
+
+/*!
+ * \brief Sets the contents margins of the button layout so the overlay buttons will only be shown over the \a editFieldRect and
+ *        not interfere with e.g. spin box buttons.
+ */
+void ButtonOverlay::setContentsMarginsFromEditFieldRectAndFrameWidth(const QRect &editFieldRect, int frameWidth, int padding)
+{
+    const auto margins = m_widget->contentsMargins();
+    const auto buttonWidth = m_widget->width() - editFieldRect.width();
+    buttonLayout()->setContentsMargins(margins.left() + frameWidth + padding, margins.top() + frameWidth,
+        margins.right() + frameWidth + padding + buttonWidth, margins.bottom() + frameWidth);
+}
+
 } // namespace QtUtilities
