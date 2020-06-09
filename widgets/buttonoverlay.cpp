@@ -5,6 +5,7 @@
 #include <QComboBox>
 #include <QCursor>
 #include <QHBoxLayout>
+#include <QIcon>
 #include <QLineEdit>
 #include <QStyle>
 #include <QStyleOption>
@@ -227,17 +228,52 @@ void ButtonOverlay::insertCustomButton(int index, QWidget *button)
 }
 
 /*!
- * \brief Removes the specified custom \a button.
+ * \brief Removes the specified custom \a button; does nothing if \a button has not been added.
  *
  * The ownership of widget remains the same as when it was added.
- *
- * \remarks This function enforces the "custom approach" mentioned in the class documentation
- *          and should therefore be avoided.
  */
 void ButtonOverlay::removeCustomButton(QWidget *button)
 {
-    fallbackToUsingCustomLayout();
-    m_buttonLayout->removeWidget(button);
+    if (isUsingCustomLayout()) {
+        m_buttonLayout->removeWidget(button);
+    }
+}
+
+/*!
+ * \brief Adds a custom \a action.
+ */
+void ButtonOverlay::addCustomAction(QAction *action)
+{
+    if (auto *const le = lineEditForWidget()) {
+        le->addAction(action, QLineEdit::TrailingPosition);
+    } else {
+        addCustomButton(IconButton::fromAction(action, reinterpret_cast<std::uintptr_t>(this)));
+    }
+}
+
+/*!
+ * \brief Inserts a custom \a action at the specified \a index.
+ */
+void ButtonOverlay::insertCustomAction(int index, QAction *action)
+{
+    if (auto *const le = lineEditForWidget()) {
+        const auto actions = le->actions();
+        le->insertAction(index < actions.size() ? actions[index] : nullptr, action);
+    } else {
+        insertCustomButton(index, IconButton::fromAction(action, reinterpret_cast<std::uintptr_t>(this)));
+    }
+}
+
+/*!
+ * \brief Removes the specified custom \a action; does nothing if \a action has not been added.
+ */
+void ButtonOverlay::removeCustomAction(QAction *action)
+{
+    if (auto *const le = lineEditForWidget()) {
+        le->removeAction(action);
+    } else {
+        removeCustomButton(IconButton::fromAction(action, reinterpret_cast<std::uintptr_t>(this)));
+    }
 }
 
 /*!
@@ -284,19 +320,23 @@ void ButtonOverlay::fallbackToUsingCustomLayout()
     }
 
     // disable QLineEdit's clear button and actions; save configuration
-    const auto clearButtonEnabled = isClearButtonEnabled();
-    if (clearButtonEnabled) {
-        setClearButtonEnabled(false);
-    }
-    auto *const iconAction = static_cast<QAction *>(m_infoButtonOrAction);
+    auto clearButtonEnabled = false;
+    auto *iconAction = static_cast<QAction *>(m_infoButtonOrAction);
     QPixmap infoPixmap;
     QString infoText;
-    if (iconAction) {
-        const auto icon = iconAction->icon();
-        const auto sizes = icon.availableSizes();
-        infoPixmap = icon.pixmap(sizes.empty() ? QSize(16, 16) : sizes.front());
-        infoText = iconAction->toolTip();
-        disableInfoButton();
+    QList<QAction *> actions;
+    if (auto const *le = lineEditForWidget()) {
+        if ((clearButtonEnabled = le->isClearButtonEnabled())) {
+            setClearButtonEnabled(false);
+        }
+        if ((iconAction = static_cast<QAction *>(m_infoButtonOrAction))) {
+            const auto icon = iconAction->icon();
+            const auto sizes = icon.availableSizes();
+            infoPixmap = icon.pixmap(sizes.empty() ? QSize(16, 16) : sizes.front());
+            infoText = iconAction->toolTip();
+            disableInfoButton();
+        }
+        actions = le->actions();
     }
 
     // initialize custom layout
@@ -312,6 +352,9 @@ void ButtonOverlay::fallbackToUsingCustomLayout()
     }
     if (iconAction) {
         enableInfoButton(infoPixmap, infoText);
+    }
+    for (auto *const action : actions) {
+        addCustomAction(action);
     }
 }
 

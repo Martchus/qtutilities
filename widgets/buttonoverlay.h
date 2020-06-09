@@ -5,6 +5,7 @@
 
 #include <QtGlobal>
 
+QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QWidget)
 QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 QT_FORWARD_DECLARE_CLASS(QString)
@@ -43,6 +44,9 @@ public:
     void addCustomButton(QWidget *button);
     void insertCustomButton(int index, QWidget *button);
     void removeCustomButton(QWidget *button);
+    void addCustomAction(QAction *action);
+    void insertCustomAction(int index, QAction *action);
+    void removeCustomAction(QAction *action);
     virtual bool isCleared() const;
 
 protected:

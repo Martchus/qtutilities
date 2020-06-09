@@ -1,9 +1,13 @@
 #include "./iconbutton.h"
 
+#include <c++utilities/conversion/stringbuilder.h>
+
 #include <QKeyEvent>
 #include <QStyle>
 #include <QStyleOptionFocusRect>
 #include <QStylePainter>
+
+using namespace CppUtilities;
 
 namespace QtUtilities {
 
@@ -27,6 +31,46 @@ IconButton::IconButton(QWidget *parent)
  */
 IconButton::~IconButton()
 {
+}
+
+/*!
+ * \brief Creates an IconButton for the specified \a action.
+ * \remarks Calling this function on the same action twice with the same \a id yields the
+ *          same instance.
+ */
+IconButton *IconButton::fromAction(QAction *action, std::uintptr_t id)
+{
+    const auto propertyName = argsToString("iconButton-", id);
+    const auto existingIconButton = action->property(propertyName.data());
+    if (!existingIconButton.isNull()) {
+        return existingIconButton.value<IconButton *>();
+    }
+    auto *const iconButton = new IconButton;
+    iconButton->assignDataFromAction(action);
+    action->setProperty(propertyName.data(), QVariant::fromValue(iconButton));
+    connect(action, &QAction::changed, iconButton, &IconButton::assignDataFromActionChangedSignal);
+    connect(iconButton, &IconButton::clicked, action, &QAction::trigger);
+    return iconButton;
+}
+
+/*!
+ * \brief Internally called to assign data from a QAction to the icon button.
+ */
+void IconButton::assignDataFromActionChangedSignal()
+{
+    assignDataFromAction(qobject_cast<const QAction *>(QObject::sender()));
+}
+
+/*!
+ * \brief Internally called to assign data from a QAction to the icon button.
+ */
+void IconButton::assignDataFromAction(const QAction *action)
+{
+    auto const icon = action->icon();
+    const auto sizes = icon.availableSizes();
+    const auto text = action->text();
+    setPixmap(icon.pixmap(sizes.empty() ? QSize(16, 16) : sizes.front()));
+    setToolTip(text.isEmpty() ? action->toolTip() : text);
 }
 
 QSize IconButton::sizeHint() const
@@ -77,4 +121,5 @@ void IconButton::keyReleaseEvent(QKeyEvent *event)
     QAbstractButton::keyReleaseEvent(event);
     event->accept();
 }
+
 } // namespace QtUtilities
