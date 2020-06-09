@@ -11,6 +11,7 @@ QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QPixmap)
 QT_FORWARD_DECLARE_CLASS(QMargins)
 QT_FORWARD_DECLARE_CLASS(QRect)
+QT_FORWARD_DECLARE_CLASS(QLineEdit)
 
 namespace QtUtilities {
 
@@ -29,8 +30,10 @@ class QT_UTILITIES_EXPORT ButtonOverlay {
 
 public:
     explicit ButtonOverlay(QWidget *widget);
+    explicit ButtonOverlay(QWidget *widget, QLineEdit *lineEdit);
     virtual ~ButtonOverlay();
 
+    bool isUsingCustomLayout() const;
     QHBoxLayout *buttonLayout();
     bool isClearButtonEnabled() const;
     void setClearButtonEnabled(bool enabled);
@@ -45,8 +48,11 @@ public:
 protected:
     void updateClearButtonVisibility(bool visible);
     virtual void handleClearButtonClicked();
+    virtual void handleCustomLayoutCreated();
 
 private:
+    void fallbackToUsingCustomLayout();
+    QLineEdit *lineEditForWidget() const;
     void showInfo();
     void setContentsMarginsFromEditFieldRectAndFrameWidth(const QRect &editFieldRect, int frameWidth, int padding = 0);
 
@@ -54,32 +60,9 @@ private:
     QWidget *m_buttonWidget;
     QHBoxLayout *m_buttonLayout;
     IconButton *m_clearButton;
-    IconButton *m_infoButton;
+    void *m_infoButtonOrAction;
 };
 
-/*!
- * \brief Returns the layout manager holding the buttons.
- */
-inline QHBoxLayout *ButtonOverlay::buttonLayout()
-{
-    return m_buttonLayout;
-}
-
-/*!
- * \brief Returns whether the clear button is enabled.
- */
-inline bool ButtonOverlay::isClearButtonEnabled() const
-{
-    return m_clearButton != nullptr;
-}
-
-/*!
- * \brief Returns whether the info button is enabled.
- */
-inline bool ButtonOverlay::isInfoButtonEnabled() const
-{
-    return m_infoButton != nullptr;
-}
 } // namespace QtUtilities
 
 #endif // WIDGETS_BUTTONOVERLAY_H

@@ -1,8 +1,11 @@
 #include "./buttonoverlay.h"
 #include "./iconbutton.h"
 
+#include <QAction>
+#include <QComboBox>
 #include <QCursor>
 #include <QHBoxLayout>
+#include <QLineEdit>
 #include <QStyle>
 #include <QStyleOption>
 #include <QToolTip>
@@ -14,31 +17,60 @@ namespace QtUtilities {
 
 /*!
  * \class ButtonOverlay
- * \brief The ButtonOverlay class is used to display buttons on top of other
- * widgets.
+ * \brief The ButtonOverlay class is used to display buttons on top of other widgets.
  *
- * The class creates a new layout manager and sets it to the widget which is
- * specified
- * when constructing an instance. Thus this widget must not already have a
- * layout manager.
+ * This class had been created before QLineEdit's functions setClearButtonEnabled() and
+ * addAction() have been available. (These functions have been available only since Qt 5.2.)
  *
- * The class is used to implement widget customization like ClearLineEidt and
- * ClearComboBox.
+ * The downside of the "custom approach" compared to QLineEdit's own functions is that the
+ * buttons are shown over the text as the text margins are not updated accordingly. Hence
+ * the ButtonOverlay class has been updated to use QLineEdit's functions internally when the
+ * specified widget is QLineEdit-based and its QLineEdit has been passed to the constructor.
+ * However, when using any functions which can not be implemented using QLineEdit's own
+ * functions, the ButtonOverlay has to fallback to its "custom approach". All functions which
+ * cause this have a remark in their documentation.
+ *
+ * When QLineEdit's functions can not be used, the ButtonOverlay class creates a new layout
+ * manager and sets it to the widget specified when constructing an instance. Thus this widget
+ * must not already have a layout manager.
+ *
+ * The class is used to implement widget customization like ClearLineEidt and ClearComboBox
+ * and most of the times it makes sense to use these widgets instead of using ButtonOverlay
+ * directly.
  */
 
 /*!
  * \brief Constructs a button overlay for the specified \a widget.
  * \param widget Specifies the widget to display the buttons on.
+ * \remarks This function enforces the "custom approach" mentioned in the class documentation
+ *          and should therefore be avoided.
  */
 ButtonOverlay::ButtonOverlay(QWidget *widget)
     : m_widget(widget)
-    , m_buttonWidget(new QWidget(widget))
-    , m_buttonLayout(new QHBoxLayout(m_buttonWidget))
+    , m_buttonWidget(nullptr)
+    , m_buttonLayout(nullptr)
     , m_clearButton(nullptr)
-    , m_infoButton(nullptr)
+    , m_infoButtonOrAction(nullptr)
 {
-    buttonLayout()->setAlignment(Qt::AlignCenter | Qt::AlignRight);
-    widget->setLayout(m_buttonLayout);
+    fallbackToUsingCustomLayout();
+}
+
+/*!
+ * \brief Constructs a button overlay for the specified \a widget.
+ * \param widget Specifies the widget to display the buttons on.
+ * \param lineEdit Specifies the line edit used by \a widget to use the QLineEdit's functions
+ *                 for adding actions instead of a custom layout.
+ */
+ButtonOverlay::ButtonOverlay(QWidget *widget, QLineEdit *lineEdit)
+    : m_widget(widget)
+    , m_buttonWidget(lineEdit)
+    , m_buttonLayout(nullptr)
+    , m_clearButton(nullptr)
+    , m_infoButtonOrAction(nullptr)
+{
+    if (!m_buttonWidget) {
+        fallbackToUsingCustomLayout();
+    }
 }
 
 /*!
@@ -49,16 +81,59 @@ ButtonOverlay::~ButtonOverlay()
 }
 
 /*!
+ * \brief Returns whether the "custom approach" mentioned in the class documentation is used.
+ */
+bool ButtonOverlay::isUsingCustomLayout() const
+{
+    return m_buttonLayout != nullptr;
+}
+
+/*!
+ * \brief Returns the layout manager holding the buttons.
+ * \remarks This function enforces the "custom approach" mentioned in the class documentation
+ *          and should therefore be avoided.
+ */
+QHBoxLayout *ButtonOverlay::buttonLayout()
+{
+    fallbackToUsingCustomLayout();
+    return m_buttonLayout;
+}
+
+/*!
+ * \brief Returns whether the clear button is enabled.
+ */
+bool ButtonOverlay::isClearButtonEnabled() const
+{
+    if (isUsingCustomLayout()) {
+        return m_clearButton != nullptr;
+    }
+    return lineEditForWidget()->isClearButtonEnabled();
+}
+
+/*!
+ * \brief Returns whether the info button is enabled.
+ */
+bool ButtonOverlay::isInfoButtonEnabled() const
+{
+    return m_infoButtonOrAction != nullptr;
+}
+
+/*!
  * \brief Sets whether the clear button is enabled.
  */
 void ButtonOverlay::setClearButtonEnabled(bool enabled)
 {
-    if (isClearButtonEnabled() && !enabled) {
+    if (auto *const le = lineEditForWidget()) {
+        le->setClearButtonEnabled(enabled);
+        return;
+    }
+    const auto clearButtonEnabled = isClearButtonEnabled();
+    if (clearButtonEnabled && !enabled) {
         // disable clear button
         m_buttonLayout->removeWidget(m_clearButton);
         delete m_clearButton;
         m_clearButton = nullptr;
-    } else if (!isClearButtonEnabled() && enabled) {
+    } else if (!clearButtonEnabled && enabled) {
         // enable clear button
         m_clearButton = new IconButton;
         m_clearButton->setHidden(isCleared());
@@ -80,18 +155,27 @@ void ButtonOverlay::setClearButtonEnabled(bool enabled)
  */
 void ButtonOverlay::enableInfoButton(const QPixmap &pixmap, const QString &infoText)
 {
-    if (!m_infoButton) {
-        m_infoButton = new IconButton;
-        m_infoButton->setGeometry(0, 0, 16, 16);
-        QObject::connect(m_infoButton, &IconButton::clicked, std::bind(&ButtonOverlay::showInfo, this));
+    if (auto *const le = lineEditForWidget()) {
+        disableInfoButton();
+        auto *const action = le->addAction(QIcon(pixmap), QLineEdit::TrailingPosition);
+        action->setToolTip(infoText);
+        QObject::connect(action, &QAction::triggered, std::bind(&ButtonOverlay::showInfo, this));
+        m_infoButtonOrAction = action;
+        return;
+    }
+    auto *infoButton = static_cast<IconButton *>(m_infoButtonOrAction);
+    if (!infoButton) {
+        m_infoButtonOrAction = infoButton = new IconButton;
+        infoButton->setGeometry(0, 0, 16, 16);
+        QObject::connect(infoButton, &IconButton::clicked, std::bind(&ButtonOverlay::showInfo, this));
         if (m_clearButton) {
-            m_buttonLayout->insertWidget(m_buttonLayout->count() - 2, m_infoButton);
+            m_buttonLayout->insertWidget(m_buttonLayout->count() - 2, infoButton);
         } else {
-            m_buttonLayout->addWidget(m_infoButton);
+            m_buttonLayout->addWidget(infoButton);
         }
     }
-    m_infoButton->setPixmap(pixmap);
-    m_infoButton->setToolTip(infoText);
+    infoButton->setPixmap(pixmap);
+    infoButton->setToolTip(infoText);
 }
 
 /*!
@@ -100,10 +184,17 @@ void ButtonOverlay::enableInfoButton(const QPixmap &pixmap, const QString &infoT
  */
 void ButtonOverlay::disableInfoButton()
 {
-    if (m_infoButton) {
-        m_buttonLayout->removeWidget(m_infoButton);
-        delete m_infoButton;
-        m_infoButton = nullptr;
+    if (auto *const le = lineEditForWidget()) {
+        if (auto *const infoAction = static_cast<QAction *>(m_infoButtonOrAction)) {
+            le->removeAction(infoAction);
+            m_infoButtonOrAction = nullptr;
+        }
+        return;
+    }
+    if (auto *infoButton = static_cast<IconButton *>(m_infoButtonOrAction)) {
+        m_buttonLayout->removeWidget(infoButton);
+        delete infoButton;
+        m_infoButtonOrAction = nullptr;
     }
 }
 
@@ -111,9 +202,13 @@ void ButtonOverlay::disableInfoButton()
  * \brief Adds a custom \a button.
  *
  * The button overlay takes ownership over the specified \a button.
+ *
+ * \remarks This function enforces the "custom approach" mentioned in the class documentation
+ *          and should therefore be avoided.
  */
 void ButtonOverlay::addCustomButton(QWidget *button)
 {
+    fallbackToUsingCustomLayout();
     m_buttonLayout->addWidget(button);
 }
 
@@ -121,9 +216,13 @@ void ButtonOverlay::addCustomButton(QWidget *button)
  * \brief Inserts a custom \a button at the specified \a index.
  *
  * The button overlay takes ownership over the specified \a button.
+ *
+ * \remarks This function enforces the "custom approach" mentioned in the class documentation
+ *          and should therefore be avoided.
  */
 void ButtonOverlay::insertCustomButton(int index, QWidget *button)
 {
+    fallbackToUsingCustomLayout();
     m_buttonLayout->insertWidget(index, button);
 }
 
@@ -131,16 +230,20 @@ void ButtonOverlay::insertCustomButton(int index, QWidget *button)
  * \brief Removes the specified custom \a button.
  *
  * The ownership of widget remains the same as when it was added.
+ *
+ * \remarks This function enforces the "custom approach" mentioned in the class documentation
+ *          and should therefore be avoided.
  */
 void ButtonOverlay::removeCustomButton(QWidget *button)
 {
+    fallbackToUsingCustomLayout();
     m_buttonLayout->removeWidget(button);
 }
 
 /*!
  * \brief Updates the visibility of the clear button.
  *
- * This method is meant to be called when subclassing.
+ * This function is meant to be called when subclassing.
  */
 void ButtonOverlay::updateClearButtonVisibility(bool visible)
 {
@@ -152,10 +255,73 @@ void ButtonOverlay::updateClearButtonVisibility(bool visible)
 /*!
  * \brief Clears the related widget.
  *
- * This method is meant to be implemented when subclassing.
+ * This function is meant to be implemented when subclassing to support the clear button.
  */
 void ButtonOverlay::handleClearButtonClicked()
 {
+}
+
+/*!
+ * \brief Applies additional handling when the button layout has been created.
+ *
+ * This function is meant to be implemented when subclassing when additional handling is
+ * required.
+ */
+void ButtonOverlay::handleCustomLayoutCreated()
+{
+}
+
+/*!
+ * \brief Switches to the "custom approach".
+ * \remarks This function is internally used when any legacy function is called
+ *          or when the QLineEdit for the specified widget can not be determined.
+ */
+void ButtonOverlay::fallbackToUsingCustomLayout()
+{
+    // skip if custom layout is already used
+    if (isUsingCustomLayout()) {
+        return;
+    }
+
+    // disable QLineEdit's clear button and actions; save configuration
+    const auto clearButtonEnabled = isClearButtonEnabled();
+    if (clearButtonEnabled) {
+        setClearButtonEnabled(false);
+    }
+    auto *const iconAction = static_cast<QAction *>(m_infoButtonOrAction);
+    QPixmap infoPixmap;
+    QString infoText;
+    if (iconAction) {
+        const auto icon = iconAction->icon();
+        const auto sizes = icon.availableSizes();
+        infoPixmap = icon.pixmap(sizes.empty() ? QSize(16, 16) : sizes.front());
+        infoText = iconAction->toolTip();
+        disableInfoButton();
+    }
+
+    // initialize custom layout
+    m_buttonLayout = new QHBoxLayout(m_buttonWidget);
+    m_buttonWidget = new QWidget(m_widget);
+    m_buttonLayout->setAlignment(Qt::AlignCenter | Qt::AlignRight);
+    m_widget->setLayout(m_buttonLayout);
+    handleCustomLayoutCreated();
+
+    // restore old configuration
+    if (clearButtonEnabled) {
+        setClearButtonEnabled(true);
+    }
+    if (iconAction) {
+        enableInfoButton(infoPixmap, infoText);
+    }
+}
+
+/*!
+ * \brief Returns the QLineEdit used to implement the button overlay.
+ * \remarks This is always nullptr in case the "custom approach" is used.
+ */
+QLineEdit *ButtonOverlay::lineEditForWidget() const
+{
+    return isUsingCustomLayout() ? nullptr : static_cast<QLineEdit *>(m_buttonWidget);
 }
 
 /*!
@@ -172,17 +338,27 @@ bool ButtonOverlay::isCleared() const
  * \brief Shows the info text using a tool tip.
  *
  * This method is called when the info button is clicked.
+ *
+ * \todo Don't use QCursor::pos() here because it will not work under Wayland.
  */
 void ButtonOverlay::showInfo()
 {
-    if (m_infoButton) {
-        QToolTip::showText(QCursor::pos(), m_infoButton->toolTip(), m_infoButton);
+    if (!isUsingCustomLayout()) {
+        if (auto *const infoAction = static_cast<QAction *>(m_infoButtonOrAction)) {
+            QToolTip::showText(QCursor::pos(), infoAction->toolTip(), m_widget);
+        }
+        return;
+    }
+    if (auto *const infoButton = static_cast<IconButton *>(m_infoButtonOrAction)) {
+        QToolTip::showText(QCursor::pos(), infoButton->toolTip(), infoButton);
     }
 }
 
 /*!
  * \brief Sets the contents margins of the button layout so the overlay buttons will only be shown over the \a editFieldRect and
  *        not interfere with e.g. spin box buttons.
+ * \remarks This function enforces the "custom approach" mentioned in the class documentation
+ *          and should therefore be avoided. Of course it makes sense to call it within handleCustomLayoutCreated().
  */
 void ButtonOverlay::setContentsMarginsFromEditFieldRectAndFrameWidth(const QRect &editFieldRect, int frameWidth, int padding)
 {

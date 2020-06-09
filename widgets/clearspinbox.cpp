@@ -18,16 +18,10 @@ namespace QtUtilities {
  */
 ClearSpinBox::ClearSpinBox(QWidget *parent)
     : QSpinBox(parent)
-    , ButtonOverlay(this)
+    , ButtonOverlay(this, lineEdit())
     , m_minimumHidden(false)
 {
-    const QStyle *const s = style();
-    QStyleOptionSpinBox opt;
-    opt.initFrom(this);
-    setContentsMarginsFromEditFieldRectAndFrameWidth(
-        s->subControlRect(QStyle::CC_SpinBox, &opt, QStyle::SC_SpinBoxEditField, this), s->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &opt, this));
-    setClearButtonEnabled(true);
-    connect(this, static_cast<void (ClearSpinBox::*)(int)>(&ClearSpinBox::valueChanged), this, &ClearSpinBox::handleValueChanged);
+    ButtonOverlay::setClearButtonEnabled(true);
 }
 
 /*!
@@ -48,6 +42,16 @@ void ClearSpinBox::handleValueChanged(int value)
 void ClearSpinBox::handleClearButtonClicked()
 {
     setValue(minimum());
+}
+
+void ClearSpinBox::handleCustomLayoutCreated()
+{
+    const QStyle *const s = style();
+    QStyleOptionSpinBox opt;
+    opt.initFrom(this);
+    setContentsMarginsFromEditFieldRectAndFrameWidth(
+        s->subControlRect(QStyle::CC_SpinBox, &opt, QStyle::SC_SpinBoxEditField, this), s->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &opt, this));
+    connect(this, static_cast<void (ClearSpinBox::*)(int)>(&ClearSpinBox::valueChanged), this, &ClearSpinBox::handleValueChanged);
 }
 
 bool ClearSpinBox::isCleared() const

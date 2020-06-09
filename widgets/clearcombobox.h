@@ -19,6 +19,7 @@ public:
 private Q_SLOTS:
     void handleTextChanged(const QString &text);
     void handleClearButtonClicked() override;
+    void handleCustomLayoutCreated() override;
 };
 
 } // namespace QtUtilities

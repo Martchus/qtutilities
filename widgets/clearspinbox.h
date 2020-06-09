@@ -34,6 +34,7 @@ protected:
 private Q_SLOTS:
     void handleValueChanged(int value);
     void handleClearButtonClicked() override;
+    void handleCustomLayoutCreated() override;
 
 private:
     bool m_minimumHidden;

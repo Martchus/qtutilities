@@ -19,6 +19,7 @@ public:
 private Q_SLOTS:
     void handleTextChanged();
     void handleClearButtonClicked() override;
+    void handleCustomLayoutCreated() override;
     void handleScroll();
 };
 
