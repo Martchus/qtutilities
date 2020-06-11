@@ -136,9 +136,9 @@ void cornerWidget(QWidget *widget, const QPoint *position)
 {
     const QPoint cursorPos(position ? *position : QCursor::pos());
     const QRect availableGeometry(availableScreenGeometryAtPoint(cursorPos));
-    Qt::Alignment alignment = nullptr;
-    alignment |= (cursorPos.x() - availableGeometry.left() < availableGeometry.right() - cursorPos.x() ? Qt::AlignLeft : Qt::AlignRight);
-    alignment |= (cursorPos.y() - availableGeometry.top() < availableGeometry.bottom() - cursorPos.y() ? Qt::AlignTop : Qt::AlignBottom);
+    const Qt::Alignment alignment
+        = (cursorPos.x() - availableGeometry.left() < availableGeometry.right() - cursorPos.x() ? Qt::AlignLeft : Qt::AlignRight)
+        | (cursorPos.y() - availableGeometry.top() < availableGeometry.bottom() - cursorPos.y() ? Qt::AlignTop : Qt::AlignBottom);
     widget->setGeometry(QStyle::alignedRect(Qt::LeftToRight, alignment, widget->size(), availableGeometry));
 }
 
