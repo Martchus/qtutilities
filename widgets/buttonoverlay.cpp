@@ -168,7 +168,6 @@ void ButtonOverlay::enableInfoButton(const QPixmap &pixmap, const QString &infoT
     if (!infoButton) {
         m_infoButtonOrAction = infoButton = new IconButton;
         infoButton->setGeometry(QRect(QPoint(), IconButton::defaultPixmapSize));
-        QObject::connect(infoButton, &IconButton::clicked, std::bind(&ButtonOverlay::showInfo, this));
         if (m_clearButton) {
             m_buttonLayout->insertWidget(m_buttonLayout->count() - 2, infoButton);
         } else {
@@ -382,18 +381,23 @@ bool ButtonOverlay::isCleared() const
  *
  * This method is called when the info button is clicked.
  *
- * \todo Don't use QCursor::pos() here because it will not work under Wayland.
+ * \remarks
+ * This function avoids using QCursor::pos() because it is problematic to use under Wayland. For the action case it seems not
+ * possible to avoid it because the position of QLineEditIconButton used by QLineEdit is not exposed.
  */
 void ButtonOverlay::showInfo()
 {
-    if (!isUsingCustomLayout()) {
+    if (auto const *const le = lineEditForWidget()) {
         if (auto *const infoAction = static_cast<QAction *>(m_infoButtonOrAction)) {
-            QToolTip::showText(QCursor::pos(), infoAction->toolTip(), m_widget);
+            const auto pos = QCursor::pos();
+            if (!pos.isNull()) {
+                QToolTip::showText(pos, infoAction->toolTip(), m_widget);
+            }
         }
         return;
     }
     if (auto *const infoButton = static_cast<IconButton *>(m_infoButtonOrAction)) {
-        QToolTip::showText(QCursor::pos(), infoButton->toolTip(), infoButton);
+        QToolTip::showText(infoButton->mapToGlobal(infoButton->rect().center()), infoButton->toolTip(), infoButton);
     }
 }
 
