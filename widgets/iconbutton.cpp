@@ -69,7 +69,7 @@ void IconButton::assignDataFromAction(const QAction *action)
     auto const icon = action->icon();
     const auto sizes = icon.availableSizes();
     const auto text = action->text();
-    setPixmap(icon.pixmap(sizes.empty() ? QSize(16, 16) : sizes.front()));
+    setPixmap(icon.pixmap(sizes.empty() ? defaultPixmapSize : sizes.front()));
     setToolTip(text.isEmpty() ? action->toolTip() : text);
 }
 

@@ -6,6 +6,7 @@
 #include <QAbstractButton>
 #include <QAction>
 #include <QPixmap>
+#include <QSize>
 
 #include <cstdint>
 
@@ -23,6 +24,8 @@ public:
     const QPixmap &pixmap() const;
     void setPixmap(const QPixmap &pixmap);
     QSize sizeHint() const override;
+
+    static constexpr auto defaultPixmapSize = QSize(16, 16);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

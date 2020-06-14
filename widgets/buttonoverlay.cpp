@@ -138,8 +138,8 @@ void ButtonOverlay::setClearButtonEnabled(bool enabled)
         // enable clear button
         m_clearButton = new IconButton;
         m_clearButton->setHidden(isCleared());
-        m_clearButton->setPixmap(QIcon::fromTheme(QStringLiteral("edit-clear")).pixmap(16));
-        m_clearButton->setGeometry(0, 0, 16, 16);
+        m_clearButton->setPixmap(QIcon::fromTheme(QStringLiteral("edit-clear")).pixmap(IconButton::defaultPixmapSize));
+        m_clearButton->setGeometry(QRect(QPoint(), IconButton::defaultPixmapSize));
         m_clearButton->setToolTip(QObject::tr("Clear"));
         QObject::connect(m_clearButton, &IconButton::clicked, std::bind(&ButtonOverlay::handleClearButtonClicked, this));
         m_buttonLayout->addWidget(m_clearButton);
@@ -167,7 +167,7 @@ void ButtonOverlay::enableInfoButton(const QPixmap &pixmap, const QString &infoT
     auto *infoButton = static_cast<IconButton *>(m_infoButtonOrAction);
     if (!infoButton) {
         m_infoButtonOrAction = infoButton = new IconButton;
-        infoButton->setGeometry(0, 0, 16, 16);
+        infoButton->setGeometry(QRect(QPoint(), IconButton::defaultPixmapSize));
         QObject::connect(infoButton, &IconButton::clicked, std::bind(&ButtonOverlay::showInfo, this));
         if (m_clearButton) {
             m_buttonLayout->insertWidget(m_buttonLayout->count() - 2, infoButton);
@@ -332,7 +332,7 @@ void ButtonOverlay::fallbackToUsingCustomLayout()
         if ((iconAction = static_cast<QAction *>(m_infoButtonOrAction))) {
             const auto icon = iconAction->icon();
             const auto sizes = icon.availableSizes();
-            infoPixmap = icon.pixmap(sizes.empty() ? QSize(16, 16) : sizes.front());
+            infoPixmap = icon.pixmap(sizes.empty() ? IconButton::defaultPixmapSize : sizes.front());
             infoText = iconAction->toolTip();
             disableInfoButton();
         }
