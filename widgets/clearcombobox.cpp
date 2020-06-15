@@ -27,6 +27,7 @@ ClearComboBox::ClearComboBox(QWidget *parent)
     : QComboBox(parent)
     , ButtonOverlay(this, getComboBoxLineEdit(this))
 {
+    ButtonOverlay::setClearButtonEnabled(true);
 }
 
 /*!

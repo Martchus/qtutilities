@@ -324,7 +324,7 @@ void ButtonOverlay::fallbackToUsingCustomLayout()
     QPixmap infoPixmap;
     QString infoText;
     QList<QAction *> actions;
-    if (auto const *le = lineEditForWidget()) {
+    if (auto *const le = lineEditForWidget()) {
         if ((clearButtonEnabled = le->isClearButtonEnabled())) {
             setClearButtonEnabled(false);
         }
@@ -336,6 +336,9 @@ void ButtonOverlay::fallbackToUsingCustomLayout()
             disableInfoButton();
         }
         actions = le->actions();
+        for (auto *const action : actions) {
+            le->removeAction(action);
+        }
     }
 
     // initialize custom layout
