@@ -72,10 +72,8 @@ void ButtonOverlayTests::testClearLineEdit()
     const auto *const iconButton = qobject_cast<const IconButton *>(clearWidget.buttonLayout()->itemAt(2)->widget());
     QVERIFY2(iconButton, "icon button present");
     QCOMPARE(iconButton->toolTip(), QStringLiteral("Copy"));
-    QVERIFY2(!iconButton->pixmap().isNull(), "pixmap assigned");
     customAction.setText(QStringLiteral("Paste"));
     QCOMPARE(iconButton->toolTip(), QStringLiteral("Paste"));
-    QVERIFY2(!iconButton->pixmap().isNull(), "pixmap still assigned");
 
     // remove buttons again
     static_cast<ButtonOverlay &>(clearWidget).setClearButtonEnabled(false);
