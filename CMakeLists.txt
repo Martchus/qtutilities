@@ -170,7 +170,7 @@ endif ()
 set(CONFIGURATION_PACKAGE_SUFFIX
     ""
     CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
-find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.0.0 REQUIRED)
+find_package(c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.5.0 REQUIRED)
 use_cpp_utilities()
 
 # include modules to apply configuration
@@ -186,3 +186,9 @@ include(WindowsResources)
 include(LibraryTarget)
 include(Doxygen)
 include(ConfigHeader)
+
+# configure test target
+include(TestUtilities)
+set(QT_TEST_LIBRARIES ${CPP_UTILITIES_LIB} ${META_TARGET_NAME})
+use_qt_module(LIBRARIES_VARIABLE "QT_TEST_LIBRARIES" PREFIX "${QT_PACKAGE_PREFIX}" MODULE "Test")
+configure_test_target(TEST_NAME "buttonoverlay_tests" SRC_FILES "tests/buttonoverlay.cpp" LIBRARIES "${QT_TEST_LIBRARIES}")
