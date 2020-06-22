@@ -9,6 +9,7 @@
 #include <QMutexLocker>
 
 #include <map>
+#include <limits>
 
 using namespace std;
 
@@ -37,9 +38,13 @@ namespace QtUtilities {
  */
 
 /// \cond
+using IDType = uint;
 static QMutex pendingNotificationsMutex;
-static std::map<uint, DBusNotification *> pendingNotifications;
+static std::map<IDType, DBusNotification *> pendingNotifications;
 OrgFreedesktopNotificationsInterface *DBusNotification::s_dbusInterface = nullptr;
+constexpr auto initialId = std::numeric_limits<IDType>::min();
+constexpr auto pendingId = std::numeric_limits<IDType>::max();
+constexpr auto pendingId2 = pendingId - 1;
 /// \endcond
 
 /*!
@@ -154,7 +159,7 @@ namespace QtUtilities {
  */
 DBusNotification::DBusNotification(const QString &title, NotificationIcon icon, int timeout, QObject *parent)
     : QObject(parent)
-    , m_id(0)
+    , m_id(initialId)
     , m_watcher(nullptr)
     , m_title(title)
     , m_timeout(timeout)
@@ -168,7 +173,7 @@ DBusNotification::DBusNotification(const QString &title, NotificationIcon icon, 
  */
 DBusNotification::DBusNotification(const QString &title, const QString &icon, int timeout, QObject *parent)
     : QObject(parent)
-    , m_id(0)
+    , m_id(initialId)
     , m_watcher(nullptr)
     , m_title(title)
     , m_icon(icon)
@@ -255,6 +260,19 @@ void DBusNotification::setImage(const QImage &image)
 }
 
 /*!
+ * \brief
+ * Returns whether the notification is about to be shown after calling show() or update() but has not been shown yet.
+ * \remarks
+ * This is the case when show() or update() has been called but the notification daemon has not responded yet. When
+ * the notification daemon has responded or an error occurred isPending() will return false again. On success, isVisible()
+ * should return true instead.
+ */
+bool DBusNotification::isPending() const
+{
+    return m_id == pendingId || m_id == pendingId2;
+}
+
+/*!
  * \brief Makes the notification object delete itself when the notification has
  * been closed or an error occurred.
  */
@@ -266,13 +284,19 @@ void DBusNotification::deleteOnCloseOrError()
 
 /*!
  * \brief Shows the notification.
- * \remarks If called when a previous notification is still shown, the previous
- * notification is updated.
- * \returns Returns false is the D-Bus daemon isn't reachable and true
- * otherwise.
+ * \remarks
+ * - If called when a previous notification is still shown, the previous notification is updated.
+ * - If called when a previous notification is about to be shown (isShowing() returns true) no second notification
+ *   is spawned immediately. Instead, the previously started notification will be updated once it has been shown to
+ *   apply changes.
+ * \returns Returns false is the D-Bus daemon isn't reachable and true otherwise.
  */
 bool DBusNotification::show()
 {
+    if (isPending()) {
+        m_id = pendingId2;
+        return true;
+    }
     if (!s_dbusInterface->isValid()) {
         emit error();
         return false;
@@ -284,6 +308,7 @@ bool DBusNotification::show()
                                           m_id, m_icon, m_title, m_msg, m_actions, m_hints, m_timeout),
             this);
     connect(m_watcher, &QDBusPendingCallWatcher::finished, this, &DBusNotification::handleNotifyResult);
+    m_id = pendingId;
     return true;
 }
 
@@ -314,7 +339,7 @@ bool DBusNotification::show(const QString &message)
  */
 bool DBusNotification::update(const QString &line)
 {
-    if (!isVisible() || m_msg.isEmpty()) {
+    if ((!isPending() && !isVisible()) || m_msg.isEmpty()) {
         m_msg = line;
     } else {
         if (!m_msg.startsWith(QStringLiteral("•"))) {
@@ -376,27 +401,34 @@ void DBusNotification::handleNotifyResult(QDBusPendingCallWatcher *watcher)
 
     QDBusPendingReply<uint> returnValue = *watcher;
     if (returnValue.isError()) {
+        m_id = initialId;
         emit error();
         return;
     }
 
+    const auto needsUpdate = m_id == pendingId2;
     {
         QMutexLocker lock(&pendingNotificationsMutex);
         pendingNotifications[m_id = returnValue.argumentAt<0>()] = this;
     }
     emit shown();
+
+    // update the notification again if show() was called before we've got the ID
+    if (needsUpdate) {
+        show();
+    }
 }
 
 /*!
  * \brief Handles the NotificationClosed D-Bus signal.
  */
-void DBusNotification::handleNotificationClosed(uint id, uint reason)
+void DBusNotification::handleNotificationClosed(IDType id, uint reason)
 {
     QMutexLocker lock(&pendingNotificationsMutex);
     auto i = pendingNotifications.find(id);
     if (i != pendingNotifications.end()) {
         DBusNotification *notification = i->second;
-        notification->m_id = 0;
+        notification->m_id = initialId;
         emit notification->closed(reason >= 1 && reason <= 3 ? static_cast<NotificationCloseReason>(reason) : NotificationCloseReason::Undefined);
         pendingNotifications.erase(i);
     }
@@ -405,7 +437,7 @@ void DBusNotification::handleNotificationClosed(uint id, uint reason)
 /*!
  * \brief Handles the ActionInvoked D-Bus signal.
  */
-void DBusNotification::handleActionInvoked(uint id, const QString &action)
+void DBusNotification::handleActionInvoked(IDType id, const QString &action)
 {
     QMutexLocker lock(&pendingNotificationsMutex);
     auto i = pendingNotifications.find(id);
@@ -416,7 +448,7 @@ void DBusNotification::handleActionInvoked(uint id, const QString &action)
         // NotificationClose signal
         // -> just consider the notification closed
         emit notification->closed(NotificationCloseReason::ActionInvoked);
-        notification->m_id = 0;
+        notification->m_id = initialId;
         pendingNotifications.erase(i);
         // however, lxqt-notificationd does not close the notification
         // -> close manually for consistent behaviour

@@ -28,8 +28,10 @@ class QT_UTILITIES_EXPORT DBusNotification : public QObject {
     Q_PROPERTY(int timeout READ timeout WRITE setTimeout)
     Q_PROPERTY(QStringList actions READ actions WRITE setActions)
     Q_PROPERTY(bool visible READ isVisible)
+    Q_PROPERTY(bool pending READ isPending)
 
 public:
+    using IDType = uint;
     class QT_UTILITIES_EXPORT Capabilities : public QSet<QString> {
     public:
         explicit Capabilities();
@@ -84,6 +86,7 @@ public:
     QVariant hint(const QString &name) const;
     QVariant hint(const QString &name, const QString &fallbackNames...) const;
     bool isVisible() const;
+    bool isPending() const;
     void deleteOnCloseOrError();
     static bool queryCapabilities(const std::function<void(Capabilities &&capabilities)> &callback);
 
@@ -105,13 +108,13 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void handleNotifyResult(QDBusPendingCallWatcher *);
-    static void handleNotificationClosed(uint id, uint reason);
-    static void handleActionInvoked(uint id, const QString &action);
+    static void handleNotificationClosed(IDType id, uint reason);
+    static void handleActionInvoked(IDType id, const QString &action);
 
 private:
     static void initInterface();
 
-    uint m_id;
+    IDType m_id;
     QDBusPendingCallWatcher *m_watcher;
     QString m_applicationName;
     QString m_title;
