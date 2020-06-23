@@ -78,7 +78,7 @@ set(WIDGETS_UI_FILES
     settingsdialog/qtlanguageoptionpage.ui
     settingsdialog/qtenvoptionpage.ui
     paletteeditor/paletteeditor.ui)
-
+set(QT_TESTS buttonoverlay dialogs)
 set(CMAKE_MODULE_FILES
     cmake/modules/AndroidApk.cmake cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake
     cmake/modules/QtLinkage.cmake cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
@@ -160,6 +160,7 @@ if (DBUS_NOTIFICATIONS)
     list(APPEND SRC_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp)
     list(APPEND DBUS_FILES dbus/org.freedesktop.Notifications.xml)
     list(APPEND META_PUBLIC_COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SUPPORT_DBUS_NOTIFICATIONS)
+    list(APPEND QT_TESTS dbusnotification)
     message(STATUS "D-Bus notifications enabled")
 else ()
     list(APPEND EXCLUDED_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.h ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp)
@@ -191,6 +192,6 @@ include(ConfigHeader)
 include(TestUtilities)
 set(QT_TEST_LIBRARIES ${CPP_UTILITIES_LIB} ${META_TARGET_NAME})
 use_qt_module(LIBRARIES_VARIABLE "QT_TEST_LIBRARIES" PREFIX "${QT_PACKAGE_PREFIX}" MODULE "Test")
-foreach (TEST buttonoverlay dialogs)
+foreach (TEST ${QT_TESTS})
     configure_test_target(TEST_NAME "${TEST}_tests" SRC_FILES "tests/${TEST}.cpp" LIBRARIES "${QT_TEST_LIBRARIES}")
 endforeach ()
