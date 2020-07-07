@@ -4,7 +4,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../widgets/buttonoverlay.cpp" line="75"/>
+        <location filename="../widgets/buttonoverlay.cpp" line="143"/>
         <source>Clear</source>
         <translation>Text löschen</translation>
     </message>
@@ -28,37 +28,37 @@
 <context>
     <name>QtUtilities::AboutDialog</name>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="32"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="24"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="135"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="127"/>
         <source>application name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="145"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="137"/>
         <source>version</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="171"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="163"/>
         <source>description</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="193"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="185"/>
         <source>website link</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="234"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="226"/>
         <source>creators</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.ui" line="261"/>
+        <location filename="../aboutdialog/aboutdialog.ui" line="253"/>
         <source>Using Qt</source>
         <translation>Verwendet Qt</translation>
     </message>
