@@ -8,8 +8,8 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include <map>
 #include <limits>
+#include <map>
 
 using namespace std;
 
