@@ -298,4 +298,18 @@ bool hasCoreApp()
 }
 } // namespace ApplicationInstances
 
+/*!
+ * \brief Sets Qt application attributes which are commonly used within my Qt applications.
+ * \remarks
+ * - So far this enables High-DPI support.
+ * - The exact attributes are unspecified and might change to whatever makes sense in the future.
+ */
+void setupCommonQtApplicationAttributes()
+{
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+}
+
+// namespace ApplicationInstances
+
 } // namespace QtUtilities

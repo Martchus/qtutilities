@@ -12,14 +12,16 @@ QT_FORWARD_DECLARE_CLASS(QStringList)
 QT_FORWARD_DECLARE_CLASS(QSettings)
 
 /*!
- * \brief Sets the application meta data in the QCoreApplication singleton.
+ * \brief Sets the application meta data in the QCoreApplication singleton and attributes commonly used
+ *        within my applications.
+ * \sa ::QtUtilities::setupCommonQtApplicationAttributes()
  */
 #define SET_QT_APPLICATION_INFO                                                                                                                      \
     QCoreApplication::setOrganizationName(QStringLiteral(APP_AUTHOR));                                                                               \
     QCoreApplication::setOrganizationDomain(QStringLiteral(APP_DOMAIN));                                                                             \
     QCoreApplication::setApplicationName(QStringLiteral(APP_NAME));                                                                                  \
     QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION));                                                                            \
-    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true)
+    ::QtUtilities::setupCommonQtApplicationAttributes()
 
 /*!
  * \brief Loads translations for Qt, other dependencies and the application.
@@ -58,6 +60,8 @@ QT_UTILITIES_EXPORT bool hasGuiApp();
 #endif
 QT_UTILITIES_EXPORT bool hasCoreApp();
 } // namespace ApplicationInstances
+
+QT_UTILITIES_EXPORT void setupCommonQtApplicationAttributes();
 
 } // namespace QtUtilities
 
