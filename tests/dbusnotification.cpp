@@ -57,7 +57,7 @@ void DBusNotificationTests::smokeTest()
  */
 void DBusNotificationTests::semiAutomaticTest()
 {
-    const auto envValue = qEnvironmentVariable(PROJECT_VARNAME_UPPER "_ENABLE_SEMI_AUTOMATIC_NOTIFICATION_TESTS");
+    const auto envValue = qgetenv(PROJECT_VARNAME_UPPER "_ENABLE_SEMI_AUTOMATIC_NOTIFICATION_TESTS");
     auto envValueIsInt = false;
     if (envValue.isEmpty() || (envValue.toInt(&envValueIsInt) == 0 && envValueIsInt)) {
         QSKIP("Set the environment variable " PROJECT_VARNAME_UPPER "_ENABLE_SEMI_AUTOMATIC_NOTIFICATION_TESTS to run "
