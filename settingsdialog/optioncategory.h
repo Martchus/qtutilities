@@ -7,6 +7,10 @@
 #include <QList>
 #include <QObject>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+Q_MOC_INCLUDE("settingsdialog/optionpage.h")
+#endif
+
 namespace QtUtilities {
 
 class OptionPage;

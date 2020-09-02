@@ -62,7 +62,7 @@ macro (use_qt_module)
             endif ()
             set("${ARGS_LIBRARIES_VARIABLE}" "${${ARGS_LIBRARIES_VARIABLE}};${TARGET}")
             set("PKG_CONFIG_${ARGS_PREFIX}_${ARGS_MODULE}" "${ARGS_PREFIX}${ARGS_MODULE}")
-            message(STATUS "Linking ${META_TARGET_NAME} against Qt 5 module ${TARGET}.")
+            message(STATUS "Linking ${META_TARGET_NAME} against Qt module ${TARGET}.")
 
             # hack for "StaticQt5": re-assign INTERFACE_LINK_LIBRARIES_RELEASE to INTERFACE_LINK_LIBRARIES
             get_target_property("${ARGS_MODULE}_INTERFACE_LINK_LIBRARIES_RELEASE" "${TARGET}"
@@ -86,7 +86,7 @@ macro (use_qt_module)
             continue()
         endif ()
         set("${ARGS_LIBRARIES_VARIABLE}" "${${ARGS_LIBRARIES_VARIABLE}};${ARGS_PREFIX}::Q${PLUGIN}Plugin")
-        message(STATUS "Linking ${META_TARGET_NAME} against Qt 5 plugin ${ARGS_PREFIX}::Q${PLUGIN}Plugin.")
+        message(STATUS "Linking ${META_TARGET_NAME} against Qt plugin ${ARGS_PREFIX}::Q${PLUGIN}Plugin.")
     endforeach ()
 
     # unset variables (can not simply use a function because Qt's variables need to be exported)
@@ -95,11 +95,24 @@ macro (use_qt_module)
     endforeach ()
 endmacro ()
 
-# define function to make qmake variable available within CMake
+# define function to make Qt variable available; queries qmake or uses variables provided by Qt 6
 function (query_qmake_variable QMAKE_VARIABLE)
     # prevent queries for variables already known
     if (NOT "${${QMAKE_VARIABLE}}" STREQUAL "")
         return()
+    endif ()
+
+    # check configuration variables provided by Qt 6
+    if (QMAKE_VARIABLE MATCHES "QT_(.*)")
+        set(VARIABLE_NAME "${CMAKE_MATCH_1}")
+        if (QT6_${VARIABLE_NAME})
+            set(VARIABLE_NAME QT6_${VARIABLE_NAME})
+        endif ()
+        if (NOT "${${VARIABLE_NAME}}" STREQUAL "")
+            set ("${QMAKE_VARIABLE}" "${${VARIABLE_NAME}}" PARENT_SCOPE)
+            message(STATUS "Qt variable ${QMAKE_VARIABLE} taken from ${VARIABLE_NAME}: ${${VARIABLE_NAME}}")
+            return()
+        endif ()
     endif ()
 
     # execute qmake
@@ -119,8 +132,6 @@ function (query_qmake_variable QMAKE_VARIABLE)
     string(REGEX REPLACE "\n$" "" "${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}")
 
     # export variable to parent scope
-    set("${QMAKE_VARIABLE}"
-        "${${QMAKE_VARIABLE}}"
-        PARENT_SCOPE)
-    message(STATUS "qmake variable ${QMAKE_VARIABLE} is ${${QMAKE_VARIABLE}}")
+    set("${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}" PARENT_SCOPE)
+    message(STATUS "Qt variable ${QMAKE_VARIABLE} queried from qmake: ${${QMAKE_VARIABLE}}")
 endfunction ()

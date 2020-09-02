@@ -12,7 +12,9 @@
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #include <QApplication>
 #include <QCursor>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
 #include <QDesktopWidget>
+#endif
 #include <QScreen>
 #include <QStyle>
 #include <QWidget>

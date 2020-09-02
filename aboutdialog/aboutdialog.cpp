@@ -6,7 +6,6 @@
 #include <c++utilities/application/argumentparser.h>
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QGraphicsPixmapItem>
 #include <QMessageBox>
 #include <QStringBuilder>

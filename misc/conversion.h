@@ -1,5 +1,5 @@
-#ifndef CONVERSION_H
-#define CONVERSION_H
+#ifndef QT_UTILITIES_CONVERSION_H
+#define QT_UTILITIES_CONVERSION_H
 
 #include "../global.h"
 
@@ -38,4 +38,4 @@ inline QString fromNativeFileName(const std::string &nativeFileName)
 
 } // namespace QtUtilities
 
-#endif // CONVERSION_H
+#endif // QT_UTILITIES_CONVERSION_H

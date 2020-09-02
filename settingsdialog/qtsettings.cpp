@@ -123,9 +123,9 @@ void QtSettings::restore(QSettings &settings)
 void QtSettings::save(QSettings &settings) const
 {
     settings.beginGroup(QStringLiteral("qt"));
-    settings.setValue(QStringLiteral("font"), m_d->font.toString());
+    settings.setValue(QStringLiteral("font"), QVariant(m_d->font.toString()));
     settings.setValue(QStringLiteral("customfont"), m_d->customFont);
-    settings.setValue(QStringLiteral("palette"), m_d->palette);
+    settings.setValue(QStringLiteral("palette"), QVariant(m_d->palette));
     settings.setValue(QStringLiteral("custompalette"), m_d->customPalette);
     settings.setValue(QStringLiteral("widgetstyle"), m_d->widgetStyle);
     settings.setValue(QStringLiteral("customwidgetstyle"), m_d->customWidgetStyle);
@@ -137,7 +137,7 @@ void QtSettings::save(QSettings &settings) const
     settings.setValue(QStringLiteral("customlocale"), m_d->customLocale);
     settings.setValue(QStringLiteral("plugindir"), m_d->additionalPluginDirectory);
     settings.setValue(QStringLiteral("iconthemepath"), m_d->additionalIconThemeSearchPath);
-    settings.setValue(QStringLiteral("trpath"), TranslationFiles::additionalTranslationFilePath());
+    settings.setValue(QStringLiteral("trpath"), QVariant(TranslationFiles::additionalTranslationFilePath()));
     settings.endGroup();
 }
 
@@ -188,7 +188,7 @@ void QtSettings::apply()
     }
 
     // apply locale
-    QLocale::setDefault(m_d->customLocale ? m_d->localeName : m_d->defaultLocale);
+    QLocale::setDefault(m_d->customLocale ? QLocale(m_d->localeName) : m_d->defaultLocale);
 
     // apply environment
     if (m_d->additionalPluginDirectory.isEmpty()) {

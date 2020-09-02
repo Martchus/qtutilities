@@ -52,7 +52,13 @@ QPalette PaletteEditor::palette() const
 void PaletteEditor::setPalette(const QPalette &palette)
 {
     m_editPalette = palette;
-    const uint mask = palette.resolve();
+    const auto mask = palette.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+                      resolveMask()
+#else
+                      resolve()
+#endif
+        ;
     for (int i = 0; i < static_cast<int>(QPalette::NColorRoles); ++i) {
         if (mask & (1 << i)) {
             continue;
@@ -64,7 +70,14 @@ void PaletteEditor::setPalette(const QPalette &palette)
         m_editPalette.setBrush(
             QPalette::Disabled, static_cast<QPalette::ColorRole>(i), m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(i)));
     }
-    m_editPalette.resolve(mask);
+    m_editPalette.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        setResolveMask(mask);
+    m_editPalette = m_editPalette.resolve(m_editPalette)
+#else
+        resolve(mask)
+#endif
+        ;
     updatePreviewPalette();
     updateStyledButton();
     m_paletteUpdated = true;
@@ -170,7 +183,13 @@ QPalette PaletteEditor::getPalette(QWidget *parent, const QPalette &init, const 
 {
     PaletteEditor dlg(parent);
     auto parentPalette(parentPal);
-    const uint mask = init.resolve();
+    const auto mask = init.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+                      resolveMask()
+#else
+                      resolve()
+#endif
+        ;
     for (int i = 0; i < static_cast<int>(QPalette::NColorRoles); ++i) {
         if (mask & (1 << i)) {
             continue;
@@ -224,7 +243,13 @@ QVariant PaletteModel::data(const QModelIndex &index, int role) const
             return m_roleNames[static_cast<QPalette::ColorRole>(index.row())];
         }
         if (role == Qt::EditRole) {
-            const uint mask = m_palette.resolve();
+            const auto mask = m_palette.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+                              resolveMask()
+#else
+                              resolve()
+#endif
+                ;
             if (mask & (1 << index.row()))
                 return true;
             return false;
@@ -284,7 +309,13 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
         return true;
     }
     if (index.column() == 0 && role == Qt::EditRole) {
-        uint mask = m_palette.resolve();
+        auto mask = m_palette.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+                    resolveMask()
+#else
+                    resolve()
+#endif
+            ;
         const bool isMask = qvariant_cast<bool>(value);
         const int r = index.row();
         if (isMask) {
@@ -298,7 +329,14 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
                 m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r)));
             mask &= ~(1 << index.row());
         }
-        m_palette.resolve(mask);
+        m_palette.
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+            setResolveMask(mask);
+        m_palette = m_palette.resolve(m_palette)
+#else
+            resolve(mask)
+#endif
+            ;
         emit paletteChanged(m_palette);
         const QModelIndex idxEnd = PaletteModel::index(r, 3);
         emit dataChanged(index, idxEnd);
