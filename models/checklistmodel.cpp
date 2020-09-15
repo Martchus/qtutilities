@@ -81,7 +81,13 @@ bool ChecklistModel::setData(const QModelIndex &index, const QVariant &value, in
             success = true;
             break;
         case Qt::CheckStateRole:
-            if (value.canConvert(QMetaType::Int)) {
+            if (value.canConvert(
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+                    QMetaType::Int
+#else
+                    QMetaType::fromType<int>()
+#endif
+                    )) {
                 m_items[index.row()].m_checkState = static_cast<Qt::CheckState>(value.toInt());
                 success = true;
             }
@@ -224,7 +230,15 @@ void ChecklistModel::restore(QSettings &settings, const QString &name)
             continue;
         }
         const auto selected = settings.value(QStringLiteral("selected"));
-        if (!id.isNull() && !selected.isNull() && selected.canConvert(QMetaType::Bool) && !restoredIds.contains(id)) {
+        if (!id.isNull() && !selected.isNull()
+            && selected.canConvert(
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+                QMetaType::Bool
+#else
+                QMetaType::fromType<bool>()
+#endif
+                )
+            && !restoredIds.contains(id)) {
             m_items << ChecklistItem(id, labelForId(id), selected.toBool() ? Qt::Checked : Qt::Unchecked);
             restoredIds << id;
         }
