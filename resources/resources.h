@@ -4,12 +4,15 @@
 #include "../global.h"
 
 #include <QtGlobal>
+#include <QtContainerFwd>
 
 #include <initializer_list>
 
 QT_FORWARD_DECLARE_CLASS(QString)
-QT_FORWARD_DECLARE_CLASS(QStringList)
 QT_FORWARD_DECLARE_CLASS(QSettings)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+QT_FORWARD_DECLARE_CLASS(QStringList)
+#endif
 
 /*!
  * \brief Sets the application meta data in the QCoreApplication singleton and attributes commonly used
