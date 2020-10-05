@@ -121,13 +121,14 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
 
         QString path;
         if ((!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, path = additionalTranslationFilePath()))
-            || qtTranslator->load(fileName, path =
+            || qtTranslator->load(fileName,
+                path =
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                                  QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+                    QLibraryInfo::location(QLibraryInfo::TranslationsPath)
 #else
-                                  QLibraryInfo::path(QLibraryInfo::TranslationsPath)
+                    QLibraryInfo::path(QLibraryInfo::TranslationsPath)
 #endif
-                                  )
+                    )
             || qtTranslator->load(fileName, path = QStringLiteral("../share/qt/translations"))
             || qtTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
             QCoreApplication::installTranslator(qtTranslator);

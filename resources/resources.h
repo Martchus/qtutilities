@@ -3,8 +3,8 @@
 
 #include "../global.h"
 
-#include <QtGlobal>
 #include <QtContainerFwd>
+#include <QtGlobal>
 
 #include <initializer_list>
 
