@@ -12,12 +12,29 @@ if (ANDROID_APK_CONFIGURED)
     message(FATAL_ERROR "The AndroidApk module mustn't be included twice.")
 endif ()
 
-if (NOT EXISTS "${CMAKE_ANDROID_SDK}")
-    message(FATAL_ERROR "CMAKE_ANDROID_SDK must contain the path of the Android SDK.")
+# check paths of Android SDK and NDK
+if (EXISTS "${ANDROID_SDK}")
+    set (ANDROID_APK_SDK "${ANDROID_SDK}")
+elseif (EXISTS "${CMAKE_ANDROID_SDK}")
+    set (ANDROID_APK_SDK "${CMAKE_ANDROID_SDK}")
+elseif (EXISTS "$ENV{ANDROID_HOME}")
+    set (ANDROID_APK_SDK "$ENV{ANDROID_HOME}")
+else ()
+    message(FATAL_ERROR "ANDROID_SDK must contain the path of the Android SDK (for passing to androiddeployqt).")
 endif ()
-if (NOT EXISTS "${CMAKE_ANDROID_NDK}")
-    message(FATAL_ERROR "CMAKE_ANDROID_NDK must contain the path of the Android NDK.")
+if (EXISTS "${ANDROID_NDK}")
+    set (ANDROID_APK_NDK "${ANDROID_NDK}")
+elseif (EXISTS "${CMAKE_ANDROID_NDK}")
+    set (ANDROID_APK_NDK "${CMAKE_ANDROID_NDK}")
+elseif (EXISTS "$ENV{ANDROID_NDK_HOME}")
+    set (ANDROID_APK_NDK "$ENV{ANDROID_NDK_HOME}")
+else ()
+    message(FATAL_ERROR "ANDROID_NDK must contain the path of the Android NDK (for passing to androiddeployqt).")
 endif ()
+
+# set min/target SDK versions
+set(ANDROID_MIN_SDK_VERSION "${CMAKE_SYSTEM_VERSION}" CACHE STRING "specifies the minimum SDK version")
+set(ANDROID_TARGET_SDK_VERSION "30" CACHE STRING "specifies the target SDK version")
 
 # determine some variables
 if (NOT META_ANDROID_PACKAGE_NAME)
@@ -85,18 +102,23 @@ get_filename_component(ANDROID_APK_QT_CMAKE_DIR "${Qt5Core_DIR}" DIRECTORY)
 get_filename_component(ANDROID_APK_QT_LIBRARY_DIR "${ANDROID_APK_QT_CMAKE_DIR}" DIRECTORY)
 get_filename_component(ANDROID_APK_QT_INSTALL_PREFIX "${ANDROID_APK_QT_LIBRARY_DIR}" DIRECTORY)
 
-# deduce Android toolchain prefix and version from "CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX"
-message(STATUS "Android toolchain prefix: ${CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX}")
-if (CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/(.+)-")
+# deduce Android toolchain prefix from "CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX"
+set(ANDROID_APK_USE_LLVM false)
+if (CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/toolchains/llvm/.*")
+    set(ANDROID_APK_TOOL_PREFIX "llvm")
+    set(ANDROID_APK_USE_LLVM true)
+elseif (CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/(.+)-")
     set(ANDROID_APK_TOOL_PREFIX "${CMAKE_MATCH_1}")
 else ()
     set(ANDROID_APK_TOOL_PREFIX "${CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX}")
 endif ()
+message(STATUS "Android toolchain prefix: ${ANDROID_APK_TOOL_PREFIX}")
 
+# deduce Android toolchain version from various variables (not required when using LLVM)
 set(ANDROID_APK_TOOLCHAIN_VERSION
     ""
     CACHE STRING "toolchain version for making APK file")
-if (NOT ANDROID_APK_TOOLCHAIN_VERSION)
+if (NOT ANDROID_APK_TOOLCHAIN_VERSION AND NOT ANDROID_APK_TOOL_PREFIX STREQUAL "llvm")
     if (CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/.+-linux-android-([^/]+)/.*")
         set(ANDROID_APK_TOOLCHAIN_VERSION "${CMAKE_MATCH_1}")
     elseif (CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/.+-linux-androideabi-([^/]+)/.*")
@@ -104,26 +126,37 @@ if (NOT ANDROID_APK_TOOLCHAIN_VERSION)
     elseif (NOT CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION MATCHES "clang.*")
         set(ANDROID_APK_TOOLCHAIN_VERSION "${CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION}")
     else ()
-        message(FATAL_ERROR "Unable to detect the toolchain version for making the APK.")
+        message(FATAL_ERROR "Unable to detect the toolchain version  (for passing it to androiddeployqt)."
+                            "Please set ANDROID_APK_TOOLCHAIN_VERSION manually. Related variables:\n"
+                            "CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX: ${CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX}\n"
+                            "CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION: ${CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION}")
     endif ()
+    message(STATUS "Auto-detected ANDROID_APK_TOOLCHAIN_VERSION: ${ANDROID_APK_TOOLCHAIN_VERSION}")
 endif ()
 
-# determine Android build tools version note: Assuming the build tools are installed under "${CMAKE_ANDROID_SDK}/build-tools"
+# determine Android build tools version note: Assuming the build tools are installed under "${ANDROID_APK_SDK}/build-tools"
 file(
     GLOB ANDROID_APK_BUILD_TOOLS_VERSIONS
     LIST_DIRECTORIES TRUE
-    RELATIVE "${CMAKE_ANDROID_SDK}/build-tools"
-    "${CMAKE_ANDROID_SDK}/build-tools/*")
+    RELATIVE "${ANDROID_APK_SDK}/build-tools"
+    "${ANDROID_APK_SDK}/build-tools/*")
 if (NOT ANDROID_APK_BUILD_TOOLS_VERSIONS)
-    message(FATAL_ERROR "No build-tools present under \"${CMAKE_ANDROID_SDK}/build-tools\".")
+    message(FATAL_ERROR "No build-tools present under \"${ANDROID_APK_SDK}/build-tools\".")
 endif ()
 list(GET ANDROID_APK_BUILD_TOOLS_VERSIONS 0 ANDROID_APK_BUILD_TOOLS_VERSION)
 
-# deduce path of C++ standard library from "CMAKE_CXX_STANDARD_LIBRARIES" note: Assuming CMAKE_CXX_STANDARD_LIBRARIES
-# contains a paths or quotes paths with flags appended.
+# deduce path of C++ standard library from "CMAKE_CXX_STANDARD_LIBRARIES"
+# note: Assuming CMAKE_CXX_STANDARD_LIBRARIES contains a paths or quotes paths with flags appended.
 set(ANDROID_APK_CXX_STANDARD_LIBRARY
     ""
     CACHE STRING "path to standard library for making APK file")
+if (NOT ANDROID_APK_CXX_STANDARD_LIBRARY AND CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES "(.*/toolchains/llvm/.*)/bin/.*")
+    message(STATUS "CMAKE_MATCH_1: ${CMAKE_MATCH_1}")
+    set (ANDROID_APK_CXX_STANDARD_LIBRARY "${CMAKE_MATCH_1}/sysroot/usr/lib")
+    if (NOT EXISTS "${ANDROID_APK_CXX_STANDARD_LIBRARY}")
+        unset(ANDROID_APK_CXX_STANDARD_LIBRARY)
+    endif ()
+endif ()
 if (NOT ANDROID_APK_CXX_STANDARD_LIBRARY)
     foreach (CMAKE_CXX_STANDARD_LIBRARY ${CMAKE_CXX_STANDARD_LIBRARIES})
         if (EXISTS "${CMAKE_CXX_STANDARD_LIBRARY}")
@@ -134,12 +167,17 @@ if (NOT ANDROID_APK_CXX_STANDARD_LIBRARY)
                 set(ANDROID_APK_CXX_STANDARD_LIBRARY "${CMAKE_MATCH_1}")
                 break()
             endif ()
+        elseif (CMAKE_CXX_STANDARD_LIBRARY MATCHES "-l.*")
+            continue()
         endif ()
-        message(WARNING "${CMAKE_CXX_STANDARD_LIBRARY} from CMAKE_CXX_STANDARD_LIBRARIES does not exist.")
+        message(WARNING "Library \"${CMAKE_CXX_STANDARD_LIBRARY}\" from CMAKE_CXX_STANDARD_LIBRARIES does not exist.")
     endforeach ()
 endif ()
 if (NOT ANDROID_APK_CXX_STANDARD_LIBRARY)
-    message(FATAL_ERROR "CMAKE_CXX_STANDARD_LIBRARIES does not contain path to standard library.")
+    message(FATAL_ERROR "Unable to detect path of standard library (for passing it to androiddeployqt)."
+                        "Please set ANDROID_APK_CXX_STANDARD_LIBRARY manually. Related variables:\n"
+                        "CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX: ${CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX}\n"
+                        "CMAKE_CXX_STANDARD_LIBRARIES: ${CMAKE_CXX_STANDARD_LIBRARIES}")
 endif ()
 
 # determine extra prefix dirs
@@ -174,9 +212,10 @@ function (add_android_apk_extra_libs TARGET_NAME)
         elseif (EXISTS "${LIBRARY}")
             list(APPEND ANDROID_APK_EXTRA_LIBS "${LIBRARY}")
         else ()
-            message(
-                WARNING
-                    "Unable to find library \"${LIBRARY}\" required by target \"${TARGET_NAME}\". It won't be added to the APK."
+            message(STATUS
+                "Unable to find library \"${LIBRARY}\" required by target \"${TARGET_NAME}\". The library is likely "
+                "a private dependency of the target and therfore not visible within the context of creating the "
+                "final application. Relying on androiddeployqt for adding it to the APK."
             )
         endif ()
     endforeach ()
@@ -186,6 +225,35 @@ function (add_android_apk_extra_libs TARGET_NAME)
 endfunction ()
 add_android_apk_extra_libs("${META_TARGET_NAME}")
 list_to_string("," "" "" "${ANDROID_APK_EXTRA_LIBS}" ANDROID_APK_EXTRA_LIBS)
+
+# determine host architecture
+# note: ANDROID_HOST_TAG is set supposed to be set by the NDK toolchain file. If not, fallback to CMake's CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG variable.
+if (NOT ANDROID_HOST_TAG)
+    set(ANDROID_HOST_TAG "${CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG}")
+endif ()
+
+# determine Android architecture
+# note: ANDROID_ABI is set supposed to be set by the NDK toolchain file. If not, fallback to CMake's CMAKE_ANDROID_ARCH_ABI variable.
+if (NOT ANDROID_ABI)
+    set(ANDROID_ABI "${CMAKE_ANDROID_ARCH_ABI}")
+endif ()
+set(ANDROID_APK_SYSROOT_NAME
+    ""
+    CACHE STRING "name of the sysroot for making APK file")
+if (CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX MATCHES ".*/bin/(.*)-")
+    set(ANDROID_APK_SYSROOT_NAME "${CMAKE_MATCH_1}")
+else ()
+    message(FATAL_ERROR "Unable to sysroot name (for passing it to androiddeployqt)."
+                        "Please set ANDROID_APK_SYSROOT_NAME manually. Related variables:\n"
+                        "CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX: ${CMAKE_CXX_ANDROID_TOOLCHAIN_PREFIX}")
+endif ()
+
+# set application binary
+if (Qt5Core_VERSION VERSION_LESS 5.14.0)
+    set(ANDROID_APK_APP_BINARY "\$<TARGET_FILE:${META_TARGET_NAME}>")
+else ()
+    set(ANDROID_APK_APP_BINARY "${META_TARGET_NAME}")
+endif ()
 
 # query certain qmake variables
 foreach (QMAKE_VARIABLE QT_INSTALL_QML QT_INSTALL_PLUGINS QT_INSTALL_IMPORTS)
@@ -299,7 +367,13 @@ else ()
     endif ()
 
 endif ()
-set(ANDROID_APK_BINARY_PATH "${ANDROID_APK_BUILD_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/lib${META_TARGET_NAME}.so")
+if (Qt5Core_VERSION VERSION_LESS 5.14.0)
+    set(ANDROID_APK_BINARY_PATH "${ANDROID_APK_BUILD_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/lib${META_TARGET_NAME}.so")
+else ()
+    # incorporate the ANDROID_ABI into the target name because androiddeployqt > 5.14 forces use to do so
+    set_target_properties(${META_TARGET_NAME} PROPERTIES SUFFIX "_${ANDROID_ABI}.so")
+    set(ANDROID_APK_BINARY_PATH "${ANDROID_APK_BUILD_DIR}/libs/${CMAKE_ANDROID_ARCH_ABI}/lib${META_TARGET_NAME}_${ANDROID_ABI}.so")
+endif ()
 add_custom_command(
     OUTPUT "${ANDROID_APK_BINARY_PATH}"
     COMMAND "${CMAKE_COMMAND}" -E copy "$<TARGET_FILE:${META_TARGET_NAME}>" "${ANDROID_APK_BINARY_PATH}"

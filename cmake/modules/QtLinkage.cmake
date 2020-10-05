@@ -16,6 +16,13 @@ if (NOT META_QT5_VERSION)
     set(META_QT5_VERSION 5.6)
 endif ()
 
+# avoid "add_custom_target cannot create target "apk" because another target…" errors produced
+# by Qt's Android support module (which can not cope with Qt CMake modules already pulled in by a
+# dependency)
+if (ANDROID AND NOT ${PROJECT_NAME}-MultiAbiBuild)
+    set(${PROJECT_NAME}-MultiAbiBuild ON)
+endif ()
+
 # define function for using Qt and KDE Frameworks modules and static plugins
 macro (use_qt_module)
     # parse arguments
