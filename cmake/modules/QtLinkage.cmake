@@ -16,9 +16,8 @@ if (NOT META_QT5_VERSION)
     set(META_QT5_VERSION 5.6)
 endif ()
 
-# avoid "add_custom_target cannot create target "apk" because another target…" errors produced
-# by Qt's Android support module (which can not cope with Qt CMake modules already pulled in by a
-# dependency)
+# avoid "add_custom_target cannot create target "apk" because another target…" errors produced by Qt's Android support module
+# (which can not cope with Qt CMake modules already pulled in by a dependency)
 if (ANDROID AND NOT ${PROJECT_NAME}-MultiAbiBuild)
     set(${PROJECT_NAME}-MultiAbiBuild ON)
 endif ()
@@ -116,7 +115,9 @@ function (query_qmake_variable QMAKE_VARIABLE)
             set(VARIABLE_NAME QT6_${VARIABLE_NAME})
         endif ()
         if (NOT "${${VARIABLE_NAME}}" STREQUAL "")
-            set ("${QMAKE_VARIABLE}" "${${VARIABLE_NAME}}" PARENT_SCOPE)
+            set("${QMAKE_VARIABLE}"
+                "${${VARIABLE_NAME}}"
+                PARENT_SCOPE)
             message(STATUS "Qt variable ${QMAKE_VARIABLE} taken from ${VARIABLE_NAME}: ${${VARIABLE_NAME}}")
             return()
         endif ()
@@ -139,6 +140,8 @@ function (query_qmake_variable QMAKE_VARIABLE)
     string(REGEX REPLACE "\n$" "" "${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}")
 
     # export variable to parent scope
-    set("${QMAKE_VARIABLE}" "${${QMAKE_VARIABLE}}" PARENT_SCOPE)
+    set("${QMAKE_VARIABLE}"
+        "${${QMAKE_VARIABLE}}"
+        PARENT_SCOPE)
     message(STATUS "Qt variable ${QMAKE_VARIABLE} queried from qmake: ${${QMAKE_VARIABLE}}")
 endfunction ()
