@@ -312,7 +312,7 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
     endif ()
 
     # add install target for translations
-    if (NOT META_NO_INSTALL_TARGETS AND ENABLE_INSTALL_TARGETS)
+    if (NOT META_NO_INSTALL_TARGETS AND ENABLE_INSTALL_TARGETS AND NOT BUILTIN_TRANSLATIONS)
         install(
             FILES ${QM_FILES}
             DESTINATION "${META_DATA_DIR}/translations"
