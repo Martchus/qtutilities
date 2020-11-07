@@ -130,7 +130,7 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
                 PLUGINS
                 CocoaIntegration
                 ONLY_PLUGINS)
-        elseif (TARGET ${QT5_Gui_STATIC_PREFIX}QXcbIntegrationPlugin)
+        elseif (TARGET "${QT_PACKAGE_PREFIX}::QXcbIntegrationPlugin")
             use_qt_module(
                 PREFIX
                 "${QT_PACKAGE_PREFIX}"
