@@ -80,7 +80,13 @@ QtConfigArguments::QtConfigArguments()
     m_platformThemeArg.setRequiredValueCount(1);
     m_platformThemeArg.setCombinable(true);
     m_platformThemeArg.setValueNames({ "qt5ct/kde/..." });
-    m_platformThemeArg.setPreDefinedCompletionValues("qt5ct kde gnome");
+    m_platformThemeArg.setPreDefinedCompletionValues("kde gnome "
+#if QT_VERSION_MAJOR == 5
+                                                     "qt5ct"
+#elif  QT_VERSION_MAJOR == 6
+                                                     "qt6ct"
+#endif
+                                                     );
     m_platformThemeArg.setEnvironmentVariable("QT_QPA_PLATFORMTHEME");
     m_sceneGraphRenderLoopArg.setRequiredValueCount(1);
     m_sceneGraphRenderLoopArg.setCombinable(true);
