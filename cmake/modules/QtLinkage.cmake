@@ -11,9 +11,15 @@ set(QT_LINKAGE_DETERMINED ON)
 # include validate_visibility from c++utilities' 3rdParty module
 include(3rdParty)
 
-# by default, require Qt 5.6 or higher
-if (NOT META_QT5_VERSION)
-    set(META_QT5_VERSION 5.6)
+# determine the minimum Qt version
+if (NOT META_QT_VERSION)
+    if (META_QT5_VERSION)
+        # use deprecated META_QT5_VERSION variable (for compatibility)
+        set (META_QT_VERSION "${META_QT5_VERSION}")
+    else ()
+        # require Qt 5.6 or higher by default
+        set(META_QT_VERSION 5.6)
+    endif ()
 endif ()
 
 # avoid "add_custom_target cannot create target "apk" because another target…" errors produced by Qt's Android support module
@@ -58,7 +64,7 @@ macro (use_qt_module)
 
     # find and use module
     if (NOT ONLY_PLUGINS)
-        find_package("${ARGS_PREFIX}${ARGS_MODULE}" "${META_QT5_VERSION}" REQUIRED)
+        find_package("${ARGS_PREFIX}${ARGS_MODULE}" "${META_QT_VERSION}" REQUIRED)
         foreach (TARGET ${ARGS_TARGETS})
             if (NOT TARGET "${TARGET}")
                 message(FATAL_ERROR "The ${ARGS_PREFIX}${ARGS_MODULE} does not provide the target ${TARGET}.")
@@ -84,11 +90,11 @@ macro (use_qt_module)
     foreach (PLUGIN ${ARGS_PLUGINS})
         set(PLUGIN_TARGET "${ARGS_PREFIX}::Q${PLUGIN}Plugin")
         if (NOT TARGET "${PLUGIN_TARGET}")
-            find_package("${ARGS_PREFIX}${ARGS_MODULE}" "${META_QT5_VERSION}" REQUIRED)
+            find_package("${ARGS_PREFIX}${ARGS_MODULE}" "${META_QT_VERSION}" REQUIRED)
         endif ()
         if (NOT TARGET "${PLUGIN_TARGET}" AND PLUGIN MATCHES "Svg.*" AND ARGS_MODULE STREQUAL "Svg")
             # look for Svg plugins within the Gui module's directory as well
-            find_package("${ARGS_PREFIX}Gui" "${META_QT5_VERSION}" REQUIRED)
+            find_package("${ARGS_PREFIX}Gui" "${META_QT_VERSION}" REQUIRED)
             set(PLUGIN_CONFIG "${${ARGS_PREFIX}Gui_DIR}/${ARGS_PREFIX}Q${PLUGIN}PluginConfig.cmake")
             if (EXISTS "${PLUGIN_CONFIG}")
                 include("${PLUGIN_CONFIG}")
