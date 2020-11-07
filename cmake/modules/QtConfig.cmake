@@ -230,8 +230,10 @@ if (QT_INSTALL_TRANSLATIONS)
     list(APPEND QT_TRANSLATION_SEARCH_PATHS "${QT_INSTALL_TRANSLATIONS}")
 endif ()
 if (CMAKE_FIND_ROOT_PATH)
-    list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_FIND_ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
-         "${CMAKE_FIND_ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations")
+    foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
+        list(APPEND QT_TRANSLATION_SEARCH_PATHS "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
+             "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/qt5/translations")
+    endforeach ()
 endif ()
 list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt/translations"
      "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt5/translations" "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
@@ -374,7 +376,9 @@ if (REQUIRED_ICONS)
         set(ICON_THEME_FILES)
         set(ICON_SEARCH_PATHS)
         if (CMAKE_FIND_ROOT_PATH)
-            list(APPEND ICON_SEARCH_PATHS "${CMAKE_FIND_ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
+            foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
+                list(APPEND ICON_SEARCH_PATHS "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
+            endforeach ()
         endif ()
         list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
         list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when cross-
