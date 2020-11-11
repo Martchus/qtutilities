@@ -222,6 +222,7 @@ endif ()
 
 # option for built-in translations
 option(BUILTIN_TRANSLATIONS "enables/disables built-in translations when building applications and libraries" OFF)
+option(BUILTIN_TRANSLATIONS_OF_QT "enables/disables built-in translations of Qt itself when building applications" "${BUILTIN_TRANSLATIONS}")
 
 # determine relevant Qt translation files
 set(QT_TRANSLATION_FILES)
@@ -251,7 +252,7 @@ foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
         endif ()
         # add files to list of built-in translations but only if that configuration is enabled and if we're building the
         # final application
-        if (BUILTIN_TRANSLATIONS AND "${META_PROJECT_TYPE}" STREQUAL "application")
+        if (BUILTIN_TRANSLATIONS_OF_QT AND "${META_PROJECT_TYPE}" STREQUAL "application")
             file(COPY ${QT_QM_FILES} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
             list(APPEND EXTERNAL_QM_FILES ${QT_QM_FILES})
         endif ()
