@@ -160,3 +160,38 @@ function (query_qmake_variable QMAKE_VARIABLE)
         PARENT_SCOPE)
     message(STATUS "Qt variable ${QMAKE_VARIABLE} queried from qmake: ${${QMAKE_VARIABLE}}")
 endfunction ()
+
+# define function to make Qt variable available, resolving relative paths via CMAKE_FIND_ROOT_PATH
+function (query_qmake_variable_path QMAKE_VARIABLE)
+    # query the variable itself
+    query_qmake_variable("${QMAKE_VARIABLE}")
+    set(VARIABLE_VALUE "${${QMAKE_VARIABLE}}")
+    if (NOT VARIABLE_VALUE)
+        message(WARNING "Unable to resolve Qt variable ${QMAKE_VARIABLE}: it is empty")
+        return()
+    endif ()
+
+    # pass the variable as-is if it points to an existing dir/file
+    if (EXISTS "${VARIABLE_VALUE}")
+        get_filename_component(VARIABLE_VALUE "${VARIABLE_VALUE}" REALPATH)
+        message(STATUS "Qt variable ${QMAKE_VARIABLE} resolved to path: ${VARIABLE_VALUE}")
+        set("${QMAKE_VARIABLE}" "${VARIABLE_VALUE}" PARENT_SCOPE)
+        return()
+    endif ()
+
+    # assume VARIABLE_VALUE is relative within CMAKE_FIND_ROOT_PATH, e.g. QT_INSTALL_TRANSLATIONS might be
+    # set to "share/qt6/translations"
+    foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH} "")
+        foreach (PREFIX_PATH ${CMAKE_PREFIX_PATH} "")
+            string(JOIN "/" FULL_PATH ${ROOT_PATH} ${PREFIX_PATH} ${VARIABLE_VALUE})
+            if (EXISTS "${FULL_PATH}")
+                set("${QMAKE_VARIABLE}" "${FULL_PATH}" PARENT_SCOPE)
+                message(STATUS "Qt variable ${QMAKE_VARIABLE} resolved to path: ${FULL_PATH}")
+                return()
+            else ()
+                list(APPEND CHECKED_PATHS "${FULL_PATH}")
+            endif ()
+        endforeach()
+    endforeach ()
+    message(WARNING "Unable to resolve Qt variable ${QMAKE_VARIABLE} to an existing path, was checking for: ${CHECKED_PATHS}")
+endfunction ()

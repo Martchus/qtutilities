@@ -227,7 +227,7 @@ option(BUILTIN_TRANSLATIONS_OF_QT "enables/disables built-in translations of Qt 
 # determine relevant Qt translation files
 set(QT_TRANSLATION_FILES)
 set(QT_TRANSLATION_SEARCH_PATHS)
-query_qmake_variable(QT_INSTALL_TRANSLATIONS)
+query_qmake_variable_path(QT_INSTALL_TRANSLATIONS)
 if (QT_INSTALL_TRANSLATIONS)
     list(APPEND QT_TRANSLATION_SEARCH_PATHS "${QT_INSTALL_TRANSLATIONS}")
 endif ()
