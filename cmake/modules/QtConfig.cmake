@@ -241,6 +241,7 @@ list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt/tr
      "${CMAKE_INSTALL_FULL_DATAROOTDIR}/${QT_PACKAGE_PREFIX_LOWER}/translations" "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
      "/usr/${CMAKE_INSTALL_DATAROOTDIR}/${QT_PACKAGE_PREFIX_LOWER}/translations")
 list(REMOVE_DUPLICATES QT_TRANSLATION_SEARCH_PATHS)
+set(QT_TRANSLATIONS_FOUND NO)
 foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
     if (NOT IS_DIRECTORY "${QT_TRANSLATION_PATH}")
         continue()
@@ -258,8 +259,16 @@ foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
         endif ()
         list(APPEND QT_TRANSLATION_FILES "qt${QT_REPO}")
     endforeach ()
+    set(QT_TRANSLATIONS_FOUND YES)
     break()
 endforeach ()
+
+# make list of Qt translation files even if translations are not found at build time
+if (NOT QT_TRANSLATIONS_FOUND)
+    foreach (QT_REPO ${QT_REPOS})
+        list(APPEND QT_TRANSLATION_FILES "qt${QT_REPO}")
+    endforeach ()
+endif ()
 
 # emit warning if no Qt translations found but built-in translations are enabled
 if (BUILTIN_TRANSLATIONS AND NOT QT_TRANSLATION_FILES)
