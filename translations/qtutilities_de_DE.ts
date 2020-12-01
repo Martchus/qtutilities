@@ -67,22 +67,22 @@
         <translation type="vanished">verwendet Qt</translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="62"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="61"/>
         <source>developed by %1</source>
         <translation>entwickelt von %1</translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="72"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="71"/>
         <source>Linked against:</source>
         <translation>Gegen folgende Bibliotheken gelinkt:</translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="76"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="75"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation>Für Aktualisierung und Melden von Fehlern besuche die &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;Webseite des Projekts&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="92"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="91"/>
         <source>Using &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt;</source>
         <translation>Verwendet &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt;</translation>
     </message>
@@ -195,22 +195,22 @@
 <context>
     <name>QtUtilities::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="321"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="359"/>
         <source>Color Role</source>
         <translation>Farbrolle</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="361"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="363"/>
         <source>Inactive</source>
         <translation>Inaktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="365"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
@@ -290,8 +290,14 @@
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="249"/>
         <source>These settings take effect after restarting the application.
-These settings might be overwritten by your Qt 5 platfrom integration plugin and hence have no effect.</source>
+These settings might be overwritten by your Qt platfrom integration plugin and hence have no effect.</source>
         <translation>Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.
+Außerdem werden sie vielleicht vom QPA-Plugin überschrieben und funktionieren daher nicht.</translation>
+    </message>
+    <message>
+        <source>These settings take effect after restarting the application.
+These settings might be overwritten by your Qt 5 platfrom integration plugin and hence have no effect.</source>
+        <translation type="vanished">Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.
 Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren daher nicht.</translation>
     </message>
 </context>
@@ -426,22 +432,22 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>Utilities::windowTitle</name>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="32"/>
+        <location filename="../misc/dialogutils.cpp" line="34"/>
         <source>Unsaved - %1</source>
         <translation>Nicht gespeichert - %1</translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="35"/>
+        <location filename="../misc/dialogutils.cpp" line="37"/>
         <source>%1 - %2 - %3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="40"/>
+        <location filename="../misc/dialogutils.cpp" line="42"/>
         <source>*Unsaved - %1</source>
         <translation>*Nicht gespeichert - %1</translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="43"/>
+        <location filename="../misc/dialogutils.cpp" line="45"/>
         <source>*%1 - %2 - %3</source>
         <translation></translation>
     </message>

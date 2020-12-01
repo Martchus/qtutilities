@@ -63,22 +63,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="62"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="61"/>
         <source>developed by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="72"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="71"/>
         <source>Linked against:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="76"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="75"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="92"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="91"/>
         <source>Using &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,22 +191,22 @@
 <context>
     <name>QtUtilities::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="321"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="359"/>
         <source>Color Role</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="323"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="361"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="325"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="363"/>
         <source>Inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="327"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="365"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,7 +286,7 @@
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="249"/>
         <source>These settings take effect after restarting the application.
-These settings might be overwritten by your Qt 5 platfrom integration plugin and hence have no effect.</source>
+These settings might be overwritten by your Qt platfrom integration plugin and hence have no effect.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -421,22 +421,22 @@ These settings might be overwritten by your Qt 5 platfrom integration plugin and
 <context>
     <name>Utilities::windowTitle</name>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="32"/>
+        <location filename="../misc/dialogutils.cpp" line="34"/>
         <source>Unsaved - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="35"/>
+        <location filename="../misc/dialogutils.cpp" line="37"/>
         <source>%1 - %2 - %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="40"/>
+        <location filename="../misc/dialogutils.cpp" line="42"/>
         <source>*Unsaved - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="43"/>
+        <location filename="../misc/dialogutils.cpp" line="45"/>
         <source>*%1 - %2 - %3</source>
         <translation type="unfinished"></translation>
     </message>
