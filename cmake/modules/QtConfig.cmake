@@ -30,6 +30,10 @@ set(QT_REPOS ${ADDITIONAL_QT_REPOS} base)
 set(QT_MODULES ${ADDITIONAL_QT_MODULES} Core)
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
 
+# disable auto-inclusion of QML plugins because these seem to pull in unwanted dependencies like PostgreSQL (required as of
+# Qt 6)
+set(QT_SKIP_AUTO_QML_PLUGIN_INCLUSION ON)
+
 # disable deprecated features
 option(DISABLE_DEPRECATED_QT_FEATURES "specifies whether deprecated Qt features should be disabled" OFF)
 if (DISABLE_DEPRECATED_QT_FEATURES)
