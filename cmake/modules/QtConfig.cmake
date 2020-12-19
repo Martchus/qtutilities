@@ -293,8 +293,21 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
     message(STATUS "Project has translations which will be released.")
     set(APP_SPECIFIC_QT_TRANSLATIONS_AVAILABLE YES)
 
-    # the LinguistTools module is required (but not add it to QT_MODULES because we don't link against it)
-    find_package("${QT_LINGUIST_TOOLS_PACKAGE}" REQUIRED)
+    # require the LinguistTools module (not adding it to QT_MODULES because we don't link against it)
+    if (QT_HOST_PATH)
+        # find the module within the host path when set (required for cross compilation with Qt 6 as the module is absent in
+        # the target install tree)
+        find_package(
+            "${QT_LINGUIST_TOOLS_PACKAGE}"
+            PATHS
+            "${QT_HOST_PATH}"
+            "${QT_HOST_PATH}/lib/cmake"
+            NO_CMAKE_FIND_ROOT_PATH
+            NO_DEFAULT_PATH
+            REQUIRED)
+    else ()
+        find_package("${QT_LINGUIST_TOOLS_PACKAGE}" REQUIRED)
+    endif ()
 
     if (NOT COMMAND qt_create_translation)
         macro (qt_create_translation)
