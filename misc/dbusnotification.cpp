@@ -115,7 +115,9 @@ inline NotificationImage::NotificationImage(const QImage &image)
     , height(image.height())
     , rowstride(image.bytesPerLine())
     , hasAlpha(image.hasAlphaChannel())
-    , channels(image.isGrayscale() ? 1 : hasAlpha ? 4 : 3)
+    , channels(image.isGrayscale() ? 1
+              : hasAlpha           ? 4
+                                   : 3)
     , bitsPerSample(image.depth() / channels)
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     , data(reinterpret_cast<const char *>(image.bits()), static_cast<int>(image.sizeInBytes()))

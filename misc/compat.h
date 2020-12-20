@@ -62,7 +62,7 @@ inline StringView midRef(const QString &str, int pos, int n = -1)
 /*!
  * \brief Splits \a str into QStringViews, QStringRefs or QStrings depending on the Qt version.
  */
-template <class... SplitArgs> inline auto splitRef(const QString &str, SplitArgs &&... args)
+template <class... SplitArgs> inline auto splitRef(const QString &str, SplitArgs &&...args)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     return QStringView(str).split(std::forward<SplitArgs>(args)...);

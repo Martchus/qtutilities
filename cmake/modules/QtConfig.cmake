@@ -226,7 +226,8 @@ endif ()
 
 # option for built-in translations
 option(BUILTIN_TRANSLATIONS "enables/disables built-in translations when building applications and libraries" OFF)
-option(BUILTIN_TRANSLATIONS_OF_QT "enables/disables built-in translations of Qt itself when building applications" "${BUILTIN_TRANSLATIONS}")
+option(BUILTIN_TRANSLATIONS_OF_QT "enables/disables built-in translations of Qt itself when building applications"
+       "${BUILTIN_TRANSLATIONS}")
 
 # determine relevant Qt translation files
 set(QT_TRANSLATION_FILES)
@@ -241,9 +242,13 @@ if (CMAKE_FIND_ROOT_PATH)
              "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/${QT_PACKAGE_PREFIX_LOWER}/translations")
     endforeach ()
 endif ()
-list(APPEND QT_TRANSLATION_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt/translations"
-     "${CMAKE_INSTALL_FULL_DATAROOTDIR}/${QT_PACKAGE_PREFIX_LOWER}/translations" "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
-     "/usr/${CMAKE_INSTALL_DATAROOTDIR}/${QT_PACKAGE_PREFIX_LOWER}/translations")
+list(
+    APPEND
+    QT_TRANSLATION_SEARCH_PATHS
+    "${CMAKE_INSTALL_FULL_DATAROOTDIR}/qt/translations"
+    "${CMAKE_INSTALL_FULL_DATAROOTDIR}/${QT_PACKAGE_PREFIX_LOWER}/translations"
+    "/usr/${CMAKE_INSTALL_DATAROOTDIR}/qt/translations"
+    "/usr/${CMAKE_INSTALL_DATAROOTDIR}/${QT_PACKAGE_PREFIX_LOWER}/translations")
 list(REMOVE_DUPLICATES QT_TRANSLATION_SEARCH_PATHS)
 set(QT_TRANSLATIONS_FOUND NO)
 foreach (QT_TRANSLATION_PATH ${QT_TRANSLATION_SEARCH_PATHS})
@@ -342,7 +347,9 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
     endif ()
 
     # add install target for translations
-    if (NOT META_NO_INSTALL_TARGETS AND ENABLE_INSTALL_TARGETS AND NOT BUILTIN_TRANSLATIONS)
+    if (NOT META_NO_INSTALL_TARGETS
+        AND ENABLE_INSTALL_TARGETS
+        AND NOT BUILTIN_TRANSLATIONS)
         install(
             FILES ${QM_FILES}
             DESTINATION "${META_DATA_DIR}/translations"

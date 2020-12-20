@@ -15,7 +15,7 @@ include(3rdParty)
 if (NOT META_QT_VERSION)
     if (META_QT5_VERSION)
         # use deprecated META_QT5_VERSION variable (for compatibility)
-        set (META_QT_VERSION "${META_QT5_VERSION}")
+        set(META_QT_VERSION "${META_QT5_VERSION}")
     else ()
         # require Qt 5.6 or higher by default
         set(META_QT_VERSION 5.6)
@@ -92,7 +92,9 @@ macro (use_qt_module)
         if (NOT TARGET "${PLUGIN_TARGET}")
             find_package("${ARGS_PREFIX}${ARGS_MODULE}" "${META_QT_VERSION}" REQUIRED)
         endif ()
-        if (NOT TARGET "${PLUGIN_TARGET}" AND PLUGIN MATCHES "Svg.*" AND ARGS_MODULE STREQUAL "Svg")
+        if (NOT TARGET "${PLUGIN_TARGET}"
+            AND PLUGIN MATCHES "Svg.*"
+            AND ARGS_MODULE STREQUAL "Svg")
             # look for Svg plugins within the Gui module's directory as well
             find_package("${ARGS_PREFIX}Gui" "${META_QT_VERSION}" REQUIRED)
             set(PLUGIN_CONFIG "${${ARGS_PREFIX}Gui_DIR}/${ARGS_PREFIX}Q${PLUGIN}PluginConfig.cmake")
@@ -101,7 +103,9 @@ macro (use_qt_module)
             endif ()
         endif ()
         if (NOT TARGET "${PLUGIN_TARGET}")
-            message(FATAL_ERROR "The ${ARGS_PREFIX}${ARGS_MODULE} package does not provide the target ${ARGS_PREFIX}::Q${PLUGIN}Plugin.")
+            message(
+                FATAL_ERROR
+                    "The ${ARGS_PREFIX}${ARGS_MODULE} package does not provide the target ${ARGS_PREFIX}::Q${PLUGIN}Plugin.")
         endif ()
         if ("${PLUGIN_TARGET}" IN_LIST "${ARGS_LIBRARIES_VARIABLE}")
             continue()
@@ -175,23 +179,28 @@ function (query_qmake_variable_path QMAKE_VARIABLE)
     if (EXISTS "${VARIABLE_VALUE}")
         get_filename_component(VARIABLE_VALUE "${VARIABLE_VALUE}" REALPATH)
         message(STATUS "Qt variable ${QMAKE_VARIABLE} resolved to path: ${VARIABLE_VALUE}")
-        set("${QMAKE_VARIABLE}" "${VARIABLE_VALUE}" PARENT_SCOPE)
+        set("${QMAKE_VARIABLE}"
+            "${VARIABLE_VALUE}"
+            PARENT_SCOPE)
         return()
     endif ()
 
-    # assume VARIABLE_VALUE is relative within CMAKE_FIND_ROOT_PATH, e.g. QT_INSTALL_TRANSLATIONS might be
-    # set to "share/qt6/translations"
+    # assume VARIABLE_VALUE is relative within CMAKE_FIND_ROOT_PATH, e.g. QT_INSTALL_TRANSLATIONS might be set to
+    # "share/qt6/translations"
     foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH} "")
         foreach (PREFIX_PATH ${CMAKE_PREFIX_PATH} "")
             string(JOIN "/" FULL_PATH ${ROOT_PATH} ${PREFIX_PATH} ${VARIABLE_VALUE})
             if (EXISTS "${FULL_PATH}")
-                set("${QMAKE_VARIABLE}" "${FULL_PATH}" PARENT_SCOPE)
+                set("${QMAKE_VARIABLE}"
+                    "${FULL_PATH}"
+                    PARENT_SCOPE)
                 message(STATUS "Qt variable ${QMAKE_VARIABLE} resolved to path: ${FULL_PATH}")
                 return()
             else ()
                 list(APPEND CHECKED_PATHS "${FULL_PATH}")
             endif ()
-        endforeach()
+        endforeach ()
     endforeach ()
-    message(WARNING "Unable to resolve Qt variable ${QMAKE_VARIABLE} to an existing path, was checking for: ${CHECKED_PATHS}")
+    message(
+        WARNING "Unable to resolve Qt variable ${QMAKE_VARIABLE} to an existing path, was checking for: ${CHECKED_PATHS}")
 endfunction ()

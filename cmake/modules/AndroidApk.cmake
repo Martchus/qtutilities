@@ -140,7 +140,7 @@ if (NOT ANDROID_APK_TOOLCHAIN_VERSION AND NOT ANDROID_APK_TOOL_PREFIX STREQUAL "
     message(STATUS "Auto-detected ANDROID_APK_TOOLCHAIN_VERSION: ${ANDROID_APK_TOOLCHAIN_VERSION}")
 endif ()
 
-# determine Android build tools version note: Assuming the build tools are installed under "${ANDROID_APK_SDK}/build-tools"
+# determine Android build tools version - note: Assuming the build tools are installed under "${ANDROID_APK_SDK}/build-tools"
 file(
     GLOB ANDROID_APK_BUILD_TOOLS_VERSIONS
     LIST_DIRECTORIES TRUE
@@ -151,8 +151,8 @@ if (NOT ANDROID_APK_BUILD_TOOLS_VERSIONS)
 endif ()
 list(GET ANDROID_APK_BUILD_TOOLS_VERSIONS 0 ANDROID_APK_BUILD_TOOLS_VERSION)
 
-# deduce path of C++ standard library from "CMAKE_CXX_STANDARD_LIBRARIES"
-# note: Assuming CMAKE_CXX_STANDARD_LIBRARIES contains a paths or quotes paths with flags appended.
+# deduce path of C++ standard library from "CMAKE_CXX_STANDARD_LIBRARIES" - note: Assuming CMAKE_CXX_STANDARD_LIBRARIES
+# contains a paths or quotes paths with flags appended.
 set(ANDROID_APK_CXX_STANDARD_LIBRARY
     ""
     CACHE STRING "path to standard library for making APK file")
@@ -203,7 +203,8 @@ endforeach ()
 include(ListToString)
 list_to_string("" "\n        \"" "\"," "${ANDROID_APK_BINARY_DIRS}" ANDROID_APK_BINARY_DIRS)
 
-# find dependencies note: androiddeployqt seems to find only Qt libraries and plugins but misses other target_link_libraries
+# find dependencies - note: androiddeployqt seems to find only Qt libraries and plugins but misses other
+# target_link_libraries
 set(ANDROID_APK_ADDITIONAL_LIBS
     ""
     CACHE STRING "additional libraries to be bundled into the Android APK")
@@ -233,14 +234,14 @@ endfunction ()
 add_android_apk_extra_libs("${META_TARGET_NAME}")
 list_to_string("," "" "" "${ANDROID_APK_EXTRA_LIBS}" ANDROID_APK_EXTRA_LIBS)
 
-# determine host architecture
-# note: ANDROID_HOST_TAG is set supposed to be set by the NDK toolchain file. If not, fallback to CMake's CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG variable.
+# determine host architecture - note: ANDROID_HOST_TAG is set supposed to be set by the NDK toolchain file. If not, fallback
+# to CMake's CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG variable.
 if (NOT ANDROID_HOST_TAG)
     set(ANDROID_HOST_TAG "${CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG}")
 endif ()
 
-# determine Android architecture
-# note: ANDROID_ABI is set supposed to be set by the NDK toolchain file. If not, fallback to CMake's CMAKE_ANDROID_ARCH_ABI variable.
+# determine Android architecture - note: ANDROID_ABI is set supposed to be set by the NDK toolchain file. If not, fallback to
+# CMake's CMAKE_ANDROID_ARCH_ABI variable.
 if (NOT ANDROID_ABI)
     set(ANDROID_ABI "${CMAKE_ANDROID_ARCH_ABI}")
 endif ()

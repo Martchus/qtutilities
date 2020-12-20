@@ -83,10 +83,10 @@ QtConfigArguments::QtConfigArguments()
     m_platformThemeArg.setPreDefinedCompletionValues("kde gnome "
 #if QT_VERSION_MAJOR == 5
                                                      "qt5ct"
-#elif  QT_VERSION_MAJOR == 6
+#elif QT_VERSION_MAJOR == 6
                                                      "qt6ct"
 #endif
-                                                     );
+    );
     m_platformThemeArg.setEnvironmentVariable("QT_QPA_PLATFORMTHEME");
     m_sceneGraphRenderLoopArg.setRequiredValueCount(1);
     m_sceneGraphRenderLoopArg.setCombinable(true);
