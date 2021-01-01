@@ -106,7 +106,7 @@ bool ChecklistModel::setData(const QModelIndex &index, const QVariant &value, in
         }
     }
     if (success) {
-        dataChanged(index, index, roles);
+        emit dataChanged(index, index, roles);
     }
     return success;
 }
@@ -129,7 +129,7 @@ bool ChecklistModel::setChecked(int row, Qt::CheckState checked)
     }
     m_items[row].m_checkState = checked ? Qt::Checked : Qt::Unchecked;
     const auto index(this->index(row));
-    dataChanged(index, index, QVector<int>{ Qt::CheckStateRole });
+    emit dataChanged(index, index, QVector<int>{ Qt::CheckStateRole });
     return true;
 }
 
