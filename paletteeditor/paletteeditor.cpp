@@ -327,7 +327,7 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
                 m_parentPalette.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(r)));
             m_palette.setBrush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r),
                 m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r)));
-            mask &= ~(1 << index.row());
+            mask &= ~static_cast<decltype(mask)>(1 << index.row());
         }
         m_palette.
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))

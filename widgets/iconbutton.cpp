@@ -80,7 +80,7 @@ QSize IconButton::sizeHint() const
 #else
     const qreal pixmapRatio = 1.0;
 #endif
-    return QSize(m_pixmap.width() / pixmapRatio, m_pixmap.height() / pixmapRatio);
+    return QSize(static_cast<int>(m_pixmap.width() / pixmapRatio), static_cast<int>(m_pixmap.height() / pixmapRatio));
 }
 
 void IconButton::paintEvent(QPaintEvent *)
@@ -90,12 +90,12 @@ void IconButton::paintEvent(QPaintEvent *)
 #else
     const qreal pixmapRatio = 1.0;
 #endif
-    QStylePainter painter(this);
-    QRect pixmapRect = QRect(0, 0, m_pixmap.width() / pixmapRatio, m_pixmap.height() / pixmapRatio);
+    auto painter = QStylePainter(this);
+    auto pixmapRect = QRect(0, 0, static_cast<int>(m_pixmap.width() / pixmapRatio), static_cast<int>(m_pixmap.height() / pixmapRatio));
     pixmapRect.moveCenter(rect().center());
     painter.drawPixmap(pixmapRect, m_pixmap);
     if (hasFocus()) {
-        QStyleOptionFocusRect focusOption;
+        auto focusOption = QStyleOptionFocusRect();
         focusOption.initFrom(this);
         focusOption.rect = pixmapRect;
 #ifdef Q_OS_MAC

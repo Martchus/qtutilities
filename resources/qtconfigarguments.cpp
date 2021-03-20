@@ -132,7 +132,7 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
             QIcon::setThemeName(QString::fromLocal8Bit(*i));
             if (++i != end) {
                 QStringList searchPaths;
-                searchPaths.reserve(m_iconThemeArg.values().size() - 1);
+                searchPaths.reserve(static_cast<QStringList::size_type>(m_iconThemeArg.values().size() - 1));
                 for (; i != end; ++i) {
                     searchPaths << QString::fromLocal8Bit(*i);
                 }
@@ -179,7 +179,7 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
 #endif
     if (m_libraryPathsArg.isPresent()) {
         QStringList libraryPaths;
-        libraryPaths.reserve(m_libraryPathsArg.values().size());
+        libraryPaths.reserve(static_cast<QStringList::size_type>(m_libraryPathsArg.values().size()));
         for (const auto &path : m_libraryPathsArg.values()) {
             libraryPaths << QString::fromLocal8Bit(path);
         }

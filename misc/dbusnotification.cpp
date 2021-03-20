@@ -362,8 +362,8 @@ bool DBusNotification::queryCapabilities(const std::function<void(Capabilities &
     }
 
     // invoke GetCapabilities() and pass the return value to the callback when available
-    const auto *const watcher = new QDBusPendingCallWatcher(s_dbusInterface->GetCapabilities());
-    connect(watcher, &QDBusPendingCallWatcher::finished, [&callback](QDBusPendingCallWatcher *watcher) {
+    const auto *const newWatcher = new QDBusPendingCallWatcher(s_dbusInterface->GetCapabilities());
+    connect(newWatcher, &QDBusPendingCallWatcher::finished, [&callback](QDBusPendingCallWatcher *watcher) {
         watcher->deleteLater();
         const QDBusPendingReply<QStringList> returnValue(*watcher);
         if (returnValue.isError()) {
