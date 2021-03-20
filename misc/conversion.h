@@ -6,6 +6,7 @@
 #include <QString>
 
 #include <string>
+#include <string_view>
 
 namespace QtUtilities {
 
@@ -34,6 +35,11 @@ inline QString fromNativeFileName(const std::string &nativeFileName)
 #else
     return QString::fromUtf8(nativeFileName.data(), static_cast<int>(nativeFileName.size()));
 #endif
+}
+
+inline QString qstringFromStdStringView(std::string_view stringView)
+{
+    return QString::fromUtf8(stringView.data(), static_cast<QString::size_type>(stringView.size()));
 }
 
 } // namespace QtUtilities
