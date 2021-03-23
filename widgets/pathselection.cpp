@@ -29,7 +29,7 @@ namespace QtUtilities {
  * file/directory via QFileDialog.
  */
 
-QCompleter *PathSelection::m_completer = nullptr;
+QCompleter *PathSelection::s_completer = nullptr;
 
 /*!
  * \brief Constructs a path selection widget.
@@ -41,21 +41,21 @@ PathSelection::PathSelection(QWidget *parent)
     , m_customDialog(nullptr)
     , m_customMode(QFileDialog::Directory)
 {
-    if (!m_completer) {
-        auto *fileSystemModel = new QFileSystemModel(m_completer);
+    if (!s_completer) {
+        s_completer = new QCompleter;
+        s_completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+        auto *const fileSystemModel = new QFileSystemModel(s_completer);
         fileSystemModel->setRootPath(QString());
-        m_completer = new QCompleter;
-        m_completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
-        m_completer->setModel(fileSystemModel);
+        s_completer->setModel(fileSystemModel);
     }
 
     m_lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_lineEdit->installEventFilter(this);
-    m_lineEdit->setCompleter(m_completer);
+    m_lineEdit->setCompleter(s_completer);
     m_button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_button->setText(tr("Select ..."));
 
-    auto *layout = new QHBoxLayout(this);
+    auto *const layout = new QHBoxLayout(this);
     layout->setSpacing(3);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(m_lineEdit);

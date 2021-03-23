@@ -34,7 +34,7 @@ private:
     QPushButton *m_button;
     QFileDialog *m_customDialog;
     QFileDialog::FileMode m_customMode;
-    static QCompleter *m_completer;
+    static QCompleter *s_completer;
 };
 
 /*!

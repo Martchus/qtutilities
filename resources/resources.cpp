@@ -116,7 +116,7 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
 {
     const auto debugTranslations = qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS");
     for (const auto &repoName : repositoryNames) {
-        auto *const qtTranslator = new QTranslator;
+        auto *const qtTranslator = new QTranslator(QCoreApplication::instance());
         const auto fileName = QString(repoName % QChar('_') % localeName);
 
         QString path;
@@ -216,7 +216,7 @@ void logTranslationEvent(
  */
 void loadApplicationTranslationFile(const QString &configName, const QString &applicationName, const QString &localeName)
 {
-    auto *const appTranslator = new QTranslator;
+    auto *const appTranslator = new QTranslator(QCoreApplication::instance());
     const auto fileName = QString(applicationName % QChar('_') % localeName);
     const auto directoryName = configName.isEmpty() ? applicationName : QString(applicationName % QChar('-') % configName);
 
