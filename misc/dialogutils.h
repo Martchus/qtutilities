@@ -37,6 +37,7 @@ QT_UTILITIES_EXPORT const QString &dialogStyle();
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
 QT_UTILITIES_EXPORT QRect availableScreenGeometryAtPoint(const QPoint &point);
 QT_UTILITIES_EXPORT void centerWidget(QWidget *widget, const QWidget *parent = nullptr, const QPoint *position = nullptr);
+QT_UTILITIES_EXPORT bool centerWidgetAvoidingOverflow(QWidget *widget, const QWidget *parent = nullptr, const QPoint *position = nullptr);
 QT_UTILITIES_EXPORT void cornerWidget(QWidget *widget, const QPoint *position = nullptr);
 QT_UTILITIES_EXPORT void makeHeading(QWidget *widget);
 QT_UTILITIES_EXPORT void updateStyle(QWidget *widget);
