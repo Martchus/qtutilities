@@ -115,6 +115,15 @@ QRect availableScreenGeometryAtPoint(const QPoint &point)
 }
 
 /// \cond
+static QRect shrinkRectByMargins(QRect rect, const QMargins &margins)
+{
+    rect.setLeft(rect.left() + margins.left());
+    rect.setTop(rect.top() + margins.top());
+    rect.setRight(rect.right() - margins.right());
+    rect.setBottom(rect.bottom() - margins.bottom());
+    return rect;
+}
+
 static QRect limitRect(QRect rect, const QRect &bounds)
 {
     if (rect.left() < bounds.left()) {
@@ -132,6 +141,18 @@ static QRect limitRect(QRect rect, const QRect &bounds)
     return rect;
 }
 
+static QMargins widgetFrame(QWidget *widget, const QMargins &defaultAssumption = QMargins(10, 25, 10, 10))
+{
+    if (!widget->isWindow()) {
+        return QMargins();
+    }
+    const auto widgetGeometry = widget->geometry();
+    const auto frameGeometry = widget->frameGeometry();
+    const auto frame = QMargins(widgetGeometry.left() - frameGeometry.left(), widgetGeometry.top() - frameGeometry.top(),
+                    frameGeometry.right() - widgetGeometry.right(), frameGeometry.bottom() - widgetGeometry.bottom());
+    return frame.isNull() ? defaultAssumption : frame;
+}
+
 static bool centerWidgetInternal(QWidget *widget, const QWidget *parent, const QPoint *position, bool avoidOverflow)
 {
     const auto availableGeometry = parent ? parent->geometry() : availableScreenGeometryAtPoint(position ? *position : QCursor::pos());
@@ -140,7 +161,7 @@ static bool centerWidgetInternal(QWidget *widget, const QWidget *parent, const Q
         widget->setGeometry(alignedRect);
         return false;
     }
-    const auto limitedRect = limitRect(alignedRect, availableGeometry);
+    const auto limitedRect = limitRect(alignedRect, shrinkRectByMargins(availableGeometry, widgetFrame(widget)));
     widget->setGeometry(limitedRect);
     return alignedRect != limitedRect;
 }
@@ -160,10 +181,10 @@ void centerWidget(QWidget *widget, const QWidget *parent, const QPoint *position
  * \brief Moves the specified \a widget to be centered within the (available) screen area or \a parent if specified.
  * \returns Returns whether an overflow occurred.
  * \remarks
- * - If the widget overflows it is resized to take the whole available space in the dimention(s) that overflow. Note that
- *   this does *not* take the window frame into account. So if \a widget is a window it makes sense to show it using
- *   QWidget::showMaximized() to make it fill the entire screen to avoid clipped window frames. It makes also sense to
- *   assign a smaller size to avoid clipped window frames once the window is "de-maximized" again.
+ * - If the widget overflows it is resized to take the whole available space in the dimention(s) that overflow.
+ *   If the widget is a window, its frame is attempted to be taken into account. If the window frame can not be determined
+ *   a generous assumption is made. It can nevertheless make sense to simply show \a widget using QWidget::showMaximized()
+ *   to make it simply fill the entire screen after all.
  * - The screen containing the current cursor position is used unless \a position is specified.
  */
 bool centerWidgetAvoidingOverflow(QWidget *widget, const QWidget *parent, const QPoint *position)
