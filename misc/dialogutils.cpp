@@ -149,7 +149,7 @@ static QMargins widgetFrame(QWidget *widget, const QMargins &defaultAssumption =
     const auto widgetGeometry = widget->geometry();
     const auto frameGeometry = widget->frameGeometry();
     const auto frame = QMargins(widgetGeometry.left() - frameGeometry.left(), widgetGeometry.top() - frameGeometry.top(),
-                    frameGeometry.right() - widgetGeometry.right(), frameGeometry.bottom() - widgetGeometry.bottom());
+        frameGeometry.right() - widgetGeometry.right(), frameGeometry.bottom() - widgetGeometry.bottom());
     return frame.isNull() ? defaultAssumption : frame;
 }
 
