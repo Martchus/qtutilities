@@ -187,6 +187,11 @@ function (query_qmake_variable_path QMAKE_VARIABLE)
 
     # assume VARIABLE_VALUE is relative within CMAKE_FIND_ROOT_PATH, e.g. QT_INSTALL_TRANSLATIONS might be set to
     # "share/qt6/translations"
+    if ("${CMAKE_VERSION}" VERSION_LESS "3.12.0")
+        message(
+            WARNING "Unable to resolve Qt variable ${QMAKE_VARIABLE} to an existing path, try using CMake 3.12 or newer")
+        return() # skip if CMake version too old like on Leap 15.1
+    endif ()
     foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH} "")
         foreach (PREFIX_PATH ${CMAKE_PREFIX_PATH} "")
             string(JOIN "/" FULL_PATH ${ROOT_PATH} ${PREFIX_PATH} ${VARIABLE_VALUE})
