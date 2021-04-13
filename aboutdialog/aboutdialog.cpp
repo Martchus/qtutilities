@@ -45,7 +45,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
     m_ui->setupUi(this);
     makeHeading(m_ui->productNameLabel);
     setStyleSheet(dialogStyle());
-    setWindowFlags(Qt::Tool);
+    setWindowFlags((windowFlags()) & ~(Qt::WindowMinMaxButtonsHint | Qt::WindowContextHelpButtonHint | Qt::WindowFullscreenButtonHint));
     if (!applicationName.isEmpty()) {
         m_ui->productNameLabel->setText(applicationName);
     } else if (!QApplication::applicationDisplayName().isEmpty()) {
