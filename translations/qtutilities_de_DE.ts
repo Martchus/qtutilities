@@ -290,8 +290,14 @@
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="249"/>
         <source>These settings take effect after restarting the application.
-These settings might be overwritten by your Qt platfrom integration plugin and hence have no effect.</source>
+These settings might be overwritten by your Qt platform integration plugin and hence have no effect.</source>
         <translation>Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.
+Außerdem werden sie vielleicht vom QPA-Plugin überschrieben und funktionieren daher nicht.</translation>
+    </message>
+    <message>
+        <source>These settings take effect after restarting the application.
+These settings might be overwritten by your Qt platfrom integration plugin and hence have no effect.</source>
+        <translation type="vanished">Diese Einstellungen wirken sich erst nach einem Neustart der Anwendung aus.
 Außerdem werden sie vielleicht vom QPA-Plugin überschrieben und funktionieren daher nicht.</translation>
     </message>
     <message>
@@ -425,8 +431,12 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.cpp" line="253"/>
-        <source>unknonw error</source>
+        <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
+    </message>
+    <message>
+        <source>unknonw error</source>
+        <translation type="vanished">unbekannter Fehler</translation>
     </message>
 </context>
 <context>
