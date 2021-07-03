@@ -54,7 +54,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         m_ui->productNameLabel->setText(QApplication::applicationName());
     }
     if (creator.startsWith(QLatin1Char('<'))) {
-        // assing rich text as-is
+        // assign rich text as-is
         m_ui->creatorLabel->setText(creator);
     } else {
         // add "developed by " before creator name

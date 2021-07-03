@@ -181,7 +181,7 @@ void centerWidget(QWidget *widget, const QWidget *parent, const QPoint *position
  * \brief Moves the specified \a widget to be centered within the (available) screen area or \a parent if specified.
  * \returns Returns whether an overflow occurred.
  * \remarks
- * - If the widget overflows it is resized to take the whole available space in the dimention(s) that overflow.
+ * - If the widget overflows it is resized to take the whole available space in the dimension(s) that overflow.
  *   If the widget is a window, its frame is attempted to be taken into account. If the window frame can not be determined
  *   a generous assumption is made. It can nevertheless make sense to simply show \a widget using QWidget::showMaximized()
  *   to make it simply fill the entire screen after all.

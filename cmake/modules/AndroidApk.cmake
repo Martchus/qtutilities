@@ -223,7 +223,7 @@ function (add_android_apk_extra_libs TARGET_NAME)
         else ()
             message(
                 STATUS "Unable to find library \"${LIBRARY}\" required by target \"${TARGET_NAME}\". The library is likely "
-                       "a private dependency of the target and therfore not visible within the context of creating the "
+                       "a private dependency of the target and therefore not visible within the context of creating the "
                        "final application. Relying on androiddeployqt for adding it to the APK.")
         endif ()
     endforeach ()

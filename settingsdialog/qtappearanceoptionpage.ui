@@ -247,7 +247,7 @@
      </property>
      <property name="text">
       <string>These settings take effect after restarting the application.
-These settings might be overwritten by your Qt platfrom integration plugin and hence have no effect.</string>
+These settings might be overwritten by your Qt platform integration plugin and hence have no effect.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>

@@ -79,7 +79,7 @@ inline const QString &EnterPasswordDialog::password() const
  *
  * The instruction text is displayed at the top of the dialog.
  * If the instruction text is empty the default text "Enter the new password"
- * or "Enter the password" (depending on whether the verification is requried or
+ * or "Enter the password" (depending on whether the verification is required or
  * not) displayed.
  *
  * \sa EnterPasswordDialog::setInstruction()

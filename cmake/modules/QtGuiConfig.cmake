@@ -69,7 +69,7 @@ elseif (APPLE)
     set(GUI_TYPE MACOSX_BUNDLE)
 endif ()
 
-# add source files requried by both GUI variants
+# add source files required by both GUI variants
 list(APPEND SRC_FILES ${GUI_SRC_FILES})
 list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
 

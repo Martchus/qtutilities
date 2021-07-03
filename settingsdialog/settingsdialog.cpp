@@ -250,7 +250,7 @@ bool SettingsDialog::apply()
             QStringList &errors = const_cast<OptionPage *>(page)->errors();
             if (errors.isEmpty()) {
                 errorMessage.append(QStringLiteral("<li><i>") % category->displayName() % QLatin1Char('/') % page->widget()->windowTitle()
-                    % QStringLiteral("</i>: ") % tr("unknonw error") % QStringLiteral("</li>"));
+                    % QStringLiteral("</i>: ") % tr("unknown error") % QStringLiteral("</li>"));
             } else {
                 for (const QString &error : errors) {
                     errorMessage.append(QStringLiteral("<li><i>") % category->displayName() % QLatin1Char('/') % page->widget()->windowTitle()

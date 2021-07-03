@@ -75,7 +75,7 @@ QtSettings::QtSettings()
 
 /*!
  * \brief Destroys the settings object.
- * \remarks Unlike QSettings not explicitely saved settings are not saved
+ * \remarks Unlike QSettings not explicitly saved settings are not saved
  * automatically.
  */
 QtSettings::~QtSettings()
@@ -91,7 +91,7 @@ bool QtSettings::hasCustomFont() const
 }
 
 /*!
- * \brief Restors the settings from the specified QSettings object.
+ * \brief Restores the settings from the specified QSettings object.
  * \remarks The restored values are not applied automatically (except
  * translation path).
  * \sa apply(), save()
@@ -142,7 +142,7 @@ void QtSettings::save(QSettings &settings) const
 }
 
 /*!
- * \brief Applies the current configuraion.
+ * \brief Applies the current configuration.
  * \remarks
  *  - Some settings take only affect after restarting the application.
  *  - QApplication/QGuiApplication must be instantiated before calling this
