@@ -9,6 +9,7 @@
 #if defined(@META_PROJECT_VARNAME_UPPER@_USE_WEBENGINE)
 # include <QWebEngineView>
 # include <QWebEnginePage>
+# include <QtWebEngineWidgetsVersion>
 #elif defined(@META_PROJECT_VARNAME_UPPER@_USE_WEBKIT)
 # include <QWebView>
 # include <QWebPage>
