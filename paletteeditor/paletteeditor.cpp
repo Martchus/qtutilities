@@ -3,10 +3,14 @@
 
 #include "ui_paletteeditor.h"
 
+#include <QFileDialog>
 #include <QHeaderView>
 #include <QLabel>
+#include <QMessageBox>
 #include <QMetaProperty>
 #include <QPainter>
+#include <QPushButton>
+#include <QSettings>
 #include <QStyle>
 #include <QToolButton>
 
@@ -37,6 +41,11 @@ PaletteEditor::PaletteEditor(QWidget *parent)
     m_ui->paletteView->setRootIsDecorated(false);
     m_ui->paletteView->setColumnHidden(2, true);
     m_ui->paletteView->setColumnHidden(3, true);
+
+    auto saveButton = m_ui->buttonBox->addButton(tr("Save…"), QDialogButtonBox::ActionRole);
+    connect(saveButton, &QPushButton::clicked, this, &PaletteEditor::save);
+    auto loadButton = m_ui->buttonBox->addButton(tr("Load…"), QDialogButtonBox::ActionRole);
+    connect(loadButton, &QPushButton::clicked, this, &PaletteEditor::load);
 
     connect(m_paletteModel, &PaletteModel::paletteChanged, this, &PaletteEditor::paletteChanged);
     connect(m_ui->buildButton, &ColorButton::colorChanged, this, &PaletteEditor::buildPalette);
@@ -122,6 +131,74 @@ void PaletteEditor::handleDetailsRadioClicked()
     header->resizeSection(3, w / 3);
     m_compute = false;
     m_paletteModel->setCompute(false);
+}
+
+static inline QString paletteSuffix()
+{
+    return QStringLiteral("ini");
+}
+
+static inline QString paletteFilter()
+{
+    return PaletteEditor::tr("Color palette configuration (*.ini)");
+}
+
+static bool loadPalette(const QString &fileName, QPalette *pal, QString *errorMessage)
+{
+    const auto settings = QSettings(fileName, QSettings::IniFormat);
+    if (settings.status() != QSettings::NoError) {
+        *errorMessage = PaletteEditor::tr("Unable to load \"%1\".").arg(fileName);
+        return false;
+    }
+    const auto value = settings.value(QStringLiteral("palette"));
+    if (!value.isValid() || !value.canConvert<QPalette>()) {
+        *errorMessage = PaletteEditor::tr("\"%1\" does not contain a valid palette.").arg(fileName);
+        return false;
+    }
+    *pal = settings.value(QStringLiteral("palette")).value<QPalette>();
+    return true;
+}
+
+static bool savePalette(const QString &fileName, const QPalette &pal, QString *errorMessage)
+{
+    auto settings = QSettings(fileName, QSettings::IniFormat);
+    settings.setValue(QStringLiteral("palette"), QVariant(pal));
+    settings.sync();
+    if (settings.status() != QSettings::NoError) {
+        *errorMessage = PaletteEditor::tr("Unable to write \"%1\".").arg(fileName);
+        return false;
+    }
+    return true;
+}
+
+void PaletteEditor::load()
+{
+    auto dialog = QFileDialog(this, tr("Load palette"), QString(), paletteFilter());
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    if (dialog.exec() != QDialog::Accepted) {
+        return;
+    }
+    auto pal = QPalette();
+    auto errorMessage = QString();
+    if (loadPalette(dialog.selectedFiles().constFirst(), &pal, &errorMessage)) {
+        setPalette(pal);
+    } else {
+        QMessageBox::warning(this, tr("Error reading palette"), errorMessage);
+    }
+}
+
+void PaletteEditor::save()
+{
+    auto dialog = QFileDialog(this, tr("Save palette"), QString(), paletteFilter());
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDefaultSuffix(paletteSuffix());
+    if (dialog.exec() != QDialog::Accepted) {
+        return;
+    }
+    auto errorMessage = QString();
+    if (!savePalette(dialog.selectedFiles().constFirst(), palette(), &errorMessage)) {
+        QMessageBox::warning(this, tr("Error writing palette"), errorMessage);
+    }
 }
 
 void PaletteEditor::paletteChanged(const QPalette &palette)

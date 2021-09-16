@@ -43,6 +43,8 @@ private Q_SLOTS:
     void paletteChanged(const QPalette &palette);
     void handleComputeRadioClicked();
     void handleDetailsRadioClicked();
+    void load();
+    void save();
 
 private:
     void updatePreviewPalette();
