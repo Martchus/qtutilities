@@ -39,18 +39,12 @@ public:
     void setPalette(const QPalette &palette, const QPalette &parentPalette);
 
 private Q_SLOTS:
-    void handleBuildButtonColorChanged(const QColor &);
-    void handleActiveRadioClicked();
-    void handleInactiveRadioClicked();
-    void handleDisabledRadioClicked();
+    void buildPalette();
+    void paletteChanged(const QPalette &palette);
     void handleComputeRadioClicked();
     void handleDetailsRadioClicked();
 
-    void paletteChanged(const QPalette &palette);
-
 private:
-    void buildPalette();
-
     void updatePreviewPalette();
     void updateStyledButton();
 

@@ -31,13 +31,17 @@ PaletteEditor::PaletteEditor(QWidget *parent)
     auto *const delegate = new ColorDelegate(this);
     m_ui->paletteView->setItemDelegate(delegate);
     m_ui->paletteView->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    connect(m_paletteModel, &PaletteModel::paletteChanged, this, &PaletteEditor::paletteChanged);
     m_ui->paletteView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_ui->paletteView->setDragEnabled(true);
     m_ui->paletteView->setDropIndicatorShown(true);
     m_ui->paletteView->setRootIsDecorated(false);
     m_ui->paletteView->setColumnHidden(2, true);
     m_ui->paletteView->setColumnHidden(3, true);
+
+    connect(m_paletteModel, &PaletteModel::paletteChanged, this, &PaletteEditor::paletteChanged);
+    connect(m_ui->buildButton, &ColorButton::colorChanged, this, &PaletteEditor::buildPalette);
+    connect(m_ui->computeRadio, &QRadioButton::clicked, this, &PaletteEditor::handleComputeRadioClicked);
+    connect(m_ui->detailsRadio, &QRadioButton::clicked, this, &PaletteEditor::handleDetailsRadioClicked);
 }
 
 PaletteEditor::~PaletteEditor()
@@ -91,29 +95,6 @@ void PaletteEditor::setPalette(const QPalette &palette, const QPalette &parentPa
 {
     m_parentPalette = parentPalette;
     setPalette(palette);
-}
-
-void PaletteEditor::handleBuildButtonColorChanged(const QColor &)
-{
-    buildPalette();
-}
-
-void PaletteEditor::handleActiveRadioClicked()
-{
-    m_currentColorGroup = QPalette::Active;
-    updatePreviewPalette();
-}
-
-void PaletteEditor::handleInactiveRadioClicked()
-{
-    m_currentColorGroup = QPalette::Inactive;
-    updatePreviewPalette();
-}
-
-void PaletteEditor::handleDisabledRadioClicked()
-{
-    m_currentColorGroup = QPalette::Disabled;
-    updatePreviewPalette();
 }
 
 void PaletteEditor::handleComputeRadioClicked()
