@@ -29,37 +29,34 @@ using namespace std;
 
 namespace QtUtilities {
 
+#if defined(Q_OS_WINDOWS) || defined(Q_OS_DARWIN)
+#define QT_UTILITIES_CAN_ENFORCE_FREETYPE 1
+#endif
+#if defined(Q_OS_WINDOWS)
+#define QT_UTILITIES_CAN_ENABLE_DARKMODE 1
+#endif
+
 struct QtSettingsData {
-    QtSettingsData();
+    QtSettingsData() = default;
 
     QFont font;
     QPalette palette;
     QString widgetStyle;
     QString styleSheetPath;
-    QString iconTheme;
+    QString iconTheme = QIcon::themeName();
     QLocale defaultLocale;
-    QString localeName;
+    QString localeName = defaultLocale.name();
     QString additionalPluginDirectory;
     QString additionalIconThemeSearchPath;
-    bool customFont;
-    bool customPalette;
-    bool customWidgetStyle;
-    bool customStyleSheet;
-    bool customIconTheme;
-    bool customLocale;
+    QString fontEngine;
+    bool customFont = false;
+    bool customPalette = false;
+    bool customWidgetStyle = false;
+    bool customStyleSheet = false;
+    bool customIconTheme = false;
+    bool customLocale = false;
+    bool enableDarkmode = false;
 };
-
-inline QtSettingsData::QtSettingsData()
-    : iconTheme(QIcon::themeName())
-    , localeName(defaultLocale.name())
-    , customFont(false)
-    , customPalette(false)
-    , customWidgetStyle(false)
-    , customStyleSheet(false)
-    , customIconTheme(false)
-    , customLocale(false)
-{
-}
 
 /*!
  * \brief Creates a new settings object.
@@ -114,6 +111,8 @@ void QtSettings::restore(QSettings &settings)
     m_d->additionalPluginDirectory = settings.value(QStringLiteral("plugindir")).toString();
     m_d->additionalIconThemeSearchPath = settings.value(QStringLiteral("iconthemepath")).toString();
     TranslationFiles::additionalTranslationFilePath() = settings.value(QStringLiteral("trpath")).toString();
+    m_d->fontEngine = settings.value(QStringLiteral("fontengine")).toString();
+    m_d->enableDarkmode = settings.value(QStringLiteral("enabledarkmode")).toBool();
     settings.endGroup();
 }
 
@@ -138,17 +137,28 @@ void QtSettings::save(QSettings &settings) const
     settings.setValue(QStringLiteral("plugindir"), m_d->additionalPluginDirectory);
     settings.setValue(QStringLiteral("iconthemepath"), m_d->additionalIconThemeSearchPath);
     settings.setValue(QStringLiteral("trpath"), QVariant(TranslationFiles::additionalTranslationFilePath()));
+    settings.setValue(QStringLiteral("enforcefreetype"), m_d->fontEngine);
+    settings.setValue(QStringLiteral("enabledarkmode"), m_d->enableDarkmode);
     settings.endGroup();
 }
 
 /*!
- * \brief Applies the current configuration.
+ * \brief Applies values from the current configuration which need to be set before the platform plugin has been
+ *        instantiated.
+ */
+void QtSettings::applyPlatformSettings()
+{
+
+}
+
+/*!
+ * \brief Applies the current configuration except values which need to be set before the platform plugin has been
+ *        instantiated.
  * \remarks
  *  - Some settings take only affect after restarting the application.
  *  - QApplication/QGuiApplication must be instantiated before calling this
- * method.
- *  - Hence it makes most sense to call this directly after instantiating
- * QApplication/QGuiApplication.
+ *    method. Hence it makes most sense to call this directly after instantiating
+ *    QApplication/QGuiApplication.
  */
 void QtSettings::apply()
 {
@@ -205,8 +215,7 @@ void QtSettings::apply()
  * - The QtSettings instance does not keep the ownership over the returned
  * category.
  * - The pages of the returned category require the QtSetings instance which
- * hence
- *   must be present as long as all pages are destroyed.
+ *   hence must be present until all pages are destroyed.
  */
 OptionCategory *QtSettings::category()
 {

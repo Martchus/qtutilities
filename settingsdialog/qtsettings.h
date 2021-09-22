@@ -15,7 +15,11 @@ struct QtSettingsData;
 
 BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtAppearanceOptionPage)
 public:
+enum PresetFlags { Dark };
 explicit QtAppearanceOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
+
+Q_SIGNALS:
+void presetsApplied(PresetFlags flags);
 
 private:
 DECLARE_SETUP_WIDGETS
@@ -47,6 +51,7 @@ public:
 
     void restore(QSettings &settings);
     void save(QSettings &settings) const;
+    void applyPlatformSettings();
     void apply();
     bool hasCustomFont() const;
 

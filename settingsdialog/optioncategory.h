@@ -31,6 +31,7 @@ public:
     void setIcon(const QIcon &icon);
     const QList<OptionPage *> &pages() const;
     void assignPages(const QList<OptionPage *> &pages);
+    template<typename PageType> PageType *page();
     bool applyAllPages();
     void resetAllPages();
     bool matches(const QString &searchKeyWord) const;
@@ -87,6 +88,19 @@ inline void OptionCategory::setIcon(const QIcon &icon)
 inline const QList<OptionPage *> &OptionCategory::pages() const
 {
     return m_pages;
+}
+
+/*!
+ * \brief Returns the first page with the specified \tp PageType or nullptr if there is no such page.
+ */
+template<typename PageType> PageType *OptionCategory::page()
+{
+    for (auto *const genericPage : m_pages) {
+        if (const auto *const page = qobject_cast<PageType *>(genericPage)) {
+            return page;
+        }
+    }
+    return nullptr;
 }
 
 /*!
