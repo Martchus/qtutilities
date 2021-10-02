@@ -110,6 +110,15 @@ foreach (MODULE ${IMPORTED_KF_MODULES})
     endif ()
 endforeach ()
 
+# enable TLS support by default when using Qt Network (relevant for linking against static plugin)
+if (NOT DEFINED TLS_SUPPORT)
+    if (Network IN_LIST QT_MODULES OR Network IN_LIST IMPORTED_QT_MODULES)
+        set(TLS_SUPPORT ON)
+    else ()
+        set(TLS_SUPPORT OFF)
+    endif ()
+endif ()
+
 # built-in platform, imageformat and iconengine plugins when linking statically against Qt
 if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
     message(STATUS "Linking application ${META_PROJECT_NAME} against Qt plugins because static linkage is enabled.")
@@ -146,6 +155,32 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
                 ONLY_PLUGINS)
         else ()
             message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
+        endif ()
+    endif ()
+
+    # ensure a TLS plugin is built-in when available and when creating an app using Qt Network - required since Qt 6.2.0
+    # which "pluginized" TLS support
+    if (TLS_SUPPORT)
+        set(KNOWN_TLS_PLUGINS ${META_TLS_PLUGINS} SchannelBackend TlsBackendOpenSSL)
+        set(USED_TLS_PLUGINS)
+        foreach (TLS_PLUGIN ${KNOWN_TLS_PLUGINS})
+            if (TARGET "${QT_PACKAGE_PREFIX}::Q${TLS_PLUGIN}Plugin")
+                use_qt_module(
+                    PREFIX
+                    "${QT_PACKAGE_PREFIX}"
+                    MODULE
+                    Network
+                    PLUGINS
+                    ${TLS_PLUGIN}
+                    ONLY_PLUGINS)
+                list(APPEND USED_TLS_PLUGINS "${TLS_PLUGIN}")
+                break() # one plugin is sufficient
+            endif ()
+        endforeach ()
+
+        # allow importing TLS plugins via qtconfig.h
+        if (USED_TLS_PLUGINS)
+            list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" ")" "${USED_TLS_PLUGINS}" USED_TLS_PLUGINS_ARRAY)
         endif ()
     endif ()
 
