@@ -149,8 +149,8 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
         endif ()
     endif ()
 
-    # ensure all available widget style plugins are built-in when creating a Qt Widgets application note: required since Qt
-    # 5.10 because the styles have been "pluginized" (see commit 4f3249f)
+    # ensure all available widget style plugins are built-in when creating a Qt Widgets application - required since Qt 5.10
+    # because the styles have been "pluginized" (see commit 4f3249f)
     set(KNOWN_WIDGET_STYLE_PLUGINS WindowsVistaStyle MacStyle AndroidStyle)
     set(USED_WIDGET_STYLE_PLUGINS)
     if (Widgets IN_LIST QT_MODULES)
@@ -168,7 +168,7 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
             endif ()
         endforeach ()
 
-        # allow importing image format plugins via qtconfig.h
+        # allow importing widget style plugins via qtconfig.h
         if (USED_WIDGET_STYLE_PLUGINS)
             list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "Plugin)" "${USED_WIDGET_STYLE_PLUGINS}"
                            WIDGET_STYLE_PLUGINS_ARRAY)
