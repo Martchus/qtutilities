@@ -176,7 +176,7 @@ set(PACKAGE_NAMESPACE
     ""
     CACHE STRING "sets the namespace (prefix) for find_package() calls to packages configured via c++utilities")
 if (PACKAGE_NAMESPACE)
-  set(PACKAGE_NAMESPACE_PREFIX "${PACKAGE_NAMESPACE}-")
+    set(PACKAGE_NAMESPACE_PREFIX "${PACKAGE_NAMESPACE}-")
 endif ()
 find_package(${PACKAGE_NAMESPACE_PREFIX}c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.5.0 REQUIRED)
 use_cpp_utilities()
