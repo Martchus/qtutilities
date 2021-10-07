@@ -90,7 +90,8 @@ if (ANDROID)
     list(APPEND CMAKE_TEMPLATE_FILES cmake/templates/android-deployment.json.in)
 endif ()
 
-set(TS_FILES translations/${META_PROJECT_NAME}_de_DE.ts translations/${META_PROJECT_NAME}_en_US.ts)
+set(TS_FILES translations/${META_PROJECT_NAME}_zh_CN.ts translations/${META_PROJECT_NAME}_de_DE.ts
+             translations/${META_PROJECT_NAME}_en_US.ts)
 
 set(DOC_FILES README.md)
 
