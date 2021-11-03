@@ -52,7 +52,7 @@ inline StringView makeStringView(const QString &str)
 /*!
  * \brief Makes either a QStringView or a QStringRef depending on the Qt version, applying "mid()" parameters.
  */
-template <typename PosType1, typename PosType2,
+template <typename PosType1, typename PosType2 = PosType1,
     CppUtilities::Traits::EnableIf<std::is_integral<PosType1>, std::is_signed<PosType1>, std::is_integral<PosType2>, std::is_signed<PosType2>>
         * = nullptr>
 inline StringView midRef(const QString &str, PosType1 pos, PosType2 n = -1)
