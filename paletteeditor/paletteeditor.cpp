@@ -282,7 +282,7 @@ PaletteModel::PaletteModel(QObject *parent)
 
 int PaletteModel::rowCount(const QModelIndex &) const
 {
-    return m_roleNames.count();
+    return static_cast<int>(m_roleNames.count());
 }
 
 int PaletteModel::columnCount(const QModelIndex &) const
@@ -348,7 +348,7 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
                 m_palette.setBrush(QPalette::Disabled, QPalette::Text, br);
                 m_palette.setBrush(QPalette::Disabled, QPalette::ButtonText, br);
                 idxBegin = PaletteModel::index(0, 0);
-                idxEnd = PaletteModel::index(m_roleNames.count() - 1, 3);
+                idxEnd = PaletteModel::index(static_cast<int>(m_roleNames.count()) - 1, 3);
                 break;
             case QPalette::Window:
                 m_palette.setBrush(QPalette::Disabled, QPalette::Base, br);
@@ -435,7 +435,7 @@ void PaletteModel::setPalette(const QPalette &palette, const QPalette &parentPal
     m_parentPalette = parentPalette;
     m_palette = palette;
     const QModelIndex idxBegin = index(0, 0);
-    const QModelIndex idxEnd = index(m_roleNames.count() - 1, 3);
+    const QModelIndex idxEnd = index(static_cast<int>(m_roleNames.count()) - 1, 3);
     emit dataChanged(idxBegin, idxEnd);
 }
 

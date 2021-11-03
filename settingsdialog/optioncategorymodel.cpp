@@ -6,6 +6,8 @@
 #include <QStyle>
 #endif
 
+#include <utility>
+
 namespace QtUtilities {
 
 /*!
@@ -30,7 +32,7 @@ OptionCategoryModel::OptionCategoryModel(const QList<OptionCategory *> &categori
     : QAbstractListModel(parent)
     , m_categories(categories)
 {
-    for (OptionCategory *category : m_categories) {
+    for (OptionCategory *category : std::as_const(m_categories)) {
         category->setParent(this);
     }
 }
@@ -52,7 +54,7 @@ void OptionCategoryModel::setCategories(const QList<OptionCategory *> &categorie
     beginResetModel();
     qDeleteAll(m_categories);
     m_categories = categories;
-    for (OptionCategory *const category : m_categories) {
+    for (OptionCategory *const category : std::as_const(m_categories)) {
         category->setParent(this);
         connect(category, &OptionCategory::displayNameChanged, this, &OptionCategoryModel::categoryChangedName);
         connect(category, &OptionCategory::iconChanged, this, &OptionCategoryModel::categoryChangedIcon);
@@ -62,7 +64,7 @@ void OptionCategoryModel::setCategories(const QList<OptionCategory *> &categorie
 
 int OptionCategoryModel::rowCount(const QModelIndex &parent) const
 {
-    return parent.isValid() ? 0 : m_categories.size();
+    return parent.isValid() ? 0 : static_cast<int>(m_categories.size());
 }
 
 QVariant OptionCategoryModel::data(const QModelIndex &index, int role) const
@@ -98,7 +100,7 @@ void OptionCategoryModel::categoryChangedName()
     if (!senderCategory) {
         return;
     }
-    for (int i = 0, end = m_categories.size(); i < end; ++i) {
+    for (int i = 0, end = static_cast<int>(m_categories.size()); i < end; ++i) {
         if (senderCategory == m_categories.at(i)) {
             QModelIndex index = this->index(i);
             emit dataChanged(index, index, QVector<int>({ Qt::DisplayRole }));
@@ -115,7 +117,7 @@ void OptionCategoryModel::categoryChangedIcon()
     if (!senderCategory) {
         return;
     }
-    for (int i = 0, end = m_categories.size(); i < end; ++i) {
+    for (int i = 0, end = static_cast<int>(m_categories.size()); i < end; ++i) {
         if (senderCategory == m_categories.at(i)) {
             QModelIndex index = this->index(i);
             emit dataChanged(index, index, QVector<int>({ Qt::DecorationRole }));

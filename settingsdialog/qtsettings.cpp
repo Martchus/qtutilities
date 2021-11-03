@@ -293,15 +293,16 @@ QWidget *QtAppearanceOptionPage::setupWidget()
     // setup icon theme selection
     const QStringList searchPaths = QIcon::themeSearchPaths() << QStringLiteral("/usr/share/icons/");
     for (const QString &searchPath : searchPaths) {
-        for (const QString &iconTheme : QDir(searchPath).entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+        const auto dir = QDir(searchPath).entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+        for (const QString &iconTheme : dir) {
             const int existingItemIndex = ui()->iconThemeComboBox->findData(iconTheme);
             QFile indexFile(searchPath % QChar('/') % iconTheme % QStringLiteral("/index.theme"));
             QByteArray index;
             if (indexFile.open(QFile::ReadOnly) && !(index = indexFile.readAll()).isEmpty()) {
-                const int iconThemeSection = index.indexOf("[Icon Theme]");
-                const int nameStart = index.indexOf("Name=", iconThemeSection != -1 ? iconThemeSection : 0);
+                const auto iconThemeSection = index.indexOf("[Icon Theme]");
+                const auto nameStart = index.indexOf("Name=", iconThemeSection != -1 ? iconThemeSection : 0);
                 if (nameStart != -1) {
-                    int nameLength = index.indexOf("\n", nameStart) - nameStart - 5;
+                    auto nameLength = index.indexOf("\n", nameStart) - nameStart - 5;
                     if (nameLength > 0) {
                         QString displayName = index.mid(nameStart + 5, nameLength);
                         if (displayName != iconTheme) {
@@ -355,7 +356,8 @@ QWidget *QtLanguageOptionPage::setupWidget()
 
     // add all available locales to combo box
     auto *localeComboBox = ui()->localeComboBox;
-    for (const QLocale &locale : QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry)) {
+    const auto locales = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry);
+    for (const QLocale &locale : locales) {
         localeComboBox->addItem(locale.name());
     }
 

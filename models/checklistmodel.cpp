@@ -32,7 +32,7 @@ ChecklistModel::ChecklistModel(QObject *parent)
 int ChecklistModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
-        return m_items.size();
+        return static_cast<int>(m_items.size());
     }
     return 0;
 }
@@ -261,7 +261,7 @@ void ChecklistModel::restore(QSettings &settings, const QString &name)
  */
 void ChecklistModel::save(QSettings &settings, const QString &name) const
 {
-    settings.beginWriteArray(name, m_items.size());
+    settings.beginWriteArray(name, static_cast<int>(m_items.size()));
     int index = 0;
     for (const ChecklistItem &item : m_items) {
         settings.setArrayIndex(index);
@@ -295,7 +295,7 @@ void ChecklistModel::applyVariantList(const QVariantList &checkedIds)
     for (auto &item : m_items) {
         item.m_checkState = checkedIds.contains(item.id()) ? Qt::Checked : Qt::Unchecked;
     }
-    emit dataChanged(index(0), index(m_items.size()), { Qt::CheckStateRole });
+    emit dataChanged(index(0), index(static_cast<int>(m_items.size())), { Qt::CheckStateRole });
 }
 
 } // namespace QtUtilities

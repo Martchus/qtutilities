@@ -113,7 +113,7 @@ inline NotificationImage::NotificationImage(SwappedImage image)
 inline NotificationImage::NotificationImage(const QImage &image)
     : width(image.width())
     , height(image.height())
-    , rowstride(image.bytesPerLine())
+    , rowstride(static_cast<qint32>(image.bytesPerLine()))
     , hasAlpha(image.hasAlphaChannel())
     , channels(image.isGrayscale() ? 1
               : hasAlpha           ? 4

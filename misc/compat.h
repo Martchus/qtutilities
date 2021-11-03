@@ -3,6 +3,8 @@
 
 #include "../global.h"
 
+#include <c++utilities/misc/traits.h>
+
 #include <QtGlobal>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -50,7 +52,10 @@ inline StringView makeStringView(const QString &str)
 /*!
  * \brief Makes either a QStringView or a QStringRef depending on the Qt version, applying "mid()" parameters.
  */
-inline StringView midRef(const QString &str, int pos, int n = -1)
+template <typename PosType1, typename PosType2,
+    CppUtilities::Traits::EnableIf<std::is_integral<PosType1>, std::is_signed<PosType1>, std::is_integral<PosType2>, std::is_signed<PosType2>>
+        * = nullptr>
+inline StringView midRef(const QString &str, PosType1 pos, PosType2 n = -1)
 {
 #ifdef QT_UTILITIES_USE_Q_STRING_VIEW
     return QStringView(str).mid(pos, n);
