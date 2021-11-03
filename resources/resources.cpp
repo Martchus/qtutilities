@@ -314,7 +314,9 @@ bool hasCoreApp()
 void setupCommonQtApplicationAttributes()
 {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    if (!QCoreApplication::instance()) {
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    }
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 #endif
 }
