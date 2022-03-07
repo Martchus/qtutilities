@@ -28,6 +28,7 @@ class PaletteEditor;
  */
 class QT_UTILITIES_EXPORT PaletteEditor : public QDialog {
     Q_OBJECT
+    Q_PROPERTY(QPalette palette READ palette WRITE setPalette)
 public:
     PaletteEditor(QWidget *parent);
     ~PaletteEditor() override;

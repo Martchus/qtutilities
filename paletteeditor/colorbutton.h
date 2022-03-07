@@ -14,6 +14,7 @@ namespace QtUtilities {
  */
 class QT_UTILITIES_EXPORT ColorButton : public QToolButton {
     Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(bool backgroundCheckered READ isBackgroundCheckered WRITE setBackgroundCheckered)
 public:
     ColorButton(QWidget *parent = nullptr);
