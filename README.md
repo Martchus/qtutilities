@@ -9,5 +9,7 @@ c++utilities repository.
 The library also depends on the following Qt modules (version 5.6 or higher): core, gui, widgets
 Some header files also require further Qt modules.
 
-## License
+## Copyright notice and license
+Copyright © 2015-2022 Marius Kittler
+
 All code is licensed under [GPL-2-or-later](LICENSE).
