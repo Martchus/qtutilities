@@ -10,7 +10,7 @@ set(META_APP_DESCRIPTION
     "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
 set(META_VERSION_MAJOR 6)
 set(META_VERSION_MINOR 6)
-set(META_VERSION_PATCH 0)
+set(META_VERSION_PATCH 1)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 project(${META_PROJECT_NAME})
@@ -198,7 +198,7 @@ include(ConfigHeader)
 
 # configure test target
 include(TestUtilities)
-set(QT_TEST_LIBRARIES ${CPP_UTILITIES_LIB} ${META_TARGET_NAME})
+list(APPEND QT_TEST_LIBRARIES ${CPP_UTILITIES_LIB} ${META_TARGET_NAME})
 use_qt_module(LIBRARIES_VARIABLE "QT_TEST_LIBRARIES" PREFIX "${QT_PACKAGE_PREFIX}" MODULE "Test")
 foreach (TEST ${QT_TESTS})
     configure_test_target(TEST_NAME "${TEST}_tests" SRC_FILES "tests/${TEST}.cpp" LIBRARIES "${QT_TEST_LIBRARIES}")

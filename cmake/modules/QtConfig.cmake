@@ -120,14 +120,27 @@ if (NOT DEFINED TLS_SUPPORT)
 endif ()
 
 # built-in platform, imageformat and iconengine plugins when linking statically against Qt
-if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
-    message(STATUS "Linking application ${META_PROJECT_NAME} against Qt plugins because static linkage is enabled.")
+if (TARGET "${QT_PACKAGE_PREFIX}::Core")
+    get_target_property(QT_TARGET_TYPE "${QT_PACKAGE_PREFIX}::Core" TYPE)
+endif ()
+if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
+    if (META_PROJECT_IS_APPLICATION)
+        set(QT_PLUGINS_LIBRARIES_VARIABLE PRIVATE_LIBRARIES)
+    else ()
+        set(QT_PLUGINS_LIBRARIES_VARIABLE QT_TEST_LIBRARIES)
+    endif ()
+    message(
+        STATUS
+            "Linking ${META_PROJECT_NAME} (${QT_PLUGINS_LIBRARIES_VARIABLE}) against Qt plugins because static linkage is enabled or a static Qt build is used."
+    )
 
     if (Gui IN_LIST QT_MODULES
         OR Widgets IN_LIST QT_MODULES
         OR Quick IN_LIST QT_MODULES)
-        if (WIN32)
+        if (WIN32 AND TARGET "${QT_PACKAGE_PREFIX}::QWindowsIntegrationPlugin")
             use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
                 PREFIX
                 "${QT_PACKAGE_PREFIX}"
                 MODULE
@@ -135,8 +148,10 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
                 PLUGINS
                 WindowsIntegration
                 ONLY_PLUGINS)
-        elseif (APPLE)
+        elseif (APPLE AND TARGET "${QT_PACKAGE_PREFIX}::QCocoaIntegrationPlugin")
             use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
                 PREFIX
                 "${QT_PACKAGE_PREFIX}"
                 MODULE
@@ -144,8 +159,23 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
                 PLUGINS
                 CocoaIntegration
                 ONLY_PLUGINS)
-        elseif (TARGET "${QT_PACKAGE_PREFIX}::QXcbIntegrationPlugin")
+        endif ()
+        if (UNIX AND TARGET "${QT_PACKAGE_PREFIX}::QOffscreenIntegrationPlugin")
             use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                PREFIX
+                "${QT_PACKAGE_PREFIX}"
+                MODULE
+                Gui
+                PLUGINS
+                OffscreenIntegration
+                ONLY_PLUGINS)
+        endif ()
+        if (TARGET "${QT_PACKAGE_PREFIX}::QXcbIntegrationPlugin")
+            use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
                 PREFIX
                 "${QT_PACKAGE_PREFIX}"
                 MODULE
@@ -153,8 +183,18 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
                 PLUGINS
                 XcbIntegration
                 ONLY_PLUGINS)
-        else ()
-            message(WARNING "The required platform plugin for your platform is unknown an can not be linked in statically.")
+        endif ()
+        if (TARGET "${QT_PACKAGE_PREFIX}::QWaylandIntegrationPlugin")
+            use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                PREFIX
+                "${QT_PACKAGE_PREFIX}"
+                MODULE
+                Gui
+                PLUGINS
+                WaylandIntegration
+                ONLY_PLUGINS)
         endif ()
     endif ()
 
@@ -166,6 +206,8 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
         foreach (TLS_PLUGIN ${KNOWN_TLS_PLUGINS})
             if (TARGET "${QT_PACKAGE_PREFIX}::Q${TLS_PLUGIN}Plugin")
                 use_qt_module(
+                    LIBRARIES_VARIABLE
+                    "${QT_PLUGINS_LIBRARIES_VARIABLE}"
                     PREFIX
                     "${QT_PACKAGE_PREFIX}"
                     MODULE
@@ -192,6 +234,8 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
         foreach (WIDGET_STYLE_PLUGIN ${KNOWN_WIDGET_STYLE_PLUGINS})
             if (TARGET "${QT_PACKAGE_PREFIX}::Q${WIDGET_STYLE_PLUGIN}Plugin")
                 use_qt_module(
+                    LIBRARIES_VARIABLE
+                    "${QT_PLUGINS_LIBRARIES_VARIABLE}"
                     PREFIX
                     "${QT_PACKAGE_PREFIX}"
                     MODULE
@@ -219,6 +263,8 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
                 list(REMOVE_ITEM IMAGE_FORMAT_SUPPORT Svg)
             else ()
                 use_qt_module(
+                    LIBRARIES_VARIABLE
+                    "${QT_PLUGINS_LIBRARIES_VARIABLE}"
                     PREFIX
                     "${QT_PACKAGE_PREFIX}"
                     MODULE
@@ -235,10 +281,12 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
 
     # ensure SVG plugins are built-in if configured
     if ((SVG_SUPPORT OR SVG_ICON_SUPPORT) AND NOT Svg IN_LIST QT_MODULES)
-        use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg)
+        use_qt_module(LIBRARIES_VARIABLE "${QT_PLUGINS_LIBRARIES_VARIABLE}" PREFIX "${QT_PACKAGE_PREFIX}" MODULE Svg)
     endif ()
     if (SVG_SUPPORT)
         use_qt_module(
+            LIBRARIES_VARIABLE
+            "${QT_PLUGINS_LIBRARIES_VARIABLE}"
             PREFIX
             "${QT_PACKAGE_PREFIX}"
             MODULE
@@ -249,6 +297,8 @@ if (STATIC_LINKAGE AND META_PROJECT_IS_APPLICATION)
     endif ()
     if (SVG_ICON_SUPPORT)
         use_qt_module(
+            LIBRARIES_VARIABLE
+            "${QT_PLUGINS_LIBRARIES_VARIABLE}"
             PREFIX
             "${QT_PACKAGE_PREFIX}"
             MODULE
