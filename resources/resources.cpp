@@ -313,6 +313,11 @@ bool hasCoreApp()
  */
 void setupCommonQtApplicationAttributes()
 {
+#ifdef QT_FEATURE_fontdialog
+    if (!qEnvironmentVariableIsSet("FONTCONFIG_PATH") && QDir(QStringLiteral("/etc/fonts")).exists()) {
+        qputenv("FONTCONFIG_PATH", "/etc/fonts");
+    }
+#endif
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     if (!QCoreApplication::instance()) {
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
