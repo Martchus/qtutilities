@@ -230,7 +230,7 @@ QtAppearanceOptionPage::~QtAppearanceOptionPage()
 
 bool QtAppearanceOptionPage::apply()
 {
-    m_settings.font = ui()->fontComboBox->font();
+    m_settings.font = ui()->fontComboBox->currentFont();
     m_settings.customFont = !ui()->fontCheckBox->isChecked();
     m_settings.widgetStyle = ui()->widgetStyleComboBox->currentText();
     m_settings.customWidgetStyle = !ui()->widgetStyleCheckBox->isChecked();
