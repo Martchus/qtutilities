@@ -31,7 +31,7 @@ endif ()
 # define function for using Qt and KDE Frameworks modules and static plugins
 macro (use_qt_module)
     # parse arguments
-    set(OPTIONAL_ARGS ONLY_PLUGINS)
+    set(OPTIONAL_ARGS ONLY_PLUGINS PLUGINS_OPTIONAL)
     set(ONE_VALUE_ARGS PREFIX MODULE VISIBILITY LIBRARIES_VARIABLE)
     set(MULTI_VALUE_ARGS TARGETS PLUGINS)
     cmake_parse_arguments(ARGS "${OPTIONAL_ARGS}" "${ONE_VALUE_ARGS}" "${MULTI_VALUE_ARGS}" ${ARGN})
@@ -103,6 +103,9 @@ macro (use_qt_module)
             endif ()
         endif ()
         if (NOT TARGET "${PLUGIN_TARGET}")
+            if (NOT PLUGINS_OPTIONAL)
+                continue()
+            endif ()
             message(
                 FATAL_ERROR
                     "The ${ARGS_PREFIX}${ARGS_MODULE} package does not provide the target ${ARGS_PREFIX}::Q${PLUGIN}Plugin.")

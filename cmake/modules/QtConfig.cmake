@@ -195,6 +195,20 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 PLUGINS
                 WaylandIntegration
                 ONLY_PLUGINS)
+            use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                PREFIX
+                "${QT_PACKAGE_PREFIX}"
+                MODULE
+                WaylandClient
+                PLUGINS
+                WaylandXdgShellIntegration
+                WaylandWlShellIntegration
+                WaylandIviShellIntegration
+                WaylandQtShellIntegration
+                ONLY_PLUGINS
+                PLUGINS_OPTIONAL)
         endif ()
     endif ()
 
