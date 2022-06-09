@@ -22,11 +22,11 @@ void DialogsTests::testSettingsDialog()
     settingsDlg.setSingleCategory(qtSettings.category());
 
     // add another empty category
-    auto testCategory = OptionCategory();
-    testCategory.setDisplayName(QStringLiteral("Test category"));
-    testCategory.setIcon(QIcon::fromTheme(QStringLiteral("preferences")));
+    auto *const testCategory = new OptionCategory();
+    testCategory->setDisplayName(QStringLiteral("Test category"));
+    testCategory->setIcon(QIcon::fromTheme(QStringLiteral("preferences")));
     settingsDlg.setSingleCategory(nullptr);
-    settingsDlg.categoryModel()->setCategories(QList<OptionCategory *>({&testCategory, qtSettings.category()}));
+    settingsDlg.categoryModel()->setCategories(QList<OptionCategory *>({testCategory, qtSettings.category()}));
     settingsDlg.showCategory(qtSettings.category());
     settingsDlg.show();
 }
