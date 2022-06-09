@@ -203,10 +203,9 @@ void QtSettings::apply()
  * \brief Returns a new OptionCatecory containing all Qt related option pages.
  * \remarks
  * - The QtSettings instance does not keep the ownership over the returned
- * category.
- * - The pages of the returned category require the QtSetings instance which
- * hence
- *   must be present as long as all pages are destroyed.
+ *   category.
+ * - The pages of the returned category require the QtSettings instance which
+ *   hence must be present as long as all pages are destroyed.
  */
 OptionCategory *QtSettings::category()
 {
