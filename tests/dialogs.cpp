@@ -26,8 +26,9 @@ void DialogsTests::testSettingsDialog()
     testCategory->setDisplayName(QStringLiteral("Test category"));
     testCategory->setIcon(QIcon::fromTheme(QStringLiteral("preferences")));
     settingsDlg.setSingleCategory(nullptr);
-    settingsDlg.categoryModel()->setCategories(QList<OptionCategory *>({testCategory, qtSettings.category()}));
-    settingsDlg.showCategory(qtSettings.category());
+    auto *const qtCategory = qtSettings.category();
+    settingsDlg.categoryModel()->setCategories(QList<OptionCategory *>({testCategory, qtCategory}));
+    settingsDlg.showCategory(qtCategory);
     settingsDlg.show();
 }
 
