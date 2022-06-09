@@ -25,6 +25,7 @@ void DialogsTests::testSettingsDialog()
     auto *const testCategory = new OptionCategory();
     testCategory->setDisplayName(QStringLiteral("Test category"));
     testCategory->setIcon(QIcon::fromTheme(QStringLiteral("preferences")));
+    settingsDlg.showCategory(nullptr);  // ensure no current category is shown anymore
     settingsDlg.setSingleCategory(nullptr);
     auto *const qtCategory = qtSettings.category();
     settingsDlg.categoryModel()->setCategories(QList<OptionCategory *>({testCategory, qtCategory}));
