@@ -1,10 +1,13 @@
 #include "./optionpage.h"
 
 #include <QCheckBox>
+#include <QEvent>
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
+
+#include <utility>
 
 namespace QtUtilities {
 
@@ -81,10 +84,24 @@ bool OptionPage::matches(const QString &searchKeyWord)
             m_keywords << groupBox->title();
         m_keywordsInitialized = true;
     }
-    for (const QString &keyword : m_keywords)
+    for (const QString &keyword : std::as_const(m_keywords))
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return false;
+}
+
+/*!
+ * \brief Emits the paletteChanged() signal.
+ */
+bool OptionPageWidget::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::PaletteChange:
+        emit paletteChanged();
+        break;
+    default:;
+    }
+    return QWidget::event(event);
 }
 
 /*!

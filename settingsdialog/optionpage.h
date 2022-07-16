@@ -12,6 +12,24 @@ namespace QtUtilities {
 
 class SettingsDialog;
 
+class QT_UTILITIES_EXPORT OptionPageWidget : public QWidget {
+    Q_OBJECT
+
+public:
+    explicit OptionPageWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+
+Q_SIGNALS:
+    void paletteChanged();
+
+protected:
+    bool event(QEvent *) override;
+};
+
+inline OptionPageWidget::OptionPageWidget(QWidget *parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
+{
+}
+
 class QT_UTILITIES_EXPORT OptionPage {
     friend class SettingsDialog;
 
@@ -125,7 +143,7 @@ template <class UiClass> UiFileBasedOptionPage<UiClass>::~UiFileBasedOptionPage(
  */
 template <class UiClass> QWidget *UiFileBasedOptionPage<UiClass>::setupWidget()
 {
-    QWidget *widget = new QWidget();
+    QWidget *widget = new OptionPageWidget();
     if (!m_ui) {
         m_ui.reset(new UiClass);
     }
