@@ -38,4 +38,14 @@ bool openLocalFileOrDir(const QString &path)
 #endif
     return QDesktopServices::openUrl(url);
 }
+
+/*!
+ * \brief Returns whether \a palette is dark.
+ * \remarks Just call with no argument to check for the default palette to see whether "dark mode" is enabled.
+ */
+bool isPaletteDark(const QPalette &palette)
+{
+    return palette.color(QPalette::WindowText).lightness() > palette.color(QPalette::Window).lightness();
+}
+
 } // namespace QtUtilities
