@@ -3,10 +3,12 @@
 
 #include "../global.h"
 
+#include <QString>
 #include <QtContainerFwd>
 #include <QtGlobal>
 
 #include <initializer_list>
+#include <memory>
 
 QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QSettings)
@@ -65,6 +67,7 @@ QT_UTILITIES_EXPORT bool hasCoreApp();
 } // namespace ApplicationInstances
 
 QT_UTILITIES_EXPORT void setupCommonQtApplicationAttributes();
+QT_UTILITIES_EXPORT std::unique_ptr<QSettings> getSettings(const QString &organization, const QString &application = QString());
 
 } // namespace QtUtilities
 
