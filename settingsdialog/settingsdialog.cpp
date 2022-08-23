@@ -178,6 +178,22 @@ void SettingsDialog::setSingleCategory(OptionCategory *singleCategory)
 }
 
 /*!
+ * \brief Returns the tab-widget's corner widget.
+ */
+QWidget *SettingsDialog::cornerWidget(Qt::Corner corner) const
+{
+    return m_ui->pagesTabWidget->cornerWidget(corner);
+}
+
+/*!
+ * \brief Sets the tab-widget's corner widget.
+ */
+void SettingsDialog::setCornerWidget(QWidget *widget, Qt::Corner corner)
+{
+    m_ui->pagesTabWidget->setCornerWidget(widget, corner);
+}
+
+/*!
  * \brief Updates the tab widget to show the pages for the current category.
  */
 void SettingsDialog::updateTabWidget()

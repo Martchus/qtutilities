@@ -32,6 +32,8 @@ public:
     OptionPage *page(int categoryIndex, int pageIndex) const;
     void showCategory(OptionCategory *category);
     void setSingleCategory(OptionCategory *singleCategory);
+    QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
+    void setCornerWidget(QWidget *widget, Qt::Corner corner = Qt::TopRightCorner);
 
 Q_SIGNALS:
     void applied();
