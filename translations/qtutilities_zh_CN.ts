@@ -459,12 +459,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation>好的</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="248"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="264"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;p&gt;&lt;b&gt;应用更改时发生错误：&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="253"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="269"/>
         <source>unknown error</source>
         <translation>未知错误</translation>
     </message>

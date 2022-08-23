@@ -458,12 +458,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="248"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="264"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="253"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="269"/>
         <source>unknown error</source>
         <translation type="unfinished"></translation>
     </message>
