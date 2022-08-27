@@ -433,38 +433,38 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="53"/>
+        <location filename="../settingsdialog/settingsdialog.ui" line="75"/>
         <location filename="../settingsdialog/settingsdialog.cpp" line="153"/>
         <source>No category selected</source>
         <translation>未选择类别</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="69"/>
+        <location filename="../settingsdialog/settingsdialog.ui" line="93"/>
         <source>Filter</source>
         <translation>筛选</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="136"/>
+        <location filename="../settingsdialog/settingsdialog.ui" line="134"/>
         <source>Abort</source>
         <translation>放弃</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="150"/>
+        <location filename="../settingsdialog/settingsdialog.ui" line="148"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.ui" line="161"/>
+        <location filename="../settingsdialog/settingsdialog.ui" line="159"/>
         <source>OK</source>
         <translation>好的</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="264"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="272"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;p&gt;&lt;b&gt;应用更改时发生错误：&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="269"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="277"/>
         <source>unknown error</source>
         <translation>未知错误</translation>
     </message>
