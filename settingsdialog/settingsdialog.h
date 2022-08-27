@@ -34,6 +34,7 @@ public:
     void setSingleCategory(OptionCategory *singleCategory);
     QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
     void setCornerWidget(QWidget *widget, Qt::Corner corner = Qt::TopRightCorner);
+    void addHeadingWidget(QWidget *widget);
 
 Q_SIGNALS:
     void applied();

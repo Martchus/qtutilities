@@ -35,41 +35,6 @@
       <property name="bottomMargin">
        <number>3</number>
       </property>
-      <item row="0" column="1">
-       <widget class="QLabel" name="headingLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>500</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>No category selected</string>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QtUtilities::ClearLineEdit" name="filterLineEdit">
-        <property name="maximumSize">
-         <size>
-          <width>140</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="placeholderText">
-         <string>Filter</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QTabWidget" name="pagesTabWidget">
         <property name="currentIndex">
@@ -93,6 +58,39 @@
           <width>32</width>
           <height>32</height>
          </size>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="headingLayout">
+        <item>
+         <widget class="QLabel" name="headingLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>No category selected</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <widget class="QtUtilities::ClearLineEdit" name="filterLineEdit">
+        <property name="maximumSize">
+         <size>
+          <width>140</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="placeholderText">
+         <string>Filter</string>
         </property>
        </widget>
       </item>

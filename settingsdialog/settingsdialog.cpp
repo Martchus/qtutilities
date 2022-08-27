@@ -194,6 +194,14 @@ void SettingsDialog::setCornerWidget(QWidget *widget, Qt::Corner corner)
 }
 
 /*!
+ * \brief Adds a widget next to the heading.
+ */
+void SettingsDialog::addHeadingWidget(QWidget *widget)
+{
+    m_ui->headingLayout->addWidget(widget);
+}
+
+/*!
  * \brief Updates the tab widget to show the pages for the current category.
  */
 void SettingsDialog::updateTabWidget()
