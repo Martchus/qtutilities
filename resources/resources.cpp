@@ -320,11 +320,15 @@ void setupCommonQtApplicationAttributes()
         qputenv("QT_QPA_PLATFORM", "windows:darkmode=1");
     }
 #endif
+
+    // ensure FONTCONFIG_PATH is set (mainly required for static GNU/Linux builds)
 #ifdef QT_FEATURE_fontdialog
     if (!qEnvironmentVariableIsSet("FONTCONFIG_PATH") && QDir(QStringLiteral("/etc/fonts")).exists()) {
         qputenv("FONTCONFIG_PATH", "/etc/fonts");
     }
 #endif
+
+    // enable settings for High-DPI scaling
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     if (!QCoreApplication::instance()) {
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
