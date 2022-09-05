@@ -313,6 +313,13 @@ bool hasCoreApp()
  */
 void setupCommonQtApplicationAttributes()
 {
+    // enable dark window frame on Windows if the configured color palette is dark (supported as of Qt 6.4)
+    // see https://bugreports.qt.io/browse/QTBUG-72028?focusedCommentId=677819#comment-677819
+#if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (QLibraryInfo::version() >= QVersionNumber(6, 4, 0) && !qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
+        qputenv("QT_QPA_PLATFORM", "windows:darkmode=1");
+    }
+#endif
 #ifdef QT_FEATURE_fontdialog
     if (!qEnvironmentVariableIsSet("FONTCONFIG_PATH") && QDir(QStringLiteral("/etc/fonts")).exists()) {
         qputenv("FONTCONFIG_PATH", "/etc/fonts");
