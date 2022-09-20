@@ -6,7 +6,9 @@ Qt utilities depends on c++utilities and is built in the same way. So checkout t
 instructions. The documentation for various CMake variables influencing the build is also provided in the
 c++utilities repository.
 
-The library also depends on the following Qt modules (version 5.6 or higher): core, gui, widgets
+The library also depends on the following Qt modules (only the latest Qt 5 and Qt 6 version tested):
+core, gui, widgets
+
 Some header files also require further Qt modules.
 
 ## Copyright notice and license
