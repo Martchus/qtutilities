@@ -36,6 +36,10 @@ public:
     void setCornerWidget(QWidget *widget, Qt::Corner corner = Qt::TopRightCorner);
     void addHeadingWidget(QWidget *widget);
 
+public Q_SLOTS:
+    bool apply();
+    void reset();
+
 Q_SIGNALS:
     void applied();
     void resetted();
@@ -46,9 +50,6 @@ protected:
 private Q_SLOTS:
     void currentCategoryChanged(const QModelIndex &index);
     void updateTabWidget();
-
-    bool apply();
-    void reset();
 
 private:
     std::unique_ptr<Ui::SettingsDialog> m_ui;
