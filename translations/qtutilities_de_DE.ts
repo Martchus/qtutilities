@@ -475,12 +475,12 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="272"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="285"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;p&gt;&lt;b&gt;Beim Anwenden der Einstellungen sind Fehler aufgetreten:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="277"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="290"/>
         <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
     </message>
