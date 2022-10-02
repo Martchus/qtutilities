@@ -202,6 +202,19 @@ void SettingsDialog::addHeadingWidget(QWidget *widget)
 }
 
 /*!
+ * \brief Selects the specified page within the specified category.
+ */
+void SettingsDialog::selectPage(int categoryIndex, int pageIndex)
+{
+    m_categoryFilterModel->setFilterFixedString(QString());
+    m_ui->filterLineEdit->clear();
+    showCategory(m_categoryModel->category(categoryIndex));
+    m_ui->categoriesListView->selectionModel()->select(
+        m_categoryFilterModel->mapFromSource(m_categoryModel->index(categoryIndex)), QItemSelectionModel::ClearAndSelect);
+    m_ui->pagesTabWidget->setCurrentIndex(pageIndex);
+}
+
+/*!
  * \brief Updates the tab widget to show the pages for the current category.
  */
 void SettingsDialog::updateTabWidget()

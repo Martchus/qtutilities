@@ -35,6 +35,7 @@ public:
     QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
     void setCornerWidget(QWidget *widget, Qt::Corner corner = Qt::TopRightCorner);
     void addHeadingWidget(QWidget *widget);
+    void selectPage(int categoryIndex, int pageIndex);
 
 public Q_SLOTS:
     bool apply();
