@@ -2,8 +2,8 @@
 
 #include "resources/config.h"
 
-#include <QTest>
 #include <QSignalSpy>
+#include <QTest>
 
 using namespace QtUtilities;
 
@@ -61,19 +61,17 @@ void DBusNotificationTests::semiAutomaticTest()
     auto envValueIsInt = false;
     if (envValue.isEmpty() || (envValue.toInt(&envValueIsInt) == 0 && envValueIsInt)) {
         QSKIP("Set the environment variable " PROJECT_VARNAME_UPPER "_ENABLE_SEMI_AUTOMATIC_NOTIFICATION_TESTS to run "
-                                                                    "the semi-automatic D-Bus notification test.");
+              "the semi-automatic D-Bus notification test.");
     }
 
     QVERIFY2(DBusNotification::isAvailable(), "D-Bus notifications are available");
 
     DBusNotification n(QStringLiteral("Semi-automatic test"), NotificationIcon::Information, 10000);
     QString clickedAction, error;
-    const auto actionConnection = connect(&n, &DBusNotification::actionInvoked, [&clickedAction] (const QString &actionName) {
-        clickedAction = actionName;
-    });
-    const auto errorConnection = connect(&n, &DBusNotification::error, [&error] () {
-        error = QStringLiteral("error occurred (TODO: pass an error message here)");
-    });
+    const auto actionConnection
+        = connect(&n, &DBusNotification::actionInvoked, [&clickedAction](const QString &actionName) { clickedAction = actionName; });
+    const auto errorConnection
+        = connect(&n, &DBusNotification::error, [&error]() { error = QStringLiteral("error occurred (TODO: pass an error message here)"); });
     n.setApplicationName(QStringLiteral(APP_NAME " tests; " APP_VERSION));
     n.show(QStringLiteral("Some message; will append more lines later"));
     for (auto i = 1; i <= 10; ++i) {
@@ -83,7 +81,7 @@ void DBusNotificationTests::semiAutomaticTest()
     QCOMPARE(error, QString());
     n.setImage(QIcon::fromTheme(QStringLiteral("document-open")).pixmap(64).toImage());
     n.setTitle(n.title() + QStringLiteral(" - click action to continue"));
-    n.setActions(QStringList({QStringLiteral("fail"), QStringLiteral("Let test fail"), QStringLiteral("pass"), QStringLiteral("Let test pass")}));
+    n.setActions(QStringList({ QStringLiteral("fail"), QStringLiteral("Let test fail"), QStringLiteral("pass"), QStringLiteral("Let test pass") }));
     QSignalSpy actionInvokedSpy(&n, &DBusNotification::actionInvoked);
     n.update(QStringLiteral("Click on \"Let test pass\" to continue within 10 seconds"));
     actionInvokedSpy.wait(10000);

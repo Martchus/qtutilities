@@ -4,8 +4,8 @@
 #include "../widgets/clearspinbox.h"
 #include "../widgets/iconbutton.h"
 
-#include <QPushButton>
 #include <QHBoxLayout>
+#include <QPushButton>
 #include <QtTest/QtTest>
 
 using namespace QtUtilities;
@@ -37,7 +37,8 @@ void ButtonOverlayTests::changeBasicConfiguration(ButtonOverlay &buttonOverlay)
 {
     buttonOverlay.setClearButtonEnabled(false);
     QVERIFY2(!buttonOverlay.isClearButtonEnabled(), "clear button disabled");
-    buttonOverlay.enableInfoButton(QIcon::fromTheme(QStringLiteral("data-information")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Some info"));
+    buttonOverlay.enableInfoButton(
+        QIcon::fromTheme(QStringLiteral("data-information")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Some info"));
     QVERIFY2(buttonOverlay.isInfoButtonEnabled(), "info button enabled");
 }
 
