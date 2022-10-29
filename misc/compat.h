@@ -80,4 +80,17 @@ template <class... SplitArgs> inline auto splitRef(const QString &str, SplitArgs
 
 } // namespace QtUtilities
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+QT_BEGIN_NAMESPACE
+/*!
+ * \brief Provides a fallback for qEnvironmentVariable() when using old Qt versions.
+ */
+inline QString qEnvironmentVariable(const char *varName, const QString &defaultValue)
+{
+    const auto val = qgetenv(varName);
+    return !val.isEmpty() ? QString::fromLocal8Bit(val) : defaultValue;
+}
+QT_END_NAMESPACE
+#endif
+
 #endif // QT_UTILITIES_COMPAT_H
