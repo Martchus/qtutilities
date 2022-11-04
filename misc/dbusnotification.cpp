@@ -369,7 +369,7 @@ bool DBusNotification::queryCapabilities(const std::function<void(Capabilities &
         if (returnValue.isError()) {
             callback(Capabilities());
         } else {
-            callback(Capabilities(move(returnValue.value())));
+            callback(Capabilities(std::move(returnValue.value())));
         }
     });
     return true;
