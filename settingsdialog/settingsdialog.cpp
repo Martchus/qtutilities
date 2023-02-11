@@ -224,29 +224,35 @@ void SettingsDialog::updateTabWidget()
         return;
     }
     m_ui->pagesTabWidget->setUpdatesEnabled(false);
-    const QString searchKeyWord = m_ui->filterLineEdit->text();
+
+    const auto searchKeyWord = m_ui->filterLineEdit->text();
     int index = 0, pageIndex = 0;
     for (OptionPage *const page : m_currentCategory->pages()) {
         if (page->matches(searchKeyWord)) {
+            // ensure the page's widget has no parent anymore; otherwise windowIcon() might return the parent's icon
+            auto *const widget = page->widget();
+            widget->setParent(nullptr);
+
+            // add the widget to the tab widget within a scroll area
             QScrollArea *scrollArea;
             if (index < m_ui->pagesTabWidget->count()) {
                 scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
                 scrollArea->takeWidget();
-                m_ui->pagesTabWidget->setTabText(index, page->widget()->windowTitle());
-                m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
+                m_ui->pagesTabWidget->setTabText(index, widget->windowTitle());
+                m_ui->pagesTabWidget->setTabIcon(index, widget->windowIcon());
             } else {
                 scrollArea = new QScrollArea(m_ui->pagesTabWidget);
                 scrollArea->setFrameStyle(QFrame::NoFrame);
                 scrollArea->setBackgroundRole(QPalette::Base);
                 scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                 scrollArea->setWidgetResizable(true);
-                m_ui->pagesTabWidget->addTab(scrollArea, page->widget()->windowTitle());
-                m_ui->pagesTabWidget->setTabIcon(index, page->widget()->windowIcon());
+                m_ui->pagesTabWidget->addTab(scrollArea, widget->windowTitle());
+                m_ui->pagesTabWidget->setTabIcon(index, widget->windowIcon());
             }
-            if (page->widget()->layout()) {
-                page->widget()->layout()->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+            if (auto *const layout = widget->layout()) {
+                layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
             }
-            scrollArea->setWidget(page->widget());
+            scrollArea->setWidget(widget);
             ++index;
         }
         if (pageIndex == m_currentCategory->currentIndex()) {
@@ -254,12 +260,15 @@ void SettingsDialog::updateTabWidget()
         }
         ++pageIndex;
     }
+
+    // remove surplus tabs
     while (index < m_ui->pagesTabWidget->count()) {
-        QScrollArea *const scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
+        auto *const scrollArea = qobject_cast<QScrollArea *>(m_ui->pagesTabWidget->widget(index));
         scrollArea->takeWidget();
         m_ui->pagesTabWidget->removeTab(index);
         delete scrollArea;
     }
+
     m_ui->pagesTabWidget->tabBar()->setHidden(!m_tabBarAlwaysVisible && m_ui->pagesTabWidget->count() == 1);
     m_ui->pagesTabWidget->setUpdatesEnabled(true);
 }
