@@ -26,6 +26,29 @@
     </message>
 </context>
 <context>
+    <name>QtUtilities</name>
+    <message>
+        <location filename="../resources/resources.cpp" line="382"/>
+        <source>unable to access file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/resources.cpp" line="385"/>
+        <source>file has invalid format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/resources.cpp" line="388"/>
+        <source>unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../resources/resources.cpp" line="390"/>
+        <source>Unable to sync settings from &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtUtilities::AboutDialog</name>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="24"/>

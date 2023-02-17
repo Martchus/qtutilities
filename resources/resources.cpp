@@ -369,6 +369,27 @@ std::unique_ptr<QSettings> getSettings(const QString &organization, const QStrin
     return settings;
 }
 
+/*!
+ * \brief Returns an error message for the specified \a settings or an empty string if there's no error.
+ */
+QString errorMessageForSettings(const QSettings &settings)
+{
+    auto errorMessage = QString();
+    switch (settings.status()) {
+    case QSettings::NoError:
+        return QString();
+    case QSettings::AccessError:
+        errorMessage = QCoreApplication::translate("QtUtilities", "unable to access file");
+        break;
+    case QSettings::FormatError:
+        errorMessage = QCoreApplication::translate("QtUtilities", "file has invalid format");
+        break;
+    default:
+        errorMessage = QCoreApplication::translate("QtUtilities", "unknown error");
+    }
+    return QCoreApplication::translate("QtUtilities", "Unable to sync settings from \"%1\": %2").arg(settings.fileName(), errorMessage);
+}
+
 // namespace ApplicationInstances
 
 } // namespace QtUtilities
