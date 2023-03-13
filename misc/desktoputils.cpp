@@ -2,6 +2,10 @@
 
 #include <QDesktopServices>
 #include <QUrl>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+#include <QGuiApplication>
+#include <QStyleHints>
+#endif
 #ifdef Q_OS_WIN32
 #include <QFileInfo>
 #endif
@@ -41,11 +45,28 @@ bool openLocalFileOrDir(const QString &path)
 
 /*!
  * \brief Returns whether \a palette is dark.
- * \remarks Just call with no argument to check for the default palette to see whether "dark mode" is enabled.
  */
 bool isPaletteDark(const QPalette &palette)
 {
     return palette.color(QPalette::WindowText).lightness() > palette.color(QPalette::Window).lightness();
+}
+
+/*!
+ * \brief Returns whether dark mode is enabled.
+ * \remarks Whether dark mode is enabled can only be determined on Qt 6.5 or newer and only on certain
+ *          platforms. If it cannot be determined, std::nullopt is returned.
+ */
+std::optional<bool> isDarkModeEnabled()
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    if (const auto *const styleHints = QGuiApplication::styleHints()) {
+        const auto colorScheme = styleHints->colorScheme();
+        if (colorScheme != Qt::ColorScheme::Unknown) {
+            return colorScheme == Qt::ColorScheme::Dark;
+        }
+    }
+#endif
+    return std::nullopt;
 }
 
 } // namespace QtUtilities
