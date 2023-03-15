@@ -1,5 +1,7 @@
 #include "./qtconfigarguments.h"
 
+#include "../misc/compat.h"
+
 #include <c++utilities/conversion/stringconversion.h>
 #include <c++utilities/io/ansiescapecodes.h>
 
@@ -127,14 +129,14 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
     }
 #endif
     if (m_iconThemeArg.isPresent()) {
-        auto i = m_iconThemeArg.values().cbegin(), end = m_iconThemeArg.values().end();
-        if (i != end) {
-            QIcon::setThemeName(QString::fromLocal8Bit(*i));
+        // set first value of m_iconThemeArg as icon theme and add further values as search paths
+        if (auto i = m_iconThemeArg.values().cbegin(), end = m_iconThemeArg.values().cend(); i != end) {
+            QIcon::setThemeName(QString::fromUtf8(*i));
             if (++i != end) {
-                QStringList searchPaths;
-                searchPaths.reserve(static_cast<QStringList::size_type>(m_iconThemeArg.values().size() - 1));
+                auto searchPaths = QStringList();
+                searchPaths.reserve(static_cast<QStringList::size_type>(m_iconThemeArg.values().size()));
                 for (; i != end; ++i) {
-                    searchPaths << QString::fromLocal8Bit(*i);
+                    searchPaths << QString::fromUtf8(*i);
                 }
                 searchPaths << QStringLiteral(":/icons");
                 QIcon::setThemeSearchPaths(searchPaths);
@@ -142,16 +144,12 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
         }
     } else {
         if (qEnvironmentVariableIsSet("ICON_THEME_SEARCH_PATH")) {
-            QString path;
-            path.append(qgetenv("ICON_THEME_SEARCH_PATH"));
-            QIcon::setThemeSearchPaths(QStringList({ path, QStringLiteral(":/icons") }));
+            QIcon::setThemeSearchPaths(QStringList({ qEnvironmentVariable("ICON_THEME_SEARCH_PATH"), QStringLiteral(":/icons") }));
         } else {
             QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral("../share/icons") << QStringLiteral(":/icons"));
         }
         if (qEnvironmentVariableIsSet("ICON_THEME")) {
-            QString themeName;
-            themeName.append(qgetenv("ICON_THEME"));
-            QIcon::setThemeName(themeName);
+            QIcon::setThemeName(qEnvironmentVariable("ICON_THEME"));
         }
     }
 #ifdef Q_OS_WIN32
