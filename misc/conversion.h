@@ -12,7 +12,7 @@ namespace QtUtilities {
 
 inline QByteArray toNativeFileName(const QString &fileName)
 {
-#if !defined(PLATFORM_MINGW) || !defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+#if !defined(PLATFORM_WINDOWS) || !defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
     return fileName.toLocal8Bit();
 #else
     return fileName.toUtf8();
@@ -21,7 +21,7 @@ inline QByteArray toNativeFileName(const QString &fileName)
 
 inline QString fromNativeFileName(const char *nativeFileName, int size = -1)
 {
-#if !defined(PLATFORM_MINGW) || !defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+#if !defined(PLATFORM_WINDOWS) || !defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
     return QString::fromLocal8Bit(nativeFileName, size);
 #else
     return QString::fromUtf8(nativeFileName, size);
@@ -30,7 +30,7 @@ inline QString fromNativeFileName(const char *nativeFileName, int size = -1)
 
 inline QString fromNativeFileName(const std::string &nativeFileName)
 {
-#if !defined(PLATFORM_MINGW) || !defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
+#if !defined(PLATFORM_WINDOWS) || !defined(CPP_UTILITIES_USE_NATIVE_FILE_BUFFER)
     return QString::fromLocal8Bit(nativeFileName.data(), static_cast<int>(nativeFileName.size()));
 #else
     return QString::fromUtf8(nativeFileName.data(), static_cast<int>(nativeFileName.size()));
