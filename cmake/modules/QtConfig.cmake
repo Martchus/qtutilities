@@ -518,6 +518,7 @@ if (REQUIRED_ICONS)
         list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
         set(BUILTIN_ICONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
         set(DEFAULT_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default/index.theme")
+        set(DEFAULT_DARK_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default-dark/index.theme")
         file(REMOVE_RECURSE "${BUILTIN_ICONS_DIR}")
         file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}")
         foreach (ICON_THEME ${BUILTIN_ICON_THEMES})
@@ -550,8 +551,13 @@ if (REQUIRED_ICONS)
                             LIST_DIRECTORIES false
                             "${ICON_THEME_PATH}/index.theme")
                     endif ()
-                    # make the first specified built-in the default theme
-                    if (NOT EXISTS "${DEFAULT_THEME_INDEX_FILE}")
+                    # make the first non-dark specified built-in theme the "default" theme
+                    # make the first dark specified built-in theme the "default-dark" theme
+                    if (NEW_ICON_THEME_NAME MATCHES ".*-dark" AND NOT EXISTS "${DEFAULT_DARK_THEME_INDEX_FILE}")
+                        file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/default-dark")
+                        file(WRITE "${DEFAULT_DARK_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
+                        list(APPEND ICON_THEME_FILES "<file>default-dark/index.theme</file>")
+                    elseif (NOT EXISTS "${DEFAULT_THEME_INDEX_FILE}")
                         file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/default")
                         file(WRITE "${DEFAULT_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
                         list(APPEND ICON_THEME_FILES "<file>default/index.theme</file>")

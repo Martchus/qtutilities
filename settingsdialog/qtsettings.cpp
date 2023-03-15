@@ -10,6 +10,8 @@
 
 #include "../resources/resources.h"
 
+#include "../misc/desktoputils.h"
+
 #include "ui_qtappearanceoptionpage.h"
 #include "ui_qtenvoptionpage.h"
 #include "ui_qtlanguageoptionpage.h"
@@ -142,6 +144,40 @@ void QtSettings::save(QSettings &settings) const
 }
 
 /*!
+ * \brief Returns the icon themes present in the specified \a searchPaths.
+ * \remarks The display name is the key and the actual icon theme name the value.
+ *          This way the map is sorted correctly for display purposes.
+ */
+static QMap<QString, QString> scanIconThemes(const QStringList &searchPaths)
+{
+    auto res = QMap<QString, QString>();
+    for (const auto &searchPath : searchPaths) {
+        const auto dir = QDir(searchPath).entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+        for (const auto &iconTheme : dir) {
+            auto indexFile = QFile(searchPath % QChar('/') % iconTheme % QStringLiteral("/index.theme"));
+            auto index = QByteArray();
+            if (indexFile.open(QFile::ReadOnly) && !(index = indexFile.readAll()).isEmpty()) {
+                const auto iconThemeSection = index.indexOf("[Icon Theme]");
+                const auto nameStart = index.indexOf("Name=", iconThemeSection != -1 ? iconThemeSection : 0);
+                if (nameStart != -1) {
+                    auto nameLength = index.indexOf("\n", nameStart) - nameStart - 5;
+                    if (nameLength > 0) {
+                        auto displayName = QString::fromUtf8(index.mid(nameStart + 5, nameLength));
+                        if (displayName != iconTheme) {
+                            displayName += QChar(' ') % QChar('(') % iconTheme % QChar(')');
+                        }
+                        res[displayName] = iconTheme;
+                        continue;
+                    }
+                }
+            }
+            res[iconTheme] = iconTheme;
+        }
+    }
+    return res;
+}
+
+/*!
  * \brief Applies the current configuration.
  * \remarks
  *  - Some settings take only affect after restarting the application.
@@ -193,6 +229,19 @@ void QtSettings::apply()
     }
     if (m_d->customIconTheme) {
         QIcon::setThemeName(m_d->iconTheme);
+    } else if (QIcon::themeName().isEmpty()) {
+        // use bundled default icon theme matching the current palette
+        // notes: - It is ok that search paths specified via CLI arguments are not set here yet. When doing so one should also
+        //          specify the desired icon theme explicitly.
+        //        - The icon themes "default" and "default-dark" come from QtConfig.cmake which makes the first non-dark bundled
+        //          icon theme available as "default" and the first dark icon theme available as "default-dark". An icon theme
+        //          is considered dark if it ends with "-dark".
+        const auto bundledIconThemes = scanIconThemes(QStringList(QStringLiteral(":/icons")));
+        if (isPaletteDark() && bundledIconThemes.contains(QStringLiteral("default-dark"))) {
+            QIcon::setThemeName(QStringLiteral("default-dark"));
+        } else if (bundledIconThemes.contains(QStringLiteral("default"))) {
+            QIcon::setThemeName(QStringLiteral("default"));
+        }
     }
 
     // apply locale
@@ -290,35 +339,15 @@ QWidget *QtAppearanceOptionPage::setupWidget()
         [this] { ui()->paletteToolButton->setPalette(PaletteEditor::getPalette(this->widget(), ui()->paletteToolButton->palette())); });
 
     // setup icon theme selection
-    const QStringList searchPaths = QIcon::themeSearchPaths() << QStringLiteral("/usr/share/icons/");
-    for (const QString &searchPath : searchPaths) {
-        const auto dir = QDir(searchPath).entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
-        for (const QString &iconTheme : dir) {
-            const int existingItemIndex = ui()->iconThemeComboBox->findData(iconTheme);
-            QFile indexFile(searchPath % QChar('/') % iconTheme % QStringLiteral("/index.theme"));
-            QByteArray index;
-            if (indexFile.open(QFile::ReadOnly) && !(index = indexFile.readAll()).isEmpty()) {
-                const auto iconThemeSection = index.indexOf("[Icon Theme]");
-                const auto nameStart = index.indexOf("Name=", iconThemeSection != -1 ? iconThemeSection : 0);
-                if (nameStart != -1) {
-                    auto nameLength = index.indexOf("\n", nameStart) - nameStart - 5;
-                    if (nameLength > 0) {
-                        QString displayName = index.mid(nameStart + 5, nameLength);
-                        if (displayName != iconTheme) {
-                            displayName += QChar(' ') % QChar('(') % iconTheme % QChar(')');
-                        }
-                        if (existingItemIndex != -1) {
-                            ui()->iconThemeComboBox->setItemText(existingItemIndex, displayName);
-                        } else {
-                            ui()->iconThemeComboBox->addItem(displayName, iconTheme);
-                        }
-                        continue;
-                    }
-                }
-            }
-            if (existingItemIndex == -1) {
-                ui()->iconThemeComboBox->addItem(iconTheme, iconTheme);
-            }
+    const auto iconThemes = scanIconThemes(QIcon::themeSearchPaths() << QStringLiteral("/usr/share/icons/"));
+    auto *iconThemeComboBox = ui()->iconThemeComboBox;
+    for (auto i = iconThemes.begin(), end = iconThemes.end(); i != end; ++i) {
+        const auto &displayName = i.key();
+        const auto &id = i.value();
+        if (const auto existingItemIndex = iconThemeComboBox->findData(id); existingItemIndex != -1) {
+            iconThemeComboBox->setItemText(existingItemIndex, displayName);
+        } else {
+            iconThemeComboBox->addItem(displayName, id);
         }
     }
 

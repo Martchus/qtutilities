@@ -152,12 +152,6 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
             QIcon::setThemeName(qEnvironmentVariable("ICON_THEME"));
         }
     }
-#ifdef Q_OS_WIN32
-    // default configuration under Windows
-    if (QIcon::themeName().isEmpty()) {
-        QIcon::setThemeName(QStringLiteral("default"));
-    }
-#endif
     if (m_fontArg.isPresent()) {
         QFont font;
         font.setFamily(QString::fromLocal8Bit(m_fontArg.values().front()));
