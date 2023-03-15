@@ -502,11 +502,15 @@ if (REQUIRED_ICONS)
     set(BUILTIN_ICON_THEMES
         ""
         CACHE STRING "specifies icon themes to be built-in")
+    set(BUILTIN_ICON_THEMES_SEARCH_PATH
+        ""
+        CACHE PATH "specifies the search path for icon themes to be built-in")
     option(BUILTIN_ICON_THEMES_IN_LIBRARIES "specifies whether icon themes should also be built-in when building libraries"
            OFF)
     if (BUILTIN_ICON_THEMES AND (BUILTIN_ICON_THEMES_IN_LIBRARIES OR (NOT "${META_PROJECT_TYPE}" STREQUAL "library")))
         set(ICON_THEME_FILES)
-        set(ICON_SEARCH_PATHS)
+        set(ICON_SEARCH_PATHS ${BUILTIN_ICON_THEMES_SEARCH_PATH})
+
         if (CMAKE_FIND_ROOT_PATH)
             foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
                 list(APPEND ICON_SEARCH_PATHS "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
