@@ -152,6 +152,14 @@ void QtSettings::save(QSettings &settings) const
  */
 void QtSettings::apply()
 {
+    // apply environment
+    if (m_d->additionalPluginDirectory.isEmpty()) {
+        QCoreApplication::addLibraryPath(m_d->additionalPluginDirectory);
+    }
+    if (!m_d->additionalIconThemeSearchPath.isEmpty()) {
+        QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << m_d->additionalIconThemeSearchPath);
+    }
+
     // read style sheet
     QString styleSheet;
     if (m_d->customStyleSheet && !m_d->styleSheetPath.isEmpty()) {
@@ -189,14 +197,6 @@ void QtSettings::apply()
 
     // apply locale
     QLocale::setDefault(m_d->customLocale ? QLocale(m_d->localeName) : m_d->defaultLocale);
-
-    // apply environment
-    if (m_d->additionalPluginDirectory.isEmpty()) {
-        QCoreApplication::addLibraryPath(m_d->additionalPluginDirectory);
-    }
-    if (!m_d->additionalIconThemeSearchPath.isEmpty()) {
-        QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << m_d->additionalIconThemeSearchPath);
-    }
 }
 
 /*!
