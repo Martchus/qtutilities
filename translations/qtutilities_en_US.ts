@@ -12,7 +12,7 @@
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="367"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="396"/>
         <source>recognized by Qt as</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="213"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="262"/>
         <source>Qt</source>
         <translation type="unfinished"></translation>
     </message>
@@ -28,22 +28,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="382"/>
+        <location filename="../resources/resources.cpp" line="386"/>
         <source>unable to access file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="385"/>
+        <location filename="../resources/resources.cpp" line="389"/>
         <source>file has invalid format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="388"/>
+        <location filename="../resources/resources.cpp" line="392"/>
         <source>unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="390"/>
+        <location filename="../resources/resources.cpp" line="394"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
