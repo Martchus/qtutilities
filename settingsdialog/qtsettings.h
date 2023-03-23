@@ -48,6 +48,8 @@ public:
     void restore(QSettings &settings);
     void save(QSettings &settings) const;
     void apply();
+    void reevaluatePaletteAndDefaultIconTheme();
+    bool isPaletteDark();
     bool hasCustomFont() const;
 
     OptionCategory *category();
