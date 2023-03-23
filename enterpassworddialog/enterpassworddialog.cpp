@@ -43,7 +43,7 @@ EnterPasswordDialog::EnterPasswordDialog(QWidget *parent)
     // setup ui
     m_ui->setupUi(this);
     makeHeading(m_ui->instructionLabel);
-    setStyleSheet(dialogStyle());
+    setStyleSheet(dialogStyleForPalette(palette()));
     setDescription();
     setPromptForUserName(false);
     setVerificationRequired(false);
@@ -212,6 +212,9 @@ void EnterPasswordDialog::setInstruction(const QString &value)
 bool EnterPasswordDialog::event(QEvent *event)
 {
     switch (event->type()) {
+    case QEvent::PaletteChange:
+        setStyleSheet(dialogStyleForPalette(palette()));
+        break;
     case QEvent::KeyPress: {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_CapsLock) {

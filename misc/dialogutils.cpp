@@ -1,5 +1,7 @@
 #include "./dialogutils.h"
 
+#include "../misc/desktoputils.h"
+
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
@@ -56,13 +58,28 @@ QString generateWindowTitle(DocumentStatus documentStatus, const QString &docume
 #if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
 
 #ifdef Q_OS_WIN32
+/*!
+ * \brief Returns the color used to draw frames.
+ */
+QColor windowFrameColorForPalette(const QPalette &palette)
+{
+    return palette.window().color().darker(108);
+}
 
 /*!
  * \brief Returns the color used to draw frames.
  */
 QColor windowFrameColor()
 {
-    return QGuiApplication::palette().window().color().darker(108);
+    return windowFrameColorForPalette(QGuiApplication::palette());
+}
+
+/*!
+ * \brief Returns the color used to draw instructions.
+ */
+QColor instructionTextColorForPalette(const QPalette &palette)
+{
+    return isPaletteDark(palette) ? palette.text().color() : QColor(0x00, 0x33, 0x99);
 }
 
 /*!
@@ -70,11 +87,33 @@ QColor windowFrameColor()
  */
 QColor instructionTextColor()
 {
-    const auto baseColor = QGuiApplication::palette().base().color();
-    return (baseColor.value() > 204 && baseColor.saturation() < 63) ? QColor(0x00, 0x33, 0x99) : QGuiApplication::palette().text().color();
+    return instructionTextColorForPalette(QGuiApplication::palette());
 }
-
 #endif
+
+/*!
+ * \brief Returns the stylesheet for dialogs and other windows used in my
+ * applications.
+ */
+const QString &dialogStyleForPalette(const QPalette &palette)
+{
+#ifdef Q_OS_WINDOWS
+    return QStringLiteral("#mainWidget { color: palette(text); background-color: "
+                          "palette(base); border: none; }"
+                          "#bottomWidget { background-color: palette(window); "
+                          "color: palette(window-text); border-top: 1px solid %1; }"
+                          "QMessageBox QLabel, QInputDialog QLabel, "
+                          "*[classNames~=\"heading\"] { font-size: 12pt; color: %2; "
+                          "}"
+                          "*[classNames~=\"input-invalid\"] { color: red; }")
+        .arg(windowFrameColorForPalette(palette).name(), instructionTextColorForPalette(palette).name());
+#else
+    Q_UNUSED(palette)
+    static const auto style = QStringLiteral("*[classNames~=\"heading\"] { font-weight: bold; }"
+                                             "*[classNames~=\"input-invalid\"] { color: red; }");
+    return style;
+#endif
+}
 
 /*!
  * \brief Returns the stylesheet for dialogs and other windows used in my
@@ -82,21 +121,7 @@ QColor instructionTextColor()
  */
 const QString &dialogStyle()
 {
-#ifdef Q_OS_WIN32
-    static const auto style = QStringLiteral("#mainWidget { color: palette(text); background-color: "
-                                             "palette(base); border: none; }"
-                                             "#bottomWidget { background-color: palette(window); "
-                                             "color: palette(window-text); border-top: 1px solid %1; }"
-                                             "QMessageBox QLabel, QInputDialog QLabel, "
-                                             "*[classNames~=\"heading\"] { font-size: 12pt; color: %2; "
-                                             "}"
-                                             "*[classNames~=\"input-invalid\"] { color: red; }")
-                                  .arg(windowFrameColor().name(), instructionTextColor().name());
-#else
-    static const auto style = QStringLiteral("*[classNames~=\"heading\"] { font-weight: bold; }"
-                                             "*[classNames~=\"input-invalid\"] { color: red; }");
-#endif
-    return style;
+    return dialogStyleForPalette(QGuiApplication::palette());
 }
 
 #ifdef QT_UTILITIES_GUI_QTWIDGETS

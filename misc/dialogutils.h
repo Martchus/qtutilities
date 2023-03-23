@@ -8,6 +8,7 @@
 QT_FORWARD_DECLARE_CLASS(QString)
 QT_FORWARD_DECLARE_CLASS(QWidget)
 QT_FORWARD_DECLARE_CLASS(QColor)
+QT_FORWARD_DECLARE_CLASS(QPalette)
 QT_FORWARD_DECLARE_CLASS(QPoint)
 QT_FORWARD_DECLARE_CLASS(QRect)
 
@@ -29,11 +30,14 @@ enum class DocumentStatus {
 QT_UTILITIES_EXPORT QString generateWindowTitle(DocumentStatus documentStatus, const QString &documentPath);
 
 #if defined(QT_UTILITIES_GUI_QTWIDGETS) || defined(QT_UTILITIES_GUI_QTQUICK)
-#ifdef Q_OS_WIN32
-QT_UTILITIES_EXPORT QColor windowFrameColor();
-QT_UTILITIES_EXPORT QColor instructionTextColor();
+#ifdef Q_OS_WINDOWS
+[[deprecated]] QT_UTILITIES_EXPORT QColor windowFrameColor();
+QT_UTILITIES_EXPORT QColor windowFrameColorForPalette(const QPalette &palette);
+[[deprecated]] QT_UTILITIES_EXPORT QColor instructionTextColor();
+QT_UTILITIES_EXPORT QColor instructionTextColorForPalette(const QPalette &palette);
 #endif
-QT_UTILITIES_EXPORT const QString &dialogStyle();
+[[deprecated]] QT_UTILITIES_EXPORT const QString &dialogStyle();
+QT_UTILITIES_EXPORT const QString &dialogStyleForPalette(const QPalette &palette);
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
 QT_UTILITIES_EXPORT QRect availableScreenGeometryAtPoint(const QPoint &point);
 QT_UTILITIES_EXPORT void centerWidget(QWidget *widget, const QWidget *parent = nullptr, const QPoint *position = nullptr);

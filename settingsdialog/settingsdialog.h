@@ -46,6 +46,7 @@ Q_SIGNALS:
     void resetted();
 
 protected:
+    bool event(QEvent *event) override;
     void showEvent(QShowEvent *event) override;
 
 private Q_SLOTS:

@@ -37,7 +37,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 {
     m_ui->setupUi(this);
     makeHeading(m_ui->headingLabel);
-    setStyleSheet(dialogStyle());
+    setStyleSheet(dialogStyleForPalette(palette()));
 
     // setup models
     m_categoryFilterModel->setSourceModel(m_categoryModel);
@@ -329,4 +329,17 @@ void SettingsDialog::reset()
     }
     emit resetted();
 }
+
+bool SettingsDialog::event(QEvent *event)
+{
+    const auto res = QDialog::event(event);
+    switch (event->type()) {
+    case QEvent::PaletteChange:
+        setStyleSheet(dialogStyleForPalette(palette()));
+        break;
+    default:;
+    }
+    return res;
+}
+
 } // namespace QtUtilities

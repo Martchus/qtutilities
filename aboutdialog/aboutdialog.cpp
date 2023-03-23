@@ -44,7 +44,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
 {
     m_ui->setupUi(this);
     makeHeading(m_ui->productNameLabel);
-    setStyleSheet(dialogStyle());
+    setStyleSheet(dialogStyleForPalette(palette()));
     setWindowFlags((windowFlags()) & ~(Qt::WindowMinMaxButtonsHint | Qt::WindowContextHelpButtonHint | Qt::WindowFullscreenButtonHint));
     if (!applicationName.isEmpty()) {
         m_ui->productNameLabel->setText(applicationName);
@@ -116,6 +116,18 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &website, const QString 
  */
 AboutDialog::~AboutDialog()
 {
+}
+
+bool AboutDialog::event(QEvent *event)
+{
+    const auto res = QDialog::event(event);
+    switch (event->type()) {
+    case QEvent::PaletteChange:
+        setStyleSheet(dialogStyleForPalette(palette()));
+        break;
+    default:;
+    }
+    return res;
 }
 
 void AboutDialog::linkActivated(const QString &link)
