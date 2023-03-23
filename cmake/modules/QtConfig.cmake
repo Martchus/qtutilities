@@ -508,134 +508,140 @@ if (REQUIRED_ICONS)
     option(BUILTIN_ICON_THEMES_IN_LIBRARIES "specifies whether icon themes should also be built-in when building libraries"
            OFF)
     if (BUILTIN_ICON_THEMES AND (BUILTIN_ICON_THEMES_IN_LIBRARIES OR (NOT "${META_PROJECT_TYPE}" STREQUAL "library")))
-        set(ICON_THEME_FILES)
-        set(ICON_SEARCH_PATHS ${BUILTIN_ICON_THEMES_SEARCH_PATH})
+        set(BUILTIN_ICON_THEMES_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/icons/${META_PROJECT_NAME}_builtinicons.qrc")
+        list(APPEND RES_FILES "${BUILTIN_ICON_THEMES_QRC_FILE}")
 
-        if (CMAKE_FIND_ROOT_PATH)
-            foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
-                list(APPEND ICON_SEARCH_PATHS "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
-            endforeach ()
-        endif ()
-        list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
-        list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when cross-
-                                                                                 # compiling
-        list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
-        set(BUILTIN_ICONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
-        set(DEFAULT_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default/index.theme")
-        set(DEFAULT_DARK_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default-dark/index.theme")
-        file(REMOVE_RECURSE "${BUILTIN_ICONS_DIR}")
-        file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}")
-        foreach (ICON_THEME ${BUILTIN_ICON_THEMES})
-            string(REGEX MATCHALL "([^:]+|[^:]+$)" ICON_THEME_PARTS "${ICON_THEME}")
-            list(LENGTH ICON_THEME_PARTS ICON_THEME_PARTS_LENGTH)
-            if ("${ICON_THEME_PARTS_LENGTH}" STREQUAL 2)
-                list(GET ICON_THEME_PARTS 0 ICON_THEME)
-                list(GET ICON_THEME_PARTS 1 NEW_ICON_THEME_NAME)
-            else ()
-                set(NEW_ICON_THEME_NAME "${ICON_THEME}")
+        if (EXISTS "${BUILTIN_ICON_THEMES_QRC_FILE}")
+            message(STATUS "Using existing \"${BUILTIN_ICON_THEMES_QRC_FILE}\" to bundle icon themes for ${META_PROJECT_NAME}. "
+                           "Remove this file to force re-generation of the resource file.")
+        else ()
+            set(ICON_THEME_FILES)
+            set(ICON_SEARCH_PATHS ${BUILTIN_ICON_THEMES_SEARCH_PATH})
+
+            if (CMAKE_FIND_ROOT_PATH)
+                foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
+                    list(APPEND ICON_SEARCH_PATHS "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
+                endforeach ()
             endif ()
-            foreach (ICON_SEARCH_PATH ${ICON_SEARCH_PATHS})
-                set(ICON_THEME_PATH "${ICON_SEARCH_PATH}/${ICON_THEME}")
-                set(NEW_ICON_THEME_PATH "${ICON_SEARCH_PATH}/${ICON_THEME}")
-                if (IS_DIRECTORY "${ICON_THEME_PATH}")
-                    message(
-                        STATUS
-                            "The specified icon theme \"${ICON_THEME}\" has been located under \"${ICON_THEME_PATH}\" and will be built-in."
-                    )
-                    # find index files
-                    if (NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
-                        file(
-                            GLOB GLOBBED_ICON_THEME_INDEX_FILES
-                            LIST_DIRECTORIES false
-                            "${ICON_THEME_PATH}/index.theme" "${ICON_THEME_PATH}/icon-theme.cache")
-                    else ()
-                        # only index.theme required when icons are provided as fallback anyways
-                        file(
-                            GLOB GLOBBED_ICON_THEME_INDEX_FILES
-                            LIST_DIRECTORIES false
-                            "${ICON_THEME_PATH}/index.theme")
-                    endif ()
-                    # make the first non-dark specified built-in theme the "default" theme
-                    # make the first dark specified built-in theme the "default-dark" theme
-                    if (NEW_ICON_THEME_NAME MATCHES ".*-dark" AND NOT EXISTS "${DEFAULT_DARK_THEME_INDEX_FILE}")
-                        file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/default-dark")
-                        file(WRITE "${DEFAULT_DARK_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
-                        list(APPEND ICON_THEME_FILES "<file>default-dark/index.theme</file>")
-                    elseif (NOT EXISTS "${DEFAULT_THEME_INDEX_FILE}")
-                        file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/default")
-                        file(WRITE "${DEFAULT_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
-                        list(APPEND ICON_THEME_FILES "<file>default/index.theme</file>")
-                    endif ()
-                    # find required icons, except the icon theme is provided as fallback anyways
-                    if (NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
-                        set(GLOB_PATTERNS)
-                        foreach (REQUIRED_ICON ${REQUIRED_ICONS})
-                            list(APPEND GLOB_PATTERNS "${ICON_THEME_PATH}/${REQUIRED_ICON}"
-                                 "${ICON_THEME_PATH}/${REQUIRED_ICON}.*" "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
-                                 "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*")
-                        endforeach ()
-                        file(
-                            GLOB_RECURSE GLOBBED_ICON_THEME_FILES
-                            LIST_DIRECTORIES false
-                            ${GLOB_PATTERNS})
-                    else ()
+            list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
+            list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when cross-
+                                                                                     # compiling
+            list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
+            set(BUILTIN_ICONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
+            set(DEFAULT_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default/index.theme")
+            set(DEFAULT_DARK_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default-dark/index.theme")
+            file(REMOVE_RECURSE "${BUILTIN_ICONS_DIR}")
+            file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}")
+            foreach (ICON_THEME ${BUILTIN_ICON_THEMES})
+                string(REGEX MATCHALL "([^:]+|[^:]+$)" ICON_THEME_PARTS "${ICON_THEME}")
+                list(LENGTH ICON_THEME_PARTS ICON_THEME_PARTS_LENGTH)
+                if ("${ICON_THEME_PARTS_LENGTH}" STREQUAL 2)
+                    list(GET ICON_THEME_PARTS 0 ICON_THEME)
+                    list(GET ICON_THEME_PARTS 1 NEW_ICON_THEME_NAME)
+                else ()
+                    set(NEW_ICON_THEME_NAME "${ICON_THEME}")
+                endif ()
+                foreach (ICON_SEARCH_PATH ${ICON_SEARCH_PATHS})
+                    set(ICON_THEME_PATH "${ICON_SEARCH_PATH}/${ICON_THEME}")
+                    set(NEW_ICON_THEME_PATH "${ICON_SEARCH_PATH}/${ICON_THEME}")
+                    if (IS_DIRECTORY "${ICON_THEME_PATH}")
                         message(
                             STATUS
-                                "Icon files for specified theme \"${ICON_THEME}\" are skipped because these are provided as fallback anyways."
+                                "The specified icon theme \"${ICON_THEME}\" has been located under \"${ICON_THEME_PATH}\" and will be built-in."
                         )
-                        set(GLOBBED_ICON_THEME_FILES)
-                    endif ()
-                    # make temporary copy of required icons and create resource list for Qt
-                    foreach (ICON_THEME_FILE ${GLOBBED_ICON_THEME_INDEX_FILES} ${GLOBBED_ICON_THEME_FILES})
-                        # resolve symlinks
-                        if (IS_SYMLINK "${ICON_THEME_FILE}")
-                            string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH
-                                                 "${ICON_THEME_FILE}")
+                        # find index files
+                        if (NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
+                            file(
+                                GLOB GLOBBED_ICON_THEME_INDEX_FILES
+                                LIST_DIRECTORIES false
+                                "${ICON_THEME_PATH}/index.theme" "${ICON_THEME_PATH}/icon-theme.cache")
+                        else ()
+                            # only index.theme required when icons are provided as fallback anyways
+                            file(
+                                GLOB GLOBBED_ICON_THEME_INDEX_FILES
+                                LIST_DIRECTORIES false
+                                "${ICON_THEME_PATH}/index.theme")
+                        endif ()
+                        # make the first non-dark specified built-in theme the "default" theme
+                        # make the first dark specified built-in theme the "default-dark" theme
+                        if (NEW_ICON_THEME_NAME MATCHES ".*-dark" AND NOT EXISTS "${DEFAULT_DARK_THEME_INDEX_FILE}")
+                            file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/default-dark")
+                            file(WRITE "${DEFAULT_DARK_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
+                            list(APPEND ICON_THEME_FILES "<file>default-dark/index.theme</file>")
+                        elseif (NOT EXISTS "${DEFAULT_THEME_INDEX_FILE}")
+                            file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/default")
+                            file(WRITE "${DEFAULT_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
+                            list(APPEND ICON_THEME_FILES "<file>default/index.theme</file>")
+                        endif ()
+                        # find required icons, except the icon theme is provided as fallback anyways
+                        if (NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
+                            set(GLOB_PATTERNS)
+                            foreach (REQUIRED_ICON ${REQUIRED_ICONS})
+                                list(APPEND GLOB_PATTERNS "${ICON_THEME_PATH}/${REQUIRED_ICON}"
+                                     "${ICON_THEME_PATH}/${REQUIRED_ICON}.*" "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
+                                     "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*")
+                            endforeach ()
+                            file(
+                                GLOB_RECURSE GLOBBED_ICON_THEME_FILES
+                                LIST_DIRECTORIES false
+                                ${GLOB_PATTERNS})
+                        else ()
+                            message(
+                                STATUS
+                                    "Icon files for specified theme \"${ICON_THEME}\" are skipped because these are provided as fallback anyways."
+                            )
+                            set(GLOBBED_ICON_THEME_FILES)
+                        endif ()
+                        # make temporary copy of required icons and create resource list for Qt
+                        foreach (ICON_THEME_FILE ${GLOBBED_ICON_THEME_INDEX_FILES} ${GLOBBED_ICON_THEME_FILES})
+                            # resolve symlinks
+                            if (IS_SYMLINK "${ICON_THEME_FILE}")
+                                string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH
+                                                     "${ICON_THEME_FILE}")
+                                string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH
+                                                     "${ICON_THEME_FILE_RELATIVE_PATH}")
+                                set(ICON_THEME_FILE_ALIAS " alias=\"${NEW_ICON_THEME_FILE_RELATIVE_PATH}\"")
+                                if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+                                    if (CMAKE_VERSION VERSION_LESS "3.14")
+                                        message(FATAL_ERROR "Need at least CMake 3.14 on Windows to read symlinks of"
+                                                           "icon theme to be bundled.")
+                                    endif ()
+                                    while (IS_SYMLINK "${ICON_THEME_FILE}")
+                                        get_filename_component(ICON_THEME_FILE_DIR "${ICON_THEME_FILE}" DIRECTORY)
+                                        file(READ_SYMLINK "${ICON_THEME_FILE}" ICON_THEME_FILE)
+                                        if(NOT IS_ABSOLUTE "${ICON_THEME_FILE}")
+                                            set(ICON_THEME_FILE "${ICON_THEME_FILE_DIR}/${ICON_THEME_FILE}")
+                                        endif()
+                                    endwhile ()
+                                endif ()
+                                get_filename_component(ICON_THEME_FILE "${ICON_THEME_FILE}" REALPATH)
+                            else ()
+                                unset(ICON_THEME_FILE_ALIAS)
+                            endif ()
+                            string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH "${ICON_THEME_FILE}")
                             string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH
                                                  "${ICON_THEME_FILE_RELATIVE_PATH}")
-                            set(ICON_THEME_FILE_ALIAS " alias=\"${NEW_ICON_THEME_FILE_RELATIVE_PATH}\"")
-                            if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
-                                if (CMAKE_VERSION VERSION_LESS "3.14")
-                                    message(FATAL_ERROR "Need at least CMake 3.14 on Windows to read symlinks of"
-                                                       "icon theme to be bundled.")
-                                endif ()
-                                while (IS_SYMLINK "${ICON_THEME_FILE}")
-                                    get_filename_component(ICON_THEME_FILE_DIR "${ICON_THEME_FILE}" DIRECTORY)
-                                    file(READ_SYMLINK "${ICON_THEME_FILE}" ICON_THEME_FILE)
-                                    if(NOT IS_ABSOLUTE "${ICON_THEME_FILE}")
-                                        set(ICON_THEME_FILE "${ICON_THEME_FILE_DIR}/${ICON_THEME_FILE}")
-                                    endif()
-                                endwhile ()
-                            endif ()
-                            get_filename_component(ICON_THEME_FILE "${ICON_THEME_FILE}" REALPATH)
-                        else ()
-                            unset(ICON_THEME_FILE_ALIAS)
-                        endif ()
-                        string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH "${ICON_THEME_FILE}")
-                        string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH
-                                             "${ICON_THEME_FILE_RELATIVE_PATH}")
-                        get_filename_component(ICON_THEME_FILE_DIR "${ICON_THEME_FILE_RELATIVE_PATH}" DIRECTORY)
-                        string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_DIR
-                                             "${ICON_THEME_FILE_DIR}")
-                        file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
-                        file(COPY "${ICON_THEME_FILE}" DESTINATION "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
-                        list(APPEND ICON_THEME_FILES
-                             "<file${ICON_THEME_FILE_ALIAS}>${NEW_ICON_THEME_FILE_RELATIVE_PATH}</file>")
-                    endforeach ()
-                    break()
+                            get_filename_component(ICON_THEME_FILE_DIR "${ICON_THEME_FILE_RELATIVE_PATH}" DIRECTORY)
+                            string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_DIR
+                                                 "${ICON_THEME_FILE_DIR}")
+                            file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
+                            file(COPY "${ICON_THEME_FILE}" DESTINATION "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
+                            list(APPEND ICON_THEME_FILES
+                                 "<file${ICON_THEME_FILE_ALIAS}>${NEW_ICON_THEME_FILE_RELATIVE_PATH}</file>")
+                        endforeach ()
+                        break()
+                    endif ()
+                    unset(ICON_THEME_PATH)
+                endforeach ()
+                if (NOT ICON_THEME_PATH)
+                    message(FATAL_ERROR "The specified icon theme \"${ICON_THEME}\" could not be found.")
                 endif ()
-                unset(ICON_THEME_PATH)
             endforeach ()
-            if (NOT ICON_THEME_PATH)
-                message(FATAL_ERROR "The specified icon theme \"${ICON_THEME}\" could not be found.")
-            endif ()
-        endforeach ()
-        set(BUILTIN_ICON_THEMES_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/icons/${META_PROJECT_NAME}_builtinicons.qrc")
-        list(REMOVE_DUPLICATES ICON_THEME_FILES)
-        string(CONCAT BUILTIN_ICON_THEMES_QRC_FILE_CONTENT "<RCC><qresource prefix=\"/icons\">" ${ICON_THEME_FILES}
-                      "</qresource></RCC>")
-        file(WRITE "${BUILTIN_ICON_THEMES_QRC_FILE}" "${BUILTIN_ICON_THEMES_QRC_FILE_CONTENT}")
-        list(APPEND RES_FILES "${BUILTIN_ICON_THEMES_QRC_FILE}")
+            list(REMOVE_DUPLICATES ICON_THEME_FILES)
+            string(CONCAT BUILTIN_ICON_THEMES_QRC_FILE_CONTENT "<RCC><qresource prefix=\"/icons\">" ${ICON_THEME_FILES}
+                          "</qresource></RCC>")
+            file(WRITE "${BUILTIN_ICON_THEMES_QRC_FILE}" "${BUILTIN_ICON_THEMES_QRC_FILE_CONTENT}")
+        endif ()
     endif ()
 endif ()
 
