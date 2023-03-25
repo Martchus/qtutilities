@@ -512,8 +512,9 @@ if (REQUIRED_ICONS)
         list(APPEND RES_FILES "${BUILTIN_ICON_THEMES_QRC_FILE}")
 
         if (EXISTS "${BUILTIN_ICON_THEMES_QRC_FILE}")
-            message(STATUS "Using existing \"${BUILTIN_ICON_THEMES_QRC_FILE}\" to bundle icon themes for ${META_PROJECT_NAME}. "
-                           "Remove this file to force re-generation of the resource file.")
+            message(
+                STATUS "Using existing \"${BUILTIN_ICON_THEMES_QRC_FILE}\" to bundle icon themes for ${META_PROJECT_NAME}. "
+                       "Remove this file to force re-generation of the resource file.")
         else ()
             set(ICON_THEME_FILES)
             set(ICON_SEARCH_PATHS ${BUILTIN_ICON_THEMES_SEARCH_PATH})
@@ -524,8 +525,8 @@ if (REQUIRED_ICONS)
                 endforeach ()
             endif ()
             list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
-            list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when cross-
-                                                                                     # compiling
+            list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when
+                                                                                     # cross- compiling
             list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
             set(BUILTIN_ICONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
             set(DEFAULT_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default/index.theme")
@@ -562,8 +563,8 @@ if (REQUIRED_ICONS)
                                 LIST_DIRECTORIES false
                                 "${ICON_THEME_PATH}/index.theme")
                         endif ()
-                        # make the first non-dark specified built-in theme the "default" theme
-                        # make the first dark specified built-in theme the "default-dark" theme
+                        # make the first non-dark specified built-in theme the "default" theme make the first dark specified
+                        # built-in theme the "default-dark" theme
                         if (NEW_ICON_THEME_NAME MATCHES ".*-dark" AND NOT EXISTS "${DEFAULT_DARK_THEME_INDEX_FILE}")
                             file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/default-dark")
                             file(WRITE "${DEFAULT_DARK_THEME_INDEX_FILE}" "[Icon Theme]\nInherits=${NEW_ICON_THEME_NAME}")
@@ -604,21 +605,22 @@ if (REQUIRED_ICONS)
                                 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
                                     if (CMAKE_VERSION VERSION_LESS "3.14")
                                         message(FATAL_ERROR "Need at least CMake 3.14 on Windows to read symlinks of"
-                                                           "icon theme to be bundled.")
+                                                            "icon theme to be bundled.")
                                     endif ()
                                     while (IS_SYMLINK "${ICON_THEME_FILE}")
                                         get_filename_component(ICON_THEME_FILE_DIR "${ICON_THEME_FILE}" DIRECTORY)
                                         file(READ_SYMLINK "${ICON_THEME_FILE}" ICON_THEME_FILE)
-                                        if(NOT IS_ABSOLUTE "${ICON_THEME_FILE}")
+                                        if (NOT IS_ABSOLUTE "${ICON_THEME_FILE}")
                                             set(ICON_THEME_FILE "${ICON_THEME_FILE_DIR}/${ICON_THEME_FILE}")
-                                        endif()
+                                        endif ()
                                     endwhile ()
                                 endif ()
                                 get_filename_component(ICON_THEME_FILE "${ICON_THEME_FILE}" REALPATH)
                             else ()
                                 unset(ICON_THEME_FILE_ALIAS)
                             endif ()
-                            string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH "${ICON_THEME_FILE}")
+                            string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH
+                                                 "${ICON_THEME_FILE}")
                             string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH
                                                  "${ICON_THEME_FILE_RELATIVE_PATH}")
                             get_filename_component(ICON_THEME_FILE_DIR "${ICON_THEME_FILE_RELATIVE_PATH}" DIRECTORY)

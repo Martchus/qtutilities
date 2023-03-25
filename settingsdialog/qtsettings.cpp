@@ -265,7 +265,7 @@ void QtSettings::reevaluatePaletteAndDefaultIconTheme()
 {
     const auto isPaletteDark = QtUtilities::isPaletteDark();
     if (isPaletteDark == m_d->isPaletteDark) {
-        return;  // no need to do anything if there's no change
+        return; // no need to do anything if there's no change
     }
     m_d->isPaletteDark = isPaletteDark;
     if (auto iconTheme = QIcon::themeName(); iconTheme == QStringLiteral("default") || iconTheme == QStringLiteral("default-dark")) {

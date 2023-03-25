@@ -319,8 +319,7 @@ void setupCommonQtApplicationAttributes()
     //   and https://www.qt.io/blog/dark-mode-on-windows-11-with-qt-6.5
 #if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)) && (QT_VERSION < QT_VERSION_CHECK(6, 5, 0))
     if (const auto qtVersion = QLibraryInfo::version();
-            qtVersion >= QVersionNumber(6, 4, 0) && qtVersion < QVersionNumber(6, 5, 0)
-            && !qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
+        qtVersion >= QVersionNumber(6, 4, 0) && qtVersion < QVersionNumber(6, 5, 0) && !qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
         qputenv("QT_QPA_PLATFORM", "windows:darkmode=1");
     }
 #endif
