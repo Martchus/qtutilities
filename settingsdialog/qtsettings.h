@@ -37,6 +37,7 @@ public:
 explicit QtEnvOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
 
 private:
+DECLARE_SETUP_WIDGETS
 QtSettingsData &m_settings;
 END_DECLARE_OPTION_PAGE
 
@@ -45,6 +46,7 @@ public:
     QtSettings();
     ~QtSettings();
 
+    void disableNotices();
     void restore(QSettings &settings);
     void save(QSettings &settings) const;
     void apply();

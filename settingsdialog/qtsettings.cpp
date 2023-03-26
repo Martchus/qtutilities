@@ -56,6 +56,7 @@ struct QtSettingsData {
     bool customIconTheme;
     bool customLocale;
     bool isPaletteDark;
+    bool showNotices;
 };
 
 inline QtSettingsData::QtSettingsData()
@@ -69,6 +70,7 @@ inline QtSettingsData::QtSettingsData()
     , customIconTheme(false)
     , customLocale(false)
     , isPaletteDark(false)
+    , showNotices(true)
 {
 }
 
@@ -91,6 +93,19 @@ QtSettings::QtSettings()
  */
 QtSettings::~QtSettings()
 {
+}
+
+/*!
+ * \brief Disables notices on option pages that settings take only effect after restarting.
+ * \remarks
+ * - This function must be called before obtaining the option pages via category().
+ * - Only call this function if the application actually re-applies these settings when the
+ *   settings dialog is applied and when it is generally able to handle widget style and
+ *   palette changes well.
+ */
+void QtSettings::disableNotices()
+{
+    m_d->showNotices = false;
 }
 
 /*!
@@ -393,6 +408,9 @@ QWidget *QtAppearanceOptionPage::setupWidget()
 {
     // call base implementation first, so ui() is available
     auto *widget = QtAppearanceOptionPageBase::setupWidget();
+    if (!m_settings.showNotices) {
+        ui()->label->hide();
+    }
 
     // setup widget style selection
     ui()->widgetStyleComboBox->addItems(QStyleFactory::keys());
@@ -458,6 +476,9 @@ QWidget *QtLanguageOptionPage::setupWidget()
 {
     // call base implementation first, so ui() is available
     auto *widget = QtLanguageOptionPageBase::setupWidget();
+    if (!m_settings.showNotices) {
+        ui()->label->hide();
+    }
 
     // add all available locales to combo box
     auto *localeComboBox = ui()->localeComboBox;
@@ -501,6 +522,17 @@ void QtEnvOptionPage::reset()
     ui()->iconThemeSearchPathSelection->lineEdit()->setText(m_settings.additionalIconThemeSearchPath);
     ui()->translationPathSelection->lineEdit()->setText(TranslationFiles::additionalTranslationFilePath());
 }
+
+QWidget *QtEnvOptionPage::setupWidget()
+{
+    // call base implementation first, so ui() is available
+    auto *widget = QtEnvOptionPageBase::setupWidget();
+    if (!m_settings.showNotices) {
+        ui()->label->hide();
+    }
+    return widget;
+}
+
 } // namespace QtUtilities
 
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
