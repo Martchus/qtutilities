@@ -40,7 +40,7 @@ public:
 Q_SIGNALS:
     void displayNameChanged(const QString &displayName);
     void iconChanged(const QIcon &icon);
-    void pagesChanged(const QList<OptionPage *> &pages);
+    void pagesChanged(const QList<QtUtilities::OptionPage *> &pages);
 
 private:
     QString m_displayName;
