@@ -24,6 +24,7 @@
 #include <QStringBuilder>
 #include <QStyleFactory>
 
+#include <optional>
 #include <iostream>
 #include <memory>
 
@@ -35,13 +36,18 @@ struct QtSettingsData {
     QtSettingsData();
 
     QFont font;
+    std::optional<QFont> initialFont;
     QPalette palette;
     QString widgetStyle;
+    QString initialWidgetStyle;
     QString styleSheetPath;
     QString iconTheme;
+    QString initialIconTheme;
     QLocale defaultLocale;
     QString localeName;
+    QString previousPluginDirectory;
     QString additionalPluginDirectory;
+    QString previousIconThemeSearchPath;
     QString additionalIconThemeSearchPath;
     bool customFont;
     bool customPalette;
@@ -54,6 +60,7 @@ struct QtSettingsData {
 
 inline QtSettingsData::QtSettingsData()
     : iconTheme(QIcon::themeName())
+    , initialIconTheme(iconTheme)
     , localeName(defaultLocale.name())
     , customFont(false)
     , customPalette(false)
@@ -182,26 +189,42 @@ static QMap<QString, QString> scanIconThemes(const QStringList &searchPaths)
 /*!
  * \brief Applies the current configuration.
  * \remarks
- *  - Some settings take only affect after restarting the application.
- *  - QApplication/QGuiApplication must be instantiated before calling this
- * method.
- *  - Hence it makes most sense to call this directly after instantiating
+ * QApplication/QGuiApplication must be instantiated before calling this
+ * method. Hence it makes most sense to call this directly after instantiating
  * QApplication/QGuiApplication.
+ *
+ * This function may be called multiple times. This supports restoring default
+ * settings (e.g. if use of a custom icon theme has been disabled again after it
+ * was enabled the default icon theme will be configured again).
  */
 void QtSettings::apply()
 {
     // apply environment
-    if (m_d->additionalPluginDirectory.isEmpty()) {
-        QCoreApplication::addLibraryPath(m_d->additionalPluginDirectory);
+    if (m_d->additionalPluginDirectory != m_d->previousPluginDirectory) {
+        if (!m_d->previousPluginDirectory.isEmpty()) {
+            QCoreApplication::removeLibraryPath(m_d->previousPluginDirectory);
+        }
+        if (!m_d->additionalPluginDirectory.isEmpty()) {
+            QCoreApplication::addLibraryPath(m_d->additionalPluginDirectory);
+        }
+        m_d->previousPluginDirectory = m_d->additionalPluginDirectory;
     }
-    if (!m_d->additionalIconThemeSearchPath.isEmpty()) {
-        QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << m_d->additionalIconThemeSearchPath);
+    if (m_d->additionalIconThemeSearchPath != m_d->previousIconThemeSearchPath) {
+        auto paths = QIcon::themeSearchPaths();
+        if (!m_d->previousIconThemeSearchPath.isEmpty()) {
+            paths.removeAll(m_d->previousIconThemeSearchPath);
+        }
+        if (!m_d->additionalIconThemeSearchPath.isEmpty()) {
+            paths.append(m_d->additionalIconThemeSearchPath);
+        }
+        m_d->previousIconThemeSearchPath = m_d->additionalIconThemeSearchPath;
+        QIcon::setThemeSearchPaths(paths);
     }
 
     // read style sheet
-    QString styleSheet;
+    auto styleSheet = QString();
     if (m_d->customStyleSheet && !m_d->styleSheetPath.isEmpty()) {
-        QFile file(m_d->styleSheetPath);
+        auto file = QFile(m_d->styleSheetPath);
         if (!file.open(QFile::ReadOnly)) {
             cerr << "Unable to open the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << endl;
         }
@@ -213,26 +236,44 @@ void QtSettings::apply()
 
     // apply appearance
     if (m_d->customFont) {
+        if (!m_d->initialFont.has_value()) {
+            m_d->initialFont = QGuiApplication::font();
+        }
         QGuiApplication::setFont(m_d->font);
+    } else if (m_d->initialFont.has_value()) {
+        QGuiApplication::setFont(m_d->initialFont.value());
     }
     if (m_d->customWidgetStyle) {
-        QApplication::setStyle(m_d->widgetStyle);
-    }
-    if (!styleSheet.isEmpty()) {
-        if (auto *qapp = qobject_cast<QApplication *>(QApplication::instance())) {
-            qapp->setStyleSheet(styleSheet);
-        } else {
-            cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data()
-                 << "\" because no QApplication has been instantiated." << endl;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
+        const auto *const currentStyle = QApplication::style();
+        if (m_d->initialWidgetStyle.isEmpty() && currentStyle) {
+            m_d->initialWidgetStyle = currentStyle->name();
         }
+#endif
+        QApplication::setStyle(m_d->widgetStyle);
+    } else if (!m_d->initialWidgetStyle.isEmpty()) {
+        QApplication::setStyle(m_d->initialWidgetStyle);
+    }
+    if (auto *const qapp = qobject_cast<QApplication *>(QApplication::instance())) {
+        qapp->setStyleSheet(styleSheet);
+    } else {
+        cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data()
+             << "\" because no QApplication has been instantiated." << endl;
     }
     if (m_d->customPalette) {
         QGuiApplication::setPalette(m_d->palette);
+    } else {
+        QGuiApplication::setPalette(QPalette());
     }
     m_d->isPaletteDark = isPaletteDark();
     if (m_d->customIconTheme) {
         QIcon::setThemeName(m_d->iconTheme);
-    } else if (QIcon::themeName().isEmpty()) {
+    } else if (!m_d->initialIconTheme.isEmpty()) {
+        if (m_d->iconTheme != m_d->initialIconTheme) {
+            // set the icon theme back to what it was before changing anything (not sure how to read the current system icon theme again)
+            QIcon::setThemeName(m_d->initialIconTheme);
+        }
+    } else {
         // use bundled default icon theme matching the current palette
         // notes: - It is ok that search paths specified via CLI arguments are not set here yet. When doing so one should also
         //          specify the desired icon theme explicitly.
