@@ -360,7 +360,7 @@ QWidget *QtAppearanceOptionPage::setupWidget()
     ui()->styleSheetPathSelection->provideCustomFileMode(QFileDialog::ExistingFile);
 
     // setup font selection
-    QObject::connect(ui()->fontPushButton, &QPushButton::clicked, [this] {
+    QObject::connect(ui()->fontPushButton, &QPushButton::clicked, m_fontDialog, [this] {
         if (!m_fontDialog) {
             m_fontDialog = new QFontDialog(this->widget());
             m_fontDialog->setCurrentFont(ui()->fontComboBox->font());
@@ -371,7 +371,7 @@ QWidget *QtAppearanceOptionPage::setupWidget()
     });
 
     // setup palette selection
-    QObject::connect(ui()->paletteToolButton, &QToolButton::clicked,
+    QObject::connect(ui()->paletteToolButton, &QToolButton::clicked, ui()->paletteToolButton,
         [this] { ui()->paletteToolButton->setPalette(PaletteEditor::getPalette(this->widget(), ui()->paletteToolButton->palette())); });
 
     // setup icon theme selection
@@ -426,7 +426,7 @@ QWidget *QtLanguageOptionPage::setupWidget()
     }
 
     auto *languageLabel = ui()->languageLabel;
-    QObject::connect(ui()->localeComboBox, &QComboBox::currentTextChanged, [languageLabel, localeComboBox] {
+    QObject::connect(ui()->localeComboBox, &QComboBox::currentTextChanged, languageLabel, [languageLabel, localeComboBox] {
         const QLocale selectedLocale(localeComboBox->currentText());
         const QLocale currentLocale;
         languageLabel->setText(QCoreApplication::translate("QtGui::QtLanguageOptionPage", "recognized by Qt as") % QStringLiteral(" <i>")
