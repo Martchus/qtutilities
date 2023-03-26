@@ -95,7 +95,7 @@ QColor instructionTextColor()
  * \brief Returns the stylesheet for dialogs and other windows used in my
  * applications.
  */
-const QString &dialogStyleForPalette(const QPalette &palette)
+QString dialogStyleForPalette(const QPalette &palette)
 {
 #ifdef Q_OS_WINDOWS
     return QStringLiteral("#mainWidget { color: palette(text); background-color: "
@@ -109,9 +109,8 @@ const QString &dialogStyleForPalette(const QPalette &palette)
         .arg(windowFrameColorForPalette(palette).name(), instructionTextColorForPalette(palette).name());
 #else
     Q_UNUSED(palette)
-    static const auto style = QStringLiteral("*[classNames~=\"heading\"] { font-weight: bold; }"
+    return QStringLiteral("*[classNames~=\"heading\"] { font-weight: bold; }"
                                              "*[classNames~=\"input-invalid\"] { color: red; }");
-    return style;
 #endif
 }
 
@@ -121,7 +120,8 @@ const QString &dialogStyleForPalette(const QPalette &palette)
  */
 const QString &dialogStyle()
 {
-    return dialogStyleForPalette(QGuiApplication::palette());
+    static const auto style = dialogStyleForPalette(QGuiApplication::palette());
+    return style;
 }
 
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
