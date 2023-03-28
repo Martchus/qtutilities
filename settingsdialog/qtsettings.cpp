@@ -24,6 +24,11 @@
 #include <QStringBuilder>
 #include <QStyleFactory>
 
+#if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0))
+#include <QOperatingSystemVersion>
+#define QT_UTILITIES_USE_FUSION_ON_WINDOWS_11
+#endif
+
 #include <optional>
 #include <iostream>
 #include <memory>
@@ -258,6 +263,15 @@ void QtSettings::apply()
     } else if (m_d->initialFont.has_value()) {
         QGuiApplication::setFont(m_d->initialFont.value());
     }
+#ifdef QT_UTILITIES_USE_FUSION_ON_WINDOWS_11
+    if (m_d->initialWidgetStyle.isEmpty()) {
+        // use Fusion on Windows 11 as the native style doesn't look good
+        // see https://bugreports.qt.io/browse/QTBUG-97668
+        if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11) {
+            m_d->initialWidgetStyle = QStringLiteral("Fusion");
+        }
+    }
+#endif
     if (m_d->customWidgetStyle) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
         const auto *const currentStyle = QApplication::style();
