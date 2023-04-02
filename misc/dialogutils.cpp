@@ -110,7 +110,7 @@ QString dialogStyleForPalette(const QPalette &palette)
 #else
     Q_UNUSED(palette)
     return QStringLiteral("*[classNames~=\"heading\"] { font-weight: bold; }"
-                                             "*[classNames~=\"input-invalid\"] { color: red; }");
+                          "*[classNames~=\"input-invalid\"] { color: red; }");
 #endif
 }
 
