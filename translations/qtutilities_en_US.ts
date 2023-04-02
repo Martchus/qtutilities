@@ -12,7 +12,7 @@
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="396"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="508"/>
         <source>recognized by Qt as</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="262"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="368"/>
         <source>Qt</source>
         <translation type="unfinished"></translation>
     </message>
@@ -28,22 +28,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="386"/>
+        <location filename="../resources/resources.cpp" line="385"/>
         <source>unable to access file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="389"/>
+        <location filename="../resources/resources.cpp" line="388"/>
         <source>file has invalid format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="392"/>
+        <location filename="../resources/resources.cpp" line="391"/>
         <source>unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="394"/>
+        <location filename="../resources/resources.cpp" line="393"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -163,22 +163,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="290"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="293"/>
         <source>You didn&apos;t enter a user name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="292"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="295"/>
         <source>You didn&apos;t enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="297"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="303"/>
         <source>You mistyped the password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -494,22 +494,22 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>Utilities::windowTitle</name>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="34"/>
+        <location filename="../misc/dialogutils.cpp" line="36"/>
         <source>Unsaved - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="37"/>
+        <location filename="../misc/dialogutils.cpp" line="39"/>
         <source>%1 - %2 - %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="42"/>
+        <location filename="../misc/dialogutils.cpp" line="44"/>
         <source>*Unsaved - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="45"/>
+        <location filename="../misc/dialogutils.cpp" line="47"/>
         <source>*%1 - %2 - %3</source>
         <translation type="unfinished"></translation>
     </message>

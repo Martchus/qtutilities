@@ -12,7 +12,7 @@
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="396"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="508"/>
         <source>recognized by Qt as</source>
         <translation>von Qt erkannt als</translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="262"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="368"/>
         <source>Qt</source>
         <translation></translation>
     </message>
@@ -28,22 +28,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="386"/>
+        <location filename="../resources/resources.cpp" line="385"/>
         <source>unable to access file</source>
         <translation>Zugriff auf die Datei ist nicht möglich</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="389"/>
+        <location filename="../resources/resources.cpp" line="388"/>
         <source>file has invalid format</source>
         <translation>Datei hat ungültiges Format</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="392"/>
+        <location filename="../resources/resources.cpp" line="391"/>
         <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="394"/>
+        <location filename="../resources/resources.cpp" line="393"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation>Settings können nicht unter &quot;%1&quot; synchronisiert werden: %2</translation>
     </message>
@@ -167,22 +167,22 @@
         <translation>Neues Passwort festlegen</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="290"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="293"/>
         <source>You didn&apos;t enter a user name.</source>
         <translation>Es wurde kein Benutzername eingegeben.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="292"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="295"/>
         <source>You didn&apos;t enter a password.</source>
         <translation>Es wurde kein Passwort eingegeben.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="297"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation>Um sicher zu stellen, dass das neue Passwort richtig eingegeben wurde, muss es zweimal eingegeben werden.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="303"/>
         <source>You mistyped the password.</source>
         <translation>Erstes und zweites Passwort stimmen nicht überein.</translation>
     </message>
@@ -515,22 +515,22 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>Utilities::windowTitle</name>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="34"/>
+        <location filename="../misc/dialogutils.cpp" line="36"/>
         <source>Unsaved - %1</source>
         <translation>Nicht gespeichert - %1</translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="37"/>
+        <location filename="../misc/dialogutils.cpp" line="39"/>
         <source>%1 - %2 - %3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="42"/>
+        <location filename="../misc/dialogutils.cpp" line="44"/>
         <source>*Unsaved - %1</source>
         <translation>*Nicht gespeichert - %1</translation>
     </message>
     <message>
-        <location filename="../misc/dialogutils.cpp" line="45"/>
+        <location filename="../misc/dialogutils.cpp" line="47"/>
         <source>*%1 - %2 - %3</source>
         <translation></translation>
     </message>
