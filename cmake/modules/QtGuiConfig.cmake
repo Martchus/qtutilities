@@ -64,6 +64,8 @@ endif ()
 if (WIN32)
     # set "GUI-type" to WIN32 to hide console under Windows
     set(GUI_TYPE WIN32)
+    # add option for building CLI-wrapper
+    option(BUILD_CLI_WRAPPER "whether to build a CLI wrapper" ON)
 elseif (APPLE)
     # make the GUI application a "bundle" under MacOSX
     set(GUI_TYPE MACOSX_BUNDLE)
