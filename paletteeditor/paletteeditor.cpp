@@ -73,7 +73,7 @@ void PaletteEditor::setPalette(const QPalette &palette)
 #endif
         ;
     for (int i = 0; i < static_cast<int>(QPalette::NColorRoles); ++i) {
-        if (mask & (1 << i)) {
+        if (mask & (static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(i))) {
             continue;
         }
         m_editPalette.setBrush(
@@ -249,7 +249,7 @@ QPalette PaletteEditor::getPalette(QWidget *parent, const QPalette &init, const 
 #endif
         ;
     for (int i = 0; i < static_cast<int>(QPalette::NColorRoles); ++i) {
-        if (mask & (1 << i)) {
+        if (mask & (static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(i))) {
             continue;
         }
         parentPalette.setBrush(
@@ -308,7 +308,7 @@ QVariant PaletteModel::data(const QModelIndex &index, int role) const
                               resolve()
 #endif
                 ;
-            if (mask & (1 << index.row()))
+            if (mask & (static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(index.row())))
                 return true;
             return false;
         }
@@ -377,7 +377,7 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
         const bool isMask = qvariant_cast<bool>(value);
         const int r = index.row();
         if (isMask) {
-            mask |= (1 << r);
+            mask |= (static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(r));
         } else {
             m_palette.setBrush(
                 QPalette::Active, static_cast<QPalette::ColorRole>(r), m_parentPalette.brush(QPalette::Active, static_cast<QPalette::ColorRole>(r)));
@@ -385,7 +385,7 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
                 m_parentPalette.brush(QPalette::Inactive, static_cast<QPalette::ColorRole>(r)));
             m_palette.setBrush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r),
                 m_parentPalette.brush(QPalette::Disabled, static_cast<QPalette::ColorRole>(r)));
-            mask &= ~static_cast<decltype(mask)>(1 << index.row());
+            mask &= ~static_cast<decltype(mask)>((static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(index.row())));
         }
         m_palette.
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
