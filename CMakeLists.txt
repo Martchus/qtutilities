@@ -42,6 +42,7 @@ set(WIDGETS_HEADER_FILES
     settingsdialog/optionpage.h
     settingsdialog/settingsdialog.h
     settingsdialog/qtsettings.h
+    setup/updater.h
     widgets/buttonoverlay.h
     widgets/clearcombobox.h
     widgets/clearlineedit.h
@@ -61,6 +62,7 @@ set(WIDGETS_SRC_FILES
     settingsdialog/optionpage.cpp
     settingsdialog/settingsdialog.cpp
     settingsdialog/qtsettings.cpp
+    setup/updater.cpp
     widgets/buttonoverlay.cpp
     widgets/clearcombobox.cpp
     widgets/clearlineedit.cpp
@@ -116,7 +118,14 @@ set(SCRIPT_FILES scripts/required_icons.sh)
 # required to include CMake modules from own project directory
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
 
+# configure whether setup tools are enabled
+option(SETUP_TOOLS "enables setup tools; makes likely sense to disable when distributing via a package" ON)
+
 # find c++utilities
+set(CPP_UTILITIES_REQUIRED_VERSION 5.5.0)
+if (SETUP_TOOLS)
+    set(CPP_UTILITIES_REQUIRED_VERSION 5.26.0)
+endif ()
 set(CONFIGURATION_PACKAGE_SUFFIX
     ""
     CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
@@ -126,7 +135,8 @@ set(PACKAGE_NAMESPACE
 if (PACKAGE_NAMESPACE)
     set(PACKAGE_NAMESPACE_PREFIX "${PACKAGE_NAMESPACE}-")
 endif ()
-find_package(${PACKAGE_NAMESPACE_PREFIX}c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.5.0 REQUIRED)
+find_package(${PACKAGE_NAMESPACE_PREFIX}c++utilities${CONFIGURATION_PACKAGE_SUFFIX} ${CPP_UTILITIES_REQUIRED_VERSION}
+             REQUIRED)
 use_cpp_utilities()
 
 # configure platform specific capslock detection for enterpassworddialog.cpp
@@ -174,6 +184,16 @@ if (DBUS_NOTIFICATIONS)
 else ()
     list(APPEND EXCLUDED_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.h ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp)
     message(STATUS "D-Bus notifications disabled")
+endif ()
+
+# configure setup tools; if not enabled functions/classes under setup become no-ops
+if (SETUP_TOOLS)
+    set_property(
+        SOURCE setup/updater.cpp
+        APPEND
+        PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SETUP_TOOLS_ENABLED)
+    list(APPEND QT_TESTS setup)
+    list(APPEND ADDITIONAL_QT_MODULES Network Concurrent)
 endif ()
 
 # include modules to apply configuration
