@@ -26,10 +26,11 @@ set(HEADER_FILES
     misc/conversion.h
     misc/compat.h
     models/checklistmodel.h
+    tests/mockreply.h
     resources/qtconfigarguments.h
     resources/resources.h
     resources/importplugin.h)
-set(SRC_FILES misc/dialogutils.cpp misc/desktoputils.cpp models/checklistmodel.cpp resources/qtconfigarguments.cpp
+set(SRC_FILES misc/dialogutils.cpp misc/desktoputils.cpp models/checklistmodel.cpp tests/mockreply.cpp resources/qtconfigarguments.cpp
               resources/resources.cpp)
 set(RES_FILES resources/qtutilsicons.qrc)
 
@@ -42,6 +43,7 @@ set(WIDGETS_HEADER_FILES
     settingsdialog/optionpage.h
     settingsdialog/settingsdialog.h
     settingsdialog/qtsettings.h
+    setup/updater.h
     widgets/buttonoverlay.h
     widgets/clearcombobox.h
     widgets/clearlineedit.h
@@ -61,6 +63,7 @@ set(WIDGETS_SRC_FILES
     settingsdialog/optionpage.cpp
     settingsdialog/settingsdialog.cpp
     settingsdialog/qtsettings.cpp
+    setup/updater.cpp
     widgets/buttonoverlay.cpp
     widgets/clearcombobox.cpp
     widgets/clearlineedit.cpp
@@ -174,6 +177,17 @@ if (DBUS_NOTIFICATIONS)
 else ()
     list(APPEND EXCLUDED_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.h ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp)
     message(STATUS "D-Bus notifications disabled")
+endif ()
+
+# configure whether setup tools are enabled; if not functions/classes under setup become no-ops
+option(SETUP_TOOLS "enables setup tools; makes likely sense to disable when distributing via a package" ON)
+if (SETUP_TOOLS)
+    set_property(
+        SOURCE setup/updater.cpp
+        APPEND
+        PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SETUP_TOOLS_ENABLED)
+    list(APPEND QT_TESTS setup)
+    list(APPEND ADDITIONAL_QT_MODULES Network)
 endif ()
 
 # include modules to apply configuration
