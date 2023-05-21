@@ -14,6 +14,8 @@
 #include <QStyle>
 #include <QToolButton>
 
+#include <type_traits>
+
 namespace QtUtilities {
 
 enum { BrushRole = 33 };
@@ -72,8 +74,9 @@ void PaletteEditor::setPalette(const QPalette &palette)
                       resolve()
 #endif
         ;
+    using MaskType = std::remove_cv_t<decltype(mask)>;
     for (int i = 0; i < static_cast<int>(QPalette::NColorRoles); ++i) {
-        if (mask & (static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(i))) {
+        if (mask & (static_cast<MaskType>(1) << static_cast<MaskType>(i))) {
             continue;
         }
         m_editPalette.setBrush(
@@ -248,8 +251,9 @@ QPalette PaletteEditor::getPalette(QWidget *parent, const QPalette &init, const 
                       resolve()
 #endif
         ;
+    using MaskType = std::remove_cv_t<decltype(mask)>;
     for (int i = 0; i < static_cast<int>(QPalette::NColorRoles); ++i) {
-        if (mask & (static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(i))) {
+        if (mask & (static_cast<MaskType>(1) << static_cast<MaskType>(i))) {
             continue;
         }
         parentPalette.setBrush(
@@ -308,9 +312,8 @@ QVariant PaletteModel::data(const QModelIndex &index, int role) const
                               resolve()
 #endif
                 ;
-            if (mask & (static_cast<decltype(mask)>(1) << static_cast<decltype(mask)>(index.row())))
-                return true;
-            return false;
+            using MaskType = std::remove_cv_t<decltype(mask)>;
+            return mask & (static_cast<MaskType>(1) << static_cast<MaskType>(index.row()));
         }
         return QVariant();
     }
