@@ -211,52 +211,52 @@
         <translation>快</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="45"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="47"/>
         <source>Save…</source>
         <translation>保存…</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="47"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="49"/>
         <source>Load…</source>
         <translation>加载…</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="143"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="146"/>
         <source>Color palette configuration (*.ini)</source>
         <translation>调色板配置 (*.ini)</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="150"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="153"/>
         <source>Unable to load &quot;%1&quot;.</source>
         <translation>无法加载 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="155"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="158"/>
         <source>&quot;%1&quot; does not contain a valid palette.</source>
         <translation>&quot;%1&quot;  不包含有效的调色板。</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="168"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="171"/>
         <source>Unable to write &quot;%1&quot;.</source>
         <translation>无法写入 &quot;%1&quot;.。</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="176"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="179"/>
         <source>Load palette</source>
         <translation>加载调色板</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="186"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="189"/>
         <source>Error reading palette</source>
         <translation>读取调色板时出错</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="192"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="195"/>
         <source>Save palette</source>
         <translation>保存调色板</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="200"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="203"/>
         <source>Error writing palette</source>
         <translation>写入调色板时出错</translation>
     </message>
@@ -264,22 +264,22 @@
 <context>
     <name>QtUtilities::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="417"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="420"/>
         <source>Color Role</source>
         <translation>颜色角色</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="419"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="422"/>
         <source>Active</source>
         <translation>激活</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="421"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="424"/>
         <source>Inactive</source>
         <translation>未激活</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="423"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="426"/>
         <source>Disabled</source>
         <translation>已禁用</translation>
     </message>
