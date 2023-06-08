@@ -42,7 +42,8 @@ struct QtSettingsData {
 
     QFont font;
     std::optional<QFont> initialFont;
-    QPalette palette;
+    QPalette palette;  // the currently applied palette (only in use if customPalette is true, though)
+    QPalette selectedPalette;  // the intermediately selected palette (chosen in palette editor but not yet applied)
     QString widgetStyle;
     QString initialWidgetStyle;
     QString styleSheetPath;
@@ -390,7 +391,7 @@ bool QtAppearanceOptionPage::apply()
     m_settings.customWidgetStyle = !ui()->widgetStyleCheckBox->isChecked();
     m_settings.styleSheetPath = ui()->styleSheetPathSelection->lineEdit()->text();
     m_settings.customStyleSheet = !ui()->styleSheetCheckBox->isChecked();
-    m_settings.palette = ui()->paletteToolButton->palette();
+    m_settings.palette = m_settings.selectedPalette;
     m_settings.customPalette = !ui()->paletteCheckBox->isChecked();
     m_settings.iconTheme
         = ui()->iconThemeComboBox->currentIndex() != -1 ? ui()->iconThemeComboBox->currentData().toString() : ui()->iconThemeComboBox->currentText();
@@ -407,7 +408,7 @@ void QtAppearanceOptionPage::reset()
     ui()->widgetStyleCheckBox->setChecked(!m_settings.customWidgetStyle);
     ui()->styleSheetPathSelection->lineEdit()->setText(m_settings.styleSheetPath);
     ui()->styleSheetCheckBox->setChecked(!m_settings.customStyleSheet);
-    ui()->paletteToolButton->setPalette(m_settings.palette);
+    m_settings.selectedPalette = m_settings.palette;
     ui()->paletteCheckBox->setChecked(!m_settings.customPalette);
     int iconThemeIndex = ui()->iconThemeComboBox->findData(m_settings.iconTheme);
     if (iconThemeIndex != -1) {
@@ -445,7 +446,7 @@ QWidget *QtAppearanceOptionPage::setupWidget()
 
     // setup palette selection
     QObject::connect(ui()->paletteToolButton, &QToolButton::clicked, ui()->paletteToolButton,
-        [this] { ui()->paletteToolButton->setPalette(PaletteEditor::getPalette(this->widget(), ui()->paletteToolButton->palette())); });
+        [this] { m_settings.selectedPalette = PaletteEditor::getPalette(this->widget(), m_settings.selectedPalette); });
 
     // setup icon theme selection
     const auto iconThemes = scanIconThemes(QIcon::themeSearchPaths() << QStringLiteral("/usr/share/icons/"));
