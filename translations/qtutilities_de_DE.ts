@@ -215,37 +215,37 @@
         <translation>Einfach</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="47"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="46"/>
         <source>Save…</source>
         <translation>Speichern…</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="49"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="48"/>
         <source>Load…</source>
         <translation>Laden…</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="146"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="144"/>
         <source>Color palette configuration (*.ini)</source>
         <translation>Farbpalettenkonfiguration (*.ini)</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="153"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="151"/>
         <source>Unable to load &quot;%1&quot;.</source>
         <translation>Fehler beim Laden von &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="158"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="156"/>
         <source>&quot;%1&quot; does not contain a valid palette.</source>
         <translation>&quot;%1&quot; enthält keine gültige Farbpalette.</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="171"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="169"/>
         <source>Unable to write &quot;%1&quot;.</source>
         <translation>Fehler beim Schreiben von &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="179"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="177"/>
         <source>Load palette</source>
         <translation>Palette laden</translation>
     </message>
@@ -268,22 +268,22 @@
 <context>
     <name>QtUtilities::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="420"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="405"/>
         <source>Color Role</source>
         <translation>Farbrolle</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="422"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="407"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="424"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="409"/>
         <source>Inactive</source>
         <translation>Inaktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="426"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="411"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
