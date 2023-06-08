@@ -42,8 +42,8 @@ struct QtSettingsData {
 
     QFont font;
     std::optional<QFont> initialFont;
-    QPalette palette;  // the currently applied palette (only in use if customPalette is true, though)
-    QPalette selectedPalette;  // the intermediately selected palette (chosen in palette editor but not yet applied)
+    QPalette palette; // the currently applied palette (only in use if customPalette is true, though)
+    QPalette selectedPalette; // the intermediately selected palette (chosen in palette editor but not yet applied)
     QString widgetStyle;
     QString initialWidgetStyle;
     QString styleSheetPath;
