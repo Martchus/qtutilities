@@ -183,6 +183,8 @@ void PaletteEditor::load()
     auto errorMessage = QString();
     if (loadPalette(dialog.selectedFiles().constFirst(), &pal, &errorMessage)) {
         setPalette(pal);
+        // apply again as otherwise highlight and possibly other roles are not shown until the next restart
+        setPalette(pal, pal);
     } else {
         QMessageBox::warning(this, tr("Error reading palette"), errorMessage);
     }
