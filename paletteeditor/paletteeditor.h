@@ -48,7 +48,6 @@ private Q_SLOTS:
     void save();
 
 private:
-    void updatePreviewPalette();
     void updateStyledButton();
 
     QPalette::ColorGroup currentColorGroup() const

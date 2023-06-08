@@ -31,7 +31,6 @@ PaletteEditor::PaletteEditor(QWidget *parent)
 {
     m_ui->setupUi(this);
     m_ui->paletteView->setModel(m_paletteModel);
-    updatePreviewPalette();
     updateStyledButton();
     m_ui->paletteView->setModel(m_paletteModel);
     auto *const delegate = new ColorDelegate(this);
@@ -94,7 +93,6 @@ void PaletteEditor::setPalette(const QPalette &palette)
         resolve(mask)
 #endif
         ;
-    updatePreviewPalette();
     updateStyledButton();
     m_paletteUpdated = true;
     if (!m_modelUpdated) {
@@ -218,21 +216,6 @@ void PaletteEditor::buildPalette()
     const QColor btn(m_ui->buildButton->color());
     const QPalette temp(btn);
     setPalette(temp);
-}
-
-void PaletteEditor::updatePreviewPalette()
-{
-    const QPalette::ColorGroup g = currentColorGroup();
-    // build the preview palette
-    const QPalette currentPalette = palette();
-    QPalette previewPalette;
-    for (int i = QPalette::WindowText; i < QPalette::NColorRoles; ++i) {
-        const QPalette::ColorRole r = static_cast<QPalette::ColorRole>(i);
-        const QBrush br = currentPalette.brush(g, r);
-        previewPalette.setBrush(QPalette::Active, r, br);
-        previewPalette.setBrush(QPalette::Inactive, r, br);
-        previewPalette.setBrush(QPalette::Disabled, r, br);
-    }
 }
 
 void PaletteEditor::updateStyledButton()
