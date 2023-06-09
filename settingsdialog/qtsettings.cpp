@@ -434,7 +434,7 @@ QWidget *QtAppearanceOptionPage::setupWidget()
     ui()->styleSheetPathSelection->provideCustomFileMode(QFileDialog::ExistingFile);
 
     // setup font selection
-    QObject::connect(ui()->fontPushButton, &QPushButton::clicked, m_fontDialog, [this] {
+    QObject::connect(ui()->fontPushButton, &QPushButton::clicked, widget, [this] {
         if (!m_fontDialog) {
             m_fontDialog = new QFontDialog(this->widget());
             m_fontDialog->setCurrentFont(ui()->fontComboBox->font());
