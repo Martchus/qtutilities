@@ -11,6 +11,14 @@ set(QT_LINKAGE_DETERMINED ON)
 # include validate_visibility from c++utilities' 3rdParty module
 include(3rdParty)
 
+# allow switching the Qt and KDE Frameworks version
+set(QT_PACKAGE_PREFIX
+    "Qt5"
+    CACHE STRING "specifies the prefix for Qt packages")
+set(KF_PACKAGE_PREFIX
+    "KF5"
+    CACHE STRING "specifies the prefix for KDE Frameworks packages")
+
 # determine the minimum Qt version
 if (NOT META_QT_VERSION)
     if (META_QT5_VERSION)

@@ -66,10 +66,6 @@ if (IMPORTED_KF_MODULES)
 endif ()
 
 # find and use the required Qt/KF modules
-set(QT_PACKAGE_PREFIX
-    "Qt5"
-    CACHE STRING "specifies the prefix for Qt packages")
-string(TOLOWER "${QT_PACKAGE_PREFIX}" QT_PACKAGE_PREFIX_LOWER)
 set(QT_LINGUIST_TOOLS_PACKAGE "${QT_PACKAGE_PREFIX}LinguistTools")
 set(QT_QMAKE_TARGET "${QT_PACKAGE_PREFIX}::qmake")
 foreach (MODULE ${QT_MODULES})
@@ -79,9 +75,6 @@ foreach (MODULE ${QT_MODULES})
     endif ()
     use_qt_module(PREFIX "${QT_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
 endforeach ()
-set(KF_PACKAGE_PREFIX
-    "KF5"
-    CACHE STRING "specifies the prefix for KDE Frameworks packages")
 foreach (MODULE ${KF_MODULES})
     unset(MODULE_OPTIONS)
     if ("${MODULE}" IN_LIST META_PUBLIC_KF_MODULES)
@@ -329,6 +322,7 @@ option(BUILTIN_TRANSLATIONS_OF_QT "enables/disables built-in translations of Qt 
        "${BUILTIN_TRANSLATIONS}")
 
 # determine relevant Qt translation files
+string(TOLOWER "${QT_PACKAGE_PREFIX}" QT_PACKAGE_PREFIX_LOWER)
 set(QT_TRANSLATION_FILES)
 set(QT_TRANSLATION_SEARCH_PATHS)
 query_qmake_variable_path(QT_INSTALL_TRANSLATIONS)

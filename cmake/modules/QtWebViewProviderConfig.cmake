@@ -6,9 +6,19 @@ if (TARGET_CONFIG_DONE)
     message(FATAL_ERROR "Can not include QtWebViewProviderConfig module when targets are already configured.")
 endif ()
 
+# include required modules
+include(QtLinkage)
+
+# check whether Qt WebEngine is present
+find_package("${QT_PACKAGE_PREFIX}WebEngineWidgets" "${META_QT_VERSION}")
+set(WEBVIEW_PROVIDER_DEFAULT "none")
+if ("${${QT_PACKAGE_PREFIX}WebEngineWidgets_FOUND}")
+    set(WEBVIEW_PROVIDER_DEFAULT "webengine")
+endif ()
+
 # configure the specified web view provider
 set(WEBVIEW_PROVIDER
-    "webengine"
+    "${WEBVIEW_PROVIDER_DEFAULT}"
     CACHE STRING "specifies the web view provider: webengine (default), webkit or none")
 if (WEBVIEW_PROVIDER STREQUAL "webkit")
     set(WEBVIEW_PROVIDER WebKitWidgets)
