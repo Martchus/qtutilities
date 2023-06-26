@@ -548,6 +548,17 @@ QWidget *QtEnvOptionPage::setupWidget()
     return widget;
 }
 
+/*!
+ * \brief Returns a handle to the internal data.
+ * \remarks
+ * This is an opaque data structure. It can be used to construct option pages
+ * like QtLanguageOptionPage.
+ */
+QtSettings::operator QtSettingsData &() const
+{
+    return *m_d.get();
+}
+
 } // namespace QtUtilities
 
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
