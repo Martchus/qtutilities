@@ -53,6 +53,7 @@ QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &configNam
 QT_UTILITIES_EXPORT void loadApplicationTranslationFile(const QString &configName, const std::initializer_list<QString> &applicationNames);
 QT_UTILITIES_EXPORT void loadApplicationTranslationFile(
     const QString &configName, const std::initializer_list<QString> &applicationNames, const QString &localeName);
+QT_UTILITIES_EXPORT void clearTranslationFiles();
 } // namespace TranslationFiles
 
 namespace ApplicationInstances {

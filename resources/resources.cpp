@@ -69,6 +69,11 @@ void cleanup()
 namespace TranslationFiles {
 
 /*!
+ * \brief The translators installed via the load-functions in this namespace.
+ */
+static QList<QTranslator *> translators;
+
+/*!
  * \brief Allows to set an additional search path for translation files.
  * \remarks This path is considered *before* the default directories.
  */
@@ -132,6 +137,7 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
             || qtTranslator->load(fileName, path = QStringLiteral("../share/qt/translations"))
             || qtTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
             QCoreApplication::installTranslator(qtTranslator);
+            translators.append(qtTranslator);
             if (debugTranslations) {
                 cerr << "Loading translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and the locale \""
                      << localeName.toLocal8Bit().data() << "\" from \"" << path.toLocal8Bit().data() << "\"." << endl;
@@ -230,6 +236,7 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
         || appTranslator->load(fileName, path = QStringLiteral(APP_INSTALL_PREFIX "/share/") % directoryName % QStringLiteral("/translations"))
         || appTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
+        translators.append(appTranslator);
         if (qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS")) {
             logTranslationEvent("Loading", configName, applicationName, localeName, path);
         }
@@ -267,6 +274,18 @@ void loadApplicationTranslationFile(const QString &configName, const std::initia
         loadApplicationTranslationFile(configName, applicationName, localeName);
     }
 }
+
+/*!
+ * \brief Clears all translation files previously loaded via the load-functions in this namespace.
+ */
+void clearTranslationFiles()
+{
+    for (auto *const translator : translators) {
+        QCoreApplication::removeTranslator(translator);
+    }
+    translators.clear();
+}
+
 } // namespace TranslationFiles
 
 /*!
