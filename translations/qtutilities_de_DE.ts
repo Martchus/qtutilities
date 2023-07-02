@@ -12,7 +12,7 @@
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="509"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="537"/>
         <source>recognized by Qt as</source>
         <translation>von Qt erkannt als</translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="369"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="397"/>
         <source>Qt</source>
         <translation></translation>
     </message>
@@ -167,22 +167,22 @@
         <translation>Neues Passwort festlegen</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="293"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="296"/>
         <source>You didn&apos;t enter a user name.</source>
         <translation>Es wurde kein Benutzername eingegeben.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="295"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="298"/>
         <source>You didn&apos;t enter a password.</source>
         <translation>Es wurde kein Passwort eingegeben.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="300"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="303"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation>Um sicher zu stellen, dass das neue Passwort richtig eingegeben wurde, muss es zweimal eingegeben werden.</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="303"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="306"/>
         <source>You mistyped the password.</source>
         <translation>Erstes und zweites Passwort stimmen nicht überein.</translation>
     </message>
@@ -225,42 +225,42 @@
         <translation>Laden…</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="144"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="156"/>
         <source>Color palette configuration (*.ini)</source>
         <translation>Farbpalettenkonfiguration (*.ini)</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="151"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="163"/>
         <source>Unable to load &quot;%1&quot;.</source>
         <translation>Fehler beim Laden von &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="156"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="168"/>
         <source>&quot;%1&quot; does not contain a valid palette.</source>
         <translation>&quot;%1&quot; enthält keine gültige Farbpalette.</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="169"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="181"/>
         <source>Unable to write &quot;%1&quot;.</source>
         <translation>Fehler beim Schreiben von &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="177"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="189"/>
         <source>Load palette</source>
         <translation>Palette laden</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="189"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="201"/>
         <source>Error reading palette</source>
         <translation>Fehler beim Einlesen der Palette</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="195"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="207"/>
         <source>Save palette</source>
         <translation>Palette speichern</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="203"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="215"/>
         <source>Error writing palette</source>
         <translation>Fehler beim Schreiben der Palette</translation>
     </message>
@@ -268,22 +268,22 @@
 <context>
     <name>QtUtilities::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="405"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="417"/>
         <source>Color Role</source>
         <translation>Farbrolle</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="407"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="419"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="409"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="421"/>
         <source>Inactive</source>
         <translation>Inaktiv</translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="411"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="423"/>
         <source>Disabled</source>
         <translation>Deaktiviert</translation>
     </message>
@@ -291,24 +291,24 @@
 <context>
     <name>QtUtilities::PathSelection</name>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="56"/>
-        <location filename="../widgets/pathselection.cpp" line="76"/>
+        <location filename="../widgets/pathselection.cpp" line="88"/>
+        <location filename="../widgets/pathselection.cpp" line="145"/>
         <source>Select ...</source>
         <translation>Wählen ...</translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="81"/>
+        <location filename="../widgets/pathselection.cpp" line="93"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="84"/>
+        <location filename="../widgets/pathselection.cpp" line="96"/>
         <source>Explore</source>
         <translation>Im Dateibrowser öffnen</translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="120"/>
-        <location filename="../widgets/pathselection.cpp" line="122"/>
+        <location filename="../widgets/pathselection.cpp" line="132"/>
+        <location filename="../widgets/pathselection.cpp" line="134"/>
         <source>Select path</source>
         <translation>Pfad auswählen</translation>
     </message>
@@ -498,12 +498,12 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
         <translation></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="294"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="321"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation>&lt;p&gt;&lt;b&gt;Beim Anwenden der Einstellungen sind Fehler aufgetreten:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="299"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="326"/>
         <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
     </message>
