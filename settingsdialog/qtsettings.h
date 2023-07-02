@@ -53,6 +53,7 @@ public:
     void reevaluatePaletteAndDefaultIconTheme();
     bool isPaletteDark();
     bool hasCustomFont() const;
+    bool hasLocaleChanged() const;
     operator QtSettingsData &() const;
 
     OptionCategory *category();

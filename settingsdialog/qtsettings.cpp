@@ -50,6 +50,7 @@ struct QtSettingsData {
     QString iconTheme;
     QString initialIconTheme;
     QLocale defaultLocale;
+    QLocale previousLocale;
     QString localeName;
     QString previousPluginDirectory;
     QString additionalPluginDirectory;
@@ -319,6 +320,7 @@ void QtSettings::apply()
     }
 
     // apply locale
+    m_d->previousLocale = QLocale();
     QLocale::setDefault(m_d->customLocale ? QLocale(m_d->localeName) : m_d->defaultLocale);
 }
 
@@ -353,6 +355,14 @@ void QtSettings::reevaluatePaletteAndDefaultIconTheme()
 bool QtSettings::isPaletteDark()
 {
     return m_d->isPaletteDark;
+}
+
+/*!
+ * \brief Returns whether the last apply() call has changed the default locale.
+ */
+bool QtSettings::hasLocaleChanged() const
+{
+    return m_d->previousLocale != QLocale();
 }
 
 /*!
