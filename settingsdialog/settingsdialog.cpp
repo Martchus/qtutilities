@@ -156,6 +156,21 @@ void SettingsDialog::showCategory(OptionCategory *category)
 }
 
 /*!
+ * \brief Allows to set the \a categories display name so that it is retranslated as needed.
+ * \remarks
+ * - The specified \a translator is supposed to return the display name to assign to \a category for the current
+ *   locale. The \a translator is called immediately for the initial assignment and on language change events.
+ * - This function is experimental and might change or be removed completely in the next minor release.
+ */
+void SettingsDialog::translateCategory(OptionCategory *category, const std::function<QString ()> &translator)
+{
+    category->setDisplayName(translator());
+    connect(this, &SettingsDialog::retranslationRequired, category, [category, translator = std::move(translator)] {
+        category->setDisplayName(translator());
+    });
+}
+
+/*!
  * \brief Enables *single-category mode* to show only the specified \a
  * singleCategory.
  * \remarks
@@ -339,6 +354,7 @@ bool SettingsDialog::event(QEvent *event)
         break;
     case QEvent::LanguageChange:
         m_ui->retranslateUi(this);
+        emit retranslationRequired();
         break;
     default:;
     }

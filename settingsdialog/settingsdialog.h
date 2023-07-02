@@ -31,6 +31,7 @@ public:
     OptionCategory *category(int categoryIndex) const;
     OptionPage *page(int categoryIndex, int pageIndex) const;
     void showCategory(OptionCategory *category);
+    void translateCategory(OptionCategory *category, const std::function<QString()> &translator);
     void setSingleCategory(OptionCategory *singleCategory);
     QWidget *cornerWidget(Qt::Corner corner = Qt::TopRightCorner) const;
     void setCornerWidget(QWidget *widget, Qt::Corner corner = Qt::TopRightCorner);
@@ -44,6 +45,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void applied();
     void resetted();
+    void retranslationRequired();
 
 protected:
     bool event(QEvent *event) override;
