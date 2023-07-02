@@ -54,6 +54,7 @@ protected:
 private Q_SLOTS:
     void currentCategoryChanged(const QModelIndex &index);
     void updateTabWidget();
+    void retranslateTabWidget();
 
 private:
     std::unique_ptr<Ui::SettingsDialog> m_ui;

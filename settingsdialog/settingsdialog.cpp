@@ -289,6 +289,18 @@ void SettingsDialog::updateTabWidget()
 }
 
 /*!
+ * \brief Updates the tab widget's tab texts to apply possible translation changes.
+ */
+void SettingsDialog::retranslateTabWidget()
+{
+    for (auto index = 0; index < m_ui->pagesTabWidget->count(); ++index) {
+        const auto *const scrollArea = qobject_cast<const QScrollArea *>(m_ui->pagesTabWidget->widget(index));
+        const auto *const widget = scrollArea->widget();
+        m_ui->pagesTabWidget->setTabText(index, widget->windowTitle());
+    }
+}
+
+/*!
  * \brief Applies all changes. Calls OptionCategory::applyAllPages() for each category.
  * \remarks Pages which have not been shown yet must have not been initialized anyways
  *          and hence are skipped.
@@ -354,6 +366,7 @@ bool SettingsDialog::event(QEvent *event)
         break;
     case QEvent::LanguageChange:
         m_ui->retranslateUi(this);
+        retranslateTabWidget();
         emit retranslationRequired();
         break;
     default:;
