@@ -58,7 +58,11 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         m_ui->creatorLabel->setText(creator);
     } else {
         // add "developed by " before creator name
-        m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
+        auto setCreator = [this, creator = std::move(creator)] {
+            m_ui->creatorLabel->setText(tr("developed by %1").arg(creator.isEmpty() ? QApplication::organizationName() : creator));
+        };
+        setCreator();
+        connect(this, &AboutDialog::retranslationRequired, this, std::move(setCreator));
     }
     m_ui->versionLabel->setText(version.isEmpty() ? QApplication::applicationVersion() : version);
     const auto &deps(dependencyVersions.size() ? dependencyVersions : CppUtilities::applicationInfo.dependencyVersions);
@@ -72,10 +76,14 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
             % linkedAgainst.join(QStringLiteral("</li><li>")) % QStringLiteral("</li></ul>"));
     }
     if (!website.isEmpty() || CppUtilities::applicationInfo.url) {
-        m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" "
-                                       "style=\"text-decoration: underline; color: palette(link);\">project "
-                                       "website</a>.")
-                                        .arg(!website.isEmpty() ? website : QString::fromUtf8(CppUtilities::applicationInfo.url)));
+        auto setWebsite = [this, website = std::move(website)] {
+            m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" "
+                                           "style=\"text-decoration: underline; color: palette(link);\">project "
+                                           "website</a>.")
+                                            .arg(!website.isEmpty() ? website : QString::fromUtf8(CppUtilities::applicationInfo.url)));
+        };
+        setWebsite();
+        connect(this, &AboutDialog::retranslationRequired, this, std::move(setWebsite));
     } else {
         m_ui->websiteLabel->hide();
     }
@@ -88,7 +96,9 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
         : new QGraphicsPixmapItem(QPixmap::fromImage(image));
     m_iconScene->addItem(item);
     m_ui->graphicsView->setScene(m_iconScene);
-    m_ui->qtVersionLabel->setText(tr("Using <a href=\"qtversion\">Qt %1</a>").arg(QString::fromUtf8(qVersion())));
+    auto setQtVersion = [this] { m_ui->qtVersionLabel->setText(tr("Using <a href=\"qtversion\">Qt %1</a>").arg(QString::fromUtf8(qVersion()))); };
+    setQtVersion();
+    connect(this, &AboutDialog::retranslationRequired, this, std::move(setQtVersion));
     connect(m_ui->qtVersionLabel, &QLabel::linkActivated, this, &AboutDialog::linkActivated);
     centerWidget(this, parentWidget());
 }
@@ -126,7 +136,8 @@ bool AboutDialog::event(QEvent *event)
         setStyleSheet(dialogStyleForPalette(palette()));
         break;
     case QEvent::LanguageChange:
-        m_ui->retranslateUi(this);
+        setWindowTitle(QCoreApplication::translate("QtUtilities::AboutDialog", "About", nullptr));
+        emit retranslationRequired();
         break;
     default:;
     }

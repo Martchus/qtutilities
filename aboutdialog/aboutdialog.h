@@ -27,6 +27,9 @@ public:
     explicit AboutDialog(QWidget *parent, const QString &website = QString(), const QString &description = QString(), const QImage &image = QImage());
     ~AboutDialog() override;
 
+Q_SIGNALS:
+    void retranslationRequired();
+
 protected:
     bool event(QEvent *event) override;
 
