@@ -162,12 +162,11 @@ void SettingsDialog::showCategory(OptionCategory *category)
  *   locale. The \a translator is called immediately for the initial assignment and on language change events.
  * - This function is experimental and might change or be removed completely in the next minor release.
  */
-void SettingsDialog::translateCategory(OptionCategory *category, const std::function<QString ()> &translator)
+void SettingsDialog::translateCategory(OptionCategory *category, const std::function<QString()> &translator)
 {
     category->setDisplayName(translator());
-    connect(this, &SettingsDialog::retranslationRequired, category, [category, translator = std::move(translator)] {
-        category->setDisplayName(translator());
-    });
+    connect(this, &SettingsDialog::retranslationRequired, category,
+        [category, translator = std::move(translator)] { category->setDisplayName(translator()); });
 }
 
 /*!

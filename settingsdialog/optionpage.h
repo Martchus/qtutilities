@@ -149,9 +149,7 @@ template <class UiClass> QWidget *UiFileBasedOptionPage<UiClass>::setupWidget()
         m_ui.reset(new UiClass);
     }
     m_ui->setupUi(widget);
-    QObject::connect(widget, &OptionPageWidget::retranslationRequired, [this, widget] {
-        m_ui->retranslateUi(widget);
-    });
+    QObject::connect(widget, &OptionPageWidget::retranslationRequired, [this, widget] { m_ui->retranslateUi(widget); });
     return widget;
 }
 

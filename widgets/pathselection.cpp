@@ -67,12 +67,11 @@ PathSelection::PathSelection(QWidget *parent)
 
 bool PathSelection::event(QEvent *event)
 {
-    switch(event->type()) {
+    switch (event->type()) {
     case QEvent::LanguageChange:
         setTexts();
         break;
-    default:
-        ;
+    default:;
     }
     return QWidget::event(event);
 }

@@ -109,12 +109,11 @@ void PaletteEditor::setPalette(const QPalette &palette, const QPalette &parentPa
 
 bool PaletteEditor::event(QEvent *event)
 {
-    switch(event->type()) {
+    switch (event->type()) {
     case QEvent::LanguageChange:
         m_ui->retranslateUi(this);
         break;
-    default:
-        ;
+    default:;
     }
     return QDialog::event(event);
 }
