@@ -33,6 +33,7 @@ public:
     void assignPages(const QList<OptionPage *> &pages);
     bool applyAllPages();
     void resetAllPages();
+    void retranslateAllPages();
     bool matches(const QString &searchKeyWord) const;
     int currentIndex() const;
     void setCurrentIndex(int currentIndex);

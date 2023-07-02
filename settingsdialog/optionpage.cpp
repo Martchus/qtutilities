@@ -99,6 +99,9 @@ bool OptionPageWidget::event(QEvent *event)
     case QEvent::PaletteChange:
         emit paletteChanged();
         break;
+    case QEvent::LanguageChange:
+        emit retranslationRequired();
+        break;
     default:;
     }
     return QWidget::event(event);

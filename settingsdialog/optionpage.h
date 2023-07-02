@@ -20,6 +20,7 @@ public:
 
 Q_SIGNALS:
     void paletteChanged();
+    void retranslationRequired();
 
 protected:
     bool event(QEvent *) override;
@@ -143,11 +144,14 @@ template <class UiClass> UiFileBasedOptionPage<UiClass>::~UiFileBasedOptionPage(
  */
 template <class UiClass> QWidget *UiFileBasedOptionPage<UiClass>::setupWidget()
 {
-    QWidget *widget = new OptionPageWidget();
+    auto *const widget = new OptionPageWidget();
     if (!m_ui) {
         m_ui.reset(new UiClass);
     }
     m_ui->setupUi(widget);
+    QObject::connect(widget, &OptionPageWidget::retranslationRequired, [this, widget] {
+        m_ui->retranslateUi(widget);
+    });
     return widget;
 }
 

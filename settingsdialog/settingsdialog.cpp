@@ -337,6 +337,9 @@ bool SettingsDialog::event(QEvent *event)
     case QEvent::PaletteChange:
         setStyleSheet(dialogStyleForPalette(palette()));
         break;
+    case QEvent::LanguageChange:
+        m_ui->retranslateUi(this);
+        break;
     default:;
     }
     return res;

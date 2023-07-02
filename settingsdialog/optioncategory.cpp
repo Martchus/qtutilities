@@ -1,6 +1,9 @@
 #include "./optioncategory.h"
 #include "./optionpage.h"
 
+#include <QCoreApplication>
+#include <QEvent>
+
 namespace QtUtilities {
 
 /*!
@@ -55,6 +58,20 @@ void OptionCategory::resetAllPages()
     for (OptionPage *page : m_pages) {
         if (page->hasBeenShown()) {
             page->reset();
+        }
+    }
+}
+
+/*!
+ * \brief Triggers retranslation of all pages.
+ * \remarks Has no effect if the pages don't react to the LanguageChange event.
+ */
+void OptionCategory::retranslateAllPages()
+{
+    auto event = QEvent(QEvent::LanguageChange);
+    for (auto *const page : m_pages) {
+        if (page->hasBeenShown()) {
+            QCoreApplication::sendEvent(page->widget(), &event);
         }
     }
 }
