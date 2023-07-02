@@ -24,10 +24,12 @@ public:
     void provideCustomFileDialog(QFileDialog *customFileDialog);
 
 protected:
+    bool event(QEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private Q_SLOTS:
     void showFileDialog();
+    void setTexts();
 
 private:
     ClearLineEdit *m_lineEdit;

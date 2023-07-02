@@ -107,6 +107,18 @@ void PaletteEditor::setPalette(const QPalette &palette, const QPalette &parentPa
     setPalette(palette);
 }
 
+bool PaletteEditor::event(QEvent *event)
+{
+    switch(event->type()) {
+    case QEvent::LanguageChange:
+        m_ui->retranslateUi(this);
+        break;
+    default:
+        ;
+    }
+    return QDialog::event(event);
+}
+
 void PaletteEditor::handleComputeRadioClicked()
 {
     if (m_compute) {

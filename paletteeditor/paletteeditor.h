@@ -39,6 +39,9 @@ public:
     void setPalette(const QPalette &palette);
     void setPalette(const QPalette &palette, const QPalette &parentPalette);
 
+protected:
+    bool event(QEvent *event) override;
+
 private Q_SLOTS:
     void buildPalette();
     void paletteChanged(const QPalette &palette);

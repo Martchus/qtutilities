@@ -53,7 +53,7 @@ PathSelection::PathSelection(QWidget *parent)
     m_lineEdit->installEventFilter(this);
     m_lineEdit->setCompleter(s_completer);
     m_button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    m_button->setText(tr("Select ..."));
+    setTexts();
 
     auto *const layout = new QHBoxLayout(this);
     layout->setSpacing(3);
@@ -63,6 +63,18 @@ PathSelection::PathSelection(QWidget *parent)
     setLayout(layout);
 
     connect(m_button, &QPushButton::clicked, this, &PathSelection::showFileDialog);
+}
+
+bool PathSelection::event(QEvent *event)
+{
+    switch(event->type()) {
+    case QEvent::LanguageChange:
+        setTexts();
+        break;
+    default:
+        ;
+    }
+    return QWidget::event(event);
 }
 
 bool PathSelection::eventFilter(QObject *obj, QEvent *event)
@@ -127,4 +139,10 @@ void PathSelection::showFileDialog()
         }
     }
 }
+
+void PathSelection::setTexts()
+{
+    m_button->setText(tr("Select ..."));
+}
+
 } // namespace QtUtilities

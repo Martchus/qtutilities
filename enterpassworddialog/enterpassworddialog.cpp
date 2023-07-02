@@ -223,6 +223,9 @@ bool EnterPasswordDialog::event(QEvent *event)
         m_ui->capslockWarningWidget->setVisible(m_capslockPressed);
         break;
     }
+    case QEvent::LanguageChange:
+        m_ui->retranslateUi(this);
+        break;
     default:;
     }
     return QDialog::event(event);
