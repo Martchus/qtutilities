@@ -47,6 +47,7 @@ public:
     ~QtSettings();
 
     void disableNotices();
+    void setRetranslatable(bool retranslatable);
     void restore(QSettings &settings);
     void save(QSettings &settings) const;
     void apply();

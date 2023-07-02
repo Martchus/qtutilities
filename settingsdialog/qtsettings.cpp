@@ -64,6 +64,7 @@ struct QtSettingsData {
     bool customLocale;
     bool isPaletteDark;
     bool showNotices;
+    bool retranslatable;
 };
 
 inline QtSettingsData::QtSettingsData()
@@ -78,6 +79,7 @@ inline QtSettingsData::QtSettingsData()
     , customLocale(false)
     , isPaletteDark(false)
     , showNotices(true)
+    , retranslatable(false)
 {
 }
 
@@ -109,10 +111,26 @@ QtSettings::~QtSettings()
  * - Only call this function if the application actually re-applies these settings when the
  *   settings dialog is applied and when it is generally able to handle widget style and
  *   palette changes well.
+ * - The localization option page's notice is handled via setRetranslatable() and the notice
+ *   for the environment page is still always shown (as those settings can never be applied
+ *   at runtime). So this affects only the appearance page at this point.
  */
 void QtSettings::disableNotices()
 {
     m_d->showNotices = false;
+}
+
+/*!
+ * \brief Sets whether the application supports changing the locale settings at runtime.
+ * \remarks
+ * Set this to true if the application will retranslate its UI after the locale has changed.
+ * This requires the application to re-install translators and to re-invoke all ts() and
+ * translate() function calls. If set to true, the notice that the locale setting takes only
+ * effect after restarting is not shown anymore.
+ */
+void QtSettings::setRetranslatable(bool retranslatable)
+{
+    m_d->retranslatable = retranslatable;
 }
 
 /*!
@@ -501,7 +519,7 @@ QWidget *QtLanguageOptionPage::setupWidget()
 {
     // call base implementation first, so ui() is available
     auto *widget = QtLanguageOptionPageBase::setupWidget();
-    if (!m_settings.showNotices) {
+    if (m_settings.retranslatable) {
         ui()->label->hide();
     }
 
@@ -551,11 +569,7 @@ void QtEnvOptionPage::reset()
 QWidget *QtEnvOptionPage::setupWidget()
 {
     // call base implementation first, so ui() is available
-    auto *widget = QtEnvOptionPageBase::setupWidget();
-    if (!m_settings.showNotices) {
-        ui()->label->hide();
-    }
-    return widget;
+    return QtEnvOptionPageBase::setupWidget();
 }
 
 /*!
