@@ -229,7 +229,6 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
     QString path;
     if ((!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, path = additionalTranslationFilePath()))
         || appTranslator->load(fileName, path = QStringLiteral(".")) || appTranslator->load(fileName, path = QStringLiteral("../") % directoryName)
-        || appTranslator->load(fileName, path = QStringLiteral("../") % directoryName)
         || appTranslator->load(fileName, path = QStringLiteral("../../") % directoryName)
         || appTranslator->load(fileName, path = QStringLiteral("./translations"))
         || appTranslator->load(fileName, path = QStringLiteral("../share/") % directoryName % QStringLiteral("/translations"))
