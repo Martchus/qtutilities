@@ -373,7 +373,7 @@ if (NOT QT_TRANSLATIONS_FOUND)
 endif ()
 
 # emit warning if no Qt translations found but built-in translations are enabled
-if (BUILTIN_TRANSLATIONS AND NOT QT_TRANSLATION_FILES)
+if (BUILTIN_TRANSLATIONS_OF_QT AND NOT QT_TRANSLATION_FILES)
     message(
         WARNING
             "Unable to find translations of Qt itself so Qt's translation files will not be built-in. Be sure Qt translations (https://code.qt.io/cgit/qt/qttranslations.git) are installed. Was looking under: ${QT_TRANSLATION_SEARCH_PATHS}"
