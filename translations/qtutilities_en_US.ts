@@ -28,22 +28,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="404"/>
+        <location filename="../resources/resources.cpp" line="403"/>
         <source>unable to access file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="407"/>
+        <location filename="../resources/resources.cpp" line="406"/>
         <source>file has invalid format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="410"/>
+        <location filename="../resources/resources.cpp" line="409"/>
         <source>unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="412"/>
+        <location filename="../resources/resources.cpp" line="411"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -52,6 +52,7 @@
     <name>QtUtilities::AboutDialog</name>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="24"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="139"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,22 +87,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="61"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="62"/>
         <source>developed by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="71"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="75"/>
         <source>Linked against:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="75"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="80"/>
         <source>For updates and bug reports visit the &lt;a href=&quot;%1&quot; style=&quot;text-decoration: underline; color: palette(link);&quot;&gt;project website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdialog/aboutdialog.cpp" line="91"/>
+        <location filename="../aboutdialog/aboutdialog.cpp" line="99"/>
         <source>Using &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -221,42 +222,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="156"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="155"/>
         <source>Color palette configuration (*.ini)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="163"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="162"/>
         <source>Unable to load &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="168"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="167"/>
         <source>&quot;%1&quot; does not contain a valid palette.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="181"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="180"/>
         <source>Unable to write &quot;%1&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="189"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="188"/>
         <source>Load palette</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="201"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="200"/>
         <source>Error reading palette</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="207"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="206"/>
         <source>Save palette</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="215"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="214"/>
         <source>Error writing palette</source>
         <translation type="unfinished"></translation>
     </message>
@@ -264,22 +265,22 @@
 <context>
     <name>QtUtilities::PaletteModel</name>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="417"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="416"/>
         <source>Color Role</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="419"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="418"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="421"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="420"/>
         <source>Inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../paletteeditor/paletteeditor.cpp" line="423"/>
+        <location filename="../paletteeditor/paletteeditor.cpp" line="422"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -287,24 +288,24 @@
 <context>
     <name>QtUtilities::PathSelection</name>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="88"/>
-        <location filename="../widgets/pathselection.cpp" line="145"/>
+        <location filename="../widgets/pathselection.cpp" line="87"/>
+        <location filename="../widgets/pathselection.cpp" line="144"/>
         <source>Select ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="93"/>
+        <location filename="../widgets/pathselection.cpp" line="92"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="96"/>
+        <location filename="../widgets/pathselection.cpp" line="95"/>
         <source>Explore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/pathselection.cpp" line="132"/>
-        <location filename="../widgets/pathselection.cpp" line="134"/>
+        <location filename="../widgets/pathselection.cpp" line="131"/>
+        <location filename="../widgets/pathselection.cpp" line="133"/>
         <source>Select path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -481,12 +482,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="321"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="320"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingsdialog/settingsdialog.cpp" line="326"/>
+        <location filename="../settingsdialog/settingsdialog.cpp" line="325"/>
         <source>unknown error</source>
         <translation type="unfinished"></translation>
     </message>
