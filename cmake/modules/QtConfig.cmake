@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
 
 # applies Qt specific configuration notes: For GUI applications, QtGuiConfig must be included before. This module must always
 # be included before AppTarget/LibraryTarget.
