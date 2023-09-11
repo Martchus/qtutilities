@@ -12,8 +12,7 @@
 #include <QMessageBox>
 #include <QStyle>
 
-#ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
-#if defined(Q_OS_WIN32)
+#if defined(QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION) && defined(Q_OS_WIN32)
 #include <windows.h>
 #elif defined(X_AVAILABLE)
 #include <X11/XKBlib.h>
@@ -21,7 +20,6 @@
 #undef KeyRelease
 #undef FocusIn
 #undef FocusOut
-#endif
 #endif
 
 namespace QtUtilities {
@@ -52,12 +50,7 @@ EnterPasswordDialog::EnterPasswordDialog(QWidget *parent)
     m_ui->userNameLineEdit->installEventFilter(this);
     m_ui->password1LineEdit->installEventFilter(this);
     m_ui->password2LineEdit->installEventFilter(this);
-// capslock key detection
-#ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
     m_capslockPressed = isCapslockPressed();
-#else
-    m_capslockPressed = false;
-#endif
     m_ui->capslockWarningWidget->setVisible(m_capslockPressed);
     // draw icon to capslock warning graphics view
     QIcon icon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning, nullptr, this);
@@ -330,22 +323,17 @@ void EnterPasswordDialog::confirm()
  */
 bool EnterPasswordDialog::isCapslockPressed()
 {
-#ifdef QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION
-// platform dependent method of determining if CAPS LOCK is pressed
-#if defined(Q_OS_WIN32)
+#if defined(QT_UTILITIES_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION) && defined(Q_OS_WIN32)
     return GetKeyState(VK_CAPITAL) == 1;
 #elif defined(X_AVAILABLE)
-    Display *d = XOpenDisplay((char *)0);
-    bool caps_state = false;
+    auto *const d = XOpenDisplay(nullptr);
+    auto capsState = false;
     if (d) {
         unsigned n;
         XkbGetIndicatorState(d, XkbUseCoreKbd, &n);
-        caps_state = (n & 0x01) == 1;
+        capsState = (n & 0x01) == 1;
     }
-    return caps_state;
-#else
-    return false;
-#endif
+    return capsState;
 #else
     return false;
 #endif

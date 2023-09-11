@@ -117,27 +117,20 @@ set(SCRIPT_FILES scripts/required_icons.sh)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
 
 # configure platform specific capslock detection for enterpassworddialog.cpp
-if (WIN32
-    OR (UNIX
-        AND NOT APPLE
-        AND NOT ANDROID))
-    set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT ON)
+if (WIN32)
+    set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
 else ()
-    set(ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT OFF)
-endif ()
-option(CAPSLOCK_DETECTION "enables capslock detection" ${ENABLE_CAPSLOCK_DETECTION_BY_DEFAULT})
-if (CAPSLOCK_DETECTION)
-    if (WIN32)
-        # WinAPI provides functions to provide capslock detection
+    use_package(TARGET_NAME X11::X11 PACKAGE_NAME X11)
+    if (TARGET X11::X11)
+        set_property(
+            SOURCE enterpassworddialog/enterpassworddialog.cpp
+            APPEND
+            PROPERTY COMPILE_DEFINITIONS X_AVAILABLE)
         set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
-    else ()
-        # X11 can provide functions for capslock detection under non-Windows environments
-        find_package(X11)
-        if (X11_FOUND)
-            list(APPEND LIBRARIES ${X11_LIBRARIES})
-            set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
-        endif ()
     endif ()
+endif ()
+option(CAPSLOCK_DETECTION "enables capslock detection" ${HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION})
+if (CAPSLOCK_DETECTION)
     if (NOT HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION)
         message(FATAL_ERROR "No backend for capslock detection found (WinAPI or X11 must be provided)")
     endif ()
