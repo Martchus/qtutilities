@@ -521,8 +521,8 @@ if (REQUIRED_ICONS)
             list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
             list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when
                                                                                      # cross- compiling
-            list(APPEND ICON_SEARCH_PATHS "/usr/share/icons")                        # the project might change CMAKE_…_DATAROOTDIR
-                                                                                     # to something custom so let's add one hardcoded fallback
+            list(APPEND ICON_SEARCH_PATHS "/usr/share/icons") # the project might change CMAKE_…_DATAROOTDIR to something
+                                                              # custom so let's add one hardcoded fallback
 
             list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
             set(BUILTIN_ICONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
