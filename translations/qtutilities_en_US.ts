@@ -112,8 +112,8 @@
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="12"/>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="51"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="183"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="198"/>
         <source>Enter the password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -158,28 +158,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="190"/>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="205"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="183"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="198"/>
         <source>Enter the new password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="296"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="289"/>
         <source>You didn&apos;t enter a user name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="298"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="291"/>
         <source>You didn&apos;t enter a password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="303"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="296"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="306"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="299"/>
         <source>You mistyped the password.</source>
         <translation type="unfinished"></translation>
     </message>
