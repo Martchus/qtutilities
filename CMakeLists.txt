@@ -116,10 +116,24 @@ set(SCRIPT_FILES scripts/required_icons.sh)
 # required to include CMake modules from own project directory
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
 
+# find c++utilities
+set(CONFIGURATION_PACKAGE_SUFFIX
+    ""
+    CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
+set(PACKAGE_NAMESPACE
+    ""
+    CACHE STRING "sets the namespace (prefix) for find_package() calls to packages configured via c++utilities")
+if (PACKAGE_NAMESPACE)
+    set(PACKAGE_NAMESPACE_PREFIX "${PACKAGE_NAMESPACE}-")
+endif ()
+find_package(${PACKAGE_NAMESPACE_PREFIX}c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.5.0 REQUIRED)
+use_cpp_utilities()
+
 # configure platform specific capslock detection for enterpassworddialog.cpp
 if (WIN32)
     set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
 else ()
+    include(3rdParty)
     use_package(TARGET_NAME X11::X11 PACKAGE_NAME X11)
     if (TARGET X11::X11)
         set_property(
@@ -161,19 +175,6 @@ else ()
     list(APPEND EXCLUDED_FILES ${DBUS_NOTIFICATIONS_FILE_NAME}.h ${DBUS_NOTIFICATIONS_FILE_NAME}.cpp)
     message(STATUS "D-Bus notifications disabled")
 endif ()
-
-# find c++utilities
-set(CONFIGURATION_PACKAGE_SUFFIX
-    ""
-    CACHE STRING "sets the suffix for find_package() calls to packages configured via c++utilities")
-set(PACKAGE_NAMESPACE
-    ""
-    CACHE STRING "sets the namespace (prefix) for find_package() calls to packages configured via c++utilities")
-if (PACKAGE_NAMESPACE)
-    set(PACKAGE_NAMESPACE_PREFIX "${PACKAGE_NAMESPACE}-")
-endif ()
-find_package(${PACKAGE_NAMESPACE_PREFIX}c++utilities${CONFIGURATION_PACKAGE_SUFFIX} 5.5.0 REQUIRED)
-use_cpp_utilities()
 
 # include modules to apply configuration
 include(BasicConfig)
