@@ -12,14 +12,19 @@
 
 #include "../misc/desktoputils.h"
 
+#include "resources/config.h"
+
 #include "ui_qtappearanceoptionpage.h"
 #include "ui_qtenvoptionpage.h"
 #include "ui_qtlanguageoptionpage.h"
+
+#include <c++utilities/application/commandlineutils.h>
 
 #include <QDir>
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QIcon>
+#include <QOperatingSystemVersion>
 #include <QSettings>
 #include <QStringBuilder>
 #include <QStyleFactory>
@@ -338,6 +343,24 @@ void QtSettings::apply()
     // apply locale
     m_d->previousLocale = QLocale();
     QLocale::setDefault(m_d->customLocale ? QLocale(m_d->localeName) : m_d->defaultLocale);
+
+    // log some debug information on the first call if env variable set
+    static auto debugInfoLogged = false;
+    if (debugInfoLogged) {
+        return;
+    }
+    const auto debugLoggingEnabled = CppUtilities::isEnvVariableSet(PROJECT_VARNAME_UPPER "_LOG_QT_CONFIG");
+    if (debugLoggingEnabled.has_value() && debugLoggingEnabled.value()) {
+        if (const auto os = QOperatingSystemVersion::current(); os.type() != QOperatingSystemVersion::Unknown) {
+            std::cerr << "OS name and version: " << os.name().toStdString() << ' ' << os.version().toString().toStdString() << '\n';
+        }
+        std::cerr << "Qt version: " << qVersion() << '\n';
+        std::cerr << "Qt platform (set QT_QPA_PLATFORM to override): " << QGuiApplication::platformName().toStdString() << '\n';
+        std::cerr << "Qt locale: " << QLocale().name().toStdString() << '\n';
+        std::cerr << "Qt library paths: " << QCoreApplication::libraryPaths().join(':').toStdString() << '\n';
+        std::cerr << "Qt theme search paths: " << QIcon::themeSearchPaths().join(':').toStdString() << '\n';
+        debugInfoLogged = true;
+    }
 }
 
 /*!
