@@ -33,8 +33,6 @@
 #include <memory>
 #include <optional>
 
-using namespace std;
-
 namespace QtUtilities {
 
 struct QtSettingsData {
@@ -91,7 +89,7 @@ inline QtSettingsData::QtSettingsData()
  * system-default.
  */
 QtSettings::QtSettings()
-    : m_d(make_unique<QtSettingsData>())
+    : m_d(std::make_unique<QtSettingsData>())
 {
 }
 
@@ -266,11 +264,11 @@ void QtSettings::apply()
     if (m_d->customStyleSheet && !m_d->styleSheetPath.isEmpty()) {
         auto file = QFile(m_d->styleSheetPath);
         if (!file.open(QFile::ReadOnly)) {
-            cerr << "Unable to open the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << endl;
+            std::cerr << "Unable to open the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << std::endl;
         }
         styleSheet.append(file.readAll());
         if (file.error() != QFile::NoError) {
-            cerr << "Unable to read the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << endl;
+            std::cerr << "Unable to read the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << std::endl;
         }
     }
 
@@ -306,8 +304,8 @@ void QtSettings::apply()
     if (auto *const qapp = qobject_cast<QApplication *>(QApplication::instance())) {
         qapp->setStyleSheet(styleSheet);
     } else {
-        cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data()
-             << "\" because no QApplication has been instantiated." << endl;
+        std::cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data()
+                  << "\" because no QApplication has been instantiated." << std::endl;
     }
     if (m_d->customPalette) {
         QGuiApplication::setPalette(m_d->palette);
