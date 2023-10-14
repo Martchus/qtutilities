@@ -532,11 +532,16 @@ QWidget *QtLanguageOptionPage::setupWidget()
 
     auto *languageLabel = ui()->languageLabel;
     QObject::connect(ui()->localeComboBox, &QComboBox::currentTextChanged, languageLabel, [languageLabel, localeComboBox] {
-        const QLocale selectedLocale(localeComboBox->currentText());
-        const QLocale currentLocale;
+        const auto selectedLocale = QLocale(localeComboBox->currentText());
+        const auto currentLocale = QLocale();
+        const auto territory =
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+            currentLocale.territoryToString(selectedLocale.territory());
+#else
+            currentLocale.countryToString(selectedLocale.country());
+#endif
         languageLabel->setText(QCoreApplication::translate("QtGui::QtLanguageOptionPage", "recognized by Qt as") % QStringLiteral(" <i>")
-            % currentLocale.languageToString(selectedLocale.language()) % QChar(',') % QChar(' ')
-            % currentLocale.countryToString(selectedLocale.country()) % QStringLiteral("</i>"));
+            % currentLocale.languageToString(selectedLocale.language()) % QChar(',') % QChar(' ') % territory % QStringLiteral("</i>"));
     });
     return widget;
 }
