@@ -112,6 +112,11 @@ if (NOT DEFINED TLS_SUPPORT)
     endif ()
 endif ()
 
+# allow configuring certain features when linking against static Qt
+option(OPENGL_SUPPORT "whether to enable native Wayland support (when linking against static Qt)" ON)
+option(NATIVE_WAYLAND_SUPPORT "whether to enable native Wayland support (when linking against static Qt)" ON)
+option(NATIVE_WAYLAND_EGL_SUPPORT "specifies whether to enable native Wayland-EGL support (when linking against static Qt)" OFF)
+
 # built-in platform, imageformat and iconengine plugins when linking statically against Qt
 if (TARGET "${QT_PACKAGE_PREFIX}::Core")
     get_target_property(QT_TARGET_TYPE "${QT_PACKAGE_PREFIX}::Core" TYPE)
@@ -177,7 +182,38 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 XcbIntegration
                 ONLY_PLUGINS)
         endif ()
-        if (TARGET "${QT_PACKAGE_PREFIX}::QWaylandIntegrationPlugin")
+        if (OPENGL_SUPPORT AND TARGET "${QT_PACKAGE_PREFIX}::QXcbEglIntegrationPlugin")
+            use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                PREFIX
+                "${QT_PACKAGE_PREFIX}"
+                MODULE
+                Gui
+                PLUGINS
+                XcbEglIntegration
+                ONLY_PLUGINS)
+        endif ()
+        if (OPENGL_SUPPORT AND TARGET "${QT_PACKAGE_PREFIX}::QXcbGlxIntegrationPlugin")
+            use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                PREFIX
+                "${QT_PACKAGE_PREFIX}"
+                MODULE
+                Gui
+                PLUGINS
+                XcbGlxIntegration
+                ONLY_PLUGINS)
+        endif ()
+        set(QT_CONFIG_USE_WAYLAND_INTEGRATION NO)
+        set(QT_CONFIG_WAYLAND_CLIENT_PLUGINS
+            WaylandXdgShellIntegration
+            WaylandWlShellIntegration
+            WaylandIviShellIntegration
+            WaylandQtShellIntegration
+        )
+        if (NATIVE_WAYLAND_SUPPORT AND TARGET "${QT_PACKAGE_PREFIX}::QWaylandIntegrationPlugin")
             use_qt_module(
                 LIBRARIES_VARIABLE
                 "${QT_PLUGINS_LIBRARIES_VARIABLE}"
@@ -188,6 +224,23 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 PLUGINS
                 WaylandIntegration
                 ONLY_PLUGINS)
+            SET(QT_CONFIG_USE_WAYLAND_INTEGRATION YES)
+        endif ()
+        if (NATIVE_WAYLAND_EGL_SUPPORT AND TARGET "${QT_PACKAGE_PREFIX}::QWaylandEglPlatformIntegrationPlugin")
+            use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                PREFIX
+                "${QT_PACKAGE_PREFIX}"
+                MODULE
+                Gui
+                PLUGINS
+                WaylandEglPlatformIntegration
+                ONLY_PLUGINS)
+            SET(QT_CONFIG_USE_WAYLAND_INTEGRATION YES)
+            list(APPEND QT_CONFIG_WAYLAND_CLIENT_PLUGINS WaylandEglClientBuffer)
+        endif ()
+        if (QT_CONFIG_USE_WAYLAND_INTEGRATION)
             use_qt_module(
                 LIBRARIES_VARIABLE
                 "${QT_PLUGINS_LIBRARIES_VARIABLE}"
@@ -196,10 +249,7 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 MODULE
                 WaylandClient
                 PLUGINS
-                WaylandXdgShellIntegration
-                WaylandWlShellIntegration
-                WaylandIviShellIntegration
-                WaylandQtShellIntegration
+                ${QT_CONFIG_WAYLAND_CLIENT_PLUGINS}
                 ONLY_PLUGINS
                 PLUGINS_OPTIONAL)
         endif ()
