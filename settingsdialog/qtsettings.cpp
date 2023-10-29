@@ -28,6 +28,7 @@
 #include <QSettings>
 #include <QStringBuilder>
 #include <QStyleFactory>
+#include <QVersionNumber>
 
 #if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0))
 #include <QOperatingSystemVersion>
@@ -352,7 +353,8 @@ void QtSettings::apply()
     const auto debugLoggingEnabled = CppUtilities::isEnvVariableSet(PROJECT_VARNAME_UPPER "_LOG_QT_CONFIG");
     if (debugLoggingEnabled.has_value() && debugLoggingEnabled.value()) {
         if (const auto os = QOperatingSystemVersion::current(); os.type() != QOperatingSystemVersion::Unknown) {
-            std::cerr << "OS name and version: " << os.name().toStdString() << ' ' << os.version().toString().toStdString() << '\n';
+            const auto version = QVersionNumber(os.majorVersion(), os.minorVersion(), os.microVersion());
+            std::cerr << "OS name and version: " << os.name().toStdString() << ' ' << version.toString().toStdString() << '\n';
         }
         std::cerr << "Qt version: " << qVersion() << '\n';
         std::cerr << "Qt platform (set QT_QPA_PLATFORM to override): " << QGuiApplication::platformName().toStdString() << '\n';
