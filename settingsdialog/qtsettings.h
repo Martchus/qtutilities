@@ -19,7 +19,7 @@ explicit QtAppearanceOptionPage(QtSettingsData &settings, QWidget *parentWidget 
 
 private:
 DECLARE_SETUP_WIDGETS
-QtSettingsData &m_settings;
+QtSettingsData & m_settings;
 QFontDialog *m_fontDialog;
 END_DECLARE_OPTION_PAGE
 
@@ -29,7 +29,7 @@ explicit QtLanguageOptionPage(QtSettingsData &settings, QWidget *parentWidget = 
 
 private:
 DECLARE_SETUP_WIDGETS
-QtSettingsData &m_settings;
+QtSettingsData & m_settings;
 END_DECLARE_OPTION_PAGE
 
 BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtEnvOptionPage)
@@ -38,7 +38,7 @@ explicit QtEnvOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullp
 
 private:
 DECLARE_SETUP_WIDGETS
-QtSettingsData &m_settings;
+QtSettingsData & m_settings;
 END_DECLARE_OPTION_PAGE
 
 class QT_UTILITIES_EXPORT QtSettings {
