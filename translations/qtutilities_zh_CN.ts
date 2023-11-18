@@ -10,6 +10,14 @@
     </message>
 </context>
 <context>
+    <name>QtConfigArguments</name>
+    <message>
+        <location filename="../resources/qtconfigarguments.cpp" line="193"/>
+        <source>This application requires Windows 10, version 1809 or newer. The current Windows version is older so the application might not work correctly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
         <location filename="../settingsdialog/qtsettings.cpp" line="566"/>
