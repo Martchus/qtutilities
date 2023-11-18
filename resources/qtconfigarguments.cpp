@@ -17,6 +17,12 @@
 #include <QGuiApplication>
 #endif
 
+#if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0))
+#define QT_UTILITIES_CHECK_WINDOWS_VERSION
+#include <QMessageBox>
+#include <QOperatingSystemVersion>
+#endif
+
 #include <initializer_list>
 #include <iostream>
 
@@ -180,5 +186,14 @@ void QtConfigArguments::applySettings(bool preventApplyingDefaultFont) const
     if (m_sceneGraphRenderLoopArg.isPresent()) {
         qputenv(m_sceneGraphRenderLoopArg.environmentVariable(), QByteArray(m_sceneGraphRenderLoopArg.firstValue()));
     }
+
+#ifdef QT_UTILITIES_CHECK_WINDOWS_VERSION
+    if (QOperatingSystemVersion::current() < QOperatingSystemVersion::Windows10_1809) {
+        QMessageBox::warning(nullptr, QCoreApplication::applicationName(),
+            QCoreApplication::translate("QtConfigArguments",
+                "This application requires Windows 10, version 1809 or newer. The current Windows version is older so the application might not work "
+                "correctly."));
+    }
+#endif
 }
 } // namespace CppUtilities
