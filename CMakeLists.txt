@@ -10,7 +10,7 @@ set(META_APP_DESCRIPTION
     "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
 set(META_VERSION_MAJOR 6)
 set(META_VERSION_MINOR 13)
-set(META_VERSION_PATCH 2)
+set(META_VERSION_PATCH 3)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 
 project(${META_PROJECT_NAME})
