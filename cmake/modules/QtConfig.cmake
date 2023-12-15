@@ -282,7 +282,7 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
 
     # ensure all available widget style plugins are built-in when creating a Qt Widgets application - required since Qt 5.10
     # because the styles have been "pluginized" (see commit 4f3249f)
-    set(KNOWN_WIDGET_STYLE_PLUGINS WindowsVistaStyle MacStyle AndroidStyle)
+    set(KNOWN_WIDGET_STYLE_PLUGINS ModernWindowsStyle WindowsVistaStyle MacStyle AndroidStyle)
     set(USED_WIDGET_STYLE_PLUGINS)
     if (Widgets IN_LIST QT_MODULES)
         foreach (WIDGET_STYLE_PLUGIN ${KNOWN_WIDGET_STYLE_PLUGINS})
