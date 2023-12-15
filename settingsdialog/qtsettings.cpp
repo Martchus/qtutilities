@@ -30,7 +30,7 @@
 #include <QStyleFactory>
 #include <QVersionNumber>
 
-#if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0))
+#if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)) && (QT_VERSION < QT_VERSION_CHECK(6, 7, 0))
 #include <QOperatingSystemVersion>
 #define QT_UTILITIES_USE_FUSION_ON_WINDOWS_11
 #endif
