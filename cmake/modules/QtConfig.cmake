@@ -280,6 +280,34 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
         endif ()
     endif ()
 
+    if (NETWORK_INFORMATION_SUPPORT)
+        set(KNOWN_NETWORK_INFORMATION_PLUGINS
+            ${META_NETWORK_INFORMATION_PLUGINS} NetworkManagerNetworkInformation GlibNetworkInformation NLMNI
+            AndroidNetworkInformation SCNetworkReachabilityNetworkInformation)
+        set(USED_NETWORK_INFORMATION_PLUGINS)
+        foreach (PLUGIN ${KNOWN_NETWORK_INFORMATION_PLUGINS})
+            if (TARGET "${QT_PACKAGE_PREFIX}::Q${PLUGIN}Plugin")
+                use_qt_module(
+                    LIBRARIES_VARIABLE
+                    "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                    PREFIX
+                    "${QT_PACKAGE_PREFIX}"
+                    MODULE
+                    Network
+                    PLUGINS
+                    ${PLUGIN}
+                    ONLY_PLUGINS)
+                list(APPEND USED_NETWORK_INFORMATION_PLUGINS "${PLUGIN}")
+            endif ()
+        endforeach ()
+
+        # allow importing network information plugins via qtconfig.h
+        if (USED_NETWORK_INFORMATION_PLUGINS)
+            list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" ")" "${USED_NETWORK_INFORMATION_PLUGINS}"
+                           USED_NETWORK_INFORMATION_PLUGINS_ARRAY)
+        endif ()
+    endif ()
+
     # ensure all available widget style plugins are built-in when creating a Qt Widgets application - required since Qt 5.10
     # because the styles have been "pluginized" (see commit 4f3249f)
     set(KNOWN_WIDGET_STYLE_PLUGINS ModernWindowsStyle WindowsVistaStyle MacStyle AndroidStyle)
