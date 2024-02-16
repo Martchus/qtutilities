@@ -280,6 +280,7 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
         endif ()
     endif ()
 
+    # enable network information support for projects setting NETWORK_INFORMATION_SUPPORT explicitly
     if (NETWORK_INFORMATION_SUPPORT)
         set(KNOWN_NETWORK_INFORMATION_PLUGINS
             ${META_NETWORK_INFORMATION_PLUGINS} NetworkManagerNetworkInformation GlibNetworkInformation NLMNI
@@ -297,13 +298,16 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                     PLUGINS
                     ${PLUGIN}
                     ONLY_PLUGINS)
+                if (PLUGIN STREQUAL NLMNI)
+                    set(PLUGIN NetworkListManagerNetworkInformation)
+                endif ()
                 list(APPEND USED_NETWORK_INFORMATION_PLUGINS "${PLUGIN}")
             endif ()
         endforeach ()
 
         # allow importing network information plugins via qtconfig.h
         if (USED_NETWORK_INFORMATION_PLUGINS)
-            list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" ")" "${USED_NETWORK_INFORMATION_PLUGINS}"
+            list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "BackendFactory)" "${USED_NETWORK_INFORMATION_PLUGINS}"
                            USED_NETWORK_INFORMATION_PLUGINS_ARRAY)
         endif ()
     endif ()
