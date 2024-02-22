@@ -4,6 +4,7 @@
 #ifndef QT_UTILITIES_GLOBAL
 #define QT_UTILITIES_GLOBAL
 
+#include "qtutilities-definitions.h"
 #include <c++utilities/application/global.h>
 
 #ifdef QT_UTILITIES_STATIC
