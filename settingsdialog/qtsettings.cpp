@@ -352,7 +352,7 @@ void QtSettings::apply()
     }
     const auto debugLoggingEnabled = CppUtilities::isEnvVariableSet(PROJECT_VARNAME_UPPER "_LOG_QT_CONFIG");
     if (debugLoggingEnabled.has_value() && debugLoggingEnabled.value()) {
-        if (const auto os = QOperatingSystemVersion::current(); os.type() != QOperatingSystemVersion::Unknown) {
+        if (const auto os = QOperatingSystemVersion::current(); os.type() != static_cast<decltype(os.type())>(QOperatingSystemVersion::Unknown)) {
             const auto version = QVersionNumber(os.majorVersion(), os.minorVersion(), os.microVersion());
             std::cerr << "OS name and version: " << os.name().toStdString() << ' ' << version.toString().toStdString() << '\n';
         }
