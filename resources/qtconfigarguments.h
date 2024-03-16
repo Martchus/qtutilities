@@ -9,11 +9,20 @@
 #include <QQuickStyle>
 #include <QString>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if defined(PLATFORM_ANDROID)
+#define QT_UTILITIES_DEFAULT_QQC2_STYLE "Material"
+#elif defined(PLATFORM_WINDOWS)
+#define QT_UTILITIES_DEFAULT_QQC2_STYLE "Universal"
+#endif
+#else
 #if defined(PLATFORM_ANDROID)
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE "material"
 #elif defined(PLATFORM_WINDOWS)
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE "universal"
 #endif
+#endif
+
 #endif
 
 namespace CppUtilities {
