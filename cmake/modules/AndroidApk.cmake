@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
 
+message(DEPRECATION "Do not use the AndroidApk module anymore. It broke after some minor Qt 5 version. As of Qt 6 the "
+                    "CMake functions that come with Qt itself are sufficient.")
+
 # adds a target to create an Android APK with the help of androiddeployqt if target platform is Android
 
 if (NOT ANDROID)
