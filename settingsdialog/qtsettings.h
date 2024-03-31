@@ -51,6 +51,7 @@ public:
     void restore(QSettings &settings);
     void save(QSettings &settings) const;
     void apply();
+    void reapplyDefaultIconTheme(bool isPaletteDark);
     void reevaluatePaletteAndDefaultIconTheme();
     bool isPaletteDark();
     bool hasCustomFont() const;

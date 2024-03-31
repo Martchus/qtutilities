@@ -366,6 +366,33 @@ void QtSettings::apply()
 }
 
 /*!
+ * \brief Re-applies default icon theme assuming the palette is dark or not depending on \a isPaletteDark.
+ *
+ * Re-assigns the appropriate default icon theme depending on the current palette. Call this function after the
+ * darkmode setting has changed without the current palette reflecting that but you want the darkmode setting take
+ * precedence over the palette (e.g. when using Qt Quick Material style under Android). If your application makes
+ * actually use of the palette and you want the palette take precedence than call \a reevaluatePaletteAndDefaultIconTheme()
+ * instead.
+ *
+ * Note that QtSettings::isPaletteDark() will return \a isPaletteDark after calling this function (even though the current
+ * palette is not actually reflecting that).
+ *
+ * \remarks
+ * - The default icon theme must have been assigned before using the apply() function.
+ * - This function has no effect if a custom icon theme is configured.
+ */
+void QtSettings::reapplyDefaultIconTheme(bool isPaletteDark)
+{
+    if (isPaletteDark == m_d->isPaletteDark) {
+        return; // no need to do anything if there's no change
+    }
+    m_d->isPaletteDark = isPaletteDark;
+    if (auto iconTheme = QIcon::themeName(); iconTheme == QStringLiteral("default") || iconTheme == QStringLiteral("default-dark")) {
+        QIcon::setThemeName(m_d->isPaletteDark ? QStringLiteral("default-dark") : QStringLiteral("default"));
+    }
+}
+
+/*!
  * \brief Re-evaluates whether the palette is dark and re-applies default icon theme.
  *
  * Re-assigns the appropriate default icon theme depending on the current palette. Call this function after the palette
@@ -377,14 +404,7 @@ void QtSettings::apply()
  */
 void QtSettings::reevaluatePaletteAndDefaultIconTheme()
 {
-    const auto isPaletteDark = QtUtilities::isPaletteDark();
-    if (isPaletteDark == m_d->isPaletteDark) {
-        return; // no need to do anything if there's no change
-    }
-    m_d->isPaletteDark = isPaletteDark;
-    if (auto iconTheme = QIcon::themeName(); iconTheme == QStringLiteral("default") || iconTheme == QStringLiteral("default-dark")) {
-        QIcon::setThemeName(m_d->isPaletteDark ? QStringLiteral("default-dark") : QStringLiteral("default"));
-    }
+    reapplyDefaultIconTheme(QtUtilities::isPaletteDark());
 }
 
 /*!
