@@ -69,4 +69,27 @@ std::optional<bool> isDarkModeEnabled()
     return std::nullopt;
 }
 
+/*!
+ * \brief Invokes the specified callback when the color scheme changed.
+ *
+ * The first argument of the callback will be whether the color scheme is dark now (Qt::ColorScheme::Dark).
+ * The callback is invoked immediately by this function unless \a invokeImmediately is set to false.
+ *
+ * \remarks Whether dark mode is enabled can only be determined on Qt 6.5 or newer and only on certain
+ *          platforms. If it cannot be determined the \a darkModeChangedCallback is never invoked.
+ */
+QMetaObject::Connection onDarkModeChanged(std::function<void(bool)> &&darkModeChangedCallback, QObject *context, bool invokeImmediately)
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0))
+    if (const auto *const styleHints = QGuiApplication::styleHints()) {
+        if (invokeImmediately) {
+            darkModeChangedCallback(styleHints->colorScheme() == Qt::ColorScheme::Dark);
+        }
+        return QObject::connect(styleHints, &QStyleHints::colorSchemeChanged, context,
+            [handler = std::move(darkModeChangedCallback)](Qt::ColorScheme colorScheme) { return handler(colorScheme == Qt::ColorScheme::Dark); });
+    }
+#endif
+    return QMetaObject::Connection();
+}
+
 } // namespace QtUtilities
