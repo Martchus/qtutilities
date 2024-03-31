@@ -20,7 +20,7 @@
 <context>
     <name>QtGui::QtLanguageOptionPage</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="566"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="586"/>
         <source>recognized by Qt as</source>
         <translation>von Qt erkannt als</translation>
     </message>
@@ -28,7 +28,7 @@
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
-        <location filename="../settingsdialog/qtsettings.cpp" line="420"/>
+        <location filename="../settingsdialog/qtsettings.cpp" line="440"/>
         <source>Qt</source>
         <translation></translation>
     </message>
