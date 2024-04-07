@@ -20,6 +20,11 @@
 #include <QCoreApplication>
 #endif
 
+#ifdef Q_OS_WINDOWS
+#include <windows.h>
+#include <werapi.h>
+#endif
+
 #include <iostream>
 
 using namespace std;
@@ -355,6 +360,14 @@ void setupCommonQtApplicationAttributes()
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     }
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+#endif
+
+    // always show error reporting UI for this process (applicable for interactive applications only)
+    // see https://learn.microsoft.com/en-us/windows/win32/api/werapi/nf-werapi-wersetflags
+#ifdef Q_OS_WINDOWS
+    if (WerSetFlags(WER_FAULT_REPORTING_ALWAYS_SHOW_UI) != S_OK) {
+        std::cerr << "Unable to initialize error reporting.\n";
+    }
 #endif
 }
 
