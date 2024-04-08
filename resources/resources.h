@@ -17,6 +17,18 @@ QT_FORWARD_DECLARE_CLASS(QStringList)
 #endif
 
 /*!
+ * \brief Sets the base name of the desktop entry for this application from buildsystem-provided meta-data.
+ * \remarks
+ * - This is done as part of SET_QT_APPLICATION_INFO and thus normally doesn't need to be invoked individually.
+ * - This macro is still experimental.
+ */
+#define SET_QT_DESKTOP_FILE_NAME
+#if defined(Q_OS_LINUX) && defined(qGuiApp) && defined(APP_ID)
+#undef SET_QT_DESKTOP_FILE_NAME
+#define SET_QT_DESKTOP_FILE_NAME QGuiApplication::setDesktopFileName(QStringLiteral(APP_ID));
+#endif
+
+/*!
  * \brief Sets the application meta data in the QCoreApplication singleton and attributes commonly used
  *        within my applications.
  * \sa ::QtUtilities::setupCommonQtApplicationAttributes()
@@ -26,6 +38,7 @@ QT_FORWARD_DECLARE_CLASS(QStringList)
     QCoreApplication::setOrganizationDomain(QStringLiteral(APP_DOMAIN));                                                                             \
     QCoreApplication::setApplicationName(QStringLiteral(APP_NAME));                                                                                  \
     QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION));                                                                            \
+    SET_QT_DESKTOP_FILE_NAME                                                                                                                         \
     ::QtUtilities::setupCommonQtApplicationAttributes()
 
 /*!
