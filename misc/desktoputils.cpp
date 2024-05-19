@@ -88,6 +88,10 @@ QMetaObject::Connection onDarkModeChanged(std::function<void(bool)> &&darkModeCh
         return QObject::connect(styleHints, &QStyleHints::colorSchemeChanged, context,
             [handler = std::move(darkModeChangedCallback)](Qt::ColorScheme colorScheme) { return handler(colorScheme == Qt::ColorScheme::Dark); });
     }
+#else
+    Q_UNUSED(darkModeChangedCallback)
+    Q_UNUSED(context)
+    Q_UNUSED(invokeImmediately)
 #endif
     return QMetaObject::Connection();
 }
