@@ -159,6 +159,18 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 CocoaIntegration
                 ONLY_PLUGINS)
         endif ()
+        if (EMSCRIPTEN AND TARGET "${QT_PACKAGE_PREFIX}::QWasmIntegrationPlugin")
+            use_qt_module(
+                LIBRARIES_VARIABLE
+                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                PREFIX
+                "${QT_PACKAGE_PREFIX}"
+                MODULE
+                Gui
+                PLUGINS
+                WasmIntegration
+                ONLY_PLUGINS)
+        endif ()
         if (UNIX AND TARGET "${QT_PACKAGE_PREFIX}::QOffscreenIntegrationPlugin")
             use_qt_module(
                 LIBRARIES_VARIABLE
