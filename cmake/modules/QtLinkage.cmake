@@ -203,7 +203,7 @@ function (query_qmake_variable_path QMAKE_VARIABLE)
         return() # skip if CMake version too old like on Leap 15.1
     endif ()
     foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH} "")
-        foreach (PREFIX_PATH ${CMAKE_INSTALL_PREFIX} ${CMAKE_PREFIX_PATH} "")
+        foreach (PREFIX_PATH ${CMAKE_INSTALL_PREFIX} ${CMAKE_PREFIX_PATH} ${CMAKE_SYSTEM_PREFIX_PATH} "")
             string(JOIN "/" FULL_PATH ${ROOT_PATH} ${PREFIX_PATH} ${VARIABLE_VALUE})
             if (EXISTS "${FULL_PATH}")
                 set("${QMAKE_VARIABLE}"
