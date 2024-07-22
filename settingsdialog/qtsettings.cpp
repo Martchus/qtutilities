@@ -318,7 +318,7 @@ void QtSettings::apply()
     } else {
         QGuiApplication::setPalette(QPalette());
     }
-    m_d->isPaletteDark = isPaletteDark();
+    m_d->isPaletteDark = QtUtilities::isPaletteDark();
     if (m_d->customIconTheme) {
         QIcon::setThemeName(m_d->iconTheme);
     } else if (!m_d->initialIconTheme.isEmpty()) {
@@ -361,6 +361,8 @@ void QtSettings::apply()
         std::cerr << "Qt locale: " << QLocale().name().toStdString() << '\n';
         std::cerr << "Qt library paths: " << QCoreApplication::libraryPaths().join(':').toStdString() << '\n';
         std::cerr << "Qt theme search paths: " << QIcon::themeSearchPaths().join(':').toStdString() << '\n';
+        std::cerr << "Darkmode enabled: " << (QtUtilities::isDarkModeEnabled() ? "yes" : "no") << '\n';
+        std::cerr << "Is Qt palette dark: " << (m_d->isPaletteDark ? "yes" : "no") << '\n';
         debugInfoLogged = true;
     }
 }
