@@ -262,7 +262,7 @@ void ChecklistModel::restore(QSettings &settings, const QString &name)
 void ChecklistModel::save(QSettings &settings, const QString &name) const
 {
     settings.beginWriteArray(name, static_cast<int>(m_items.size()));
-    int index = 0;
+    auto index = int();
     for (const ChecklistItem &item : m_items) {
         settings.setArrayIndex(index);
         settings.setValue(QStringLiteral("id"), item.id());
