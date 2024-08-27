@@ -13,7 +13,14 @@
 #if defined(PLATFORM_ANDROID)
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE "Material"
 #elif defined(PLATFORM_WINDOWS)
+#include <QLibraryInfo>
+#include <QOperatingSystemVersion>
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE "Universal"
+#define QT_UTILITIES_DEFAULT_QQC2_STYLE_QSTRING                                                                                                      \
+    (QLibraryInfo::version() > QVersionNumber(6, 8, 0)                                                                                               \
+                && QOperatingSystemVersion::current() >= QOperatingSystemVersion(QOperatingSystemVersion::Windows11)                                 \
+            ? QStringLiteral("FluentWinUI3")                                                                                                         \
+            : QStringLiteral("Universal"))
 #endif
 #else
 #if defined(PLATFORM_ANDROID)
@@ -21,6 +28,9 @@
 #elif defined(PLATFORM_WINDOWS)
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE "universal"
 #endif
+#endif
+#if defined(QT_UTILITIES_DEFAULT_QQC2_STYLE) && !defined(QT_UTILITIES_DEFAULT_QQC2_STYLE_QSTRING)
+#define QT_UTILITIES_DEFAULT_QQC2_STYLE_QSTRING QStringLiteral(QT_UTILITIES_DEFAULT_QQC2_STYLE)
 #endif
 
 #endif
@@ -98,7 +108,7 @@ inline void QtConfigArguments::applySettingsForQuickGui() const
     }
 #ifdef QT_UTILITIES_DEFAULT_QQC2_STYLE
     else if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
-        QQuickStyle::setStyle(QStringLiteral(QT_UTILITIES_DEFAULT_QQC2_STYLE));
+        QQuickStyle::setStyle(QT_UTILITIES_DEFAULT_QQC2_STYLE_QSTRING);
     }
 #endif // QT_UTILITIES_DEFAULT_QQC2_STYLE
 }
