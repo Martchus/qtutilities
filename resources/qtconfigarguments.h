@@ -108,6 +108,12 @@ inline void QtConfigArguments::applySettingsForQuickGui() const
     }
 #ifdef QT_UTILITIES_DEFAULT_QQC2_STYLE
     else if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
+        if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_MATERIAL_THEME")) {
+            qputenv("QT_QUICK_CONTROLS_MATERIAL_THEME", "System");
+        }
+        if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_UNIVERSAL_THEME")) {
+            qputenv("QT_QUICK_CONTROLS_UNIVERSAL_THEME", "System");
+        }
         QQuickStyle::setStyle(QT_UTILITIES_DEFAULT_QQC2_STYLE_QSTRING);
     }
 #endif // QT_UTILITIES_DEFAULT_QQC2_STYLE
