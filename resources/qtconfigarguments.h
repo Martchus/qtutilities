@@ -17,7 +17,7 @@
 #include <QOperatingSystemVersion>
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE "Universal"
 #define QT_UTILITIES_DEFAULT_QQC2_STYLE_QSTRING                                                                                                      \
-    (QLibraryInfo::version() >= QVersionNumber(6, 8, 0)                                                                                               \
+    (QLibraryInfo::version() >= QVersionNumber(6, 8, 0)                                                                                              \
                 && QOperatingSystemVersion::current() >= QOperatingSystemVersion(QOperatingSystemVersion::Windows11)                                 \
             ? QStringLiteral("FluentWinUI3")                                                                                                         \
             : QStringLiteral("Universal"))
