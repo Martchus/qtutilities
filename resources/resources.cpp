@@ -363,8 +363,9 @@ void setupCommonQtApplicationAttributes()
  * \remarks
  * - This function always uses INI as that's what I'd like to use in all of my applications consistently, regardless of the platform.
  * - The parameter \a application might be empty. In fact, most of my applications use just `getSettings(QStringLiteral(PROJECT_NAME))`.
- * - This function first checks whether a file called `$organization/$application.ini` exists in the current working directory (or just
- *   `$organization.ini` if \a application is empty) and uses that if it exists. That allows having a portable installation.
+ * - This function first checks whether a file called `$organization/$application.ini` exists in the current working directory or next
+ *   to the executable (or just `$organization.ini` if \a application is empty) and uses that if it exists. That allows having a portable
+ *   installation.
  * - Some of my apps where using values from QCoreApplication for \a organization and \a application in the beginning. This function
  *   moves those old config files to their new location if needed. This extra handling will likely removed at some point. Note that
  *   I moved away from using values from QCoreApplication to avoid having spaces and additional config suffixes in the file name.
@@ -372,9 +373,11 @@ void setupCommonQtApplicationAttributes()
 std::unique_ptr<QSettings> getSettings(const QString &organization, const QString &application)
 {
     auto settings = std::unique_ptr<QSettings>();
-    if (const auto portableFile
-        = QFile(application.isEmpty() ? organization + QStringLiteral(".ini") : organization % QChar('/') % application % QStringLiteral(".ini"));
-        portableFile.exists()) {
+    const auto portableFileName
+        = application.isEmpty() ? organization + QStringLiteral(".ini") : organization % QChar('/') % application % QStringLiteral(".ini");
+    if (const auto portableFile = QFile(portableFileName); portableFile.exists()) {
+        settings = std::make_unique<QSettings>(portableFile.fileName(), QSettings::IniFormat);
+    } else if (const auto portableFile = QFile(QCoreApplication::applicationDirPath() % QChar('/') % portableFileName); portableFile.exists()) {
         settings = std::make_unique<QSettings>(portableFile.fileName(), QSettings::IniFormat);
     } else {
         settings = std::make_unique<QSettings>(QSettings::IniFormat, QSettings::UserScope, organization, application);
