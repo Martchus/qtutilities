@@ -375,10 +375,11 @@ std::unique_ptr<QSettings> getSettings(const QString &organization, const QStrin
     auto settings = std::unique_ptr<QSettings>();
     const auto portableFileName
         = application.isEmpty() ? organization + QStringLiteral(".ini") : organization % QChar('/') % application % QStringLiteral(".ini");
-    if (const auto portableFile = QFile(portableFileName); portableFile.exists()) {
-        settings = std::make_unique<QSettings>(portableFile.fileName(), QSettings::IniFormat);
-    } else if (const auto portableFile = QFile(QCoreApplication::applicationDirPath() % QChar('/') % portableFileName); portableFile.exists()) {
-        settings = std::make_unique<QSettings>(portableFile.fileName(), QSettings::IniFormat);
+    if (const auto portableFileWorkingDir = QFile(portableFileName); portableFileWorkingDir.exists()) {
+        settings = std::make_unique<QSettings>(portableFileWorkingDir.fileName(), QSettings::IniFormat);
+    } else if (const auto portableFileNextToApp = QFile(QCoreApplication::applicationDirPath() % QChar('/') % portableFileName);
+               portableFileNextToApp.exists()) {
+        settings = std::make_unique<QSettings>(portableFileNextToApp.fileName(), QSettings::IniFormat);
     } else {
         settings = std::make_unique<QSettings>(QSettings::IniFormat, QSettings::UserScope, organization, application);
         // move config created by older versions to new location
