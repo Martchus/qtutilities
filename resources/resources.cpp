@@ -378,7 +378,7 @@ std::unique_ptr<QSettings> getSettings(const QString &organization, const QStrin
     if (const auto portableFileWorkingDir = QFile(portableFileName); portableFileWorkingDir.exists()) {
         settings = std::make_unique<QSettings>(portableFileWorkingDir.fileName(), QSettings::IniFormat);
     } else if (const auto portableFileNextToApp = QFile(QCoreApplication::applicationDirPath() % QChar('/') % portableFileName);
-               portableFileNextToApp.exists()) {
+        portableFileNextToApp.exists()) {
         settings = std::make_unique<QSettings>(portableFileNextToApp.fileName(), QSettings::IniFormat);
     } else {
         settings = std::make_unique<QSettings>(QSettings::IniFormat, QSettings::UserScope, organization, application);

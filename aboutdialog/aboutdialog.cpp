@@ -80,7 +80,7 @@ AboutDialog::AboutDialog(QWidget *parent, const QString &applicationName, const 
             m_ui->websiteLabel->setText(tr("For updates and bug reports visit the <a href=\"%1\" "
                                            "style=\"text-decoration: underline; color: palette(link);\">project "
                                            "website</a>.")
-                                            .arg(!website.isEmpty() ? website : QString::fromUtf8(CppUtilities::applicationInfo.url)));
+                    .arg(!website.isEmpty() ? website : QString::fromUtf8(CppUtilities::applicationInfo.url)));
         };
         setWebsite();
         connect(this, &AboutDialog::retranslationRequired, this, std::move(setWebsite));
