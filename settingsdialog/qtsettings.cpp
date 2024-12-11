@@ -1,34 +1,44 @@
 #include "./qtsettings.h"
+
+#include "../misc/desktoputils.h"
+#include "../resources/resources.h"
+
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #include "./optioncategory.h"
 #include "./optioncategoryfiltermodel.h"
 #include "./optioncategorymodel.h"
 #include "./optionpage.h"
 
 #include "../paletteeditor/paletteeditor.h"
-
 #include "../widgets/clearlineedit.h"
-
-#include "../resources/resources.h"
-
-#include "../misc/desktoputils.h"
+#endif
 
 #include "resources/config.h"
 
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #include "ui_qtappearanceoptionpage.h"
 #include "ui_qtenvoptionpage.h"
 #include "ui_qtlanguageoptionpage.h"
+#endif
 
 #include <c++utilities/application/commandlineutils.h>
 
 #include <QDir>
-#include <QFileDialog>
-#include <QFontDialog>
+#include <QFont>
+#include <QGuiApplication>
 #include <QIcon>
+#include <QLocale>
 #include <QOperatingSystemVersion>
+#include <QPalette>
 #include <QSettings>
 #include <QStringBuilder>
-#include <QStyleFactory>
 #include <QVersionNumber>
+
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
+#include <QFileDialog>
+#include <QFontDialog>
+#include <QStyleFactory>
+#endif
 
 #if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)) && (QT_VERSION < QT_VERSION_CHECK(6, 7, 0))
 #include <QOperatingSystemVersion>
@@ -48,9 +58,11 @@ struct QtSettingsData {
     std::optional<QFont> initialFont;
     QPalette palette; // the currently applied palette (only in use if customPalette is true, though)
     QPalette selectedPalette; // the intermediately selected palette (chosen in palette editor but not yet applied)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     QString widgetStyle;
     QString initialWidgetStyle;
     QString styleSheetPath;
+#endif
     QString iconTheme;
     QString initialIconTheme;
     QLocale defaultLocale;
@@ -62,13 +74,17 @@ struct QtSettingsData {
     QString additionalIconThemeSearchPath;
     bool customFont;
     bool customPalette;
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     bool customWidgetStyle;
     bool customStyleSheet;
+#endif
     bool customIconTheme;
     bool customLocale;
     bool isPaletteDark;
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     bool showNotices;
     bool retranslatable;
+#endif
 };
 
 inline QtSettingsData::QtSettingsData()
@@ -77,13 +93,17 @@ inline QtSettingsData::QtSettingsData()
     , localeName(defaultLocale.name())
     , customFont(false)
     , customPalette(false)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     , customWidgetStyle(false)
     , customStyleSheet(false)
+#endif
     , customIconTheme(false)
     , customLocale(false)
     , isPaletteDark(false)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     , showNotices(true)
     , retranslatable(false)
+#endif
 {
 }
 
@@ -108,6 +128,7 @@ QtSettings::~QtSettings()
 {
 }
 
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 /*!
  * \brief Disables notices on option pages that settings take only effect after restarting.
  * \remarks
@@ -136,6 +157,7 @@ void QtSettings::setRetranslatable(bool retranslatable)
 {
     m_d->retranslatable = retranslatable;
 }
+#endif
 
 /*!
  * \brief Returns whether a custom font is set.
@@ -158,10 +180,12 @@ void QtSettings::restore(QSettings &settings)
     m_d->customFont = settings.value(QStringLiteral("customfont"), false).toBool();
     m_d->palette = settings.value(QStringLiteral("palette")).value<QPalette>();
     m_d->customPalette = settings.value(QStringLiteral("custompalette"), false).toBool();
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     m_d->widgetStyle = settings.value(QStringLiteral("widgetstyle"), m_d->widgetStyle).toString();
     m_d->customWidgetStyle = settings.value(QStringLiteral("customwidgetstyle"), false).toBool();
     m_d->styleSheetPath = settings.value(QStringLiteral("stylesheetpath"), m_d->styleSheetPath).toString();
     m_d->customStyleSheet = settings.value(QStringLiteral("customstylesheet"), false).toBool();
+#endif
     m_d->iconTheme = settings.value(QStringLiteral("icontheme"), m_d->iconTheme).toString();
     m_d->customIconTheme = settings.value(QStringLiteral("customicontheme"), false).toBool();
     m_d->localeName = settings.value(QStringLiteral("locale"), m_d->localeName).toString();
@@ -182,10 +206,12 @@ void QtSettings::save(QSettings &settings) const
     settings.setValue(QStringLiteral("customfont"), m_d->customFont);
     settings.setValue(QStringLiteral("palette"), QVariant(m_d->palette));
     settings.setValue(QStringLiteral("custompalette"), m_d->customPalette);
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     settings.setValue(QStringLiteral("widgetstyle"), m_d->widgetStyle);
     settings.setValue(QStringLiteral("customwidgetstyle"), m_d->customWidgetStyle);
     settings.setValue(QStringLiteral("stylesheetpath"), m_d->styleSheetPath);
     settings.setValue(QStringLiteral("customstylesheet"), m_d->customStyleSheet);
+#endif
     settings.setValue(QStringLiteral("icontheme"), m_d->iconTheme);
     settings.setValue(QStringLiteral("customicontheme"), m_d->customIconTheme);
     settings.setValue(QStringLiteral("locale"), m_d->localeName);
@@ -265,6 +291,7 @@ void QtSettings::apply()
         QIcon::setThemeSearchPaths(paths);
     }
 
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
     // read style sheet
     auto styleSheet = QString();
     if (m_d->customStyleSheet && !m_d->styleSheetPath.isEmpty()) {
@@ -277,6 +304,7 @@ void QtSettings::apply()
             std::cerr << "Unable to read the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data() << "\"." << std::endl;
         }
     }
+#endif
 
     // apply appearance
     if (m_d->customFont) {
@@ -287,6 +315,7 @@ void QtSettings::apply()
     } else if (m_d->initialFont.has_value()) {
         QGuiApplication::setFont(m_d->initialFont.value());
     }
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #ifdef QT_UTILITIES_USE_FUSION_ON_WINDOWS_11
     if (m_d->initialWidgetStyle.isEmpty()) {
         // use Fusion on Windows 11 as the native style doesn't look good
@@ -313,6 +342,7 @@ void QtSettings::apply()
         std::cerr << "Unable to apply the specified stylesheet \"" << m_d->styleSheetPath.toLocal8Bit().data()
                   << "\" because no QApplication has been instantiated." << std::endl;
     }
+#endif
     if (m_d->customPalette) {
         QGuiApplication::setPalette(m_d->palette);
     } else {
@@ -428,6 +458,7 @@ bool QtSettings::hasLocaleChanged() const
     return m_d->previousLocale != QLocale();
 }
 
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 /*!
  * \brief Returns a new OptionCatecory containing all Qt related option pages.
  * \remarks
@@ -621,6 +652,7 @@ QWidget *QtEnvOptionPage::setupWidget()
     // call base implementation first, so ui() is available
     return QtEnvOptionPageBase::setupWidget();
 }
+#endif
 
 /*!
  * \brief Returns a handle to the internal data.
@@ -635,6 +667,8 @@ QtSettings::operator QtSettingsData &() const
 
 } // namespace QtUtilities
 
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtAppearanceOptionPage)
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtLanguageOptionPage)
 INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(QtEnvOptionPage)
+#endif

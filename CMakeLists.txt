@@ -29,12 +29,13 @@ set(HEADER_FILES
     misc/desktoputils.h
     misc/conversion.h
     misc/compat.h
+    settingsdialog/qtsettings.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
     resources/importplugin.h)
-set(SRC_FILES misc/dialogutils.cpp misc/desktoputils.cpp models/checklistmodel.cpp resources/qtconfigarguments.cpp
-              resources/resources.cpp)
+set(SRC_FILES misc/dialogutils.cpp misc/desktoputils.cpp settingsdialog/qtsettings.cpp models/checklistmodel.cpp
+              resources/qtconfigarguments.cpp resources/resources.cpp)
 set(RES_FILES resources/qtutilsicons.qrc)
 
 set(WIDGETS_HEADER_FILES
@@ -45,7 +46,6 @@ set(WIDGETS_HEADER_FILES
     settingsdialog/optioncategorymodel.h
     settingsdialog/optionpage.h
     settingsdialog/settingsdialog.h
-    settingsdialog/qtsettings.h
     widgets/buttonoverlay.h
     widgets/clearcombobox.h
     widgets/clearlineedit.h
@@ -64,7 +64,6 @@ set(WIDGETS_SRC_FILES
     settingsdialog/optioncategorymodel.cpp
     settingsdialog/optionpage.cpp
     settingsdialog/settingsdialog.cpp
-    settingsdialog/qtsettings.cpp
     widgets/buttonoverlay.cpp
     widgets/clearcombobox.cpp
     widgets/clearlineedit.cpp
