@@ -14,6 +14,9 @@ set(META_VERSION_PATCH 5)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 set(META_GUI_OPTIONAL ON)
 
+# link explicitly against Qt Gui
+list(APPEND ADDITIONAL_QT_MODULES Gui)
+
 project(${META_PROJECT_NAME})
 
 # add project files
