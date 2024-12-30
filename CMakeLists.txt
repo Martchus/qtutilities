@@ -84,14 +84,10 @@ set(WIDGETS_UI_FILES
     paletteeditor/paletteeditor.ui)
 set(QT_TESTS buttonoverlay dialogs)
 set(CMAKE_MODULE_FILES
-    cmake/modules/AndroidApk.cmake cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake
+    cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake
     cmake/modules/QtLinkage.cmake cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
 set(CMAKE_TEMPLATE_FILES cmake/templates/qtconfig.h.in cmake/templates/webviewdefs.h.in cmake/templates/webviewincludes.h.in
                          cmake/templates/jsdefs.h.in cmake/templates/jsincludes.h.in)
-if (ANDROID)
-    list(APPEND CMAKE_MODULE_FILES)
-    list(APPEND CMAKE_TEMPLATE_FILES cmake/templates/android-deployment.json.in)
-endif ()
 
 set(TS_FILES translations/${META_PROJECT_NAME}_zh_CN.ts translations/${META_PROJECT_NAME}_de_DE.ts
              translations/${META_PROJECT_NAME}_en_US.ts)
