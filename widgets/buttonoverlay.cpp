@@ -392,8 +392,7 @@ void ButtonOverlay::showInfo()
 {
     if (lineEditForWidget()) {
         if (auto *const infoAction = static_cast<QAction *>(m_infoButtonOrAction)) {
-            const auto pos = QCursor::pos();
-            if (!pos.isNull()) {
+            if (const auto pos = QCursor::pos(); !pos.isNull()) {
                 QToolTip::showText(pos, infoAction->toolTip(), m_widget);
             }
         }
