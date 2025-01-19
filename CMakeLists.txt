@@ -83,9 +83,8 @@ set(WIDGETS_UI_FILES
     settingsdialog/qtenvoptionpage.ui
     paletteeditor/paletteeditor.ui)
 set(QT_TESTS buttonoverlay dialogs)
-set(CMAKE_MODULE_FILES
-    cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake
-    cmake/modules/QtLinkage.cmake cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
+set(CMAKE_MODULE_FILES cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake cmake/modules/QtLinkage.cmake
+                       cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
 set(CMAKE_TEMPLATE_FILES cmake/templates/qtconfig.h.in cmake/templates/webviewdefs.h.in cmake/templates/webviewincludes.h.in
                          cmake/templates/jsdefs.h.in cmake/templates/jsincludes.h.in)
 
