@@ -83,6 +83,7 @@ QT_UTILITIES_EXPORT bool hasCoreApp();
 QT_UTILITIES_EXPORT void setupCommonQtApplicationAttributes();
 QT_UTILITIES_EXPORT std::unique_ptr<QSettings> getSettings(const QString &organization, const QString &application = QString());
 QT_UTILITIES_EXPORT QString errorMessageForSettings(const QSettings &settings);
+QT_UTILITIES_EXPORT void deletePipelineCacheIfNeeded();
 
 } // namespace QtUtilities
 

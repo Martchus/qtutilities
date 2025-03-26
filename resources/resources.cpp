@@ -20,6 +20,10 @@
 #include <QCoreApplication>
 #endif
 
+#ifdef Q_OS_ANDROID
+#include <QStandardPaths>
+#endif
+
 #include <iostream>
 
 using namespace std;
@@ -413,6 +417,26 @@ QString errorMessageForSettings(const QSettings &settings)
         errorMessage = QCoreApplication::translate("QtUtilities", "unknown error");
     }
     return QCoreApplication::translate("QtUtilities", "Unable to sync settings from \"%1\": %2").arg(settings.fileName(), errorMessage);
+}
+
+/*!
+ * \brief Deletes the Qt Quick pipeline cache on platforms where this is needed to workaround issues with the cache.
+ */
+void deletePipelineCacheIfNeeded()
+{
+#ifdef Q_OS_ANDROID
+    // delete OpenGL pipeline cache under Android as it seems to break loading the app in certain cases
+    const auto cachePaths = QStandardPaths::standardLocations(QStandardPaths::CacheLocation);
+    for (const auto &cachePath : cachePaths) {
+        const auto cacheDir = QDir(cachePath);
+        const auto subdirs = cacheDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        for (const auto &subdir : subdirs) {
+            if (subdir.startsWith(QLatin1String("qtpipelinecache"))) {
+                QFile::remove(cachePath % QChar('/') % subdir % QStringLiteral("/qqpc_opengl"));
+            }
+        }
+    }
+#endif
 }
 
 } // namespace QtUtilities
