@@ -415,6 +415,4 @@ QString errorMessageForSettings(const QSettings &settings)
     return QCoreApplication::translate("QtUtilities", "Unable to sync settings from \"%1\": %2").arg(settings.fileName(), errorMessage);
 }
 
-// namespace ApplicationInstances
-
 } // namespace QtUtilities
