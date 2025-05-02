@@ -9,7 +9,7 @@ set(META_APP_URL "https://github.com/${META_APP_AUTHOR}/${META_PROJECT_NAME}")
 set(META_APP_DESCRIPTION
     "Common Qt related C++ classes and routines used by my applications such as dialogs, widgets and models")
 set(META_VERSION_MAJOR 6)
-set(META_VERSION_MINOR 15)
+set(META_VERSION_MINOR 16)
 set(META_VERSION_PATCH 0)
 set(META_APP_VERSION ${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH})
 set(META_GUI_OPTIONAL ON)
