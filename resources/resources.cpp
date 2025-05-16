@@ -189,7 +189,7 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
 }
 
 /// \cond
-void logTranslationEvent(
+static void logTranslationEvent(
     const char *event, const QString &configName, const QString &applicationName, const QString &localeName, const QString &path = QString())
 {
     cerr << event << " translation file for \"" << applicationName.toLocal8Bit().data() << "\"";
