@@ -487,8 +487,14 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
     if (NOT "${${QT_LINGUIST_TOOLS_PACKAGE}_FOUND}" AND QT_HOST_PATH)
         # find the module within the host path when set (required for cross compilation with Qt 6 as the module is absent in
         # the target install tree)
-        find_package("${QT_LINGUIST_TOOLS_PACKAGE}" PATHS "${QT_HOST_PATH}" "${QT_HOST_PATH}/lib/cmake" ${CMAKE_MODULE_PATH}
-                     NO_CMAKE_FIND_ROOT_PATH NO_DEFAULT_PATH)
+        find_package(
+            "${QT_LINGUIST_TOOLS_PACKAGE}"
+            PATHS
+            "${QT_HOST_PATH}"
+            "${QT_HOST_PATH}/lib/cmake"
+            "/usr/lib/cmake"
+            NO_CMAKE_FIND_ROOT_PATH
+            NO_DEFAULT_PATH)
     endif ()
     if (NOT "${${QT_LINGUIST_TOOLS_PACKAGE}_FOUND}")
         message(
