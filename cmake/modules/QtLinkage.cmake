@@ -19,6 +19,11 @@ set(KF_PACKAGE_PREFIX
     "KF5"
     CACHE STRING "specifies the prefix for KDE Frameworks packages")
 
+# workaround `No target "::qtpaths"`, see qtbase commit 9b9a2398f30b6c35ef6be3ce929c352afb682910
+if (NOT QT_CMAKE_EXPORT_NAMESPACE)
+    set(QT_CMAKE_EXPORT_NAMESPACE "${QT_PACKAGE_PREFIX}")
+endif ()
+
 # determine the minimum Qt version
 if (NOT META_QT_VERSION)
     if (META_QT5_VERSION)
