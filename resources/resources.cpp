@@ -87,6 +87,20 @@ QString &additionalTranslationFilePath()
     return path;
 }
 
+/// \cond
+static QString relativeBase()
+{
+    static const auto relativeBase = [] {
+        auto appDir = QCoreApplication::applicationDirPath();
+        if (appDir.isEmpty()) {
+            appDir = QStringLiteral(".");
+        }
+        return appDir;
+    }();
+    return relativeBase;
+}
+/// \endcond
+
 /*!
  * \brief Loads and installs the appropriate Qt translation file for the current
  * locale.
@@ -124,6 +138,7 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
 void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
     const auto debugTranslations = qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS");
+    const auto relBase = relativeBase();
     for (const auto &repoName : repositoryNames) {
         auto *const qtTranslator = new QTranslator(QCoreApplication::instance());
         const auto fileName = QString(repoName % QChar('_') % localeName);
@@ -138,7 +153,7 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
                     QLibraryInfo::path(QLibraryInfo::TranslationsPath)
 #endif
                     )
-            || qtTranslator->load(fileName, path = QStringLiteral("../share/qt/translations"))
+            || qtTranslator->load(fileName, path = relBase + QStringLiteral("/../share/qt/translations"))
             || qtTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
             QCoreApplication::installTranslator(qtTranslator);
             translators.append(qtTranslator);
@@ -229,13 +244,13 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
     auto *const appTranslator = new QTranslator(QCoreApplication::instance());
     const auto fileName = QString(applicationName % QChar('_') % localeName);
     const auto directoryName = configName.isEmpty() ? applicationName : QString(applicationName % QChar('-') % configName);
+    const auto relBase = relativeBase();
 
-    QString path;
-    if ((!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, path = additionalTranslationFilePath()))
-        || appTranslator->load(fileName, path = QStringLiteral(".")) || appTranslator->load(fileName, path = QStringLiteral("../") % directoryName)
-        || appTranslator->load(fileName, path = QStringLiteral("../../") % directoryName)
-        || appTranslator->load(fileName, path = QStringLiteral("./translations"))
-        || appTranslator->load(fileName, path = QStringLiteral("../share/") % directoryName % QStringLiteral("/translations"))
+    if (auto path = QString(); (!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, path = additionalTranslationFilePath()))
+        || appTranslator->load(fileName, path = relBase) || appTranslator->load(fileName, path = relBase % QStringLiteral("/../") % directoryName)
+        || appTranslator->load(fileName, path = relBase % QStringLiteral("/../../") % directoryName)
+        || appTranslator->load(fileName, path = relBase % QStringLiteral("/translations"))
+        || appTranslator->load(fileName, path = relBase % QStringLiteral("/../share/") % directoryName % QStringLiteral("/translations"))
         || appTranslator->load(fileName, path = QStringLiteral(APP_INSTALL_PREFIX "/share/") % directoryName % QStringLiteral("/translations"))
         || appTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
