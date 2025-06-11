@@ -36,22 +36,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="411"/>
+        <location filename="../resources/resources.cpp" line="426"/>
         <source>unable to access file</source>
         <translation>Zugriff auf die Datei ist nicht möglich</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="414"/>
+        <location filename="../resources/resources.cpp" line="429"/>
         <source>file has invalid format</source>
         <translation>Datei hat ungültiges Format</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="417"/>
+        <location filename="../resources/resources.cpp" line="432"/>
         <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="419"/>
+        <location filename="../resources/resources.cpp" line="434"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation>Settings können nicht unter &quot;%1&quot; synchronisiert werden: %2</translation>
     </message>
