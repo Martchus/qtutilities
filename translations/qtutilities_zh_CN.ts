@@ -14,7 +14,7 @@
     <message>
         <location filename="../resources/qtconfigarguments.cpp" line="193"/>
         <source>This application requires Windows 10, version 1809 or newer. The current Windows version is older so the application might not work correctly.</source>
-        <translation type="unfinished"></translation>
+        <translation>此应用程序需要 Windows 10(1809) 或更高的版本。当前的 Windows 版本较低，因此该应用程序可能无法正常工作。</translation>
     </message>
 </context>
 <context>
@@ -36,24 +36,24 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="411"/>
+        <location filename="../resources/resources.cpp" line="426"/>
         <source>unable to access file</source>
-        <translation type="unfinished"></translation>
+        <translation>无法访问文件</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="414"/>
+        <location filename="../resources/resources.cpp" line="429"/>
         <source>file has invalid format</source>
-        <translation type="unfinished"></translation>
+        <translation>文件格式无效</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="417"/>
+        <location filename="../resources/resources.cpp" line="432"/>
         <source>unknown error</source>
-        <translation type="unfinished">未知错误</translation>
+        <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="419"/>
+        <location filename="../resources/resources.cpp" line="434"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>无法从 &quot;%1&quot;: %2 同步设置</translation>
     </message>
 </context>
 <context>
@@ -87,7 +87,7 @@
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="226"/>
         <source>creators</source>
-        <translation>创造者</translation>
+        <translation>创作者</translation>
     </message>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="253"/>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../aboutdialog/aboutdialog.cpp" line="99"/>
         <source>Using &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt;</source>
-        <translation>使用 &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt;</translation>
+        <translation>使用 &lt;a href=&quot;qtversion&quot;&gt;Qt %1&lt;/a&gt; 【汉化：智享阁】</translation>
     </message>
 </context>
 <context>
@@ -148,17 +148,17 @@
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
         <source>don&apos;t use a password</source>
-        <translation>不要使用密码</translation>
+        <translation>不使用密码</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="213"/>
         <source>Capslock is active</source>
-        <translation>大写锁定激活</translation>
+        <translation>大写键已激活</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="239"/>
         <source>Abort</source>
-        <translation>放弃</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../paletteeditor/paletteeditor.ui" line="53"/>
         <source>Tune Palette</source>
-        <translation>微调调色板</translation>
+        <translation>调整调色板</translation>
     </message>
     <message>
         <location filename="../paletteeditor/paletteeditor.ui" line="84"/>
@@ -275,7 +275,7 @@
     <message>
         <location filename="../paletteeditor/paletteeditor.cpp" line="416"/>
         <source>Color Role</source>
-        <translation>颜色角色</translation>
+        <translation>颜色用途</translation>
     </message>
     <message>
         <location filename="../paletteeditor/paletteeditor.cpp" line="418"/>
@@ -338,7 +338,7 @@
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="71"/>
         <source>More options ...</source>
-        <translation>更多选择 ...</translation>
+        <translation>更多选项 ...</translation>
     </message>
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="93"/>
@@ -378,7 +378,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../settingsdialog/qtenvoptionpage.ui" line="14"/>
         <source>Environment/paths</source>
-        <translation>Environment/paths</translation>
+        <translation>环境变量/路径</translation>
     </message>
     <message>
         <location filename="../settingsdialog/qtenvoptionpage.ui" line="28"/>
@@ -406,7 +406,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="6"/>
         <source>Localization</source>
-        <translation>本土化</translation>
+        <translation>语言</translation>
     </message>
     <message>
         <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="43"/>
@@ -468,17 +468,17 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <location filename="../settingsdialog/settingsdialog.ui" line="75"/>
         <location filename="../settingsdialog/settingsdialog.cpp" line="153"/>
         <source>No category selected</source>
-        <translation>未选择类别</translation>
+        <translation>未选择设置类别</translation>
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="93"/>
         <source>Filter</source>
-        <translation>筛选</translation>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="134"/>
         <source>Abort</source>
-        <translation>放弃</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="148"/>
@@ -488,7 +488,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="159"/>
         <source>OK</source>
-        <translation>好的</translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.cpp" line="320"/>
