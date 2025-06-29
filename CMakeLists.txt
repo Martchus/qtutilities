@@ -31,6 +31,7 @@ set(HEADER_FILES
     misc/compat.h
     settingsdialog/qtsettings.h
     setup/updater.h
+    setup/verification.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
     resources/resources.h
@@ -201,6 +202,15 @@ if (SETUP_TOOLS)
     list(APPEND WIDGETS_UI_FILES setup/updateoptionpage.ui)
     list(APPEND QT_TESTS setup)
     list(APPEND ADDITIONAL_QT_MODULES Network Concurrent)
+    use_crypto(LIBRARIES_VARIABLE "QT_TEST_LIBRARIES" PACKAGES_VARIABLE "QT_TEST_PACKAGES" OPTIONAL)
+    if ("OpenSSL::Crypto" IN_LIST "QT_TEST_LIBRARIES")
+        set_property(
+            SOURCE tests/setup.cpp
+            APPEND
+            PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SETUP_TOOLS_HAS_OPENSSL_CRYPTO)
+    else ()
+        message(WARNING "Unable to test verification helper of setup tools because OpenSSL crypto library is not available.")
+    endif ()
 endif ()
 
 # include modules to apply configuration
