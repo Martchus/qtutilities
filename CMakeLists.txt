@@ -31,6 +31,7 @@ set(HEADER_FILES
     misc/compat.h
     settingsdialog/qtsettings.h
     setup/updater.h
+    setup/signature.h
     setup/verification.h
     models/checklistmodel.h
     resources/qtconfigarguments.h
@@ -41,6 +42,7 @@ set(SRC_FILES
     misc/desktoputils.cpp
     settingsdialog/qtsettings.cpp
     setup/updater.cpp
+    setup/signature.cpp
     models/checklistmodel.cpp
     resources/qtconfigarguments.cpp
     resources/resources.cpp)
