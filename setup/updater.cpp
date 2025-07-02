@@ -1001,7 +1001,7 @@ const UpdateHandler::CheckInterval &UpdateHandler::checkInterval() const
     m_p->settings->beginGroup(QStringLiteral("updating"));
     auto &checkInterval = m_p->checkInterval.emplace();
     checkInterval.duration = CppUtilities::TimeSpan::fromMilliseconds(m_p->settings->value("checkIntervalMs", 60 * 60 * 1000).toInt());
-    checkInterval.enabled = m_p->settings->value("automaticChecksEnabled", true).toBool();
+    checkInterval.enabled = m_p->settings->value("automaticChecksEnabled", false).toBool();
     m_p->settings->endGroup();
     return checkInterval;
 }
