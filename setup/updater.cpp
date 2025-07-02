@@ -693,18 +693,20 @@ void Updater::startDownload(const QString &downloadUrl, const QString &signature
     Q_UNUSED(downloadUrl)
     Q_UNUSED(signatureUrl)
 #else
+    m_p->error.clear();
+    m_p->storedPath.clear();
+    m_p->signature.clear();
+
     if (const auto fakeDownloadPath = qEnvironmentVariable(PROJECT_VARNAME_UPPER "_UPDATER_FAKE_DOWNLOAD"); !fakeDownloadPath.isEmpty()) {
         m_p->fakeDownload = new QFile(fakeDownloadPath);
         m_p->fakeDownload->open(QFile::ReadOnly);
+        emit inProgressChanged(true);
         storeExecutable();
         return;
     }
 
     auto request = QNetworkRequest(QUrl(downloadUrl));
     request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, m_p->cacheLoadControl);
-    m_p->error.clear();
-    m_p->storedPath.clear();
-    m_p->signature.clear();
     m_p->statusMessage = tr("Downloading %1").arg(downloadUrl);
     m_p->currentDownload = m_p->nm->get(request);
     emit updateStatusChanged(m_p->statusMessage);

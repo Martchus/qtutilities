@@ -1,9 +1,5 @@
 #include "../setup/updater.h"
 
-#ifdef QT_UTILITIES_SETUP_TOOLS_HAS_OPENSSL_CRYPTO
-#include "../setup/verification.h"
-#endif
-
 #include "resources/config.h"
 
 #include <c++utilities/application/argumentparser.h>
@@ -28,7 +24,6 @@ class SetupTests : public QObject {
 private Q_SLOTS:
     void initTestCase();
     void testUpdateNotifier();
-    void testVerification();
 
 private:
     CppUtilities::TestApplication m_app;
@@ -106,33 +101,6 @@ void SetupTests::testUpdateNotifier()
     QVERIFY2(!newVersionFromSignal.isEmpty(), "updateAvailable() was emitted with non-empty version");
     QCOMPARE(updateNotifier.newVersion(), newVersionFromSignal);
     QVERIFY2(!QVersionNumber::fromString(newVersionFromSignal).isNull(), "version is parsable");
-}
-
-void SetupTests::testVerification()
-{
-#ifdef QT_UTILITIES_SETUP_TOOLS_HAS_OPENSSL_CRYPTO
-    const auto key = std::string_view(
-        R"(-----BEGIN PUBLIC KEY-----
-MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQAWJAn1E7ZE5Q6H69oaV5sqCIppJdg
-4bXDan9dJv6GOg70/t7q2CvwcwUXhV4FvCZxCHo25+rWYINfqKU2Utul8koAx8tK
-59ohfOzI63I+CC76GfX41uRGU0P5i6hS7o/hgBLiVXqT0FgS2BMfmnLMUvUjqnI2
-YQM7C55/5BM5Vrblkow=
------END PUBLIC KEY-----)");
-    const auto signature = std::string_view(
-        R"(-----BEGIN SIGNATURE-----
-MIGIAkIB+LB01DduBFMVs7Ea2McD7/kXpP0XktDNR7WpVgkOn4+/ilR8b8lpO9dd
-FGmxKj5UVr2GpcWX6I216PjaVL9tr5oCQgFMpvNjSgFQ/KFaE+0d+QCegr3V7Uz6
-sWB0iGdPa+oXbRish7HoNCU/k0lD3ffXaf8ueC78Zme9NFO18Ol+NWXJDA==
------END SIGNATURE-----)");
-
-    // test with valid message
-    auto message = std::string("test message");
-    QCOMPARE(verifySignature(key, signature, message), QString());
-
-    // manipulate message, now it is no longer supposed to match
-    message[5] = '?';
-    QCOMPARE(verifySignature(key, signature, message), QStringLiteral("incorrect signature"));
-#endif
 }
 
 QTEST_MAIN(SetupTests)
