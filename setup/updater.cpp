@@ -787,6 +787,7 @@ void Updater::storeExecutable()
         const auto dataView = std::string_view(data.data(), static_cast<std::size_t>(data.size()));
         auto foundExecutable = false, foundSignature = false;
         auto error = QString(), storePath = QString();
+        auto newExeName = std::string(), signatureName = std::string();
         auto newExeData = std::string();
         auto newExe = QFile();
         reply->deleteLater();
@@ -837,11 +838,13 @@ void Updater::storeExecutable()
                     if (!m_p->signatureExtension.isEmpty() && fileName.endsWith(m_p->signatureExtension)) {
                         m_p->signature = QByteArray::fromStdString(file.content);
                         foundSignature = true;
+                        signatureName = file.name;
                         return foundExecutable && foundSignature;
                     }
 
                     // write executable from archive to disk (using a temporary filename)
                     foundExecutable = true;
+                    newExeName = file.name;
                     newExe.setFileName(appDirPath % QChar('/') % fileName % QStringLiteral(".tmp"));
                     if (!newExe.open(QFile::WriteOnly | QFile::Truncate)) {
                         error = tr("Unable to create new executable under \"%1\": %2").arg(newExe.fileName(), newExe.errorString());
@@ -868,8 +871,10 @@ void Updater::storeExecutable()
         if (error.isEmpty() && foundExecutable) {
             // verify whether downloaded binary is valid if a verify function was assigned
             if (m_p->verifyFunction) {
-                if (const auto verifyError = m_p->verifyFunction(Updater::Update{
-                        .data = newExeData, .signature = std::string_view(m_p->signature.data(), static_cast<std::size_t>(m_p->signature.size())) });
+                if (const auto verifyError = m_p->verifyFunction(Updater::Update{ .executableName = newExeName,
+                        .signatureName = signatureName,
+                        .data = newExeData,
+                        .signature = std::string_view(m_p->signature.data(), static_cast<std::size_t>(m_p->signature.size())) });
                     !verifyError.isEmpty()) {
                     error = tr("Unable to verify whether downloaded binary is valid: %1").arg(verifyError);
                     return QPair<QString, QString>(error, storePath);

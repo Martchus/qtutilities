@@ -106,6 +106,8 @@ class QT_UTILITIES_EXPORT Updater : public QObject {
 
 public:
     struct Update {
+        std::string_view executableName;
+        std::string_view signatureName;
         std::string_view data;
         std::string_view signature;
     };
