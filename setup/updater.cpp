@@ -38,7 +38,26 @@
 #endif
 
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
+#include <QCoreApplication>
+#include <QLabel>
+
+#if defined(QT_UTILITIES_SETUP_TOOLS_ENABLED)
 #include "ui_updateoptionpage.h"
+#else
+namespace QtUtilities {
+namespace Ui {
+class UpdateOptionPage {
+public:
+    void setupUi(QWidget *)
+    {
+    }
+    void retranslateUi(QWidget *)
+    {
+    }
+};
+} // namespace Ui
+} // namespace QtUtilities
+#endif
 #endif
 
 #include "resources/config.h"
@@ -1206,3 +1225,7 @@ void UpdateOptionPage::updateLatestVersion(bool)
 #endif
 
 } // namespace QtUtilities
+
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
+INSTANTIATE_UI_FILE_BASED_OPTION_PAGE(UpdateOptionPage)
+#endif

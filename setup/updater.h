@@ -227,8 +227,13 @@ DECLARE_SETUP_WIDGETS
 void updateLatestVersion(bool inProgress = false);
 std::unique_ptr<UpdateOptionPagePrivate> m_p;
 END_DECLARE_OPTION_PAGE
+
 #endif
 
 } // namespace QtUtilities
 
 #endif // QT_UTILITIES_SETUP_UPDATER_H
+
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
+DECLARE_EXTERN_UI_FILE_BASED_OPTION_PAGE(UpdateOptionPage)
+#endif
