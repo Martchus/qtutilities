@@ -36,7 +36,7 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1141"/>
+        <location filename="../setup/updater.cpp" line="1171"/>
         <source>Updating</source>
         <translation>Aktualisieren</translation>
     </message>
@@ -590,22 +590,22 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1145"/>
+        <location filename="../setup/updater.cpp" line="1175"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation>Nach Aktualisierungen suchen wird für die aktuelle Platform nicht untersützt.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1147"/>
+        <location filename="../setup/updater.cpp" line="1177"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation>Diese Version von %1 hat automatische Aktualisierungen deaktiviert. Du kannst die Anwendung vielleicht stattdessen über die Paketverwaltung aktualisieren.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1166"/>
+        <location filename="../setup/updater.cpp" line="1196"/>
         <source>no new version available for download</source>
         <translation>keine neue Version verfügbar</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1167"/>
+        <location filename="../setup/updater.cpp" line="1197"/>
         <source>new version available but no build for the current platform present yet</source>
         <translation>neue Version verfügbar, aber im Moment steht kein Build für die aktuelle Platform zur Verfügung</translation>
     </message>
@@ -689,102 +689,102 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::Updater</name>
     <message>
-        <location filename="../setup/updater.cpp" line="583"/>
+        <location filename="../setup/updater.cpp" line="593"/>
         <source>Update in progress …</source>
         <translation>Aktualisierung wird durchgeführt …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="583"/>
+        <location filename="../setup/updater.cpp" line="593"/>
         <source>Update done</source>
         <translation>Aktualisierung abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="583"/>
+        <location filename="../setup/updater.cpp" line="593"/>
         <source>Update failed</source>
         <translation>Aktualisierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="643"/>
+        <location filename="../setup/updater.cpp" line="653"/>
         <source>This build of the application does not support self-updating.</source>
         <translation>Diese Version der Anwendung kann sich nicht selbst aktualisieren.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="698"/>
+        <location filename="../setup/updater.cpp" line="710"/>
         <source>Downloading %1</source>
         <translation>Lade %1 herunter</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="717"/>
+        <location filename="../setup/updater.cpp" line="729"/>
         <source>Waiting for signature download …</source>
         <translation>Warte bis die Signatur heruntergeladen wurde …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="748"/>
+        <location filename="../setup/updater.cpp" line="760"/>
         <source>Unable to download signature: </source>
         <translation>Fehler beim Herunterladen der Signatur: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="756"/>
+        <location filename="../setup/updater.cpp" line="768"/>
         <source>Extracting …</source>
         <translation>Entpacke …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="772"/>
+        <location filename="../setup/updater.cpp" line="784"/>
         <source>Unable to download update: </source>
         <translation>Fehler beim Herunterladen der Aktualisierung: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="788"/>
+        <location filename="../setup/updater.cpp" line="801"/>
         <source>Unable to determine application path.</source>
         <translation>Kann den Anwendungspfad nicht ermitteln.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="795"/>
+        <location filename="../setup/updater.cpp" line="808"/>
         <source>Extraction was cancelled.</source>
         <translation>Das Entpacken wurde abgebrochen.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="837"/>
+        <location filename="../setup/updater.cpp" line="852"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
         <translation>Fehler beim Erstellen der neuen Anwendungsdatei unter &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="842"/>
+        <location filename="../setup/updater.cpp" line="857"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
         <translation>Fehler beim scheiben der neuen Anwendungsdatei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="847"/>
+        <location filename="../setup/updater.cpp" line="862"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
         <translation>Kann die neue Anwendungsdatei unter &quot;%1&quot; nicht erstellen.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="856"/>
+        <location filename="../setup/updater.cpp" line="871"/>
         <source>Unable to open downloaded archive: %1</source>
         <translation>Kann heruntergeladenes Archiv nicht öffnen: %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="864"/>
+        <location filename="../setup/updater.cpp" line="881"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
         <translation>Kann die heruntergeladene Anwendungsdatei nicht Verifizieren: %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="882"/>
+        <location filename="../setup/updater.cpp" line="899"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
         <translation>Kann die aktuelle Anwendungsdatei nicht nach &quot;%1&quot; verschieben: %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="890"/>
+        <location filename="../setup/updater.cpp" line="907"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
         <translation>Kann die neue Anwendungsdatei &quot;%1&quot; nicht nach &quot;%2&quot; verschieben: %3</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="896"/>
+        <location filename="../setup/updater.cpp" line="913"/>
         <source>Unable to find executable in downloaded archive.</source>
         <translation>Die Anwendungsdatei konnte nicht im heruntergeladenen Achiv gefunden werden.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="914"/>
+        <location filename="../setup/updater.cpp" line="931"/>
         <source>Update stored under: %1</source>
         <translation>Aktualisierung heruntergeladen unter: %1</translation>
     </message>
