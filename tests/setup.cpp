@@ -55,7 +55,7 @@ void SetupTests::testUpdateNotifier()
     auto networkAccessManager = QNetworkAccessManager();
     auto *const diskCache = new QNetworkDiskCache(&networkAccessManager);
     auto cacheDirectory = CppUtilities::testDirPath("setup");
-    diskCache->setCacheDirectory(QString::fromLocal8Bit(cacheDirectory));
+    diskCache->setCacheDirectory(QString::fromLocal8Bit(cacheDirectory.data(), static_cast<QString::size_type>(cacheDirectory.size())));
     networkAccessManager.setCache(diskCache);
     auto updateHandler = UpdateHandler(&settings, &networkAccessManager);
     auto &updateNotifier = *updateHandler.notifier();

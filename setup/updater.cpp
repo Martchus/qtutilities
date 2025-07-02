@@ -28,8 +28,7 @@
 #include <QStringBuilder>
 #include <QVersionNumber>
 #include <QtConcurrentRun>
-#include <QtProcessorDetection>
-#include <QtSystemDetection>
+#include <QtGlobal> // for QtProcessorDetection and QtSystemDetection keeping it Qt 5 compatible
 
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #include <QMessageBox>
@@ -124,7 +123,7 @@ UpdateNotifier::UpdateNotifier(QObject *parent)
     m_p->executableName = gitHubRepo + QT_UTILITIES_VERSION_SUFFIX;
     m_p->releasesUrl
         = QStringLiteral("https://api.github.com/repos/") % gitHubOrga % QChar('/') % gitHubRepo % QStringLiteral("/releases?per_page=25");
-    m_p->currentVersion = QVersionNumber::fromString(QUtf8StringView(appInfo.version));
+    m_p->currentVersion = QVersionNumber::fromString(QLatin1String(appInfo.version));
 #ifdef QT_UTILITIES_DOWNLOAD_REGEX
     m_p->assetRegex = QRegularExpression(m_p->executableName + QStringLiteral(QT_UTILITIES_DOWNLOAD_REGEX "\\..+"));
 #endif
@@ -838,7 +837,7 @@ void Updater::storeExecutable()
                     }
 
                     // read signature file
-                    const auto fileName = QString::fromUtf8(file.name);
+                    const auto fileName = QString::fromUtf8(file.name.data(), static_cast<QString::size_type>(file.name.size()));
                     if (!m_p->signatureExtension.isEmpty() && fileName.endsWith(m_p->signatureExtension)) {
                         m_p->signature = QByteArray::fromStdString(file.content);
                         foundSignature = true;
