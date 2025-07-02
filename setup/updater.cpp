@@ -562,6 +562,7 @@ Updater::Updater(const QString &executableName, const QString &signatureExtensio
 {
 #ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
     Q_UNUSED(executableName)
+    Q_UNUSED(signatureExtension)
 #else
     connect(&m_p->watcher, &QFutureWatcher<void>::finished, this, &Updater::concludeUpdate);
     m_p->executableName = executableName;
