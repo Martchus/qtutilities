@@ -539,6 +539,7 @@ struct UpdaterPrivate {
     QByteArray signature;
     QFutureWatcher<QPair<QString, QString>> watcher;
     QString executableName;
+    QString signatureExtension;
     QRegularExpression executableRegex = QRegularExpression();
     QString storedPath;
     Updater::VerifyFunction verifyFunction;
@@ -550,6 +551,11 @@ struct UpdaterPrivate {
 #endif
 
 Updater::Updater(const QString &executableName, QObject *parent)
+    : Updater(executableName, QString(), parent)
+{
+}
+
+Updater::Updater(const QString &executableName, const QString &signatureExtension, QObject *parent)
     : QObject(parent)
     , m_p(std::make_unique<UpdaterPrivate>())
 {
@@ -558,8 +564,12 @@ Updater::Updater(const QString &executableName, QObject *parent)
 #else
     connect(&m_p->watcher, &QFutureWatcher<void>::finished, this, &Updater::concludeUpdate);
     m_p->executableName = executableName;
+    m_p->signatureExtension = signatureExtension;
+    const auto signatureRegex = signatureExtension.isEmpty()
+        ? QString()
+        : QString(QStringLiteral("(") % QRegularExpression::escape(signatureExtension) % QStringLiteral(")?"));
 #ifdef QT_UTILITIES_EXE_REGEX
-    m_p->executableRegex = QRegularExpression(executableName + QStringLiteral(QT_UTILITIES_EXE_REGEX "(\\.sig)?"));
+    m_p->executableRegex = QRegularExpression(executableName % QStringLiteral(QT_UTILITIES_EXE_REGEX) % signatureRegex);
 #endif
 #endif
 }
@@ -824,7 +834,7 @@ void Updater::storeExecutable()
 
                     // read signature file
                     const auto fileName = QString::fromUtf8(file.name);
-                    if (fileName.endsWith(QLatin1String(".sig"))) {
+                    if (!m_p->signatureExtension.isEmpty() && fileName.endsWith(m_p->signatureExtension)) {
                         m_p->signature = QByteArray::fromStdString(file.content);
                         foundSignature = true;
                         return foundExecutable && foundSignature;

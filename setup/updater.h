@@ -112,6 +112,7 @@ public:
     using VerifyFunction = std::function<QString(const Update &)>;
 
     explicit Updater(const QString &executableName, QObject *parent = nullptr);
+    explicit Updater(const QString &executableName, const QString &signatureExtension, QObject *parent = nullptr);
     ~Updater() override;
 
     bool isInProgress() const;
