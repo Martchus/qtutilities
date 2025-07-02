@@ -936,8 +936,13 @@ void Updater::concludeUpdate()
 }
 
 struct UpdateHandlerPrivate {
+    explicit UpdateHandlerPrivate(const QString &executableName, const QString &signatureExtension)
+        : updater(executableName.isEmpty() ? notifier.executableName() : executableName, signatureExtension)
+    {
+    }
+
     UpdateNotifier notifier;
-    Updater updater = Updater(notifier.executableName());
+    Updater updater;
     QTimer timer;
     QSettings *settings;
     std::optional<UpdateHandler::CheckInterval> checkInterval;
@@ -949,11 +954,19 @@ UpdateHandler *UpdateHandler::s_mainInstance = nullptr;
 
 /*!
  * \brief Handles checking for updates and performing an update of the application if available.
- * \todo Setup timer for regular checking and updater for performing update.
  */
 UpdateHandler::UpdateHandler(QSettings *settings, QNetworkAccessManager *nm, QObject *parent)
+    : QtUtilities::UpdateHandler(QString(), QString(), settings, nm, parent)
+{
+}
+
+/*!
+ * \brief Handles checking for updates and performing an update of the application if available.
+ */
+UpdateHandler::UpdateHandler(
+    const QString &executableName, const QString &signatureExtension, QSettings *settings, QNetworkAccessManager *nm, QObject *parent)
     : QObject(parent)
-    , m_p(std::make_unique<UpdateHandlerPrivate>())
+    , m_p(std::make_unique<UpdateHandlerPrivate>(executableName, signatureExtension))
 {
     m_p->notifier.setNetworkAccessManager(nm);
     m_p->updater.setNetworkAccessManager(nm);

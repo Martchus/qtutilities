@@ -170,6 +170,8 @@ public:
     };
 
     explicit UpdateHandler(QSettings *settings, QNetworkAccessManager *nm, QObject *parent = nullptr);
+    explicit UpdateHandler(
+        const QString &executableName, const QString &signatureExtension, QSettings *settings, QNetworkAccessManager *nm, QObject *parent = nullptr);
     ~UpdateHandler() override;
 
     UpdateNotifier *notifier();
