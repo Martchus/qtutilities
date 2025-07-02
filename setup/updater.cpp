@@ -7,6 +7,8 @@
 
 #include <c++utilities/application/argumentparser.h>
 
+#include <optional>
+
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
 #include <c++utilities/io/ansiescapecodes.h>
 #include <c++utilities/io/archive.h>
