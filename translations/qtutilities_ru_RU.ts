@@ -44,22 +44,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="426"/>
+        <location filename="../resources/resources.cpp" line="434"/>
         <source>unable to access file</source>
         <translation>невозможно получить доступ к файлу</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="429"/>
+        <location filename="../resources/resources.cpp" line="437"/>
         <source>file has invalid format</source>
         <translation>файл имеет неверный формат</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="432"/>
+        <location filename="../resources/resources.cpp" line="440"/>
         <source>unknown error</source>
         <translation>неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="434"/>
+        <location filename="../resources/resources.cpp" line="442"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation>Невозможно синхронизировать настройки из &quot;%1&quot;: %2</translation>
     </message>
@@ -589,8 +589,76 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="6"/>
+        <source>Updating</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="20"/>
+        <source>Latest version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="30"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="40"/>
+        <source>Version in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="50"/>
+        <source>Check interval</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="60"/>
+        <source>Check for new versions regularly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="78"/>
+        <location filename="../setup/updateoptionpage.ui" line="98"/>
+        <location filename="../setup/updateoptionpage.ui" line="189"/>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="112"/>
+        <source>Check for new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="122"/>
+        <source>Update to latest version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="158"/>
+        <source>only on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="161"/>
+        <source> minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="164"/>
+        <source>every </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="248"/>
         <source>Abort</source>
-        <translation type="obsolete">Прервать</translation>
+        <translation type="unfinished">Прервать</translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="258"/>
+        <source>Restart to apply</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

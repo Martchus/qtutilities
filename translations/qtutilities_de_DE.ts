@@ -44,22 +44,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="426"/>
+        <location filename="../resources/resources.cpp" line="434"/>
         <source>unable to access file</source>
         <translation>Zugriff auf die Datei ist nicht möglich</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="429"/>
+        <location filename="../resources/resources.cpp" line="437"/>
         <source>file has invalid format</source>
         <translation>Datei hat ungültiges Format</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="432"/>
+        <location filename="../resources/resources.cpp" line="440"/>
         <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="434"/>
+        <location filename="../resources/resources.cpp" line="442"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation>Settings können nicht unter &quot;%1&quot; synchronisiert werden: %2</translation>
     </message>
@@ -610,60 +610,80 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
         <translation>neue Version verfügbar, aber im Moment steht kein Build für die aktuelle Platform zur Verfügung</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="6"/>
         <source>Updating</source>
-        <translation type="vanished">Aktualisieren</translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="20"/>
         <source>Latest version</source>
-        <translation type="vanished">Neueste Version</translation>
+        <translation>Neueste Version</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="30"/>
+        <source>Download</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="40"/>
         <source>Version in use</source>
-        <translation type="vanished">Diese Version</translation>
+        <translation>Diese Version</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="50"/>
         <source>Check interval</source>
-        <translation type="vanished">Suchintervall</translation>
+        <translation>Suchintervall</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="60"/>
         <source>Check for new versions regularly</source>
-        <translation type="vanished">Regelmäßig nach neuer Version suchen</translation>
+        <translation>Regelmäßig nach neuer Version suchen</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="78"/>
+        <location filename="../setup/updateoptionpage.ui" line="98"/>
+        <location filename="../setup/updateoptionpage.ui" line="189"/>
         <source>unknown</source>
-        <translation type="vanished">unbekannt</translation>
+        <translation>unbekannt</translation>
     </message>
     <message>
         <source>Enabled</source>
         <translation type="vanished">Aktiv</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="112"/>
         <source>Check for new version</source>
-        <translation type="vanished">Nach neuer Version suchen</translation>
+        <translation>Nach neuer Version suchen</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="122"/>
         <source>Update to latest version</source>
-        <translation type="vanished">Auf neueste Version updaten</translation>
+        <translation>Auf neueste Version updaten</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="158"/>
         <source>only on startup</source>
-        <translation type="vanished">nur beim Start</translation>
+        <translation>nur beim Start</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="161"/>
         <source> minutes</source>
-        <translation type="vanished"> Minuten</translation>
+        <translation> Minuten</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="164"/>
         <source>every </source>
-        <translation type="vanished">alle </translation>
+        <translation>alle </translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="248"/>
         <source>Abort</source>
-        <translation type="vanished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="258"/>
         <source>Restart to apply</source>
-        <translation type="vanished">Zum Anwenden Neustarten</translation>
+        <translation>Zum Anwenden Neustarten</translation>
     </message>
 </context>
 <context>
