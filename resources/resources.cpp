@@ -137,7 +137,7 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
  */
 void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QString &localeName)
 {
-    const auto debugTranslations = qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS");
+    const auto debugTranslations = qEnvironmentVariableIntValue("QT_DEBUG_TRANSLATIONS");
     const auto relBase = relativeBase();
     for (const auto &repoName : repositoryNames) {
         auto *const qtTranslator = new QTranslator(QCoreApplication::instance());
@@ -255,7 +255,7 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
         || appTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
         translators.append(appTranslator);
-        if (qEnvironmentVariableIsSet("QT_DEBUG_TRANSLATIONS")) {
+        if (qEnvironmentVariableIntValue("QT_DEBUG_TRANSLATIONS")) {
             logTranslationEvent("Loading", configName, applicationName, localeName, path);
         }
     } else {
