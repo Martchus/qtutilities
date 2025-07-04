@@ -694,6 +694,10 @@ if (REQUIRED_ICONS)
                         endif ()
                         # make temporary copy of required icons and create resource list for Qt
                         foreach (ICON_THEME_FILE ${GLOBBED_ICON_THEME_INDEX_FILES} ${GLOBBED_ICON_THEME_FILES})
+                            # skip non-existent files
+                            if (NOT EXISTS "${ICON_THEME_FILE}")
+                                continue()
+                            endif ()
                             # resolve symlinks
                             if (IS_SYMLINK "${ICON_THEME_FILE}")
                                 string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH
