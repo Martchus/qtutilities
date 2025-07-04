@@ -194,6 +194,9 @@ void QtSettings::restore(QSettings &settings)
     m_d->additionalIconThemeSearchPath = settings.value(QStringLiteral("iconthemepath")).toString();
     TranslationFiles::additionalTranslationFilePath() = settings.value(QStringLiteral("trpath")).toString();
     settings.endGroup();
+    if (qEnvironmentVariableIntValue("QT_DEBUG_SETTINGS")) {
+        std::cerr << "Restored Qt settings values\n";
+    }
 }
 
 /*!
@@ -220,6 +223,9 @@ void QtSettings::save(QSettings &settings) const
     settings.setValue(QStringLiteral("iconthemepath"), m_d->additionalIconThemeSearchPath);
     settings.setValue(QStringLiteral("trpath"), QVariant(TranslationFiles::additionalTranslationFilePath()));
     settings.endGroup();
+    if (qEnvironmentVariableIntValue("QT_DEBUG_SETTINGS")) {
+        std::cerr << "Set Qt settings values\n";
+    }
 }
 
 /*!

@@ -409,8 +409,42 @@ std::unique_ptr<QSettings> getSettings(const QString &organization, const QStrin
             QFile::rename(oldConfig, settings->fileName()) || QFile::remove(oldConfig);
         }
     }
-    settings->sync();
+    loadSettingsWithLogging(*settings);
     return settings;
+}
+
+/*!
+ * \brief Loads settings and logs a corresponding message if the env variable QT_DEBUG_SETTINGS is set.
+ */
+void loadSettingsWithLogging(QSettings &settings)
+{
+    settings.sync();
+    if (!qEnvironmentVariableIntValue("QT_DEBUG_SETTINGS")) {
+        return;
+    }
+    const auto error = errorMessageForSettings(settings);
+    if (error.isEmpty()) {
+        std::cerr << "Loaded/synced settings from " << settings.fileName().toStdString() << '\n';
+    } else {
+        std::cerr << "Unable to load settings: " << error.toStdString() << '\n';
+    }
+}
+
+/*!
+ * \brief Saves settings and logs a corresponding message if the env variable QT_DEBUG_SETTINGS is set.
+ */
+void saveSettingsWithLogging(QSettings &settings)
+{
+    settings.sync();
+    if (!qEnvironmentVariableIntValue("QT_DEBUG_SETTINGS")) {
+        return;
+    }
+    const auto error = errorMessageForSettings(settings);
+    if (error.isEmpty()) {
+        std::cerr << "Saved/synced settings to " << settings.fileName().toStdString() << '\n';
+    } else {
+        std::cerr << "Unable to save settings: " << error.toStdString() << '\n';
+    }
 }
 
 /*!
