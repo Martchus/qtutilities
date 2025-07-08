@@ -83,6 +83,18 @@ foreach (MODULE ${KF_MODULES})
     use_qt_module(PREFIX "${KF_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
 endforeach ()
 
+# remove modules which are not used after all from META_PUBLIC_…_MODULES
+foreach (MODULE ${META_PUBLIC_QT_MODULES})
+    if (NOT "${MODULE}" IN_LIST QT_MODULES)
+        list(REMOVE_ITEM META_PUBLIC_QT_MODULES "${MODULE}")
+    endif ()
+endforeach ()
+foreach (MODULE ${META_PUBLIC_KF_MODULES})
+    if (NOT "${MODULE}" IN_LIST KF_MODULES)
+        list(REMOVE_ITEM META_PUBLIC_KF_MODULES "${MODULE}")
+    endif ()
+endforeach ()
+
 # hacks for using static Qt 5 via "StaticQt5" prefix: find regular Qt5Core module as well so Qt version is defined and use
 # regular Qt5LinguistTools module and regular qmake target
 if (QT_PACKAGE_PREFIX STREQUAL "StaticQt5")
