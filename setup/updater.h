@@ -265,7 +265,7 @@ class QT_UTILITIES_EXPORT VerificationErrorMessageBox : public QMessageBox {
 
 public:
     explicit VerificationErrorMessageBox();
-    ~VerificationErrorMessageBox();
+    ~VerificationErrorMessageBox() override;
 
 public Q_SLOTS:
     int execForError(QString &errorMessage, const QString &explanation = QString());
