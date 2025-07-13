@@ -1,5 +1,9 @@
 #include "./updater.h"
 
+#if defined(QT_UTILITIES_GUI_QTWIDGETS) && defined(QT_UTILITIES_SETUP_TOOLS_ENABLED)
+#include "../settingsdialog/optioncategory.h"
+#endif
+
 #include "resources/config.h"
 
 #include <QSettings>
@@ -1288,6 +1292,36 @@ void VerificationErrorMessageBox::openForError(const QString &errorMessage, cons
     Q_UNUSED(errorMessage)
     Q_UNUSED(explanation)
 #endif
+}
+
+struct UpdateDialogPrivate {
+    UpdateOptionPage *updateOptionPage = nullptr;
+};
+
+UpdateDialog::UpdateDialog(QWidget *parent)
+    : SettingsDialog(parent)
+    , m_p(std::make_unique<UpdateDialogPrivate>())
+{
+    auto *const category = new OptionCategory;
+    m_p->updateOptionPage = new UpdateOptionPage(UpdateHandler::mainInstance(), this);
+    category->assignPages({ m_p->updateOptionPage });
+    setWindowTitle(m_p->updateOptionPage->widget()->windowTitle());
+    setTabBarAlwaysVisible(false);
+    setSingleCategory(category);
+}
+
+UpdateDialog::~UpdateDialog()
+{
+}
+
+UpdateOptionPage *UpdateDialog::page()
+{
+    return m_p->updateOptionPage;
+}
+
+const UpdateOptionPage *UpdateDialog::page() const
+{
+    return m_p->updateOptionPage;
 }
 
 #endif

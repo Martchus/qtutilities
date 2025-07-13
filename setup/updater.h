@@ -5,6 +5,7 @@
 
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
 #include "../settingsdialog/optionpage.h"
+#include "../settingsdialog/settingsdialog.h"
 #endif
 
 #include <c++utilities/chrono/datetime.h>
@@ -35,6 +36,7 @@ struct UpdateNotifierPrivate;
 struct UpdaterPrivate;
 struct UpdateHandlerPrivate;
 struct UpdateOptionPagePrivate;
+struct UpdateDialogPrivate;
 /// \endcond
 
 /// \brief The UpdateNotifier class allows checking for new updates.
@@ -260,6 +262,9 @@ void updateLatestVersion(bool inProgress = false);
 std::unique_ptr<UpdateOptionPagePrivate> m_p;
 END_DECLARE_OPTION_PAGE
 
+/// \brief The VerificationErrorMessageBox class provides message box for showing signature validation errors during updates.
+/// \remarks This class is experimental and might be changed in incompatible ways (API and ABI wise) or completely removed
+/// in further minor/patch releases.
 class QT_UTILITIES_EXPORT VerificationErrorMessageBox : public QMessageBox {
     Q_OBJECT
 
@@ -270,6 +275,22 @@ public:
 public Q_SLOTS:
     int execForError(QString &errorMessage, const QString &explanation = QString());
     void openForError(const QString &errorMessage, const QString &explanation = QString());
+};
+
+/// \brief The UpdateDialog class provides a settings dialog to manage automatic updates for applications using Qt Widgets.
+/// \remarks This class is experimental and might be changed in incompatible ways (API and ABI wise) or completely removed
+/// in further minor/patch releases.
+class QT_UTILITIES_EXPORT UpdateDialog : public SettingsDialog {
+    Q_OBJECT
+
+public:
+    explicit UpdateDialog(QWidget *parent = nullptr);
+    ~UpdateDialog() override;
+    UpdateOptionPage *page();
+    const UpdateOptionPage *page() const;
+
+private:
+    std::unique_ptr<UpdateDialogPrivate> m_p;
 };
 
 #endif
