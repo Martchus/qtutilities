@@ -58,8 +58,6 @@ public:
     }
 };
 } // namespace Ui
-
-// namespace Ui
 } // namespace QtUtilities
 #endif
 #endif
