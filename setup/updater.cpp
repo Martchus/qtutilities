@@ -1,6 +1,6 @@
 #include "./updater.h"
 
-#if defined(QT_UTILITIES_GUI_QTWIDGETS) && defined(QT_UTILITIES_SETUP_TOOLS_ENABLED)
+#if defined(QT_UTILITIES_GUI_QTWIDGETS)
 #include "../settingsdialog/optioncategory.h"
 #endif
 
