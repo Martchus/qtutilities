@@ -1154,6 +1154,11 @@ UpdateOptionPage::~UpdateOptionPage()
 void UpdateOptionPage::setRestartHandler(std::function<void()> &&handler)
 {
     m_p->restartHandler = std::move(handler);
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    if (ui() && m_p->restartHandler) {
+        QObject::connect(ui()->restartPushButton, &QPushButton::clicked, widget(), m_p->restartHandler);
+    }
+#endif
 }
 
 bool UpdateOptionPage::apply()
@@ -1192,7 +1197,9 @@ QWidget *UpdateOptionPage::setupWidget()
         QObject::connect(ui()->checkNowPushButton, &QPushButton::clicked, m_p->updateHandler->notifier(), &UpdateNotifier::checkForUpdate);
         QObject::connect(ui()->updatePushButton, &QPushButton::clicked, m_p->updateHandler, &UpdateHandler::performUpdate);
         QObject::connect(ui()->abortUpdatePushButton, &QPushButton::clicked, m_p->updateHandler->updater(), &Updater::abortUpdate);
-        QObject::connect(ui()->restartPushButton, &QPushButton::clicked, widget, m_p->restartHandler);
+        if (m_p->restartHandler) {
+            QObject::connect(ui()->restartPushButton, &QPushButton::clicked, widget, m_p->restartHandler);
+        }
         QObject::connect(
             m_p->updateHandler->notifier(), &UpdateNotifier::inProgressChanged, widget, [this](bool inProgress) { updateLatestVersion(inProgress); });
         QObject::connect(m_p->updateHandler->updater(), &Updater::inProgressChanged, widget, [this](bool inProgress) {
