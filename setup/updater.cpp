@@ -1101,27 +1101,6 @@ void UpdateHandler::scheduleNextUpdateCheck()
 }
 #endif
 
-#ifdef QT_UTILITIES_GUI_QTWIDGETS
-struct UpdateOptionPagePrivate {
-    UpdateOptionPagePrivate(UpdateHandler *updateHandler)
-        : updateHandler(updateHandler)
-    {
-    }
-    UpdateHandler *updateHandler = nullptr;
-    std::function<void()> restartHandler;
-};
-
-UpdateOptionPage::UpdateOptionPage(UpdateHandler *updateHandler, QWidget *parentWidget)
-    : UpdateOptionPageBase(parentWidget)
-#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
-    , m_p(std::make_unique<UpdateOptionPagePrivate>(updateHandler))
-#endif
-{
-#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
-    Q_UNUSED(updateHandler)
-#endif
-}
-
 void RestartHandler::requestRestart()
 {
     m_restartRequested = true;
@@ -1142,6 +1121,27 @@ void RestartHandler::respawnIfRestartRequested()
     process->setProgram(QCoreApplication::applicationFilePath());
     process->setArguments(args);
     process->startDetached();
+#endif
+}
+
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
+struct UpdateOptionPagePrivate {
+    UpdateOptionPagePrivate(UpdateHandler *updateHandler)
+        : updateHandler(updateHandler)
+    {
+    }
+    UpdateHandler *updateHandler = nullptr;
+    std::function<void()> restartHandler;
+};
+
+UpdateOptionPage::UpdateOptionPage(UpdateHandler *updateHandler, QWidget *parentWidget)
+    : UpdateOptionPageBase(parentWidget)
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    , m_p(std::make_unique<UpdateOptionPagePrivate>(updateHandler))
+#endif
+{
+#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    Q_UNUSED(updateHandler)
 #endif
 }
 
