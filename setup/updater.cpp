@@ -15,6 +15,7 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QEventLoop>
 #include <QFile>
 #include <QFileInfo>
 #include <QFutureWatcher>
@@ -24,6 +25,7 @@
 #include <QJsonParseError>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QProcess>
 #include <QRegularExpression>
 #include <QStringBuilder>
 #include <QVersionNumber>
@@ -56,6 +58,8 @@ public:
     }
 };
 } // namespace Ui
+
+// namespace Ui
 } // namespace QtUtilities
 #endif
 #endif
@@ -1118,6 +1122,29 @@ UpdateOptionPage::UpdateOptionPage(UpdateHandler *updateHandler, QWidget *parent
 #endif
 }
 
+void RestartHandler::requestRestart()
+{
+    m_restartRequested = true;
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    QCoreApplication::quit();
+#endif
+}
+
+void RestartHandler::respawnIfRestartRequested()
+{
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    if (!m_restartRequested) {
+        return;
+    }
+    auto *const process = new QProcess(QCoreApplication::instance());
+    auto args = QCoreApplication::arguments();
+    args.removeFirst();
+    process->setProgram(QCoreApplication::applicationFilePath());
+    process->setArguments(args);
+    process->startDetached();
+#endif
+}
+
 UpdateOptionPage::~UpdateOptionPage()
 {
 }
@@ -1219,6 +1246,49 @@ void UpdateOptionPage::updateLatestVersion(bool)
                             "QtUtilities::UpdateOptionPage", "new version available but no build for the current platform present yet"))
             : (QStringLiteral("<a href=\"") % downloadUrlEscaped % QStringLiteral("\">") % downloadUrlEscaped % QStringLiteral("</a>")));
     ui()->updatePushButton->setDisabled(downloadUrl.isEmpty());
+#endif
+}
+
+VerificationErrorMessageBox::VerificationErrorMessageBox()
+{
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    setWindowTitle(QCoreApplication::applicationName());
+    setStandardButtons(QMessageBox::Cancel | QMessageBox::Ignore);
+    setDefaultButton(QMessageBox::Cancel);
+    setIcon(QMessageBox::Critical);
+#endif
+}
+
+VerificationErrorMessageBox::~VerificationErrorMessageBox()
+{
+}
+
+int VerificationErrorMessageBox::execForError(QString &errorMessage, const QString &explanation)
+{
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    auto loop = QEventLoop();
+    QObject::connect(this, &QDialog::finished, &loop, &QEventLoop::exit);
+    QMetaObject::invokeMethod(this, "openForError", Qt::QueuedConnection, Q_ARG(QString, errorMessage), Q_ARG(QString, explanation));
+    auto res = loop.exec();
+    if (res == QMessageBox::Ignore) {
+        errorMessage.clear();
+    }
+    return res;
+#else
+    Q_UNUSED(errorMessage)
+    Q_UNUSED(explanation)
+    return 0;
+#endif
+}
+
+void VerificationErrorMessageBox::openForError(const QString &errorMessage, const QString &explanation)
+{
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    setText(tr("<p>The signature of the downloaded executable could not be verified: %1</p>").arg(errorMessage) + explanation);
+    open();
+#else
+    Q_UNUSED(errorMessage)
+    Q_UNUSED(explanation)
 #endif
 }
 

@@ -15,7 +15,11 @@
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
 #include <QNetworkRequest>
 #endif
+#ifdef QT_UTILITIES_GUI_QTWIDGETS
+#include <QMessageBox>
+#endif
 
+#include <atomic>
 #include <memory>
 
 QT_FORWARD_DECLARE_CLASS(QJsonParseError)
@@ -212,6 +216,34 @@ inline void UpdateHandler::setMainInstance(UpdateHandler *mainInstance)
     s_mainInstance = mainInstance;
 }
 
+/// \brief The RestartHandler class allows quitting and respawning the application if a restart is requested.
+/// \remarks This class is experimental and might be changed in incompatible ways (API and ABI wise) or completely removed
+/// in further minor/patch releases.
+class QT_UTILITIES_EXPORT RestartHandler {
+public:
+    explicit RestartHandler()
+        : m_restartRequested(false)
+    {
+    }
+    bool isRestartRequested()
+    {
+        return m_restartRequested;
+    }
+    void requestRestart();
+    void reset()
+    {
+        m_restartRequested = false;
+    }
+    void respawnIfRestartRequested();
+    std::function<void()> requester()
+    {
+        return [this] { requestRestart(); };
+    }
+
+private:
+    std::atomic_bool m_restartRequested;
+};
+
 #ifdef QT_UTILITIES_GUI_QTWIDGETS
 /// \brief The UpdateOptionPage class provides a settings page to manage automatic updates for applications using Qt Widgets.
 /// \remarks This class is experimental and might be changed in incompatible ways (API and ABI wise) or completely removed
@@ -227,6 +259,18 @@ DECLARE_SETUP_WIDGETS
 void updateLatestVersion(bool inProgress = false);
 std::unique_ptr<UpdateOptionPagePrivate> m_p;
 END_DECLARE_OPTION_PAGE
+
+class QT_UTILITIES_EXPORT VerificationErrorMessageBox : public QMessageBox {
+    Q_OBJECT
+
+public:
+    explicit VerificationErrorMessageBox();
+    ~VerificationErrorMessageBox();
+
+public Q_SLOTS:
+    int execForError(QString &errorMessage, const QString &explanation = QString());
+    void openForError(const QString &errorMessage, const QString &explanation = QString());
+};
 
 #endif
 
