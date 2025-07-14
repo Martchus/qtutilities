@@ -5,6 +5,7 @@
 #include <c++utilities/application/argumentparser.h>
 #include <c++utilities/conversion/conversionexception.h>
 #include <c++utilities/conversion/stringconversion.h>
+#include <c++utilities/io/misc.h>
 
 #include <QEventLoop>
 #include <QNetworkAccessManager>
@@ -23,7 +24,8 @@ class SetupTests : public QObject {
 
 private Q_SLOTS:
     void initTestCase();
-    void testUpdateNotifier();
+    void testUpdateNotifierReleaseChecking();
+    void testUpdateNotifierReleaseDistinction();
 
 private:
     CppUtilities::TestApplication m_app;
@@ -49,7 +51,7 @@ void SetupTests::initTestCase()
     }
 }
 
-void SetupTests::testUpdateNotifier()
+void SetupTests::testUpdateNotifierReleaseChecking()
 {
     auto settings = QSettings();
     auto networkAccessManager = QNetworkAccessManager();
@@ -101,6 +103,35 @@ void SetupTests::testUpdateNotifier()
     QVERIFY2(!newVersionFromSignal.isEmpty(), "updateAvailable() was emitted with non-empty version");
     QCOMPARE(updateNotifier.newVersion(), newVersionFromSignal);
     QVERIFY2(!QVersionNumber::fromString(newVersionFromSignal).isNull(), "version is parsable");
+}
+
+void SetupTests::testUpdateNotifierReleaseDistinction()
+{
+    auto settings = QSettings();
+    auto updateNotifier = UpdateNotifier();
+    if (!updateNotifier.isSupported()) {
+        qDebug() << "skipping: UpdateNotifier() is not supported";
+        return;
+    }
+    using namespace CppUtilities;
+    const auto jsonData = QByteArray::fromStdString(readFile(testFilePath("setup/releases.json")));
+
+    updateNotifier.supplyNewReleaseData(jsonData);
+    QCOMPARE(updateNotifier.error(), QString());
+    QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.7.7"));
+    QVERIFY2(updateNotifier.downloadUrl().path().contains(QStringLiteral("v1.7.7/")), "download URL for expected version");
+
+    updateNotifier.setFlags(UpdateCheckFlags::IncludePreReleases);
+    updateNotifier.supplyNewReleaseData(jsonData);
+    QCOMPARE(updateNotifier.error(), QString());
+    QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.7.7-rc1"));
+    QCOMPARE(updateNotifier.downloadUrl(), QUrl());
+
+    updateNotifier.setFlags(UpdateCheckFlags::IncludeDrafts | UpdateCheckFlags::IncludePreReleases);
+    updateNotifier.supplyNewReleaseData(jsonData);
+    QCOMPARE(updateNotifier.error(), QString());
+    QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.8.0"));
+    QCOMPARE(updateNotifier.downloadUrl(), QUrl());
 }
 
 QTEST_MAIN(SetupTests)

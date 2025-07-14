@@ -9,6 +9,7 @@
 #endif
 
 #include <c++utilities/chrono/datetime.h>
+#include <c++utilities/misc/flagenumclass.h>
 
 #include <QObject>
 #include <QUrl>
@@ -39,6 +40,19 @@ struct UpdateOptionPagePrivate;
 struct UpdateDialogPrivate;
 /// \endcond
 
+enum class UpdateCheckFlags : quint64 {
+    None = 0,
+    IncludePreReleases = (1 << 0),
+    IncludeDrafts = (1 << 1),
+    Default = None,
+};
+
+} // namespace QtUtilities
+
+CPP_UTILITIES_MARK_FLAG_ENUM_CLASS(QtUtilities, QtUtilities::UpdateCheckFlags);
+
+namespace QtUtilities {
+
 /// \brief The UpdateNotifier class allows checking for new updates.
 /// \remarks This class is experimental and might be changed in incompatible ways (API and ABI wise) or completely removed
 /// in further minor/patch releases.
@@ -61,6 +75,8 @@ public:
     bool isSupported() const;
     bool isInProgress() const;
     bool isUpdateAvailable() const;
+    UpdateCheckFlags flags() const;
+    void setFlags(UpdateCheckFlags flags);
     const QString &executableName() const;
     const QString &newVersion() const;
     const QString &latestVersion() const;
@@ -80,6 +96,7 @@ public:
 public Q_SLOTS:
     void checkForUpdate();
     void resetUpdateInfo();
+    void supplyNewReleaseData(const QByteArray &data);
 
 Q_SIGNALS:
     void inProgressChanged(bool inProgress);
@@ -89,7 +106,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void lastCheckNow() const;
     void setError(const QString &context, QNetworkReply *reply);
-    void setError(const QString &context, const QJsonParseError &jsonError, const QByteArray &response, QNetworkReply *reply);
+    void setError(const QString &context, const QJsonParseError &jsonError, const QByteArray &response);
     void readReleases();
     void queryRelease(const QUrl &releaseUrl);
     void readRelease();
@@ -195,6 +212,7 @@ public:
 public Q_SLOTS:
     void applySettings();
     void performUpdate();
+    void saveNotifierState();
 
 private Q_SLOTS:
     void handleUpdateCheckDone();

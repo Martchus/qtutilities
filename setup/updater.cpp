@@ -98,12 +98,20 @@ public:
 
 namespace QtUtilities {
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
+using VersionSuffixIndex = qsizetype;
+#else
+using VersionSuffixIndex = int;
+#endif
+
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
 struct UpdateNotifierPrivate {
     QNetworkAccessManager *nm = nullptr;
     CppUtilities::DateTime lastCheck;
+    UpdateCheckFlags flags = UpdateCheckFlags::Default;
     QNetworkRequest::CacheLoadControl cacheLoadControl = QNetworkRequest::PreferNetwork;
     QVersionNumber currentVersion = QVersionNumber();
+    QString currentVersionSuffix = QString();
     QRegularExpression gitHubRegex = QRegularExpression(QStringLiteral(".*/github.com/([^/]+)/([^/]+)(/.*)?"));
     QRegularExpression gitHubRegex2 = QRegularExpression(QStringLiteral(".*/([^/.]+)\\.github.io/([^/]+)(/.*)?"));
     QRegularExpression assetRegex = QRegularExpression();
@@ -145,10 +153,13 @@ UpdateNotifier::UpdateNotifier(QObject *parent)
     if (gitHubOrga.isNull() || gitHubRepo.isNull()) {
         return;
     }
+    const auto currentVersion = QString::fromUtf8(appInfo.version);
+    auto suffixIndex = VersionSuffixIndex(-1);
     m_p->executableName = gitHubRepo + QT_UTILITIES_VERSION_SUFFIX;
     m_p->releasesUrl
         = QStringLiteral("https://api.github.com/repos/") % gitHubOrga % QChar('/') % gitHubRepo % QStringLiteral("/releases?per_page=25");
-    m_p->currentVersion = QVersionNumber::fromString(QLatin1String(appInfo.version));
+    m_p->currentVersion = QVersionNumber::fromString(currentVersion, &suffixIndex);
+    m_p->currentVersionSuffix = suffixIndex >= 0 ? currentVersion.mid(suffixIndex) : QString();
 #ifdef QT_UTILITIES_DOWNLOAD_REGEX
     m_p->assetRegex = QRegularExpression(m_p->executableName + QStringLiteral(QT_UTILITIES_DOWNLOAD_REGEX "\\..+"));
 #endif
@@ -194,6 +205,24 @@ bool UpdateNotifier::isUpdateAvailable() const
     return false;
 #else
     return m_p->updateAvailable;
+#endif
+}
+
+UpdateCheckFlags UpdateNotifier::flags() const
+{
+#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    return UpdateCheckFlags::None;
+#else
+    return m_p->flags;
+#endif
+}
+
+void UpdateNotifier::setFlags(UpdateCheckFlags flags)
+{
+#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    Q_UNUSED(flags)
+#else
+    m_p->flags = flags;
 #endif
 }
 
@@ -282,6 +311,7 @@ void UpdateNotifier::restore(QSettings *settings)
     m_p->downloadUrl = settings->value("downloadUrl").toUrl();
     m_p->signatureUrl = settings->value("signatureUrl").toUrl();
     m_p->lastCheck = CppUtilities::DateTime(settings->value("lastCheck").toULongLong());
+    m_p->flags = static_cast<UpdateCheckFlags>(settings->value("flags").toULongLong());
     settings->endGroup();
 #endif
 }
@@ -297,6 +327,7 @@ void UpdateNotifier::save(QSettings *settings)
     settings->setValue("downloadUrl", m_p->downloadUrl);
     settings->setValue("signatureUrl", m_p->signatureUrl);
     settings->setValue("lastCheck", static_cast<qulonglong>(m_p->lastCheck.ticks()));
+    settings->setValue("flags", static_cast<qulonglong>(m_p->flags));
     settings->endGroup();
 #endif
 }
@@ -350,7 +381,7 @@ void UpdateNotifier::setError(const QString &context, QNetworkReply *reply)
 #endif
 }
 
-void UpdateNotifier::setError(const QString &context, const QJsonParseError &jsonError, const QByteArray &response, QNetworkReply *)
+void UpdateNotifier::setError(const QString &context, const QJsonParseError &jsonError, const QByteArray &response)
 {
 #ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
     Q_UNUSED(context)
@@ -402,6 +433,94 @@ void UpdateNotifier::lastCheckNow() const
 #endif
 }
 
+/// \cond
+bool isNewer(const QVersionNumber &lhs, const QString &lhsSuffix, const QVersionNumber &rhs, const QString &rhsSuffix)
+{
+    const auto cmp = QVersionNumber::compare(lhs, rhs);
+    if (cmp > 0) {
+        return true; // lhs is newer
+    } else if (cmp < 0) {
+        return false; // rhs is newer
+    }
+    if (!lhsSuffix.isEmpty() && rhsSuffix.isEmpty()) {
+        return true; // lhs is pre-release and rhs is regular release, so lhs is newer
+    }
+    if (lhsSuffix.isEmpty() && !rhsSuffix.isEmpty()) {
+        return false; // lhs is regular release and rhs is pre-release, so rhs is newer
+    }
+    // compare pre-release suffix
+    return lhsSuffix > rhsSuffix;
+}
+/// \endcond
+
+void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
+{
+#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    Q_UNUSED(data)
+#else
+    // parse JSON
+    auto jsonError = QJsonParseError();
+    const auto replyDoc = QJsonDocument::fromJson(data, &jsonError);
+    if (jsonError.error != QJsonParseError::NoError) {
+        setError(tr("Unable to parse releases: "), jsonError, data);
+        return;
+    }
+    resetUpdateInfo();
+#if !defined(QT_JSON_READONLY)
+    if (m_p->verbose) {
+        qDebug().noquote() << "Update check: found releases: " << QString::fromUtf8(replyDoc.toJson(QJsonDocument::Indented));
+    }
+#endif
+    const auto replyArray = replyDoc.array();
+    const auto skipPreReleases = !(m_p->flags && UpdateCheckFlags::IncludePreReleases);
+    const auto skipDrafts = !(m_p->flags && UpdateCheckFlags::IncludeDrafts);
+    auto latestVersionFound = QVersionNumber();
+    auto latestVersionSuffix = QString();
+    auto latestVersionAsset = QJsonValue();
+    for (const auto &releaseInfoVal : replyArray) {
+        const auto releaseInfo = releaseInfoVal.toObject();
+        const auto tag = releaseInfo.value(QLatin1String("tag_name")).toString();
+        if ((skipPreReleases && releaseInfo.value(QLatin1String("prerelease")).toBool())
+            || (skipDrafts && releaseInfo.value(QLatin1String("draft")).toBool())) {
+            qDebug() << "Update check: skipping prerelease/draft: " << tag;
+            continue;
+        }
+        auto suffixIndex = VersionSuffixIndex(-1);
+        const auto versionStr = tag.startsWith(QChar('v')) ? tag.mid(1) : tag;
+        const auto version = QVersionNumber::fromString(versionStr, &suffixIndex);
+        const auto suffix = suffixIndex >= 0 ? versionStr.mid(suffixIndex) : QString();
+        const auto assets = releaseInfo.value(QLatin1String("assets"));
+        // record the latest version found so far so the know the latest version even if older than the current version
+        if (latestVersionFound.isNull() || isNewer(version, suffix, latestVersionFound, latestVersionSuffix)) {
+            latestVersionFound = version;
+            latestVersionSuffix = suffix;
+            latestVersionAsset = assets;
+        }
+        // pick the first version that is newer than the current version assuming versions are sorted from new to old
+        if (!version.isNull() && isNewer(version, suffix, m_p->currentVersion, m_p->currentVersionSuffix)) {
+            m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
+            m_p->newVersion = version.toString() + suffix;
+            if (assets.isArray()) {
+                processAssets(assets.toArray(), true);
+                emit inProgressChanged(m_p->inProgress = false);
+            } else {
+                queryRelease(releaseInfo.value(QLatin1String("assets_url")).toString());
+            }
+            return;
+        }
+        if (m_p->verbose) {
+            qDebug() << "Update check: skipping release: " << tag;
+        }
+    }
+    m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
+    if (latestVersionAsset.isArray()) {
+        processAssets(latestVersionAsset.toArray(), false);
+    }
+    emit checkedForUpdate();
+    emit inProgressChanged(m_p->inProgress = false);
+#endif
+}
+
 void UpdateNotifier::readReleases()
 {
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
@@ -409,57 +528,7 @@ void UpdateNotifier::readReleases()
     reply->deleteLater();
     switch (reply->error()) {
     case QNetworkReply::NoError: {
-        // parse JSON
-        auto jsonError = QJsonParseError();
-        const auto response = reply->readAll();
-        const auto replyDoc = QJsonDocument::fromJson(response, &jsonError);
-        if (jsonError.error != QJsonParseError::NoError) {
-            setError(tr("Unable to parse releases: "), jsonError, response, reply);
-            return;
-        }
-        resetUpdateInfo();
-#if !defined(QT_JSON_READONLY)
-        if (m_p->verbose) {
-            qDebug().noquote() << "Update check: found releases: " << QString::fromUtf8(replyDoc.toJson(QJsonDocument::Indented));
-        }
-#endif
-        const auto replyArray = replyDoc.array();
-        auto latestVersionFound = QVersionNumber();
-        auto latestVersionAsset = QJsonValue();
-        for (const auto &releaseInfoVal : replyArray) {
-            const auto releaseInfo = releaseInfoVal.toObject();
-            const auto tag = releaseInfo.value(QLatin1String("tag_name")).toString();
-            if (releaseInfo.value(QLatin1String("prerelease")).toBool() || releaseInfo.value(QLatin1String("draft")).toBool()) {
-                qDebug() << "Update check: skipping prerelease/draft: " << tag;
-                continue;
-            }
-            const auto version = QVersionNumber::fromString(tag.startsWith(QChar('v')) ? tag.mid(1) : tag);
-            const auto assets = releaseInfo.value(QLatin1String("assets"));
-            if (latestVersionFound.isNull() || version > latestVersionFound) {
-                latestVersionFound = version;
-                latestVersionAsset = assets;
-            }
-            if (!version.isNull() && version > m_p->currentVersion) {
-                m_p->latestVersion = latestVersionFound.toString();
-                m_p->newVersion = version.toString();
-                if (assets.isArray()) {
-                    processAssets(assets.toArray(), true);
-                    emit inProgressChanged(m_p->inProgress = false);
-                } else {
-                    queryRelease(releaseInfo.value(QLatin1String("assets_url")).toString());
-                }
-                return;
-            }
-            if (m_p->verbose) {
-                qDebug() << "Update check: skipping release: " << tag;
-            }
-        }
-        m_p->latestVersion = latestVersionFound.toString();
-        if (latestVersionAsset.isArray()) {
-            processAssets(latestVersionAsset.toArray(), false);
-        }
-        emit checkedForUpdate();
-        emit inProgressChanged(m_p->inProgress = false);
+        supplyNewReleaseData(reply->readAll());
         break;
     }
     case QNetworkReply::OperationCanceledError:
@@ -495,7 +564,7 @@ void UpdateNotifier::readRelease()
         const auto response = reply->readAll();
         const auto replyDoc = QJsonDocument::fromJson(response, &jsonError);
         if (jsonError.error != QJsonParseError::NoError) {
-            setError(tr("Unable to parse release: "), jsonError, response, reply);
+            setError(tr("Unable to parse release: "), jsonError, response);
             return;
         }
 #if !defined(QT_JSON_READONLY)
@@ -1077,10 +1146,17 @@ void UpdateHandler::performUpdate()
         m_p->notifier.downloadUrl().toString(), m_p->considerSeparateSignature ? m_p->notifier.signatureUrl().toString() : QString());
 }
 
-void UpdateHandler::handleUpdateCheckDone()
+void UpdateHandler::saveNotifierState()
 {
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
     m_p->notifier.save(m_p->settings);
+#endif
+}
+
+void UpdateHandler::handleUpdateCheckDone()
+{
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    saveNotifierState();
     scheduleNextUpdateCheck();
 #endif
 }
@@ -1169,6 +1245,11 @@ bool UpdateOptionPage::apply()
     }
     m_p->updateHandler->setCheckInterval(UpdateHandler::CheckInterval{
         .duration = CppUtilities::TimeSpan::fromMinutes(ui()->checkIntervalSpinBox->value()), .enabled = ui()->enabledCheckBox->isChecked() });
+    auto flags = UpdateCheckFlags::None;
+    CppUtilities::modFlagEnum(flags, UpdateCheckFlags::IncludePreReleases, ui()->preReleasesCheckBox->isChecked());
+    CppUtilities::modFlagEnum(flags, UpdateCheckFlags::IncludeDrafts, ui()->draftsCheckBox->isChecked());
+    m_p->updateHandler->notifier()->setFlags(flags);
+    m_p->updateHandler->saveNotifierState();
 #endif
     return true;
 }
@@ -1182,6 +1263,9 @@ void UpdateOptionPage::reset()
     const auto &checkInterval = m_p->updateHandler->checkInterval();
     ui()->checkIntervalSpinBox->setValue(static_cast<int>(checkInterval.duration.totalMinutes()));
     ui()->enabledCheckBox->setChecked(checkInterval.enabled);
+    const auto flags = m_p->updateHandler->notifier()->flags();
+    ui()->preReleasesCheckBox->setChecked(flags && UpdateCheckFlags::IncludePreReleases);
+    ui()->draftsCheckBox->setChecked(flags && UpdateCheckFlags::IncludeDrafts);
 #endif
 }
 

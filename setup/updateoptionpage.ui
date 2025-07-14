@@ -14,36 +14,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="3" column="0">
-      <widget class="QLabel" name="latestVersionLabel">
-       <property name="text">
-        <string>Latest version</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="downloadLabel">
-       <property name="text">
-        <string>Download</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="versionInUseLabel">
-       <property name="text">
-        <string>Version in use</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="checkIntervalLabel">
        <property name="text">
@@ -54,37 +24,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QCheckBox" name="enabledCheckBox">
-       <property name="text">
-        <string>Check for new versions regularly</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <layout class="QHBoxLayout" name="latestVersionHorizontalLayout">
-       <item>
-        <widget class="QLabel" name="latestVersionValueLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>unknown</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="2" column="2">
+     <item row="4" column="2">
       <layout class="QHBoxLayout" name="versionInUseHorizontalLayout">
        <item>
         <widget class="QLabel" name="versionInUseValueLabel">
@@ -105,41 +45,44 @@
       </layout>
      </item>
      <item row="5" column="2">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="latestVersionHorizontalLayout">
        <item>
-        <widget class="QPushButton" name="checkNowPushButton">
-         <property name="text">
-          <string>Check for new version</string>
+        <widget class="QLabel" name="latestVersionValueLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="icon">
-          <iconset theme="view-refresh"/>
+         <property name="text">
+          <string>unknown</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="updatePushButton">
-         <property name="text">
-          <string>Update to latest version</string>
-         </property>
-         <property name="icon">
-          <iconset theme="install"/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
+     </item>
+     <item row="0" column="2">
+      <widget class="QCheckBox" name="enabledCheckBox">
+       <property name="text">
+        <string>Check for new versions regularly</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="downloadLabel">
+       <property name="text">
+        <string>Download</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
      <item row="1" column="2">
       <layout class="QHBoxLayout" name="checkIntervalHorizontalLayout">
@@ -183,7 +126,71 @@
        </item>
       </layout>
      </item>
-     <item row="4" column="2">
+     <item row="7" column="2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="checkNowPushButton">
+         <property name="text">
+          <string>Check for new version</string>
+         </property>
+         <property name="icon">
+          <iconset theme="view-refresh"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="updatePushButton">
+         <property name="text">
+          <string>Update to latest version</string>
+         </property>
+         <property name="icon">
+          <iconset theme="install"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="versionInUseLabel">
+       <property name="text">
+        <string>Version in use</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QCheckBox" name="preReleasesCheckBox">
+       <property name="text">
+        <string>Consider pre-releases</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="latestVersionLabel">
+       <property name="text">
+        <string>Latest version</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
       <widget class="QLabel" name="downloadUrlLabel">
        <property name="text">
         <string>unknown</string>
@@ -193,6 +200,23 @@
        </property>
        <property name="openExternalLinks">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="preReleasesLabel">
+       <property name="text">
+        <string>Pre-releases</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QCheckBox" name="draftsCheckBox">
+       <property name="text">
+        <string>Consider drafts</string>
        </property>
       </widget>
      </item>
