@@ -471,12 +471,14 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
         qDebug().noquote() << "Update check: found releases: " << QString::fromUtf8(replyDoc.toJson(QJsonDocument::Indented));
     }
 #endif
+    // determine the release with the highest version (within the current page)
     const auto replyArray = replyDoc.array();
     const auto skipPreReleases = !(m_p->flags && UpdateCheckFlags::IncludePreReleases);
     const auto skipDrafts = !(m_p->flags && UpdateCheckFlags::IncludeDrafts);
     auto latestVersionFound = QVersionNumber();
     auto latestVersionSuffix = QString();
-    auto latestVersionAsset = QJsonValue();
+    auto latestVersionAssets = QJsonValue();
+    auto latestVersionAssetsUrl = QString();
     for (const auto &releaseInfoVal : replyArray) {
         const auto releaseInfo = releaseInfoVal.toObject();
         const auto tag = releaseInfo.value(QLatin1String("tag_name")).toString();
@@ -489,32 +491,29 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
         const auto versionStr = tag.startsWith(QChar('v')) ? tag.mid(1) : tag;
         const auto version = QVersionNumber::fromString(versionStr, &suffixIndex);
         const auto suffix = suffixIndex >= 0 ? versionStr.mid(suffixIndex) : QString();
-        const auto assets = releaseInfo.value(QLatin1String("assets"));
-        // record the latest version found so far so the know the latest version even if older than the current version
         if (latestVersionFound.isNull() || isNewer(version, suffix, latestVersionFound, latestVersionSuffix)) {
             latestVersionFound = version;
             latestVersionSuffix = suffix;
-            latestVersionAsset = assets;
-        }
-        // pick the first version that is newer than the current version assuming versions are sorted from new to old
-        if (!version.isNull() && isNewer(version, suffix, m_p->currentVersion, m_p->currentVersionSuffix)) {
-            m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
-            m_p->newVersion = version.toString() + suffix;
-            if (assets.isArray()) {
-                processAssets(assets.toArray(), true);
-                emit inProgressChanged(m_p->inProgress = false);
-            } else {
-                queryRelease(releaseInfo.value(QLatin1String("assets_url")).toString());
-            }
-            return;
+            latestVersionAssets = releaseInfo.value(QLatin1String("assets"));
+            latestVersionAssetsUrl = releaseInfo.value(QLatin1String("assets_url")).toString();
         }
         if (m_p->verbose) {
             qDebug() << "Update check: skipping release: " << tag;
         }
     }
-    m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
-    if (latestVersionAsset.isArray()) {
-        processAssets(latestVersionAsset.toArray(), false);
+    if (!latestVersionFound.isNull()) {
+        m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
+    }
+    // process assets for latest version
+    const auto foundUpdate
+        = !latestVersionFound.isNull() && isNewer(latestVersionFound, latestVersionSuffix, m_p->currentVersion, m_p->currentVersionSuffix);
+    if (foundUpdate) {
+        m_p->newVersion = latestVersionFound.toString() + latestVersionSuffix;
+    }
+    if (latestVersionAssets.isArray()) {
+        return processAssets(latestVersionAssets.toArray(), foundUpdate);
+    } else if (foundUpdate) {
+        return queryRelease(latestVersionAssetsUrl);
     }
     emit checkedForUpdate();
     emit inProgressChanged(m_p->inProgress = false);
@@ -617,6 +616,7 @@ void UpdateNotifier::processAssets(const QJsonArray &assets, bool forUpdate)
         m_p->updateAvailable = !m_p->downloadUrl.isEmpty();
     }
     emit checkedForUpdate();
+    emit inProgressChanged(m_p->inProgress = false);
     if (m_p->updateAvailable) {
         emit updateAvailable(m_p->newVersion, m_p->additionalInfo);
     }
