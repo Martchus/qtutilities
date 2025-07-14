@@ -434,7 +434,7 @@ void UpdateNotifier::lastCheckNow() const
 }
 
 /// \cond
-bool isNewer(const QVersionNumber &lhs, const QString &lhsSuffix, const QVersionNumber &rhs, const QString &rhsSuffix)
+bool isVersionHigher(const QVersionNumber &lhs, const QString &lhsSuffix, const QVersionNumber &rhs, const QString &rhsSuffix)
 {
     const auto cmp = QVersionNumber::compare(lhs, rhs);
     if (cmp > 0) {
@@ -443,10 +443,10 @@ bool isNewer(const QVersionNumber &lhs, const QString &lhsSuffix, const QVersion
         return false; // rhs is newer
     }
     if (!lhsSuffix.isEmpty() && rhsSuffix.isEmpty()) {
-        return true; // lhs is pre-release and rhs is regular release, so lhs is newer
+        return false; // lhs is pre-release and rhs is regular release, so rhs is newer
     }
     if (lhsSuffix.isEmpty() && !rhsSuffix.isEmpty()) {
-        return false; // lhs is regular release and rhs is pre-release, so rhs is newer
+        return true; // lhs is regular release and rhs is pre-release, so lhs is newer
     }
     // compare pre-release suffix
     return lhsSuffix > rhsSuffix;
@@ -491,7 +491,7 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
         const auto versionStr = tag.startsWith(QChar('v')) ? tag.mid(1) : tag;
         const auto version = QVersionNumber::fromString(versionStr, &suffixIndex);
         const auto suffix = suffixIndex >= 0 ? versionStr.mid(suffixIndex) : QString();
-        if (latestVersionFound.isNull() || isNewer(version, suffix, latestVersionFound, latestVersionSuffix)) {
+        if (latestVersionFound.isNull() || isVersionHigher(version, suffix, latestVersionFound, latestVersionSuffix)) {
             latestVersionFound = version;
             latestVersionSuffix = suffix;
             latestVersionAssets = releaseInfo.value(QLatin1String("assets"));
@@ -506,7 +506,7 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
     }
     // process assets for latest version
     const auto foundUpdate
-        = !latestVersionFound.isNull() && isNewer(latestVersionFound, latestVersionSuffix, m_p->currentVersion, m_p->currentVersionSuffix);
+        = !latestVersionFound.isNull() && isVersionHigher(latestVersionFound, latestVersionSuffix, m_p->currentVersion, m_p->currentVersionSuffix);
     if (foundUpdate) {
         m_p->newVersion = latestVersionFound.toString() + latestVersionSuffix;
     }

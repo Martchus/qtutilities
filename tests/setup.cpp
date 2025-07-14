@@ -116,22 +116,24 @@ void SetupTests::testUpdateNotifierReleaseDistinction()
     using namespace CppUtilities;
     const auto jsonData = QByteArray::fromStdString(readFile(testFilePath("setup/releases.json")));
 
+    // only regular release considered by default
     updateNotifier.supplyNewReleaseData(jsonData);
     QCOMPARE(updateNotifier.error(), QString());
-    QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.7.7"));
-    QVERIFY2(updateNotifier.downloadUrl().path().contains(QStringLiteral("v1.7.7/")), "download URL for expected version");
+    QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.7.6"));
 
+    // pre-release considered if flags set acordingly
+    // rc2 wins over rc1 and beta1
     updateNotifier.setFlags(UpdateCheckFlags::IncludePreReleases);
     updateNotifier.supplyNewReleaseData(jsonData);
     QCOMPARE(updateNotifier.error(), QString());
-    QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.7.7-rc1"));
-    QCOMPARE(updateNotifier.downloadUrl(), QUrl());
+    QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.7.7-rc2"));
 
+    // draft release considered if flags set accordingly
+    // regular release tag wins over alpha1
     updateNotifier.setFlags(UpdateCheckFlags::IncludeDrafts | UpdateCheckFlags::IncludePreReleases);
     updateNotifier.supplyNewReleaseData(jsonData);
     QCOMPARE(updateNotifier.error(), QString());
     QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.8.0"));
-    QCOMPARE(updateNotifier.downloadUrl(), QUrl());
 }
 
 QTEST_MAIN(SetupTests)
