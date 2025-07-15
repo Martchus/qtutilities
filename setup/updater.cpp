@@ -572,7 +572,6 @@ void UpdateNotifier::readRelease()
         }
 #endif
         processAssets(replyDoc.object().value(QLatin1String("assets")).toArray(), true);
-        emit inProgressChanged(m_p->inProgress = false);
         break;
     }
     case QNetworkReply::OperationCanceledError:
