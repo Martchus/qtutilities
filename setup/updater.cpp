@@ -116,6 +116,7 @@ struct UpdateNotifierPrivate {
     QRegularExpression gitHubRegex2 = QRegularExpression(QStringLiteral(".*/([^/.]+)\\.github.io/([^/]+)(/.*)?"));
     QRegularExpression assetRegex = QRegularExpression();
     QString executableName;
+    QString previouslyFoundNewVersion;
     QString newVersion;
     QString latestVersion;
     QString additionalInfo;
@@ -616,7 +617,9 @@ void UpdateNotifier::processAssets(const QJsonArray &assets, bool forUpdate)
     }
     emit checkedForUpdate();
     emit inProgressChanged(m_p->inProgress = false);
-    if (m_p->updateAvailable) {
+    if (forUpdate && m_p->updateAvailable && m_p->newVersion != m_p->previouslyFoundNewVersion) {
+        // emit updateAvailable() only if we not have already previously emitted it for this version
+        m_p->previouslyFoundNewVersion = m_p->newVersion;
         emit updateAvailable(m_p->newVersion, m_p->additionalInfo);
     }
 #endif
