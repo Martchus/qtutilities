@@ -205,6 +205,7 @@ public:
     void setCheckInterval(CheckInterval checkInterval);
     bool isConsideringSeparateSignature() const;
     void setConsideringSeparateSignature(bool consideringSeparateSignature);
+    QString preCheck() const;
     static UpdateHandler *mainInstance();
     static void setMainInstance(UpdateHandler *mainInstance);
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED

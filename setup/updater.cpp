@@ -96,6 +96,10 @@ public:
 #endif
 #endif
 
+#if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0))
+#include <QNtfsPermissionCheckGuard>
+#endif
+
 namespace QtUtilities {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
@@ -1145,6 +1149,25 @@ void UpdateHandler::setConsideringSeparateSignature(bool consideringSeparateSign
     m_p->considerSeparateSignature = consideringSeparateSignature;
 }
 
+QString UpdateHandler::preCheck() const
+{
+    auto error = QString();
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    static const auto appDirPath = QCoreApplication::applicationDirPath();
+    if (appDirPath.isEmpty()) {
+        return tr("Unable to determine the application directory.");
+    }
+#if defined(Q_OS_WINDOWS) && (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0))
+    const auto permissionGuard = QNtfsPermissionCheckGuard();
+#endif
+    const auto dirInfo = QFileInfo(appDirPath);
+    if (!dirInfo.isWritable()) {
+        return tr("The directory where the executable is stored (%1) is not writable.").arg(appDirPath);
+    }
+#endif
+    return error;
+}
+
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
 void UpdateHandler::setCacheLoadControl(QNetworkRequest::CacheLoadControl cacheLoadControl)
 {
@@ -1300,7 +1323,16 @@ QWidget *UpdateOptionPage::setupWidget()
         ui()->releaseNotesPushButton->hide();
         updateLatestVersion();
         QObject::connect(ui()->checkNowPushButton, &QPushButton::clicked, m_p->updateHandler->notifier(), &UpdateNotifier::checkForUpdate);
-        QObject::connect(ui()->updatePushButton, &QPushButton::clicked, m_p->updateHandler, &UpdateHandler::performUpdate);
+        QObject::connect(ui()->updatePushButton, &QPushButton::clicked, widget, [this, widget] {
+            if (const auto preCheckError = m_p->updateHandler->preCheck(); preCheckError.isEmpty()
+                || QMessageBox::critical(widget, QCoreApplication::applicationName(),
+                       QCoreApplication::translate("QtGui::UpdateOptionPage", "<p>%1</p><p><strong>Try the update nevertheless?</strong></p>")
+                           .arg(preCheckError),
+                       QMessageBox::Yes | QMessageBox::No)
+                    == QMessageBox::Yes) {
+                m_p->updateHandler->performUpdate();
+            }
+        });
         QObject::connect(ui()->abortUpdatePushButton, &QPushButton::clicked, m_p->updateHandler->updater(), &Updater::abortUpdate);
         if (m_p->restartHandler) {
             QObject::connect(ui()->restartPushButton, &QPushButton::clicked, widget, m_p->restartHandler);
