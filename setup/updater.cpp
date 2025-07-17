@@ -1306,7 +1306,8 @@ QWidget *UpdateOptionPage::setupWidget()
         QObject::connect(ui()->releaseNotesPushButton, &QPushButton::clicked, widget, [this, widget] {
             const auto *const notifier = m_p->updateHandler->notifier();
             QMessageBox::information(widget, QCoreApplication::applicationName(),
-                QCoreApplication::translate("QtGui::UpdateOptionPage", "<strong>Release notes of %1:</strong><br>").arg(notifier->latestVersion())
+                QCoreApplication::translate("QtGui::UpdateOptionPage", "<strong>Release notes of version %1:</strong><br>")
+                        .arg(notifier->latestVersion())
                     + notifier->releaseNotes());
         });
         QObject::connect(

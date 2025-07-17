@@ -36,7 +36,12 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1312"/>
+        <location filename="../setup/updater.cpp" line="1309"/>
+        <source>&lt;strong&gt;Release notes of version %1:&lt;/strong&gt;&lt;br&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1338"/>
         <source>Updating</source>
         <translation type="unfinished"></translation>
     </message>
@@ -512,57 +517,57 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateNotifier</name>
     <message>
-        <location filename="../setup/updater.cpp" line="339"/>
+        <location filename="../setup/updater.cpp" line="353"/>
         <source>checking …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="343"/>
+        <location filename="../setup/updater.cpp" line="357"/>
         <source>unable to check: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="347"/>
+        <location filename="../setup/updater.cpp" line="361"/>
         <source>new version available: %1 (last checked: %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="349"/>
+        <location filename="../setup/updater.cpp" line="363"/>
         <source>no new version available, latest release is: %1 (last checked: %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="353"/>
+        <location filename="../setup/updater.cpp" line="367"/>
         <source>unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="391"/>
+        <location filename="../setup/updater.cpp" line="405"/>
         <source>at offset %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="403"/>
+        <location filename="../setup/updater.cpp" line="417"/>
         <source>This build of the application does not support checking for updates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="465"/>
+        <location filename="../setup/updater.cpp" line="480"/>
         <source>Unable to parse releases: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="537"/>
+        <location filename="../setup/updater.cpp" line="555"/>
         <source>Unable to request releases: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="566"/>
+        <location filename="../setup/updater.cpp" line="584"/>
         <source>Unable to parse release: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="582"/>
+        <location filename="../setup/updater.cpp" line="599"/>
         <source>Unable to request release: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -570,22 +575,22 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1316"/>
+        <location filename="../setup/updater.cpp" line="1342"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1318"/>
+        <location filename="../setup/updater.cpp" line="1344"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1337"/>
+        <location filename="../setup/updater.cpp" line="1363"/>
         <source>no new version available for download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1338"/>
+        <location filename="../setup/updater.cpp" line="1364"/>
         <source>new version available but no build for the current platform present yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -595,7 +600,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="186"/>
+        <location filename="../setup/updateoptionpage.ui" line="196"/>
         <source>Latest version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -605,7 +610,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="169"/>
+        <location filename="../setup/updateoptionpage.ui" line="179"/>
         <source>Version in use</source>
         <translation type="unfinished"></translation>
     </message>
@@ -622,7 +627,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updateoptionpage.ui" line="38"/>
         <location filename="../setup/updateoptionpage.ui" line="58"/>
-        <location filename="../setup/updateoptionpage.ui" line="196"/>
+        <location filename="../setup/updateoptionpage.ui" line="206"/>
         <source>unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -632,7 +637,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="144"/>
+        <location filename="../setup/updateoptionpage.ui" line="154"/>
         <source>Update to latest version</source>
         <translation type="unfinished"></translation>
     </message>
@@ -652,27 +657,32 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="179"/>
+        <location filename="../setup/updateoptionpage.ui" line="144"/>
+        <source>Show release notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="189"/>
         <source>Consider pre-releases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="209"/>
+        <location filename="../setup/updateoptionpage.ui" line="219"/>
         <source>Pre-releases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="219"/>
+        <location filename="../setup/updateoptionpage.ui" line="229"/>
         <source>Consider drafts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="272"/>
+        <location filename="../setup/updateoptionpage.ui" line="282"/>
         <source>Abort</source>
         <translation type="unfinished">取消</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="282"/>
+        <location filename="../setup/updateoptionpage.ui" line="292"/>
         <source>Restart to apply</source>
         <translation type="unfinished"></translation>
     </message>
@@ -680,102 +690,102 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::Updater</name>
     <message>
-        <location filename="../setup/updater.cpp" line="689"/>
+        <location filename="../setup/updater.cpp" line="708"/>
         <source>Update in progress …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="689"/>
+        <location filename="../setup/updater.cpp" line="708"/>
         <source>Update done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="689"/>
+        <location filename="../setup/updater.cpp" line="708"/>
         <source>Update failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="749"/>
+        <location filename="../setup/updater.cpp" line="768"/>
         <source>This build of the application does not support self-updating.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="806"/>
+        <location filename="../setup/updater.cpp" line="825"/>
         <source>Downloading %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="825"/>
+        <location filename="../setup/updater.cpp" line="844"/>
         <source>Waiting for signature download …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="856"/>
+        <location filename="../setup/updater.cpp" line="875"/>
         <source>Unable to download signature: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="864"/>
+        <location filename="../setup/updater.cpp" line="883"/>
         <source>Extracting …</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="880"/>
+        <location filename="../setup/updater.cpp" line="899"/>
         <source>Unable to download update: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="897"/>
+        <location filename="../setup/updater.cpp" line="916"/>
         <source>Unable to determine application path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="904"/>
+        <location filename="../setup/updater.cpp" line="923"/>
         <source>Extraction was cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="948"/>
+        <location filename="../setup/updater.cpp" line="967"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="953"/>
+        <location filename="../setup/updater.cpp" line="972"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="958"/>
+        <location filename="../setup/updater.cpp" line="977"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="967"/>
+        <location filename="../setup/updater.cpp" line="986"/>
         <source>Unable to open downloaded archive: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="977"/>
+        <location filename="../setup/updater.cpp" line="996"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="995"/>
+        <location filename="../setup/updater.cpp" line="1014"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1003"/>
+        <location filename="../setup/updater.cpp" line="1022"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1009"/>
+        <location filename="../setup/updater.cpp" line="1028"/>
         <source>Unable to find executable in downloaded archive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1027"/>
+        <location filename="../setup/updater.cpp" line="1046"/>
         <source>Update stored under: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -783,7 +793,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1380"/>
+        <location filename="../setup/updater.cpp" line="1407"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
