@@ -120,6 +120,7 @@ struct UpdateNotifierPrivate {
     QString newVersion;
     QString latestVersion;
     QString additionalInfo;
+    QString releaseNotes;
     QString error;
     QUrl downloadUrl;
     QUrl signatureUrl;
@@ -267,6 +268,16 @@ const QString &UpdateNotifier::additionalInfo() const
 #endif
 }
 
+const QString &UpdateNotifier::releaseNotes() const
+{
+#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    static const auto v = QString();
+    return v;
+#else
+    return m_p->releaseNotes;
+#endif
+}
+
 const QString &UpdateNotifier::error() const
 {
     return m_p->error;
@@ -309,6 +320,7 @@ void UpdateNotifier::restore(QSettings *settings)
     settings->beginGroup(QStringLiteral("updating"));
     m_p->newVersion = settings->value("newVersion").toString();
     m_p->latestVersion = settings->value("latestVersion").toString();
+    m_p->releaseNotes = settings->value("releaseNotes").toString();
     m_p->downloadUrl = settings->value("downloadUrl").toUrl();
     m_p->signatureUrl = settings->value("signatureUrl").toUrl();
     m_p->lastCheck = CppUtilities::DateTime(settings->value("lastCheck").toULongLong());
@@ -325,6 +337,7 @@ void UpdateNotifier::save(QSettings *settings)
     settings->beginGroup(QStringLiteral("updating"));
     settings->setValue("newVersion", m_p->newVersion);
     settings->setValue("latestVersion", m_p->latestVersion);
+    settings->setValue("releaseNotes", m_p->releaseNotes);
     settings->setValue("downloadUrl", m_p->downloadUrl);
     settings->setValue("signatureUrl", m_p->signatureUrl);
     settings->setValue("lastCheck", static_cast<qulonglong>(m_p->lastCheck.ticks()));
@@ -424,6 +437,7 @@ void UpdateNotifier::resetUpdateInfo()
     m_p->signatureUrl.clear();
     m_p->latestVersion.clear();
     m_p->newVersion.clear();
+    m_p->releaseNotes.clear();
 #endif
 }
 
@@ -480,6 +494,7 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
     auto latestVersionSuffix = QString();
     auto latestVersionAssets = QJsonValue();
     auto latestVersionAssetsUrl = QString();
+    auto latestVersionReleaseNotes = QString();
     for (const auto &releaseInfoVal : replyArray) {
         const auto releaseInfo = releaseInfoVal.toObject();
         const auto tag = releaseInfo.value(QLatin1String("tag_name")).toString();
@@ -497,6 +512,7 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
             latestVersionSuffix = suffix;
             latestVersionAssets = releaseInfo.value(QLatin1String("assets"));
             latestVersionAssetsUrl = releaseInfo.value(QLatin1String("assets_url")).toString();
+            latestVersionReleaseNotes = releaseInfo.value(QLatin1String("body")).toString();
         }
         if (m_p->verbose) {
             qDebug() << "Update check: skipping release: " << tag;
@@ -504,6 +520,7 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
     }
     if (!latestVersionFound.isNull()) {
         m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
+        m_p->releaseNotes = latestVersionReleaseNotes;
     }
     // process assets for latest version
     const auto foundUpdate
@@ -1274,11 +1291,11 @@ void UpdateOptionPage::reset()
 QWidget *UpdateOptionPage::setupWidget()
 {
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
-    // call base implementation first, so ui() is available
     if (m_p->updateHandler && m_p->updateHandler->notifier()->isSupported()) {
-        auto *const widget = UpdateOptionPageBase::setupWidget();
+        auto *const widget = UpdateOptionPageBase::setupWidget(); // call base implementation first, so ui() is available
         ui()->versionInUseValueLabel->setText(QString::fromUtf8(CppUtilities::applicationInfo.version));
         ui()->updateWidget->hide();
+        ui()->releaseNotesPushButton->hide();
         updateLatestVersion();
         QObject::connect(ui()->checkNowPushButton, &QPushButton::clicked, m_p->updateHandler->notifier(), &UpdateNotifier::checkForUpdate);
         QObject::connect(ui()->updatePushButton, &QPushButton::clicked, m_p->updateHandler, &UpdateHandler::performUpdate);
@@ -1286,6 +1303,12 @@ QWidget *UpdateOptionPage::setupWidget()
         if (m_p->restartHandler) {
             QObject::connect(ui()->restartPushButton, &QPushButton::clicked, widget, m_p->restartHandler);
         }
+        QObject::connect(ui()->releaseNotesPushButton, &QPushButton::clicked, widget, [this, widget] {
+            const auto *const notifier = m_p->updateHandler->notifier();
+            QMessageBox::information(widget, QCoreApplication::applicationName(),
+                QCoreApplication::translate("QtGui::UpdateOptionPage", "<strong>Release notes of %1:</strong><br>").arg(notifier->latestVersion())
+                    + notifier->releaseNotes());
+        });
         QObject::connect(
             m_p->updateHandler->notifier(), &UpdateNotifier::inProgressChanged, widget, [this](bool inProgress) { updateLatestVersion(inProgress); });
         QObject::connect(m_p->updateHandler->updater(), &Updater::inProgressChanged, widget, [this](bool inProgress) {
@@ -1341,6 +1364,7 @@ void UpdateOptionPage::updateLatestVersion(bool)
                             "QtUtilities::UpdateOptionPage", "new version available but no build for the current platform present yet"))
             : (QStringLiteral("<a href=\"") % downloadUrlEscaped % QStringLiteral("\">") % downloadUrlEscaped % QStringLiteral("</a>")));
     ui()->updatePushButton->setDisabled(downloadUrl.isEmpty());
+    ui()->releaseNotesPushButton->setHidden(notifier.releaseNotes().isEmpty());
 #endif
 }
 

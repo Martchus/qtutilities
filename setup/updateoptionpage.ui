@@ -139,6 +139,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="releaseNotesPushButton">
+         <property name="text">
+          <string>Show release notes</string>
+         </property>
+         <property name="icon">
+          <iconset theme="info"/>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="updatePushButton">
          <property name="text">
           <string>Update to latest version</string>

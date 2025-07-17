@@ -64,6 +64,7 @@ class QT_UTILITIES_EXPORT UpdateNotifier : public QObject {
     Q_PROPERTY(QString executableName READ executableName CONSTANT)
     Q_PROPERTY(QString newVersion READ newVersion)
     Q_PROPERTY(QString additionalInfo READ additionalInfo)
+    Q_PROPERTY(QString releaseNotes READ releaseNotes)
     Q_PROPERTY(QString error READ error)
     Q_PROPERTY(QUrl downloadUrl READ downloadUrl)
     Q_PROPERTY(QUrl signatureUrl READ signatureUrl)
@@ -81,6 +82,7 @@ public:
     const QString &newVersion() const;
     const QString &latestVersion() const;
     const QString &additionalInfo() const;
+    const QString &releaseNotes() const;
     const QString &error() const;
     const QUrl &downloadUrl() const;
     const QUrl &signatureUrl() const;
