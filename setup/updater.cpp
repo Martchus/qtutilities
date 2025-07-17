@@ -448,8 +448,9 @@ void UpdateNotifier::lastCheckNow() const
 #endif
 }
 
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
 /// \cond
-bool isVersionHigher(const QVersionNumber &lhs, const QString &lhsSuffix, const QVersionNumber &rhs, const QString &rhsSuffix)
+static bool isVersionHigher(const QVersionNumber &lhs, const QString &lhsSuffix, const QVersionNumber &rhs, const QString &rhsSuffix)
 {
     const auto cmp = QVersionNumber::compare(lhs, rhs);
     if (cmp > 0) {
@@ -467,6 +468,7 @@ bool isVersionHigher(const QVersionNumber &lhs, const QString &lhsSuffix, const 
     return lhsSuffix > rhsSuffix;
 }
 /// \endcond
+#endif
 
 void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
 {
