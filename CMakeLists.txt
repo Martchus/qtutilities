@@ -198,6 +198,7 @@ if (SETUP_TOOLS)
         SOURCE setup/updater.cpp setup/signature.cpp tests/setup.cpp
         APPEND
         PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SETUP_TOOLS_ENABLED)
+    list(APPEND REQUIRED_ICONS install info)
     list(APPEND WIDGETS_UI_FILES setup/updateoptionpage.ui)
     list(APPEND QT_TESTS setup)
     list(APPEND ADDITIONAL_QT_MODULES Network Concurrent)
