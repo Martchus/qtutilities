@@ -244,9 +244,9 @@ void makeHeading(QWidget *widget)
 
 /*!
  * \brief Updates the widget style.
- * \remarks Useful when dynamic properties are used in the stylesheet because
- *          the widget style does not update automatically when a property
- * changes.
+ * \remarks
+ * Useful when dynamic properties are used in the stylesheet because
+ * the widget style does not update automatically when a property changes.
  */
 void updateStyle(QWidget *widget)
 {
