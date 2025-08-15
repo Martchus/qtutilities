@@ -38,17 +38,17 @@
     <message>
         <location filename="../setup/updater.cpp" line="1329"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;仍然尝试更新？&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1343"/>
         <source>&lt;strong&gt;Release notes of version %1:&lt;/strong&gt;&lt;br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;strong&gt;版本 %1 的发布说明：&lt;/strong&gt;&lt;br&gt;</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1372"/>
         <source>Updating</source>
-        <translation type="unfinished"></translation>
+        <translation>更新</translation>
     </message>
 </context>
 <context>
@@ -524,12 +524,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1158"/>
         <source>Unable to determine the application directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法确定应用程序目录。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1165"/>
         <source>The directory where the executable is stored (%1) is not writable.</source>
-        <translation type="unfinished"></translation>
+        <translation>存储可执行文件的目录 （%1） 不可写。</translation>
     </message>
 </context>
 <context>
@@ -537,57 +537,57 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="357"/>
         <source>checking …</source>
-        <translation type="unfinished"></translation>
+        <translation>检查中 …</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="361"/>
         <source>unable to check: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无法检查： %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="365"/>
         <source>new version available: %1 (last checked: %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>可用的新版本： %1（上次检查时间： %2）</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="367"/>
         <source>no new version available, latest release is: %1 (last checked: %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>没有可用的新版本，最新版本为： %1（上次检查时间： %2）</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="371"/>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>未知</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="409"/>
         <source>at offset %1</source>
-        <translation type="unfinished"></translation>
+        <translation>偏移 %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="421"/>
         <source>This build of the application does not support checking for updates.</source>
-        <translation type="unfinished"></translation>
+        <translation>此应用程序版本不支持检查更新。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="486"/>
         <source>Unable to parse releases: </source>
-        <translation type="unfinished"></translation>
+        <translation>无法解析发行版本: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="561"/>
         <source>Unable to request releases: </source>
-        <translation type="unfinished"></translation>
+        <translation>无法请求发行版本: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="590"/>
         <source>Unable to parse release: </source>
-        <translation type="unfinished"></translation>
+        <translation>无法解析发行版本: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="605"/>
         <source>Unable to request release: </source>
-        <translation type="unfinished"></translation>
+        <translation>无法请求发行版本: </translation>
     </message>
 </context>
 <context>
@@ -595,114 +595,114 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1376"/>
         <source>Checking for updates is not supported on this platform.</source>
-        <translation type="unfinished"></translation>
+        <translation>此平台不支持检查更新。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1378"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 的此内部版本已禁用自动更新。不过，您可以通过包管理器以自动方式更新应用程序。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1397"/>
         <source>no new version available for download</source>
-        <translation type="unfinished"></translation>
+        <translation>没有新版本可供下载</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1398"/>
         <source>new version available but no build for the current platform present yet</source>
-        <translation type="unfinished"></translation>
+        <translation>新版本可用，但尚未为当前平台构建</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="6"/>
         <source>Updating</source>
-        <translation type="unfinished"></translation>
+        <translation>版本更新</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="196"/>
         <source>Latest version</source>
-        <translation type="unfinished"></translation>
+        <translation>最新版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="80"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>下载地址</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="179"/>
         <source>Version in use</source>
-        <translation type="unfinished"></translation>
+        <translation>当前版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="20"/>
         <source>Check interval</source>
-        <translation type="unfinished"></translation>
+        <translation>检查间隔</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="70"/>
         <source>Check for new versions regularly</source>
-        <translation type="unfinished"></translation>
+        <translation>定期检查新版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="38"/>
         <location filename="../setup/updateoptionpage.ui" line="58"/>
         <location filename="../setup/updateoptionpage.ui" line="206"/>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>未知</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="134"/>
         <source>Check for new version</source>
-        <translation type="unfinished"></translation>
+        <translation>检查新版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="154"/>
         <source>Update to latest version</source>
-        <translation type="unfinished"></translation>
+        <translation>更新到最新版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="101"/>
         <source>only on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>仅在启动时</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="104"/>
         <source> minutes</source>
-        <translation type="unfinished"></translation>
+        <translation> 分钟</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="107"/>
         <source>every </source>
-        <translation type="unfinished"></translation>
+        <translation>每隔 </translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="144"/>
         <source>Show release notes</source>
-        <translation type="unfinished"></translation>
+        <translation>显示发布说明</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="189"/>
         <source>Consider pre-releases</source>
-        <translation type="unfinished"></translation>
+        <translation>尝试预发布版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="219"/>
         <source>Pre-releases</source>
-        <translation type="unfinished"></translation>
+        <translation>预发布版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="229"/>
         <source>Consider drafts</source>
-        <translation type="unfinished"></translation>
+        <translation>尝试草案版本</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="282"/>
         <source>Abort</source>
-        <translation type="unfinished">取消</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="292"/>
         <source>Restart to apply</source>
-        <translation type="unfinished"></translation>
+        <translation>重新启动以应用</translation>
     </message>
 </context>
 <context>
@@ -710,102 +710,102 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="714"/>
         <source>Update in progress …</source>
-        <translation type="unfinished"></translation>
+        <translation>更新正在进行中...</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="714"/>
         <source>Update done</source>
-        <translation type="unfinished"></translation>
+        <translation>更新完成</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="714"/>
         <source>Update failed</source>
-        <translation type="unfinished"></translation>
+        <translation>更新失败</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="774"/>
         <source>This build of the application does not support self-updating.</source>
-        <translation type="unfinished"></translation>
+        <translation>此应用程序版本不支持自我更新。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="831"/>
         <source>Downloading %1</source>
-        <translation type="unfinished"></translation>
+        <translation>正在下载 %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="850"/>
         <source>Waiting for signature download …</source>
-        <translation type="unfinished"></translation>
+        <translation>正在等待签名下载 ...</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="881"/>
         <source>Unable to download signature: </source>
-        <translation type="unfinished"></translation>
+        <translation>无法下载签名: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="889"/>
         <source>Extracting …</source>
-        <translation type="unfinished"></translation>
+        <translation>提取 …</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="905"/>
         <source>Unable to download update: </source>
-        <translation type="unfinished"></translation>
+        <translation>无法下载更新: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="922"/>
         <source>Unable to determine application path.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法确定应用程序路径。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="929"/>
         <source>Extraction was cancelled.</source>
-        <translation type="unfinished"></translation>
+        <translation>提取已取消。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="973"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>无法在 “%1” 下创建新的可执行文件： %2</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="978"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>无法在 “%1” 下写入新的可执行文件： %2</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="983"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法在 &quot;%1&quot; 下生成新的可执行二进制文件。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="992"/>
         <source>Unable to open downloaded archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开下载的文档： %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1002"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无法验证下载的二进制文件是否有效： %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1020"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>无法将当前可执行文件移动到 &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1028"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>无法将新的可执行文件 “%1” 重命名为 &quot;%2&quot;: %3</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1034"/>
         <source>Unable to find executable in downloaded archive.</source>
-        <translation type="unfinished"></translation>
+        <translation>在下载的文档中找不到可执行文件。</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1052"/>
         <source>Update stored under: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>更新存储在：%1</translation>
     </message>
 </context>
 <context>
@@ -813,7 +813,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1441"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;无法验证下载的可执行文件的签名：%1&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
