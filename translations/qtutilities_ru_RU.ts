@@ -36,17 +36,19 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1329"/>
+        <location filename="../setup/updater.cpp" line="1346"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1343"/>
-        <source>&lt;strong&gt;Release notes of version %1:&lt;/strong&gt;&lt;br&gt;</source>
+        <location filename="../setup/updater.cpp" line="1319"/>
+        <source>**Release notes of version %1:**
+
+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1372"/>
+        <location filename="../setup/updater.cpp" line="1395"/>
         <source>Updating</source>
         <translation type="unfinished"></translation>
     </message>
@@ -592,22 +594,22 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1376"/>
+        <location filename="../setup/updater.cpp" line="1399"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1378"/>
+        <location filename="../setup/updater.cpp" line="1401"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1397"/>
+        <location filename="../setup/updater.cpp" line="1420"/>
         <source>no new version available for download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1398"/>
+        <location filename="../setup/updater.cpp" line="1421"/>
         <source>new version available but no build for the current platform present yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -810,7 +812,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1441"/>
+        <location filename="../setup/updater.cpp" line="1464"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>

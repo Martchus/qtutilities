@@ -36,17 +36,25 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1329"/>
+        <location filename="../setup/updater.cpp" line="1346"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Update trotzdem versuchen?&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1343"/>
-        <source>&lt;strong&gt;Release notes of version %1:&lt;/strong&gt;&lt;br&gt;</source>
-        <translation>&lt;strong&gt;Hinweise zu Version %1:&lt;/strong&gt;&lt;br&gt;</translation>
+        <location filename="../setup/updater.cpp" line="1319"/>
+        <source>**Release notes of version %1:**
+
+</source>
+        <translation>**Hinweise zu Version %1:**
+
+</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1372"/>
+        <source>&lt;strong&gt;Release notes of version %1:&lt;/strong&gt;&lt;br&gt;</source>
+        <translation type="vanished">&lt;strong&gt;Hinweise zu Version %1:&lt;/strong&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1395"/>
         <source>Updating</source>
         <translation>Aktualisieren</translation>
     </message>
@@ -613,22 +621,22 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1376"/>
+        <location filename="../setup/updater.cpp" line="1399"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation>Nach Aktualisierungen suchen wird für die aktuelle Platform nicht untersützt.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1378"/>
+        <location filename="../setup/updater.cpp" line="1401"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation>Diese Version von %1 hat automatische Aktualisierungen deaktiviert. Du kannst die Anwendung vielleicht stattdessen über die Paketverwaltung aktualisieren.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1397"/>
+        <location filename="../setup/updater.cpp" line="1420"/>
         <source>no new version available for download</source>
         <translation>keine neue Version verfügbar</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1398"/>
+        <location filename="../setup/updater.cpp" line="1421"/>
         <source>new version available but no build for the current platform present yet</source>
         <translation>neue Version verfügbar, aber im Moment steht kein Build für die aktuelle Platform zur Verfügung</translation>
     </message>
@@ -835,7 +843,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1441"/>
+        <location filename="../setup/updater.cpp" line="1464"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation>&lt;p&gt;Die Signatur der heruntergelandenen Programmdatei konnte nicht verifiziert werden: %1&lt;/p&gt;</translation>
     </message>
