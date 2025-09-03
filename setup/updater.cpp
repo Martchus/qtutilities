@@ -1313,6 +1313,23 @@ void UpdateOptionPage::reset()
 #endif
 }
 
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+static QString formatReleaseNotes(const QString &version, const QString &releaseNotes)
+{
+    auto res = QCoreApplication::translate("QtGui::UpdateOptionPage", "**Release notes of version %1:**\n\n").arg(version) + releaseNotes;
+
+    // ensure links like "https://github.com/…/compare/v2.0.0...v2.0.1" are not cut short at the first "."
+    static const auto re = QRegularExpression(R"(https://github\.com/[^\s)]+)");
+    for (auto it = re.globalMatch(res); it.hasNext();) {
+        const auto match = it.next();
+        const auto replacement = QChar('<') % match.captured(0) % QChar('>');
+        res.replace(match.capturedStart(), match.capturedLength(), replacement);
+    }
+
+    return res;
+}
+#endif
+
 QWidget *UpdateOptionPage::setupWidget()
 {
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
@@ -1339,10 +1356,16 @@ QWidget *UpdateOptionPage::setupWidget()
         }
         QObject::connect(ui()->releaseNotesPushButton, &QPushButton::clicked, widget, [this, widget] {
             const auto *const notifier = m_p->updateHandler->notifier();
-            QMessageBox::information(widget, QCoreApplication::applicationName(),
-                QCoreApplication::translate("QtGui::UpdateOptionPage", "<strong>Release notes of version %1:</strong><br>")
-                        .arg(notifier->latestVersion())
-                    + notifier->releaseNotes());
+            auto infobox = QMessageBox(widget);
+            infobox.setWindowTitle(QCoreApplication::applicationName());
+            infobox.setIcon(QMessageBox::Information);
+            infobox.setText(formatReleaseNotes(notifier->latestVersion(), notifier->releaseNotes()));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            infobox.setTextFormat(Qt::MarkdownText);
+#else
+            infobox.setTextFormat(Qt::PlainText);
+#endif
+            infobox.exec();
         });
         QObject::connect(
             m_p->updateHandler->notifier(), &UpdateNotifier::inProgressChanged, widget, [this](bool inProgress) { updateLatestVersion(inProgress); });
