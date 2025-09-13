@@ -21,7 +21,12 @@
 #endif
 
 #ifdef Q_OS_ANDROID
+#include <QDebug>
 #include <QStandardPaths>
+#endif
+
+#ifdef Q_OS_ANDROID
+#include <c++utilities/conversion/stringbuilder.h>
 #endif
 
 #include <iostream>
@@ -167,8 +172,12 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
                 // the translation file is probably just empty (English is built-in and usually only used for plural forms)
                 continue;
             }
+#if defined(Q_OS_ANDROID)
+            qDebug() << "Unable to load translation file for Qt repository: " << repoName << localeName;
+#else
             cerr << "Unable to load translation file for Qt repository \"" << repoName.toLocal8Bit().data() << "\" and locale "
                  << localeName.toLocal8Bit().data() << "." << endl;
+#endif
         }
     }
 }
@@ -207,6 +216,15 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
 static void logTranslationEvent(
     const char *event, const QString &configName, const QString &applicationName, const QString &localeName, const QString &path = QString())
 {
+#if defined(Q_OS_ANDROID)
+    qDebug() << CppUtilities::argsToString(event, " translation file for: ").data() << applicationName << localeName;
+    if (!configName.isEmpty()) {
+        qDebug() << "config: " << configName;
+    }
+    if (!path.isEmpty()) {
+        qDebug() << "path: " << path;
+    }
+#else
     cerr << event << " translation file for \"" << applicationName.toLocal8Bit().data() << "\"";
     if (!configName.isEmpty()) {
         cerr << " (config \"" << configName.toLocal8Bit().data() << "\")";
@@ -216,6 +234,7 @@ static void logTranslationEvent(
         cerr << " from \"" << path.toLocal8Bit().data() << '\"';
     }
     cerr << '.' << endl;
+#endif
 }
 /// \endcond
 
