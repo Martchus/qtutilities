@@ -71,7 +71,7 @@ macro (use_qt_module)
     endif ()
 
     # find and use module
-    if (NOT ONLY_PLUGINS)
+    if (NOT ARGS_ONLY_PLUGINS)
         find_package("${ARGS_PREFIX}${ARGS_MODULE}" "${META_QT_VERSION}" REQUIRED)
         foreach (TARGET ${ARGS_TARGETS})
             if (NOT TARGET "${TARGET}")
