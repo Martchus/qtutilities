@@ -130,7 +130,7 @@ endif ()
 option(OPENGL_SUPPORT "whether to enable OpenGL support (when linking against static Qt)" ON)
 option(NATIVE_WAYLAND_SUPPORT "whether to enable native Wayland support (when linking against static Qt)" ON)
 option(NATIVE_WAYLAND_EGL_SUPPORT "specifies whether to enable native Wayland-EGL support (when linking against static Qt)"
-       OFF)
+       ON)
 
 # built-in platform, imageformat and iconengine plugins when linking statically against Qt
 if (TARGET "${QT_PACKAGE_PREFIX}::Core")
