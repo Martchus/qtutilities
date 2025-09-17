@@ -30,9 +30,11 @@ set(QT_REPOS ${ADDITIONAL_QT_REPOS} base)
 set(QT_MODULES ${ADDITIONAL_QT_MODULES} Core)
 set(KF_MODULES ${ADDITIONAL_KF_MODULES})
 
-# disable auto-inclusion of QML plugins because these seem to pull in unwanted dependencies like PostgreSQL (required as of
-# Qt 6)
-set(QT_SKIP_AUTO_QML_PLUGIN_INCLUSION ON)
+# disable auto-inclusion of QML plugins if not needed because these seem to pull in unwanted dependencies like PostgreSQL
+# (required as of Qt 6)
+if (NOT Quick IN_LIST QT_MODULES)
+    set(QT_SKIP_AUTO_QML_PLUGIN_INCLUSION ON)
+endif ()
 
 # disable deprecated features
 option(DISABLE_DEPRECATED_QT_FEATURES "specifies whether deprecated Qt features should be disabled" OFF)
@@ -274,6 +276,48 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 ONLY_PLUGINS
                 PLUGINS_OPTIONAL)
         endif ()
+    endif ()
+
+    # link against QML plugins if Qt Quick GUI is enabled
+    if (QT_MAJOR_VERSION GREATER_EQUAL 6 AND Quick IN_LIST QT_MODULES)
+        if (NOT DEFINED QT_QML_PLUGINS)
+            set(QT_QML_PLUGINS qtquick2plugin qquicklayoutsplugin qtquickdialogsplugin)
+            if (TARGET "${QT_PACKAGE_PREFIX}::labsmodelsplugin")
+                list(APPEND QT_QML_PLUGINS labsmodelsplugin)
+            endif ()
+            if (QuickControls2Basic IN_LIST QT_MODULES)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2fusionstyleplugin)
+            endif ()
+            if (QuickControls2Imagine IN_LIST QT_MODULES)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2imaginestyleplugin)
+            endif ()
+            if (QuickControls2Material IN_LIST QT_MODULES)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2materialstyleplugin)
+            endif ()
+            if (QuickControls2Fusion IN_LIST QT_MODULES)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2fusionstyleplugin)
+            endif ()
+            if (QuickControls2Windows IN_LIST QT_MODULES)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2windowsstyleplugin)
+            endif ()
+            if (QuickControls2FluentWinUI IN_LIST QT_MODULES)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2fluentwinui3styleplugin)
+            endif ()
+            if (QuickControls2Universal IN_LIST QT_MODULES)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2universalstyleplugin)
+            endif ()
+        endif ()
+        use_qt_module(
+            LIBRARIES_VARIABLE
+            "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+            PREFIX
+            "${QT_PACKAGE_PREFIX}"
+            MODULE
+            Qml
+            PLUGINS
+            ${QT_QML_PLUGINS}
+            PLUGINS_LITERAL
+            ONLY_PLUGINS)
     endif ()
 
     # ensure a TLS plugin is built-in when available and when creating an app using Qt Network - required since Qt 6.2.0
