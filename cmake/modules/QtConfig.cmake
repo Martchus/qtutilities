@@ -125,7 +125,7 @@ if (NOT DEFINED TLS_SUPPORT)
 endif ()
 
 # allow configuring certain features when linking against static Qt
-option(OPENGL_SUPPORT "whether to enable native Wayland support (when linking against static Qt)" ON)
+option(OPENGL_SUPPORT "whether to enable OpenGL support (when linking against static Qt)" ON)
 option(NATIVE_WAYLAND_SUPPORT "whether to enable native Wayland support (when linking against static Qt)" ON)
 option(NATIVE_WAYLAND_EGL_SUPPORT "specifies whether to enable native Wayland-EGL support (when linking against static Qt)"
        OFF)
