@@ -111,7 +111,7 @@ macro (use_qt_module)
             endif ()
         endif ()
         if (NOT TARGET "${PLUGIN_TARGET}")
-            if (NOT PLUGINS_OPTIONAL)
+            if (ARGS_PLUGINS_OPTIONAL)
                 continue()
             endif ()
             message(
