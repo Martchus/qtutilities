@@ -1320,10 +1320,12 @@ static QString formatReleaseNotes(const QString &version, const QString &release
 
     // ensure links like "https://github.com/…/compare/v2.0.0...v2.0.1" are not cut short at the first "."
     static const auto re = QRegularExpression(R"(https://github\.com/[^\s)]+)");
-    for (auto it = re.globalMatch(res); it.hasNext();) {
+    static constexpr auto replacementLengthDiff = qsizetype(2);
+    auto offset = qsizetype();
+    for (auto it = re.globalMatch(res); it.hasNext(); offset += replacementLengthDiff) {
         const auto match = it.next();
         const auto replacement = QChar('<') % match.captured(0) % QChar('>');
-        res.replace(match.capturedStart(), match.capturedLength(), replacement);
+        res.replace(match.capturedStart() + offset, match.capturedLength(), replacement);
     }
 
     return res;
