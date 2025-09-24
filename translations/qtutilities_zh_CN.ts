@@ -36,7 +36,7 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1346"/>
+        <location filename="../setup/updater.cpp" line="1348"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;仍然尝试更新？&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
@@ -52,7 +52,7 @@
         <translation type="vanished">&lt;strong&gt;版本 %1 的发布说明：&lt;/strong&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1395"/>
+        <location filename="../setup/updater.cpp" line="1397"/>
         <source>Updating</source>
         <translation>更新</translation>
     </message>
@@ -60,22 +60,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="460"/>
+        <location filename="../resources/resources.cpp" line="479"/>
         <source>unable to access file</source>
         <translation>无法访问文件</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="463"/>
+        <location filename="../resources/resources.cpp" line="482"/>
         <source>file has invalid format</source>
         <translation>文件格式无效</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="466"/>
+        <location filename="../resources/resources.cpp" line="485"/>
         <source>unknown error</source>
         <translation>未知错误</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="468"/>
+        <location filename="../resources/resources.cpp" line="487"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation>无法从 &quot;%1&quot;: %2 同步设置</translation>
     </message>
@@ -599,22 +599,22 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1399"/>
+        <location filename="../setup/updater.cpp" line="1401"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation>此平台不支持检查更新。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1401"/>
+        <location filename="../setup/updater.cpp" line="1403"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation>%1 的此内部版本已禁用自动更新。不过，您可以通过包管理器以自动方式更新应用程序。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1420"/>
+        <location filename="../setup/updater.cpp" line="1422"/>
         <source>no new version available for download</source>
         <translation>没有新版本可供下载</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1421"/>
+        <location filename="../setup/updater.cpp" line="1423"/>
         <source>new version available but no build for the current platform present yet</source>
         <translation>新版本可用，但尚未为当前平台构建</translation>
     </message>
@@ -817,7 +817,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1464"/>
+        <location filename="../setup/updater.cpp" line="1466"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation>&lt;p&gt;无法验证下载的可执行文件的签名：%1&lt;/p&gt;</translation>
     </message>

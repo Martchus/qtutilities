@@ -36,7 +36,7 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1346"/>
+        <location filename="../setup/updater.cpp" line="1348"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -48,7 +48,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1395"/>
+        <location filename="../setup/updater.cpp" line="1397"/>
         <source>Updating</source>
         <translation type="unfinished"></translation>
     </message>
@@ -56,22 +56,22 @@
 <context>
     <name>QtUtilities</name>
     <message>
-        <location filename="../resources/resources.cpp" line="460"/>
+        <location filename="../resources/resources.cpp" line="479"/>
         <source>unable to access file</source>
         <translation>невозможно получить доступ к файлу</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="463"/>
+        <location filename="../resources/resources.cpp" line="482"/>
         <source>file has invalid format</source>
         <translation>файл имеет неверный формат</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="466"/>
+        <location filename="../resources/resources.cpp" line="485"/>
         <source>unknown error</source>
         <translation>неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../resources/resources.cpp" line="468"/>
+        <location filename="../resources/resources.cpp" line="487"/>
         <source>Unable to sync settings from &quot;%1&quot;: %2</source>
         <translation>Невозможно синхронизировать настройки из &quot;%1&quot;: %2</translation>
     </message>
@@ -594,22 +594,22 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1399"/>
+        <location filename="../setup/updater.cpp" line="1401"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1401"/>
+        <location filename="../setup/updater.cpp" line="1403"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1420"/>
+        <location filename="../setup/updater.cpp" line="1422"/>
         <source>no new version available for download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1421"/>
+        <location filename="../setup/updater.cpp" line="1423"/>
         <source>new version available but no build for the current platform present yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -619,28 +619,8 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="196"/>
-        <source>Latest version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../setup/updateoptionpage.ui" line="80"/>
-        <source>Download</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../setup/updateoptionpage.ui" line="179"/>
-        <source>Version in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../setup/updateoptionpage.ui" line="20"/>
         <source>Check interval</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../setup/updateoptionpage.ui" line="70"/>
-        <source>Check for new versions regularly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -651,13 +631,13 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="134"/>
-        <source>Check for new version</source>
+        <location filename="../setup/updateoptionpage.ui" line="70"/>
+        <source>Check for new versions regularly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="154"/>
-        <source>Update to latest version</source>
+        <location filename="../setup/updateoptionpage.ui" line="80"/>
+        <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -676,13 +656,33 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="134"/>
+        <source>Check for new version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../setup/updateoptionpage.ui" line="144"/>
         <source>Show release notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../setup/updateoptionpage.ui" line="154"/>
+        <source>Update to latest version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="179"/>
+        <source>Version in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../setup/updateoptionpage.ui" line="189"/>
         <source>Consider pre-releases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="196"/>
+        <source>Latest version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -812,7 +812,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1464"/>
+        <location filename="../setup/updater.cpp" line="1466"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
