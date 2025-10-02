@@ -38,19 +38,20 @@
     <message>
         <location filename="../setup/updater.cpp" line="1348"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Все равно загрузить обновление?&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1319"/>
         <source>**Release notes of version %1:**
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>**Примечания к выпуску версии %1:**
+</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1397"/>
         <source>Updating</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление</translation>
     </message>
 </context>
 <context>
@@ -525,12 +526,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1158"/>
         <source>Unable to determine the application directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно определить каталог приложения.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1165"/>
         <source>The directory where the executable is stored (%1) is not writable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Каталог, в котором хранится исполняемый файл (%1), недоступен для записи.</translation>
     </message>
 </context>
 <context>
@@ -538,57 +539,57 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="357"/>
         <source>checking …</source>
-        <translation type="unfinished"></translation>
+        <translation>проверка…</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="361"/>
         <source>unable to check: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>невозможно проверить: %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="365"/>
         <source>new version available: %1 (last checked: %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>доступна новая версия: %1 (последняя проверка: %2)</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="367"/>
         <source>no new version available, latest release is: %1 (last checked: %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>новая версия недоступна, последняя версия: %1 (последняя проверка: %2)</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="371"/>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>неизвестный</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="409"/>
         <source>at offset %1</source>
-        <translation type="unfinished"></translation>
+        <translation>со смещением %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="421"/>
         <source>This build of the application does not support checking for updates.</source>
-        <translation type="unfinished"></translation>
+        <translation>Данная сборка приложения не поддерживает проверку наличия обновлений.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="486"/>
         <source>Unable to parse releases: </source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно разобрать релизы: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="561"/>
         <source>Unable to request releases: </source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно запросить релизы: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="590"/>
         <source>Unable to parse release: </source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно разобрать релиз: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="605"/>
         <source>Unable to request release: </source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно запросить освобождение: </translation>
     </message>
 </context>
 <context>
@@ -596,114 +597,114 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1401"/>
         <source>Checking for updates is not supported on this platform.</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверка обновлений на этой платформе не поддерживается.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1403"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этой сборке %1 автоматические обновления отключены. Однако вы можете обновить приложение автоматически через менеджер пакетов.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1422"/>
         <source>no new version available for download</source>
-        <translation type="unfinished"></translation>
+        <translation>новая версия недоступна для скачивания</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1423"/>
         <source>new version available but no build for the current platform present yet</source>
-        <translation type="unfinished"></translation>
+        <translation>доступна новая версия, но сборки для текущей платформы пока нет</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="6"/>
         <source>Updating</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="20"/>
         <source>Check interval</source>
-        <translation type="unfinished"></translation>
+        <translation>Интервал проверки</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="38"/>
         <location filename="../setup/updateoptionpage.ui" line="58"/>
         <location filename="../setup/updateoptionpage.ui" line="206"/>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>неизвестный</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="70"/>
         <source>Check for new versions regularly</source>
-        <translation type="unfinished"></translation>
+        <translation>Регулярно проверяйте наличие новых версий</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="80"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачать</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="101"/>
         <source>only on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>только при запуске</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="104"/>
         <source> minutes</source>
-        <translation type="unfinished"></translation>
+        <translation> минут</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="107"/>
         <source>every </source>
-        <translation type="unfinished"></translation>
+        <translation>каждые </translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="134"/>
         <source>Check for new version</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверить наличие новой версии</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="144"/>
         <source>Show release notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать заметки о выпуске</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="154"/>
         <source>Update to latest version</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновить до последней версии</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="179"/>
         <source>Version in use</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущая версия</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="189"/>
         <source>Consider pre-releases</source>
-        <translation type="unfinished"></translation>
+        <translation>Бета</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="196"/>
         <source>Latest version</source>
-        <translation type="unfinished"></translation>
+        <translation>Последняя версия</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="219"/>
         <source>Pre-releases</source>
-        <translation type="unfinished"></translation>
+        <translation>Пре-релизы</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="229"/>
         <source>Consider drafts</source>
-        <translation type="unfinished"></translation>
+        <translation>Альфа</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="282"/>
         <source>Abort</source>
-        <translation type="unfinished">Прервать</translation>
+        <translation>Прервать</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="292"/>
         <source>Restart to apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезапустите, чтобы применить</translation>
     </message>
 </context>
 <context>
@@ -711,102 +712,102 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="714"/>
         <source>Update in progress …</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление в процессе…</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="714"/>
         <source>Update done</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление выполнено</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="714"/>
         <source>Update failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление не удалось</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="774"/>
         <source>This build of the application does not support self-updating.</source>
-        <translation type="unfinished"></translation>
+        <translation>Данная сборка приложения не поддерживает самостоятельное обновление.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="831"/>
         <source>Downloading %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="850"/>
         <source>Waiting for signature download …</source>
-        <translation type="unfinished"></translation>
+        <translation>Ожидание загрузки подписи…</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="881"/>
         <source>Unable to download signature: </source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить подпись: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="889"/>
         <source>Extracting …</source>
-        <translation type="unfinished"></translation>
+        <translation>Извлечение…</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="905"/>
         <source>Unable to download update: </source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить обновление: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="922"/>
         <source>Unable to determine application path.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно определить путь к приложению.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="929"/>
         <source>Extraction was cancelled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Извлечение было отменено.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="973"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать новый исполняемый файл в разделе «%1»: %2</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="978"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно записать новый исполняемый файл в «%1»: %2</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="983"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно сделать новый двоичный файл в «%1» исполняемым.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="992"/>
         <source>Unable to open downloaded archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно открыть загруженный архив: %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1002"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось проверить корректность загруженного двоичного файла: %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1020"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно переместить текущий исполняемый файл в «%1»: %2</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1028"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось переименовать новый исполняемый файл «%1» в «%2»: %3</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1034"/>
         <source>Unable to find executable in downloaded archive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось найти исполняемый файл в загруженном архиве.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1052"/>
         <source>Update stored under: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление сохранено в: %1</translation>
     </message>
 </context>
 <context>
@@ -814,7 +815,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1466"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Не удалось проверить подпись загруженного исполняемого файла: %1&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
