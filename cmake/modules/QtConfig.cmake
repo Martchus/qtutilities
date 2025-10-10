@@ -234,6 +234,7 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 ONLY_PLUGINS)
         endif ()
         set(QT_CONFIG_USE_WAYLAND_INTEGRATION NO)
+        set(QT_CONFIG_WAYLAND_HAS_SEPARATE_EGL_PLUGIN NO)
         set(QT_CONFIG_WAYLAND_CLIENT_PLUGINS WaylandXdgShellIntegration WaylandWlShellIntegration WaylandIviShellIntegration
                                              WaylandQtShellIntegration)
         if (NATIVE_WAYLAND_SUPPORT AND TARGET "${QT_PACKAGE_PREFIX}::QWaylandIntegrationPlugin")
@@ -249,19 +250,24 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 ONLY_PLUGINS)
             set(QT_CONFIG_USE_WAYLAND_INTEGRATION YES)
         endif ()
-        if (NATIVE_WAYLAND_EGL_SUPPORT AND TARGET "${QT_PACKAGE_PREFIX}::QWaylandEglPlatformIntegrationPlugin")
-            use_qt_module(
-                LIBRARIES_VARIABLE
-                "${QT_PLUGINS_LIBRARIES_VARIABLE}"
-                PREFIX
-                "${QT_PACKAGE_PREFIX}"
-                MODULE
-                Gui
-                PLUGINS
-                WaylandEglPlatformIntegration
-                ONLY_PLUGINS)
+        if (NATIVE_WAYLAND_EGL_SUPPORT)
+            if (TARGET "${QT_PACKAGE_PREFIX}::QWaylandEglPlatformIntegrationPlugin")
+                use_qt_module(
+                    LIBRARIES_VARIABLE
+                    "${QT_PLUGINS_LIBRARIES_VARIABLE}"
+                    PREFIX
+                    "${QT_PACKAGE_PREFIX}"
+                    MODULE
+                    Gui
+                    PLUGINS
+                    WaylandEglPlatformIntegration
+                    ONLY_PLUGINS)
+                set(QT_CONFIG_WAYLAND_HAS_SEPARATE_EGL_PLUGIN ON)
+            endif ()
             set(QT_CONFIG_USE_WAYLAND_INTEGRATION YES)
-            list(APPEND QT_CONFIG_WAYLAND_CLIENT_PLUGINS WaylandEglClientBuffer)
+            if (QT_CONFIG_WAYLAND_HAS_SEPARATE_EGL_PLUGIN OR "${${QT_PACKAGE_PREFIX}Gui_VERSION}" VERSION_GREATER_EQUAL 6.10)
+                list(APPEND QT_CONFIG_WAYLAND_CLIENT_PLUGINS WaylandEglClientBuffer)
+            endif ()
         endif ()
         if (QT_CONFIG_USE_WAYLAND_INTEGRATION)
             use_qt_module(
