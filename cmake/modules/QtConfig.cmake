@@ -292,29 +292,23 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
                 list(APPEND QT_QML_PLUGINS labsmodelsplugin)
             endif ()
             if (QuickControls2 IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2plugin)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2plugin qmlshapesplugin effectsplugin)
             endif ()
-            if (QuickControls2Basic IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2fusionstyleplugin)
-            endif ()
-            if (QuickControls2Imagine IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2imaginestyleplugin)
-            endif ()
-            if (QuickControls2Material IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2materialstyleplugin)
-            endif ()
-            if (QuickControls2Fusion IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2fusionstyleplugin)
-            endif ()
-            if (QuickControls2Windows IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2windowsstyleplugin)
-            endif ()
-            if (QuickControls2FluentWinUI IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2fluentwinui3styleplugin)
-            endif ()
-            if (QuickControls2Universal IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2universalstyleplugin)
-            endif ()
+            foreach (
+                CONTROLS_STYLE
+                Basic
+                Imagine
+                Material
+                Fusion
+                Windows
+                FluentWinUI3
+                Universal)
+                if ("QuickControls2${CONTROLS_STYLE}" IN_LIST QT_MODULES OR QUICK_GUI_CONTROLS_STYLE STREQUAL
+                                                                            "${CONTROLS_STYLE}")
+                    string(TOLOWER "${CONTROLS_STYLE}" CONTROLS_STYLE_LOWER)
+                    list(APPEND QT_QML_PLUGINS "qtquickcontrols2${CONTROLS_STYLE_LOWER}styleplugin")
+                endif ()
+            endforeach ()
         endif ()
         use_qt_module(
             LIBRARIES_VARIABLE
