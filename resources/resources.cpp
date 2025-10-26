@@ -110,7 +110,7 @@ static QString relativeBase()
  * \brief Loads and installs the appropriate Qt translation file for the current
  * locale.
  * \param repositoryNames Specifies the names of the Qt repositories to load
- * translations for (eg. qtbase, qtscript, ...).
+ * translations for (e.g. "qtbase", "qtdeclarative", ...).
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
  *    * QLibraryInfo::location(QLibraryInfo::TranslationsPath) (used in UNIX)
@@ -129,7 +129,7 @@ void loadQtTranslationFile(std::initializer_list<QString> repositoryNames)
  * \brief Loads and installs the appropriate Qt translation file for the
  * specified locale.
  * \param repositoryNames Specifies the names of the Qt repositories to load
- * translations for (eg. qtbase, qtscript, ...).
+ * translations for (e.g. "qtbase", "qtdeclarative", ...).
  * \param localeName Specifies the name of the locale.
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
@@ -149,7 +149,10 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
         const auto fileName = QString(repoName % QChar('_') % localeName);
 
         QString path;
-        if ((!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, path = additionalTranslationFilePath()))
+        if (
+            // allow putting translations into configurable directory
+            (!additionalTranslationFilePath().isEmpty() && qtTranslator->load(fileName, path = additionalTranslationFilePath()))
+            // allow putting translations next to the Qt libraries
             || qtTranslator->load(fileName,
                 path =
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -158,7 +161,9 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
                     QLibraryInfo::path(QLibraryInfo::TranslationsPath)
 #endif
                     )
+            // load translations from the "share" directory to support installations following the usual UNIX file system hierarchy
             || qtTranslator->load(fileName, path = relBase + QStringLiteral("/../share/qt/translations"))
+            // load built-in translations
             || qtTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
             QCoreApplication::installTranslator(qtTranslator);
             translators.append(qtTranslator);
@@ -185,7 +190,8 @@ void loadQtTranslationFile(initializer_list<QString> repositoryNames, const QStr
 /*!
  * \brief Loads and installs the appropriate application translation file for
  * the current locale.
- * \param applicationName Specifies the name of the application.
+ * \param configName Specifies the name of the build configuration, e.g. an empty string or "debug-qt6".
+ * \param applicationName Specifies the name of the application or additional library, e.g. "tageditor" or "qtutilities".
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
  *    * ./
@@ -241,8 +247,9 @@ static void logTranslationEvent(
 /*!
  * \brief Loads and installs the appropriate application translation file for
  * the specified locale.
- * \param applicationName Specifies the name of the application.
- * \param localeName Specifies the name of the locale.
+ * \param configName Specifies the name of the build configuration, e.g. an empty string or "debug-qt6".
+ * \param applicationName Specifies the name of the application or additional library, e.g. "tageditor" or "qtutilities".
+ * \param localeName Specifies the name of the locale, e.g. "de_DE".
  * \remarks
  *  - Translation files have to be placed in one of the following locations:
  *    * ./
@@ -265,12 +272,23 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
     const auto directoryName = configName.isEmpty() ? applicationName : QString(applicationName % QChar('-') % configName);
     const auto relBase = relativeBase();
 
-    if (auto path = QString(); (!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, path = additionalTranslationFilePath()))
-        || appTranslator->load(fileName, path = relBase) || appTranslator->load(fileName, path = relBase % QStringLiteral("/../") % applicationName)
+    if (auto path = QString();
+        // allow putting translations into configurable directory
+        (!additionalTranslationFilePath().isEmpty() && appTranslator->load(fileName, path = additionalTranslationFilePath()))
+        // allow putting translations next to the executable (useful during development and for easily supplying additional
+        // translations, e.g. under Windows)
+        || appTranslator->load(fileName, path = relBase)
+        // load translations from sibling directories (useful during development to load translations of e.g. qtutilities
+        // from its build directory)
+        || appTranslator->load(fileName, path = relBase % QStringLiteral("/../") % applicationName)
         || appTranslator->load(fileName, path = relBase % QStringLiteral("/../../") % applicationName)
+        // allow putting translations next to the executable into "translations" subdirectory (useful for easily supplying
+        // additional translations, e.g. under Windows)
         || appTranslator->load(fileName, path = relBase % QStringLiteral("/translations"))
+        // load translations from the "share" directory to support installations following the usual UNIX file system hierarchy
         || appTranslator->load(fileName, path = relBase % QStringLiteral("/../share/") % directoryName % QStringLiteral("/translations"))
         || appTranslator->load(fileName, path = QStringLiteral(APP_INSTALL_PREFIX "/share/") % directoryName % QStringLiteral("/translations"))
+        // load built-in translations
         || appTranslator->load(fileName, path = QStringLiteral(":/translations"))) {
         QCoreApplication::installTranslator(appTranslator);
         translators.append(appTranslator);
@@ -290,7 +308,8 @@ void loadApplicationTranslationFile(const QString &configName, const QString &ap
 /*!
  * \brief Loads and installs the appropriate application translation file for
  * the current locale.
- * \param applicationNames Specifies the names of the applications.
+ * \param configName Specifies the name of the build configuration, e.g. an empty string or "debug-qt6".
+ * \param applicationNames Specifies the names of the applications and libraries, e.g. `{"qtutilities", "tageditor"}`.
  */
 void loadApplicationTranslationFile(const QString &configName, const std::initializer_list<QString> &applicationNames)
 {
@@ -302,7 +321,8 @@ void loadApplicationTranslationFile(const QString &configName, const std::initia
 /*!
  * \brief Loads and installs the appropriate application translation file for
  * the specified locale.
- * \param applicationNames Specifies the names of the applications.
+ * \param configName Specifies the name of the build configuration, e.g. an empty string or "debug-qt6".
+ * \param applicationNames Specifies the names of the applications and libraries, e.g. `{"qtutilities", "tageditor"}`.
  * \param localeName Specifies the name of the locale.
  */
 void loadApplicationTranslationFile(const QString &configName, const std::initializer_list<QString> &applicationNames, const QString &localeName)
