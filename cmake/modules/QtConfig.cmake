@@ -389,7 +389,7 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
         if (USED_NETWORK_INFORMATION_PLUGINS)
             list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" "BackendFactory)" "${USED_NETWORK_INFORMATION_PLUGINS}"
                            USED_NETWORK_INFORMATION_PLUGINS_ARRAY)
-        else ()
+        elseif (${QT_PACKAGE_PREFIX}Core_VERSION VERSION_GREATER_EQUAL 6.1.0)
             message(FATAL_ERROR "No TLS plugin could be imported but NETWORK_INFORMATION_SUPPORT is enabled.")
         endif ()
     endif ()
