@@ -354,7 +354,7 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
         # allow importing TLS plugins via qtconfig.h
         if (USED_TLS_PLUGINS)
             list_to_string(" " "\\\n    Q_IMPORT_PLUGIN(Q" ")" "${USED_TLS_PLUGINS}" USED_TLS_PLUGINS_ARRAY)
-        else ()
+        elseif (${QT_PACKAGE_PREFIX}Core_VERSION VERSION_GREATER_EQUAL 6.2.0)
             message(FATAL_ERROR "No TLS plugin could be imported but TLS_SUPPORT is enabled.")
         endif ()
     endif ()
