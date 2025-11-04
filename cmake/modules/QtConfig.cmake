@@ -84,6 +84,7 @@ foreach (MODULE ${KF_MODULES})
     endif ()
     use_qt_module(PREFIX "${KF_PACKAGE_PREFIX}" MODULE "${MODULE}" ${MODULE_OPTIONS})
 endforeach ()
+message(STATUS "Building ${META_TARGET_NAME} against Qt version ${${QT_PACKAGE_PREFIX}Core_VERSION}")
 
 # remove modules which are not used after all from META_PUBLIC_…_MODULES
 foreach (MODULE ${META_PUBLIC_QT_MODULES})
