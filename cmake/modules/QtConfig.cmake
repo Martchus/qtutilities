@@ -127,10 +127,16 @@ if (NOT DEFINED TLS_SUPPORT)
 endif ()
 
 # allow configuring certain features when linking against static Qt
+if (LINUX AND NOT ANDROID)
+    set(NATIVE_WAYLAND_SUPPORT_DEFAULT ON)
+else ()
+    set(NATIVE_WAYLAND_SUPPORT_DEFAULT OFF)
+endif ()
 option(OPENGL_SUPPORT "whether to enable OpenGL support (when linking against static Qt)" ON)
-option(NATIVE_WAYLAND_SUPPORT "whether to enable native Wayland support (when linking against static Qt)" ON)
+option(NATIVE_WAYLAND_SUPPORT "whether to enable native Wayland support (when linking against static Qt)"
+       "${NATIVE_WAYLAND_SUPPORT_DEFAULT}")
 option(NATIVE_WAYLAND_EGL_SUPPORT "specifies whether to enable native Wayland-EGL support (when linking against static Qt)"
-       ON)
+       "${NATIVE_WAYLAND_SUPPORT_DEFAULT}")
 
 # built-in platform, imageformat and iconengine plugins when linking statically against Qt
 if (TARGET "${QT_PACKAGE_PREFIX}::Core")
