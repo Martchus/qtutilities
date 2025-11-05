@@ -36,12 +36,12 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1348"/>
+        <location filename="../setup/updater.cpp" line="1353"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;仍然尝试更新？&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1319"/>
+        <location filename="../setup/updater.cpp" line="1324"/>
         <source>**Release notes of version %1:**
 
 </source>
@@ -52,7 +52,7 @@
         <translation type="vanished">&lt;strong&gt;版本 %1 的发布说明：&lt;/strong&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1397"/>
+        <location filename="../setup/updater.cpp" line="1402"/>
         <source>Updating</source>
         <translation>更新</translation>
     </message>
@@ -528,12 +528,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateHandler</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1158"/>
+        <location filename="../setup/updater.cpp" line="1163"/>
         <source>Unable to determine the application directory.</source>
         <translation>无法确定应用程序目录。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1165"/>
+        <location filename="../setup/updater.cpp" line="1170"/>
         <source>The directory where the executable is stored (%1) is not writable.</source>
         <translation>存储可执行文件的目录 （%1） 不可写。</translation>
     </message>
@@ -599,22 +599,22 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1401"/>
+        <location filename="../setup/updater.cpp" line="1406"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation>此平台不支持检查更新。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1403"/>
+        <location filename="../setup/updater.cpp" line="1408"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation>%1 的此内部版本已禁用自动更新。不过，您可以通过包管理器以自动方式更新应用程序。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1422"/>
+        <location filename="../setup/updater.cpp" line="1427"/>
         <source>no new version available for download</source>
         <translation>没有新版本可供下载</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1423"/>
+        <location filename="../setup/updater.cpp" line="1428"/>
         <source>new version available but no build for the current platform present yet</source>
         <translation>新版本可用，但尚未为当前平台构建</translation>
     </message>
@@ -769,47 +769,47 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation>提取已取消。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="973"/>
+        <location filename="../setup/updater.cpp" line="978"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
         <translation>无法在 “%1” 下创建新的可执行文件： %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="978"/>
+        <location filename="../setup/updater.cpp" line="983"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
         <translation>无法在 “%1” 下写入新的可执行文件： %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="983"/>
+        <location filename="../setup/updater.cpp" line="988"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
         <translation>无法在 &quot;%1&quot; 下生成新的可执行二进制文件。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="992"/>
+        <location filename="../setup/updater.cpp" line="997"/>
         <source>Unable to open downloaded archive: %1</source>
         <translation>无法打开下载的文档： %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1002"/>
+        <location filename="../setup/updater.cpp" line="1007"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
         <translation>无法验证下载的二进制文件是否有效： %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1020"/>
+        <location filename="../setup/updater.cpp" line="1025"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
         <translation>无法将当前可执行文件移动到 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1028"/>
+        <location filename="../setup/updater.cpp" line="1033"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
         <translation>无法将新的可执行文件 “%1” 重命名为 &quot;%2&quot;: %3</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1034"/>
+        <location filename="../setup/updater.cpp" line="1039"/>
         <source>Unable to find executable in downloaded archive.</source>
         <translation>在下载的文档中找不到可执行文件。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1052"/>
+        <location filename="../setup/updater.cpp" line="1057"/>
         <source>Update stored under: %1</source>
         <translation>更新存储在：%1</translation>
     </message>
@@ -817,7 +817,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1466"/>
+        <location filename="../setup/updater.cpp" line="1471"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation>&lt;p&gt;无法验证下载的可执行文件的签名：%1&lt;/p&gt;</translation>
     </message>
