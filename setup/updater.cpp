@@ -962,7 +962,12 @@ void Updater::storeExecutable()
                         m_p->signature = QByteArray::fromStdString(file.content);
                         foundSignature = true;
                         signatureName = file.name;
-                        return foundExecutable && foundSignature;
+                        return foundExecutable;
+                    }
+
+                    // skip signature files (that don't match m_p->signatureExtension but are present anyway)
+                    if (fileName.endsWith(QLatin1String(".sig"))) {
+                        return false;
                     }
 
                     // write executable from archive to disk (using a temporary filename)
@@ -986,7 +991,7 @@ void Updater::storeExecutable()
 
                     storePath = newExe.fileName();
                     newExeData = std::move(file.content);
-                    return foundExecutable && foundSignature;
+                    return foundSignature || m_p->signatureExtension.isEmpty();
                 });
         } catch (const CppUtilities::ArchiveException &e) {
             error = tr("Unable to open downloaded archive: %1").arg(e.what());
