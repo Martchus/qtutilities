@@ -96,7 +96,8 @@ set(CMAKE_TEMPLATE_FILES cmake/templates/qtconfig.h.in cmake/templates/webviewde
                          cmake/templates/jsdefs.h.in cmake/templates/jsincludes.h.in)
 
 set(TS_FILES translations/${META_PROJECT_NAME}_zh_CN.ts translations/${META_PROJECT_NAME}_de_DE.ts
-             translations/${META_PROJECT_NAME}_ru_RU.ts translations/${META_PROJECT_NAME}_en_US.ts)
+             translations/${META_PROJECT_NAME}_ru_RU.ts translations/${META_PROJECT_NAME}_ja_JP.ts
+	     translations/${META_PROJECT_NAME}_en_US.ts)
 
 set(DOC_FILES README.md)
 
