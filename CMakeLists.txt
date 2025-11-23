@@ -89,7 +89,7 @@ set(WIDGETS_UI_FILES
     settingsdialog/qtlanguageoptionpage.ui
     settingsdialog/qtenvoptionpage.ui
     paletteeditor/paletteeditor.ui)
-set(QT_TESTS buttonoverlay dialogs)
+set(QT_TESTS)
 set(CMAKE_MODULE_FILES cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake cmake/modules/QtLinkage.cmake
                        cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
 set(CMAKE_TEMPLATE_FILES cmake/templates/qtconfig.h.in cmake/templates/webviewdefs.h.in cmake/templates/webviewincludes.h.in
@@ -221,6 +221,9 @@ include(Doxygen)
 include(ConfigHeader)
 
 # configure test target
+if (WIDGETS_GUI)
+    list(APPEND QT_TESTS buttonoverlay dialogs)
+endif ()
 include(TestUtilities)
 list(APPEND QT_TEST_LIBRARIES ${CPP_UTILITIES_LIB} ${META_TARGET_NAME})
 use_qt_module(LIBRARIES_VARIABLE "QT_TEST_LIBRARIES" PREFIX "${QT_PACKAGE_PREFIX}" MODULE "Test")
