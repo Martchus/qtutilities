@@ -27,6 +27,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QList>
+#include <QMap>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QProcess>
@@ -129,6 +131,9 @@ struct UpdateNotifierPrivate {
     QUrl downloadUrl;
     QUrl signatureUrl;
     QUrl releasesUrl;
+    QUrl previousVersionDownloadUrl;
+    QUrl previousVersionSignatureUrl;
+    QList<std::variant<QJsonArray, QString>> previousVersionAssets;
     bool inProgress = false;
     bool updateAvailable = false;
     bool verbose = false;
@@ -307,6 +312,26 @@ const QUrl &QtUtilities::UpdateNotifier::signatureUrl() const
 #endif
 }
 
+const QUrl &UpdateNotifier::previousVersionDownloadUrl() const
+{
+#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    static const auto v = QUrl();
+    return v;
+#else
+    return m_p->previousVersionDownloadUrl;
+#endif
+}
+
+const QUrl &QtUtilities::UpdateNotifier::previousVersionSignatureUrl() const
+{
+#ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    static const auto v = QUrl();
+    return v;
+#else
+    return m_p->previousVersionSignatureUrl;
+#endif
+}
+
 CppUtilities::DateTime UpdateNotifier::lastCheck() const
 {
 #ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
@@ -327,6 +352,8 @@ void UpdateNotifier::restore(QSettings *settings)
     m_p->releaseNotes = settings->value("releaseNotes").toString();
     m_p->downloadUrl = settings->value("downloadUrl").toUrl();
     m_p->signatureUrl = settings->value("signatureUrl").toUrl();
+    m_p->previousVersionDownloadUrl = settings->value("previousVersionDownloadUrl").toUrl();
+    m_p->previousVersionSignatureUrl = settings->value("previousVersionSignatureUrl").toUrl();
     m_p->lastCheck = CppUtilities::DateTime(settings->value("lastCheck").toULongLong());
     m_p->flags = static_cast<UpdateCheckFlags>(settings->value("flags").toULongLong());
     settings->endGroup();
@@ -344,6 +371,8 @@ void UpdateNotifier::save(QSettings *settings)
     settings->setValue("releaseNotes", m_p->releaseNotes);
     settings->setValue("downloadUrl", m_p->downloadUrl);
     settings->setValue("signatureUrl", m_p->signatureUrl);
+    settings->setValue("previousVersionDownloadUrl", m_p->previousVersionDownloadUrl);
+    settings->setValue("previousVersionSignatureUrl", m_p->previousVersionSignatureUrl);
     settings->setValue("lastCheck", static_cast<qulonglong>(m_p->lastCheck.ticks()));
     settings->setValue("flags", static_cast<qulonglong>(m_p->flags));
     settings->endGroup();
@@ -501,6 +530,7 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
     auto latestVersionAssets = QJsonValue();
     auto latestVersionAssetsUrl = QString();
     auto latestVersionReleaseNotes = QString();
+    auto previousVersionAssets = QMap<QVersionNumber, std::variant<QJsonArray, QString>>();
     for (const auto &releaseInfoVal : replyArray) {
         const auto releaseInfo = releaseInfoVal.toObject();
         const auto tag = releaseInfo.value(QLatin1String("tag_name")).toString();
@@ -513,12 +543,19 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
         const auto versionStr = tag.startsWith(QChar('v')) ? tag.mid(1) : tag;
         const auto version = QVersionNumber::fromString(versionStr, &suffixIndex);
         const auto suffix = suffixIndex >= 0 ? versionStr.mid(suffixIndex) : QString();
+        const auto assets = releaseInfo.value(QLatin1String("assets"));
+        const auto assetsUrl = releaseInfo.value(QLatin1String("assets_url")).toString();
         if (latestVersionFound.isNull() || isVersionHigher(version, suffix, latestVersionFound, latestVersionSuffix)) {
             latestVersionFound = version;
             latestVersionSuffix = suffix;
-            latestVersionAssets = releaseInfo.value(QLatin1String("assets"));
-            latestVersionAssetsUrl = releaseInfo.value(QLatin1String("assets_url")).toString();
+            latestVersionAssets = assets;
+            latestVersionAssetsUrl = assetsUrl;
             latestVersionReleaseNotes = releaseInfo.value(QLatin1String("body")).toString();
+        }
+        if (assets.isArray()) {
+            previousVersionAssets[version] = assets.toArray();
+        } else if (!assetsUrl.isEmpty()) {
+            previousVersionAssets[version] = assetsUrl;
         }
         if (m_p->verbose) {
             qDebug() << "Update check: skipping release: " << tag;
@@ -527,7 +564,9 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
     if (!latestVersionFound.isNull()) {
         m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
         m_p->releaseNotes = latestVersionReleaseNotes;
+        previousVersionAssets.remove(latestVersionFound);
     }
+    m_p->previousVersionAssets = previousVersionAssets.values();
     // process assets for latest version
     const auto foundUpdate
         = !latestVersionFound.isNull() && isVersionHigher(latestVersionFound, latestVersionSuffix, m_p->currentVersion, m_p->currentVersionSuffix);
@@ -535,9 +574,9 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
         m_p->newVersion = latestVersionFound.toString() + latestVersionSuffix;
     }
     if (latestVersionAssets.isArray()) {
-        return processAssets(latestVersionAssets.toArray(), foundUpdate);
+        return processAssets(latestVersionAssets.toArray(), foundUpdate, false);
     } else if (foundUpdate) {
-        return queryRelease(latestVersionAssetsUrl);
+        return queryRelease(latestVersionAssetsUrl, foundUpdate, false);
     }
     emit checkedForUpdate();
     emit inProgressChanged(m_p->inProgress = false);
@@ -563,14 +602,18 @@ void UpdateNotifier::readReleases()
 #endif
 }
 
-void UpdateNotifier::queryRelease(const QUrl &releaseUrl)
+void UpdateNotifier::queryRelease(const QUrl &releaseUrl, bool forUpdate, bool forPreviousVersion)
 {
 #ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
     Q_UNUSED(releaseUrl)
+    Q_UNUSED(forUpdate)
+    Q_UNUSED(forPreviousVersion)
 #else
     auto request = QNetworkRequest(releaseUrl);
     request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, m_p->cacheLoadControl);
     auto *const reply = m_p->nm->get(request);
+    reply->setProperty("forUpdate", forUpdate);
+    reply->setProperty("forPreviousVersion", forPreviousVersion);
     connect(reply, &QNetworkReply::finished, this, &UpdateNotifier::readRelease);
 #endif
 }
@@ -595,7 +638,8 @@ void UpdateNotifier::readRelease()
             qDebug().noquote() << "Update check: found release info: " << QString::fromUtf8(replyDoc.toJson(QJsonDocument::Indented));
         }
 #endif
-        processAssets(replyDoc.object().value(QLatin1String("assets")).toArray(), true);
+        processAssets(replyDoc.object().value(QLatin1String("assets")).toArray(), reply->property("forUpdate").toBool(),
+            reply->property("forPreviousVersion").toBool());
         break;
     }
     case QNetworkReply::OperationCanceledError:
@@ -607,14 +651,16 @@ void UpdateNotifier::readRelease()
 #endif
 }
 
-void UpdateNotifier::processAssets(const QJsonArray &assets, bool forUpdate)
+void UpdateNotifier::processAssets(const QJsonArray &assets, bool forUpdate, bool forPreviousVersion)
 {
 #ifndef QT_UTILITIES_SETUP_TOOLS_ENABLED
     Q_UNUSED(assets)
     Q_UNUSED(forUpdate)
+    Q_UNUSED(forPreviousVersion)
 #else
     for (const auto &assetVal : assets) {
-        if (!m_p->downloadUrl.isEmpty() && !m_p->signatureUrl.isEmpty()) {
+        if (forPreviousVersion ? !m_p->previousVersionDownloadUrl.isEmpty() && !m_p->previousVersionSignatureUrl.isEmpty()
+                               : !m_p->downloadUrl.isEmpty() && !m_p->signatureUrl.isEmpty()) {
             break;
         }
         const auto asset = assetVal.toObject();
@@ -622,21 +668,29 @@ void UpdateNotifier::processAssets(const QJsonArray &assets, bool forUpdate)
         if (assetName.isEmpty()) {
             continue;
         }
-        if (m_p->assetRegex.match(assetName).hasMatch()) {
-            const auto url = asset.value(QLatin1String("browser_download_url")).toString();
-            if (assetName.endsWith(QLatin1String(".sig"))) {
-                m_p->signatureUrl = url;
-            } else {
-                m_p->downloadUrl = url;
+        if (!m_p->assetRegex.match(assetName).hasMatch()) {
+            if (m_p->verbose) {
+                qDebug() << "Update check: skipping asset: " << assetName;
             }
             continue;
         }
-        if (m_p->verbose) {
-            qDebug() << "Update check: skipping asset: " << assetName;
+        const auto url = asset.value(QLatin1String("browser_download_url")).toString();
+        if (assetName.endsWith(QLatin1String(".sig"))) {
+            (forPreviousVersion ? m_p->previousVersionSignatureUrl : m_p->signatureUrl) = url;
+        } else {
+            (forPreviousVersion ? m_p->previousVersionDownloadUrl : m_p->downloadUrl) = url;
         }
     }
     if (forUpdate) {
         m_p->updateAvailable = !m_p->downloadUrl.isEmpty();
+    }
+    if (m_p->downloadUrl.isEmpty() && m_p->previousVersionDownloadUrl.isEmpty() && !m_p->previousVersionAssets.isEmpty()) {
+        auto previousVersionAssets = m_p->previousVersionAssets.takeLast();
+        if (std::holds_alternative<QJsonArray>(previousVersionAssets)) {
+            return processAssets(std::get<QJsonArray>(previousVersionAssets), forUpdate, true);
+        } else {
+            return queryRelease(std::get<QString>(previousVersionAssets), forUpdate, true);
+        }
     }
     emit checkedForUpdate();
     emit inProgressChanged(m_p->inProgress = false);
@@ -1191,8 +1245,9 @@ void UpdateHandler::applySettings()
 
 void UpdateHandler::performUpdate()
 {
-    m_p->updater.performUpdate(
-        m_p->notifier.downloadUrl().toString(), m_p->considerSeparateSignature ? m_p->notifier.signatureUrl().toString() : QString());
+    const auto &downloadUrl = !m_p->notifier.downloadUrl().isEmpty() ? m_p->notifier.downloadUrl() : m_p->notifier.previousVersionDownloadUrl();
+    const auto &signatureUrl = !m_p->notifier.downloadUrl().isEmpty() ? m_p->notifier.signatureUrl() : m_p->notifier.previousVersionSignatureUrl();
+    m_p->updater.performUpdate(downloadUrl.toString(), m_p->considerSeparateSignature ? signatureUrl.toString() : QString());
 }
 
 void UpdateHandler::saveNotifierState()
@@ -1420,15 +1475,25 @@ void UpdateOptionPage::updateLatestVersion(bool)
     }
     const auto &notifier = *m_p->updateHandler->notifier();
     const auto &downloadUrl = notifier.downloadUrl();
+    const auto &previousVersionDownloadUrl = notifier.previousVersionDownloadUrl();
     const auto downloadUrlEscaped = downloadUrl.toString().toHtmlEscaped();
+    const auto previousVersionDownloadUrlEscaped = previousVersionDownloadUrl.toString().toHtmlEscaped();
     ui()->latestVersionValueLabel->setText(notifier.status());
     ui()->downloadUrlLabel->setText(downloadUrl.isEmpty()
             ? (notifier.latestVersion().isEmpty()
                       ? QCoreApplication::translate("QtUtilities::UpdateOptionPage", "no new version available for download")
-                      : QCoreApplication::translate(
-                            "QtUtilities::UpdateOptionPage", "new version available but no build for the current platform present yet"))
+                      : (QCoreApplication::translate("QtUtilities::UpdateOptionPage", "latest version provides no build for the current platform yet")
+                            + (previousVersionDownloadUrl.isEmpty()
+                                    ? QString()
+                                    : QString(QStringLiteral("<br>")
+                                          % QCoreApplication::translate("QtUtilities::UpdateOptionPage", "for latest build: ")
+                                          % QStringLiteral("<a href=\"") % previousVersionDownloadUrlEscaped % QStringLiteral("\">")
+                                          % previousVersionDownloadUrlEscaped % QStringLiteral("</a>")))))
             : (QStringLiteral("<a href=\"") % downloadUrlEscaped % QStringLiteral("\">") % downloadUrlEscaped % QStringLiteral("</a>")));
-    ui()->updatePushButton->setDisabled(downloadUrl.isEmpty());
+    ui()->updatePushButton->setText(!downloadUrl.isEmpty() || previousVersionDownloadUrl.isEmpty()
+            ? QCoreApplication::translate("QtUtilities::UpdateOptionPage", "Update to latest version")
+            : QCoreApplication::translate("QtUtilities::UpdateOptionPage", "Update to latest available build"));
+    ui()->updatePushButton->setDisabled(downloadUrl.isEmpty() && previousVersionDownloadUrl.isEmpty());
     ui()->releaseNotesPushButton->setHidden(notifier.releaseNotes().isEmpty());
 #endif
 }

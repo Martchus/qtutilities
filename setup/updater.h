@@ -68,6 +68,8 @@ class QT_UTILITIES_EXPORT UpdateNotifier : public QObject {
     Q_PROPERTY(QString error READ error)
     Q_PROPERTY(QUrl downloadUrl READ downloadUrl)
     Q_PROPERTY(QUrl signatureUrl READ signatureUrl)
+    Q_PROPERTY(QUrl previousVersionDownloadUrl READ previousVersionDownloadUrl)
+    Q_PROPERTY(QUrl previousVersionSignatureUrl READ previousVersionSignatureUrl)
 
 public:
     explicit UpdateNotifier(QObject *parent = nullptr);
@@ -86,6 +88,8 @@ public:
     const QString &error() const;
     const QUrl &downloadUrl() const;
     const QUrl &signatureUrl() const;
+    const QUrl &previousVersionDownloadUrl() const;
+    const QUrl &previousVersionSignatureUrl() const;
     QString status() const;
     CppUtilities::DateTime lastCheck() const;
     void restore(QSettings *settings);
@@ -110,9 +114,9 @@ private Q_SLOTS:
     void setError(const QString &context, QNetworkReply *reply);
     void setError(const QString &context, const QJsonParseError &jsonError, const QByteArray &response);
     void readReleases();
-    void queryRelease(const QUrl &releaseUrl);
+    void queryRelease(const QUrl &releaseUrl, bool forUpdate, bool forPreviousVersion);
     void readRelease();
-    void processAssets(const QJsonArray &assets, bool forUpdate);
+    void processAssets(const QJsonArray &assets, bool forUpdate, bool forPreviousVersion);
 
 private:
     std::unique_ptr<UpdateNotifierPrivate> m_p;
