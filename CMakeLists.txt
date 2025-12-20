@@ -26,6 +26,7 @@ set(HEADER_FILES
     misc/trylocker.h
     misc/adoptlocker.h
     misc/dialogutils.h
+    misc/disablewarningsmoc.h
     misc/desktoputils.h
     misc/conversion.h
     misc/compat.h

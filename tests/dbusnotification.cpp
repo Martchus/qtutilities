@@ -1,5 +1,7 @@
 #include "../misc/dbusnotification.h"
 
+#include "../misc/disablewarningsmoc.h"
+
 #include "resources/config.h"
 
 #include <QSignalSpy>
@@ -97,5 +99,6 @@ void DBusNotificationTests::semiAutomaticTest()
     disconnect(errorConnection);
 }
 
+QT_UTILITIES_DISABLE_WARNINGS_FOR_MOC_INCLUDE
 QTEST_MAIN(DBusNotificationTests)
 #include "dbusnotification.moc"

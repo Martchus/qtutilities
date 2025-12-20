@@ -1,5 +1,7 @@
 #include "../setup/updater.h"
 
+#include "../misc/disablewarningsmoc.h"
+
 #include "resources/config.h"
 
 #include <c++utilities/application/argumentparser.h>
@@ -136,5 +138,6 @@ void SetupTests::testUpdateNotifierReleaseDistinction()
     QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.8.0"));
 }
 
+QT_UTILITIES_DISABLE_WARNINGS_FOR_MOC_INCLUDE
 QTEST_MAIN(SetupTests)
 #include "setup.moc"

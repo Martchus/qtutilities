@@ -3,6 +3,8 @@
 #include "../settingsdialog/qtsettings.h"
 #include "../settingsdialog/settingsdialog.h"
 
+#include "../misc/disablewarningsmoc.h"
+
 #include <QtTest/QtTest>
 
 using namespace QtUtilities;
@@ -33,5 +35,6 @@ void DialogsTests::testSettingsDialog()
     settingsDlg.show();
 }
 
+QT_UTILITIES_DISABLE_WARNINGS_FOR_MOC_INCLUDE
 QTEST_MAIN(DialogsTests)
 #include "dialogs.moc"

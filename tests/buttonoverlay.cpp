@@ -4,6 +4,8 @@
 #include "../widgets/clearspinbox.h"
 #include "../widgets/iconbutton.h"
 
+#include "../misc/disablewarningsmoc.h"
+
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QtTest/QtTest>
@@ -140,5 +142,6 @@ void ButtonOverlayTests::testClearPlainTextEdit()
     QVERIFY2(!clearWidget.isCleared(), "widget not considered cleared anymore");
 }
 
+QT_UTILITIES_DISABLE_WARNINGS_FOR_MOC_INCLUDE
 QTEST_MAIN(ButtonOverlayTests)
 #include "buttonoverlay.moc"
