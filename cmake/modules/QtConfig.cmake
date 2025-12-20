@@ -867,6 +867,17 @@ if (WIDGETS_UI_FILES AND WIDGETS_GUI)
     endif ()
 endif ()
 
+# avoid treating certain warnings as errors when compiling generated files
+if (TREAT_WARNINGS_AS_ERRORS
+    AND (${QT_PACKAGE_PREFIX}Core_VERSION VERSION_GREATER_EQUAL 6.11.0)
+    AND (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
+    set(AUTOGEN_FILE "${CMAKE_CURRENT_BINARY_DIR}/${META_TARGET_NAME}_autogen/mocs_compilation.cpp")
+    set_source_files_properties(
+        "${AUTOGEN_FILE}" ${GENERATED_DBUS_FILES} PROPERTIES COMPILE_OPTIONS "-Wno-error=sign-conversion" # present in Qt
+                                                                                                          # 6.11.0
+    )
+endif ()
+
 # add configuration header for Qt-specific configuration
 find_template_file("qtconfig.h" QT_UTILITIES QT_CONFIG_H_TEMPLATE_FILE)
 configure_file("${QT_CONFIG_H_TEMPLATE_FILE}" "${CMAKE_CURRENT_BINARY_DIR}/resources/qtconfig.h")
