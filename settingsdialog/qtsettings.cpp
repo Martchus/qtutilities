@@ -476,7 +476,7 @@ bool QtSettings::hasLocaleChanged() const
 OptionCategory *QtSettings::category()
 {
     auto *category = new OptionCategory;
-    category->setDisplayName(QCoreApplication::translate("QtGui::QtOptionCategory", "Qt"));
+    category->setDisplayName(QCoreApplication::translate("QtGui::QtOptionCategory", "User interface"));
     category->setIcon(QIcon::fromTheme(QStringLiteral("qtcreator"), QIcon(QStringLiteral(":/qtutilities/icons/hicolor/48x48/apps/qtcreator.svg"))));
     category->assignPages({ new QtAppearanceOptionPage(*m_d), new QtLanguageOptionPage(*m_d), new QtEnvOptionPage(*m_d) });
     return category;
