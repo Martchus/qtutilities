@@ -29,7 +29,7 @@
     <name>QtGui::QtOptionCategory</name>
     <message>
         <location filename="../settingsdialog/qtsettings.cpp" line="479"/>
-        <source>Qt</source>
+        <source>User interface</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

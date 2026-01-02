@@ -28,9 +28,13 @@
 <context>
     <name>QtGui::QtOptionCategory</name>
     <message>
+        <source>Interface</source>
+        <translation type="vanished">Oberfläche</translation>
+    </message>
+    <message>
         <location filename="../settingsdialog/qtsettings.cpp" line="479"/>
-        <source>Qt</source>
-        <translation></translation>
+        <source>User interface</source>
+        <translation>Oberfläche</translation>
     </message>
 </context>
 <context>
