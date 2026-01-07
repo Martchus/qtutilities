@@ -102,9 +102,7 @@ QString dialogStyleForPalette(const QPalette &palette)
                           "palette(base); border: none; }"
                           "#bottomWidget { background-color: palette(window); "
                           "color: palette(window-text); border-top: 1px solid %1; }"
-                          "QMessageBox QLabel, QInputDialog QLabel, "
-                          "*[classNames~=\"heading\"] { font-size: 12pt; color: %2; "
-                          "}"
+                          "*[classNames~=\"heading\"] { font-size: 12pt; color: %2; }"
                           "*[classNames~=\"input-invalid\"] { color: red; }")
         .arg(windowFrameColorForPalette(palette).name(), instructionTextColorForPalette(palette).name());
 #else
