@@ -149,8 +149,7 @@ void SetupTests::testVersionComparison()
     QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-beta1"), QStringLiteral("2.0.7")), "suffixed-version and simple version");
 
     QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.8-beta1")), "suffixed-version considered older");
-    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.8-3224.493f60f2")),
-        "suffixed-version considered older (even if it is Git hash)");
+    QVERIFY2(!UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.8-3224.493f60f2")), "invalid suffixed-version ignored");
     QVERIFY2(
         !UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-beta1"), QStringLiteral("2.0.8")), "suffixed-version considered older (reversed)");
 

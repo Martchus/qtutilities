@@ -143,6 +143,11 @@ struct VersionAndSuffix {
         auto suffixIndex = VersionSuffixIndex(-1);
         res.version = QVersionNumber::fromString(versionString, &suffixIndex);
         res.suffix = suffixIndex >= 0 ? versionString.mid(suffixIndex) : QString();
+        // ignore suffixes that are not like "alpha1", "beta2" and "rc3" (so e.g. Git revisions like "3224.493f60f2" are ignored)
+        if (static const auto validSuffixRegex = QRegularExpression(QRegularExpression::anchoredPattern(QStringLiteral("-?\\w+\\d?")));
+            !validSuffixRegex.match(res.suffix).hasMatch()) {
+            res.suffix.clear();
+        }
         return res;
     }
     QVersionNumber version;
