@@ -28,6 +28,7 @@ private Q_SLOTS:
     void initTestCase();
     void testUpdateNotifierReleaseChecking();
     void testUpdateNotifierReleaseDistinction();
+    void testVersionComparison();
 
 private:
     CppUtilities::TestApplication m_app;
@@ -136,6 +137,31 @@ void SetupTests::testUpdateNotifierReleaseDistinction()
     updateNotifier.supplyNewReleaseData(jsonData);
     QCOMPARE(updateNotifier.error(), QString());
     QCOMPARE(updateNotifier.newVersion(), QStringLiteral("1.8.0"));
+}
+
+void SetupTests::testVersionComparison()
+{
+#ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.7")), "only simple versions");
+    QVERIFY2(!UpdateNotifier::isVersionHigher(QStringLiteral("2.0.7"), QStringLiteral("2.0.8")), "only simple versions (reversed)");
+
+    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.7-beta1")), "simple version and suffixed-version");
+    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-beta1"), QStringLiteral("2.0.7")), "suffixed-version and simple version");
+
+    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.8-beta1")), "suffixed-version considered older");
+    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.8-3224.493f60f2")),
+        "suffixed-version considered older (even if it is Git hash)");
+    QVERIFY2(
+        !UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-beta1"), QStringLiteral("2.0.8")), "suffixed-version considered older (reversed)");
+
+    QVERIFY2(!UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8"), QStringLiteral("2.0.8")), "equality with to simple versions");
+    QVERIFY2(!UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-beta1"), QStringLiteral("2.0.8-beta1")), "equality with two suffixed versions");
+    QVERIFY2(
+        UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-beta2"), QStringLiteral("2.0.8-beta1")), "higher version in suffix considered newer");
+
+    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-beta1"), QStringLiteral("2.0.8-alpha2")), "beta considered newer than alpha");
+    QVERIFY2(UpdateNotifier::isVersionHigher(QStringLiteral("2.0.8-rc1"), QStringLiteral("2.0.8-beta2")), "rc concidered newer than beta");
+#endif
 }
 
 QT_UTILITIES_DISABLE_WARNINGS_FOR_MOC_INCLUDE

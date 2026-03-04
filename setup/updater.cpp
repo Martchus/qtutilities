@@ -111,13 +111,50 @@ using VersionSuffixIndex = int;
 #endif
 
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+struct VersionAndSuffix {
+    operator bool() const
+    {
+        return !version.isNull();
+    }
+    bool operator>(const VersionAndSuffix &rhs) const
+    {
+        const auto cmp = QVersionNumber::compare(version, rhs.version);
+        if (cmp > 0) {
+            return true; // lhs is newer
+        } else if (cmp < 0) {
+            return false; // rhs is newer
+        }
+        if (!suffix.isEmpty() && rhs.suffix.isEmpty()) {
+            return false; // lhs is pre-release and rhs is regular release, so rhs is newer
+        }
+        if (suffix.isEmpty() && !rhs.suffix.isEmpty()) {
+            return true; // lhs is regular release and rhs is pre-release, so lhs is newer
+        }
+        // compare pre-release suffix
+        return suffix > rhs.suffix;
+    }
+    QString toString() const
+    {
+        return version.toString() + suffix;
+    }
+    static VersionAndSuffix fromString(const QString &versionString)
+    {
+        auto res = VersionAndSuffix();
+        auto suffixIndex = VersionSuffixIndex(-1);
+        res.version = QVersionNumber::fromString(versionString, &suffixIndex);
+        res.suffix = suffixIndex >= 0 ? versionString.mid(suffixIndex) : QString();
+        return res;
+    }
+    QVersionNumber version;
+    QString suffix;
+};
+
 struct UpdateNotifierPrivate {
     QNetworkAccessManager *nm = nullptr;
     CppUtilities::DateTime lastCheck;
     UpdateCheckFlags flags = UpdateCheckFlags::Default;
     QNetworkRequest::CacheLoadControl cacheLoadControl = QNetworkRequest::PreferNetwork;
-    QVersionNumber currentVersion = QVersionNumber();
-    QString currentVersionSuffix = QString();
+    VersionAndSuffix currentVersion;
     QRegularExpression gitHubRegex = QRegularExpression(QStringLiteral(".*/github.com/([^/]+)/([^/]+)(/.*)?"));
     QRegularExpression gitHubRegex2 = QRegularExpression(QStringLiteral(".*/([^/.]+)\\.github.io/([^/]+)(/.*)?"));
     QRegularExpression assetRegex = QRegularExpression();
@@ -164,19 +201,16 @@ UpdateNotifier::UpdateNotifier(QObject *parent)
     if (gitHubOrga.isNull() || gitHubRepo.isNull()) {
         return;
     }
-    const auto currentVersion = QString::fromUtf8(appInfo.version);
-    auto suffixIndex = VersionSuffixIndex(-1);
     m_p->executableName = gitHubRepo + QT_UTILITIES_VERSION_SUFFIX;
     m_p->releasesUrl
         = QStringLiteral("https://api.github.com/repos/") % gitHubOrga % QChar('/') % gitHubRepo % QStringLiteral("/releases?per_page=25");
-    m_p->currentVersion = QVersionNumber::fromString(currentVersion, &suffixIndex);
-    m_p->currentVersionSuffix = suffixIndex >= 0 ? currentVersion.mid(suffixIndex) : QString();
+    m_p->currentVersion = VersionAndSuffix::fromString(QString::fromUtf8(appInfo.version));
 #ifdef QT_UTILITIES_DOWNLOAD_REGEX
     m_p->assetRegex = QRegularExpression(m_p->executableName + QStringLiteral(QT_UTILITIES_DOWNLOAD_REGEX "\\..+"));
 #endif
     if (m_p->verbose) {
         qDebug() << "deduced executable name: " << m_p->executableName;
-        qDebug() << "assumed current version: " << m_p->currentVersion;
+        qDebug() << "assumed current version: " << m_p->currentVersion.version;
         qDebug() << "asset regex for current platform: " << m_p->assetRegex;
     }
 
@@ -482,25 +516,14 @@ void UpdateNotifier::lastCheckNow() const
 }
 
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
-/// \cond
-static bool isVersionHigher(const QVersionNumber &lhs, const QString &lhsSuffix, const QVersionNumber &rhs, const QString &rhsSuffix)
+/*!
+ * \brief Interprets \a lhs and \a rhs as version numbers and returns whether \a lhs is higher than \a rhs.
+ * \remarks This function is mainly added to expose VersionAndSuffix for easier testing. It is only available if setup tools are enabled.
+ */
+bool UpdateNotifier::isVersionHigher(const QString &lhs, const QString &rhs)
 {
-    const auto cmp = QVersionNumber::compare(lhs, rhs);
-    if (cmp > 0) {
-        return true; // lhs is newer
-    } else if (cmp < 0) {
-        return false; // rhs is newer
-    }
-    if (!lhsSuffix.isEmpty() && rhsSuffix.isEmpty()) {
-        return false; // lhs is pre-release and rhs is regular release, so rhs is newer
-    }
-    if (lhsSuffix.isEmpty() && !rhsSuffix.isEmpty()) {
-        return true; // lhs is regular release and rhs is pre-release, so lhs is newer
-    }
-    // compare pre-release suffix
-    return lhsSuffix > rhsSuffix;
+    return VersionAndSuffix::fromString(lhs) > VersionAndSuffix::fromString(rhs);
 }
-/// \endcond
 #endif
 
 void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
@@ -525,8 +548,7 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
     const auto replyArray = replyDoc.array();
     const auto skipPreReleases = !(m_p->flags && UpdateCheckFlags::IncludePreReleases);
     const auto skipDrafts = !(m_p->flags && UpdateCheckFlags::IncludeDrafts);
-    auto latestVersionFound = QVersionNumber();
-    auto latestVersionSuffix = QString();
+    auto latestVersionFound = VersionAndSuffix();
     auto latestVersionAssets = QJsonValue();
     auto latestVersionAssetsUrl = QString();
     auto latestVersionReleaseNotes = QString();
@@ -539,39 +561,35 @@ void UpdateNotifier::supplyNewReleaseData(const QByteArray &data)
             qDebug() << "Update check: skipping prerelease/draft: " << tag;
             continue;
         }
-        auto suffixIndex = VersionSuffixIndex(-1);
         const auto versionStr = tag.startsWith(QChar('v')) ? tag.mid(1) : tag;
-        const auto version = QVersionNumber::fromString(versionStr, &suffixIndex);
-        const auto suffix = suffixIndex >= 0 ? versionStr.mid(suffixIndex) : QString();
+        const auto version = VersionAndSuffix::fromString(versionStr);
         const auto assets = releaseInfo.value(QLatin1String("assets"));
         const auto assetsUrl = releaseInfo.value(QLatin1String("assets_url")).toString();
-        if (latestVersionFound.isNull() || isVersionHigher(version, suffix, latestVersionFound, latestVersionSuffix)) {
+        if (!latestVersionFound || version > latestVersionFound) {
             latestVersionFound = version;
-            latestVersionSuffix = suffix;
             latestVersionAssets = assets;
             latestVersionAssetsUrl = assetsUrl;
             latestVersionReleaseNotes = releaseInfo.value(QLatin1String("body")).toString();
         }
         if (assets.isArray()) {
-            previousVersionAssets[version] = assets.toArray();
+            previousVersionAssets[version.version] = assets.toArray();
         } else if (!assetsUrl.isEmpty()) {
-            previousVersionAssets[version] = assetsUrl;
+            previousVersionAssets[version.version] = assetsUrl;
         }
         if (m_p->verbose) {
             qDebug() << "Update check: skipping release: " << tag;
         }
     }
-    if (!latestVersionFound.isNull()) {
-        m_p->latestVersion = latestVersionFound.toString() + latestVersionSuffix;
+    if (latestVersionFound) {
+        m_p->latestVersion = latestVersionFound.toString();
         m_p->releaseNotes = latestVersionReleaseNotes;
-        previousVersionAssets.remove(latestVersionFound);
+        previousVersionAssets.remove(latestVersionFound.version);
     }
     m_p->previousVersionAssets = previousVersionAssets.values();
     // process assets for latest version
-    const auto foundUpdate
-        = !latestVersionFound.isNull() && isVersionHigher(latestVersionFound, latestVersionSuffix, m_p->currentVersion, m_p->currentVersionSuffix);
+    const auto foundUpdate = latestVersionFound && latestVersionFound > m_p->currentVersion;
     if (foundUpdate) {
-        m_p->newVersion = latestVersionFound.toString() + latestVersionSuffix;
+        m_p->newVersion = latestVersionFound.toString();
     }
     if (latestVersionAssets.isArray()) {
         return processAssets(latestVersionAssets.toArray(), foundUpdate, false);

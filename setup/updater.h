@@ -29,10 +29,12 @@ QT_FORWARD_DECLARE_CLASS(QJsonArray)
 QT_FORWARD_DECLARE_CLASS(QNetworkAccessManager)
 QT_FORWARD_DECLARE_CLASS(QNetworkReply)
 QT_FORWARD_DECLARE_CLASS(QSettings)
+QT_FORWARD_DECLARE_CLASS(QVersionNumber)
 
 namespace QtUtilities {
 
 /// \cond
+struct VersionAndSuffix;
 struct UpdateNotifierPrivate;
 struct UpdaterPrivate;
 struct UpdateHandlerPrivate;
@@ -97,6 +99,7 @@ public:
     void setNetworkAccessManager(QNetworkAccessManager *nm);
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
     void setCacheLoadControl(QNetworkRequest::CacheLoadControl cacheLoadControl);
+    static bool isVersionHigher(const QString &lhs, const QString &rhs);
 #endif
 
 public Q_SLOTS:
