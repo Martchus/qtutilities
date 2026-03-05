@@ -40,12 +40,12 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1408"/>
+        <location filename="../setup/updater.cpp" line="1431"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Update trotzdem versuchen?&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1379"/>
+        <location filename="../setup/updater.cpp" line="1402"/>
         <source>**Release notes of version %1:**
 
 </source>
@@ -58,7 +58,7 @@
         <translation type="vanished">&lt;strong&gt;Hinweise zu Version %1:&lt;/strong&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1457"/>
+        <location filename="../setup/updater.cpp" line="1480"/>
         <source>Updating</source>
         <translation>Aktualisieren</translation>
     </message>
@@ -558,12 +558,12 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::UpdateHandler</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1217"/>
+        <location filename="../setup/updater.cpp" line="1240"/>
         <source>Unable to determine the application directory.</source>
         <translation>Das Anwendungsverzeichnis kann nicht ermittelt werden.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1224"/>
+        <location filename="../setup/updater.cpp" line="1247"/>
         <source>The directory where the executable is stored (%1) is not writable.</source>
         <translation>Das Verzeichnis in dem die Programmdatei gespeichert ist (%1) ist nicht schreibbar.</translation>
     </message>
@@ -571,57 +571,57 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::UpdateNotifier</name>
     <message>
-        <location filename="../setup/updater.cpp" line="386"/>
+        <location filename="../setup/updater.cpp" line="425"/>
         <source>checking …</source>
         <translation>suche …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="390"/>
+        <location filename="../setup/updater.cpp" line="429"/>
         <source>unable to check: %1</source>
         <translation>Suche fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="394"/>
+        <location filename="../setup/updater.cpp" line="433"/>
         <source>new version available: %1 (last checked: %2)</source>
         <translation>neue Version verfügbar: %1 (zuletzt geprüft am: %2)</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="396"/>
+        <location filename="../setup/updater.cpp" line="435"/>
         <source>no new version available, latest release is: %1 (last checked: %2)</source>
         <translation>keine neue Version verfügbar, die neueste Version ist %1 (zuletzt geprüft am: %2)</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="400"/>
+        <location filename="../setup/updater.cpp" line="439"/>
         <source>unknown</source>
         <translation>unbekannt</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="438"/>
+        <location filename="../setup/updater.cpp" line="477"/>
         <source>at offset %1</source>
         <translation>bei Position %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="450"/>
+        <location filename="../setup/updater.cpp" line="489"/>
         <source>This build of the application does not support checking for updates.</source>
         <translation>Diese Version der Anwendung kann nicht nach neuen Versionen suchen.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="515"/>
+        <location filename="../setup/updater.cpp" line="543"/>
         <source>Unable to parse releases: </source>
         <translation>Kann die Releases nicht auslesen: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="600"/>
+        <location filename="../setup/updater.cpp" line="623"/>
         <source>Unable to request releases: </source>
         <translation>Kann die Releases nicht abfragen: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="633"/>
+        <location filename="../setup/updater.cpp" line="656"/>
         <source>Unable to parse release: </source>
         <translation>Kann das Release nicht auslesen: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="649"/>
+        <location filename="../setup/updater.cpp" line="672"/>
         <source>Unable to request release: </source>
         <translation>Kann das Release nicht abfragen: </translation>
     </message>
@@ -629,22 +629,22 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1461"/>
+        <location filename="../setup/updater.cpp" line="1484"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation>Nach Aktualisierungen suchen wird für die aktuelle Platform nicht untersützt.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1463"/>
+        <location filename="../setup/updater.cpp" line="1486"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation>Diese Version von %1 hat automatische Aktualisierungen deaktiviert. Du kannst die Anwendung vielleicht stattdessen über die Paketverwaltung aktualisieren.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1484"/>
+        <location filename="../setup/updater.cpp" line="1507"/>
         <source>no new version available for download</source>
         <translation>keine neue Version verfügbar</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1485"/>
+        <location filename="../setup/updater.cpp" line="1508"/>
         <source>latest version provides no build for the current platform yet</source>
         <translation>Die neueste Version stellt im Moment keinen Build für die aktuelle Platform zur Verfügung.</translation>
     </message>
@@ -653,12 +653,12 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
         <translation type="vanished">neue Version verfügbar, aber im Moment steht kein Build für die aktuelle Platform zur Verfügung</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1489"/>
+        <location filename="../setup/updater.cpp" line="1512"/>
         <source>for latest build: </source>
         <translation>URL für letzten Build: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1495"/>
+        <location filename="../setup/updater.cpp" line="1518"/>
         <source>Update to latest available build</source>
         <translation>Auf letzten verfügbaren Build updaten</translation>
     </message>
@@ -705,7 +705,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="154"/>
-        <location filename="../setup/updater.cpp" line="1494"/>
+        <location filename="../setup/updater.cpp" line="1517"/>
         <source>Update to latest version</source>
         <translation>Auf neueste Version updaten</translation>
     </message>
@@ -717,7 +717,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     <message>
         <location filename="../setup/updateoptionpage.ui" line="80"/>
         <source>Download</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="104"/>
@@ -763,102 +763,102 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::Updater</name>
     <message>
-        <location filename="../setup/updater.cpp" line="768"/>
+        <location filename="../setup/updater.cpp" line="791"/>
         <source>Update in progress …</source>
         <translation>Aktualisierung wird durchgeführt …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="768"/>
+        <location filename="../setup/updater.cpp" line="791"/>
         <source>Update done</source>
         <translation>Aktualisierung abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="768"/>
+        <location filename="../setup/updater.cpp" line="791"/>
         <source>Update failed</source>
         <translation>Aktualisierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="828"/>
+        <location filename="../setup/updater.cpp" line="851"/>
         <source>This build of the application does not support self-updating.</source>
         <translation>Diese Version der Anwendung kann sich nicht selbst aktualisieren.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="885"/>
+        <location filename="../setup/updater.cpp" line="908"/>
         <source>Downloading %1</source>
         <translation>Lade %1 herunter</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="904"/>
+        <location filename="../setup/updater.cpp" line="927"/>
         <source>Waiting for signature download …</source>
         <translation>Warte bis die Signatur heruntergeladen wurde …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="935"/>
+        <location filename="../setup/updater.cpp" line="958"/>
         <source>Unable to download signature: </source>
         <translation>Fehler beim Herunterladen der Signatur: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="943"/>
+        <location filename="../setup/updater.cpp" line="966"/>
         <source>Extracting …</source>
         <translation>Entpacke …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="959"/>
+        <location filename="../setup/updater.cpp" line="982"/>
         <source>Unable to download update: </source>
         <translation>Fehler beim Herunterladen der Aktualisierung: </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="976"/>
+        <location filename="../setup/updater.cpp" line="999"/>
         <source>Unable to determine application path.</source>
         <translation>Kann den Anwendungspfad nicht ermitteln.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="983"/>
+        <location filename="../setup/updater.cpp" line="1006"/>
         <source>Extraction was cancelled.</source>
         <translation>Das Entpacken wurde abgebrochen.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1032"/>
+        <location filename="../setup/updater.cpp" line="1055"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
         <translation>Fehler beim Erstellen der neuen Anwendungsdatei unter &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1037"/>
+        <location filename="../setup/updater.cpp" line="1060"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
         <translation>Fehler beim scheiben der neuen Anwendungsdatei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1042"/>
+        <location filename="../setup/updater.cpp" line="1065"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
         <translation>Kann die neue Anwendungsdatei unter &quot;%1&quot; nicht erstellen.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1051"/>
+        <location filename="../setup/updater.cpp" line="1074"/>
         <source>Unable to open downloaded archive: %1</source>
         <translation>Kann heruntergeladenes Archiv nicht öffnen: %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1061"/>
+        <location filename="../setup/updater.cpp" line="1084"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
         <translation>Kann die heruntergeladene Anwendungsdatei nicht Verifizieren: %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1079"/>
+        <location filename="../setup/updater.cpp" line="1102"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
         <translation>Kann die aktuelle Anwendungsdatei nicht nach &quot;%1&quot; verschieben: %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1087"/>
+        <location filename="../setup/updater.cpp" line="1110"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
         <translation>Kann die neue Anwendungsdatei &quot;%1&quot; nicht nach &quot;%2&quot; verschieben: %3</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1093"/>
+        <location filename="../setup/updater.cpp" line="1116"/>
         <source>Unable to find executable in downloaded archive.</source>
         <translation>Die Anwendungsdatei konnte nicht im heruntergeladenen Achiv gefunden werden.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1111"/>
+        <location filename="../setup/updater.cpp" line="1134"/>
         <source>Update stored under: %1</source>
         <translation>Aktualisierung heruntergeladen unter: %1</translation>
     </message>
@@ -866,7 +866,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1536"/>
+        <location filename="../setup/updater.cpp" line="1559"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation>&lt;p&gt;Die Signatur der heruntergelandenen Programmdatei konnte nicht verifiziert werden: %1&lt;/p&gt;</translation>
     </message>
