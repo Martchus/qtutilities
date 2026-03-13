@@ -22,7 +22,7 @@
     <message>
         <location filename="../settingsdialog/qtsettings.cpp" line="625"/>
         <source>recognized by Qt as</source>
-        <translation>Qtによって認識</translation>
+        <translation>Qt によって認識</translation>
     </message>
 </context>
 <context>
@@ -34,7 +34,7 @@
     <message>
         <location filename="../settingsdialog/qtsettings.cpp" line="479"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザーインターフェース</translation>
     </message>
 </context>
 <context>
@@ -622,7 +622,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1508"/>
         <source>latest version provides no build for the current platform yet</source>
-        <translation type="unfinished"></translation>
+        <translation>最新バージョンでは、現在のプラットフォーム用のビルドはまだ提供されていません</translation>
     </message>
     <message>
         <source>new version available but no build for the current platform present yet</source>
@@ -631,12 +631,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1512"/>
         <source>for latest build: </source>
-        <translation type="unfinished"></translation>
+        <translation>最新ビルド : </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1518"/>
         <source>Update to latest available build</source>
-        <translation type="unfinished"></translation>
+        <translation>最新ビルドに更新</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="6"/>
