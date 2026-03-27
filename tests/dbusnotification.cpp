@@ -70,9 +70,9 @@ void DBusNotificationTests::semiAutomaticTest()
 
     DBusNotification n(QStringLiteral("Semi-automatic test"), NotificationIcon::Information, 10000);
     QString clickedAction, error;
-    const auto actionConnection
+    auto actionConnection
         = connect(&n, &DBusNotification::actionInvoked, [&clickedAction](const QString &actionName) { clickedAction = actionName; });
-    const auto errorConnection
+    auto errorConnection
         = connect(&n, &DBusNotification::error, [&error]() { error = QStringLiteral("error occurred (TODO: pass an error message here)"); });
     n.setApplicationName(QStringLiteral(APP_NAME " tests; " APP_VERSION));
     n.show(QStringLiteral("Some message; will append more lines later"));
