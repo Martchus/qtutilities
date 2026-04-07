@@ -85,10 +85,8 @@ else ()
 endif ()
 if (META_QUICK_GUI_MODES)
     foreach (MODE ${META_QUICK_GUI_MODES})
-        if (NOT QUICK_GUI OR NOT MODE IN_LIST QUICK_GUI_ENABLED_MODES)
-            list(APPEND EXCLUDED_FILES ${QML_HEADER_FILES_${MODE_UPPER}} ${QML_SRC_FILES_${MODE_UPPER}}
-                 ${QML_RES_FILES_${MODE_UPPER}})
-        endif ()
+        list(APPEND EXCLUDED_FILES ${QML_HEADER_FILES_${MODE_UPPER}} ${QML_SRC_FILES_${MODE_UPPER}}
+             ${QML_RES_FILES_${MODE_UPPER}})
     endforeach ()
 endif ()
 
