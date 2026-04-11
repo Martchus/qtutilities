@@ -151,7 +151,7 @@ use_cpp_utilities()
 # configure platform specific capslock detection for enterpassworddialog.cpp
 if (WIN32)
     set(HAVE_PLATFORM_SPECIFIC_CAPSLOCK_DETECTION ON)
-else ()
+elseif (NOT ANDROID AND NOT APPLE)
     include(3rdParty)
     use_package(TARGET_NAME X11::X11 PACKAGE_NAME X11 OPTIONAL)
     if (TARGET X11::X11)
