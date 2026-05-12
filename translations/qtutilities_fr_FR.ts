@@ -14,7 +14,7 @@
     <message>
         <location filename="../resources/qtconfigarguments.cpp" line="193"/>
         <source>This application requires Windows 10, version 1809 or newer. The current Windows version is older so the application might not work correctly.</source>
-        <translation>Cette application nécessite Windows 10, version 1809 ou plus récente. La version actuelle de Windows est plus ancienne, l'application pourrait donc ne pas fonctionner correctement.</translation>
+        <translation>Cette application nécessite Windows 10, version 1809 ou plus récente. La version actuelle de Windows est plus ancienne, l&apos;application pourrait donc ne pas fonctionner correctement.</translation>
     </message>
 </context>
 <context>
@@ -36,12 +36,12 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1431"/>
+        <location filename="../setup/updater.cpp" line="1434"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Essayer la mise à jour malgré tout ?&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1402"/>
+        <location filename="../setup/updater.cpp" line="1405"/>
         <source>**Release notes of version %1:**
 
 </source>
@@ -50,7 +50,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1480"/>
+        <location filename="../setup/updater.cpp" line="1483"/>
         <source>Updating</source>
         <translation>Mise à jour en cours</translation>
     </message>
@@ -60,7 +60,7 @@
     <message>
         <location filename="../resources/resources.cpp" line="499"/>
         <source>unable to access file</source>
-        <translation>impossible d'accéder au fichier</translation>
+        <translation>impossible d&apos;accéder au fichier</translation>
     </message>
     <message>
         <location filename="../resources/resources.cpp" line="502"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="127"/>
         <source>application name</source>
-        <translation>nom de l'application</translation>
+        <translation>nom de l&apos;application</translation>
     </message>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="137"/>
@@ -150,7 +150,7 @@
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
         <source>user name</source>
-        <translation>nom d'utilisateur</translation>
+        <translation>nom d&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
@@ -196,17 +196,17 @@
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="289"/>
         <source>You didn&apos;t enter a user name.</source>
-        <translation>Vous n'avez pas saisi de nom d'utilisateur.</translation>
+        <translation>Vous n&apos;avez pas saisi de nom d&apos;utilisateur.</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="291"/>
         <source>You didn&apos;t enter a password.</source>
-        <translation>Vous n'avez pas saisi de mot de passe.</translation>
+        <translation>Vous n&apos;avez pas saisi de mot de passe.</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="296"/>
         <source>You have to enter the new password twice to ensure you enterd it correct.</source>
-        <translation>Vous devez saisir le nouveau mot de passe deux fois pour vous assurer qu'il est correct.</translation>
+        <translation>Vous devez saisir le nouveau mot de passe deux fois pour vous assurer qu&apos;il est correct.</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.cpp" line="299"/>
@@ -269,7 +269,7 @@
     <message>
         <location filename="../paletteeditor/paletteeditor.cpp" line="180"/>
         <source>Unable to write &quot;%1&quot;.</source>
-        <translation>Impossible d'écrire &quot;%1&quot;.</translation>
+        <translation>Impossible d&apos;écrire &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="../paletteeditor/paletteeditor.cpp" line="188"/>
@@ -289,7 +289,7 @@
     <message>
         <location filename="../paletteeditor/paletteeditor.cpp" line="214"/>
         <source>Error writing palette</source>
-        <translation>Erreur lors de l'écriture de la palette</translation>
+        <translation>Erreur lors de l&apos;écriture de la palette</translation>
     </message>
 </context>
 <context>
@@ -360,7 +360,7 @@
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="71"/>
         <source>More options ...</source>
-        <translation>Plus d'options ...</translation>
+        <translation>Plus d&apos;options ...</translation>
     </message>
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="93"/>
@@ -385,14 +385,14 @@
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="195"/>
         <source>Icon theme</source>
-        <translation>Thème d'icônes</translation>
+        <translation>Thème d&apos;icônes</translation>
     </message>
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="249"/>
         <source>These settings take effect after restarting the application.
 These settings might be overwritten by your Qt platform integration plugin and hence have no effect.</source>
-        <translation>Ces paramètres prendront effet après le redémarrage de l'application.
-Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et n'avoir ainsi aucun effet.</translation>
+        <translation>Ces paramètres prendront effet après le redémarrage de l&apos;application.
+Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme Qt et n&apos;avoir ainsi aucun effet.</translation>
     </message>
 </context>
 <context>
@@ -410,7 +410,7 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../settingsdialog/qtenvoptionpage.ui" line="38"/>
         <source>Additional icon theme search path</source>
-        <translation>Chemin de recherche de thèmes d'icônes supplémentaire</translation>
+        <translation>Chemin de recherche de thèmes d&apos;icônes supplémentaire</translation>
     </message>
     <message>
         <location filename="../settingsdialog/qtenvoptionpage.ui" line="48"/>
@@ -420,7 +420,7 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../settingsdialog/qtenvoptionpage.ui" line="79"/>
         <source>These settings take effect after restarting the application.</source>
-        <translation>Ces paramètres prendront effet après le redémarrage de l'application.</translation>
+        <translation>Ces paramètres prendront effet après le redémarrage de l&apos;application.</translation>
     </message>
 </context>
 <context>
@@ -443,7 +443,7 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../settingsdialog/qtlanguageoptionpage.ui" line="98"/>
         <source>These settings take effect after restarting the application.</source>
-        <translation>Ces paramètres prendront effet après le redémarrage de l'application.</translation>
+        <translation>Ces paramètres prendront effet après le redémarrage de l&apos;application.</translation>
     </message>
 </context>
 <context>
@@ -466,17 +466,17 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../misc/recentmenumanager.cpp" line="145"/>
         <source>The selected file can&apos;t be found anymore. Do you want to delete the obsolete entry from the list?</source>
-        <translation>Le fichier sélectionné est introuvable. Voulez-vous supprimer l'entrée obsolète de la liste ?</translation>
+        <translation>Le fichier sélectionné est introuvable. Voulez-vous supprimer l&apos;entrée obsolète de la liste ?</translation>
     </message>
     <message>
         <location filename="../misc/recentmenumanager.cpp" line="148"/>
         <source>keep entry</source>
-        <translation>conserver l'entrée</translation>
+        <translation>conserver l&apos;entrée</translation>
     </message>
     <message>
         <location filename="../misc/recentmenumanager.cpp" line="149"/>
         <source>delete entry</source>
-        <translation>supprimer l'entrée</translation>
+        <translation>supprimer l&apos;entrée</translation>
     </message>
 </context>
 <context>
@@ -515,7 +515,7 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../settingsdialog/settingsdialog.cpp" line="320"/>
         <source>&lt;p&gt;&lt;b&gt;Errors occurred when applying changes:&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Des erreurs sont survenues lors de l'application des modifications :&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
+        <translation>&lt;p&gt;&lt;b&gt;Des erreurs sont survenues lors de l&apos;application des modifications :&lt;/b&gt;&lt;/p&gt;&lt;ul&gt;</translation>
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.cpp" line="325"/>
@@ -526,14 +526,14 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
 <context>
     <name>QtUtilities::UpdateHandler</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1240"/>
+        <location filename="../setup/updater.cpp" line="1243"/>
         <source>Unable to determine the application directory.</source>
-        <translation>Impossible de déterminer le répertoire de l'application.</translation>
+        <translation>Impossible de déterminer le répertoire de l&apos;application.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1247"/>
+        <location filename="../setup/updater.cpp" line="1250"/>
         <source>The directory where the executable is stored (%1) is not writable.</source>
-        <translation>Le répertoire où se trouve l'exécutable (%1) n'est pas accessible en écriture.</translation>
+        <translation>Le répertoire où se trouve l&apos;exécutable (%1) n&apos;est pas accessible en écriture.</translation>
     </message>
 </context>
 <context>
@@ -566,17 +566,17 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../setup/updater.cpp" line="477"/>
         <source>at offset %1</source>
-        <translation>à l'offset %1</translation>
+        <translation>à l&apos;offset %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="489"/>
         <source>This build of the application does not support checking for updates.</source>
-        <translation>Cette version de l'application ne prend pas en charge la recherche de mises à jour.</translation>
+        <translation>Cette version de l&apos;application ne prend pas en charge la recherche de mises à jour.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="543"/>
         <source>Unable to parse releases: </source>
-        <translation>Impossible d'analyser les publications : </translation>
+        <translation>Impossible d&apos;analyser les publications : </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="623"/>
@@ -586,7 +586,7 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../setup/updater.cpp" line="656"/>
         <source>Unable to parse release: </source>
-        <translation>Impossible d'analyser la publication : </translation>
+        <translation>Impossible d&apos;analyser la publication : </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="672"/>
@@ -597,32 +597,32 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1484"/>
+        <location filename="../setup/updater.cpp" line="1487"/>
         <source>Checking for updates is not supported on this platform.</source>
-        <translation>La recherche de mises à jour n'est pas prise en charge sur cette plateforme.</translation>
+        <translation>La recherche de mises à jour n&apos;est pas prise en charge sur cette plateforme.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1486"/>
+        <location filename="../setup/updater.cpp" line="1489"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
-        <translation>Cette version de %1 a les mises à jour automatiques désactivées. Vous pouvez cependant mettre à jour l'application via votre gestionnaire de paquets.</translation>
+        <translation>Cette version de %1 a les mises à jour automatiques désactivées. Vous pouvez cependant mettre à jour l&apos;application via votre gestionnaire de paquets.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1507"/>
+        <location filename="../setup/updater.cpp" line="1510"/>
         <source>no new version available for download</source>
         <translation>aucune nouvelle version disponible au téléchargement</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1508"/>
+        <location filename="../setup/updater.cpp" line="1511"/>
         <source>latest version provides no build for the current platform yet</source>
         <translation>la dernière version ne propose pas encore de build pour la plateforme actuelle</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1512"/>
+        <location filename="../setup/updater.cpp" line="1515"/>
         <source>for latest build: </source>
         <translation>pour le dernier build : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1518"/>
+        <location filename="../setup/updater.cpp" line="1521"/>
         <source>Update to latest available build</source>
         <translation>Mettre à jour vers le dernier build disponible</translation>
     </message>
@@ -680,7 +680,7 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="154"/>
-        <location filename="../setup/updater.cpp" line="1517"/>
+        <location filename="../setup/updater.cpp" line="1520"/>
         <source>Update to latest version</source>
         <translation>Mettre à jour vers la dernière version</translation>
     </message>
@@ -740,57 +740,122 @@ Ils peuvent être écrasés par votre plug-in d'intégration de plateforme Qt et
     <message>
         <location filename="../setup/updater.cpp" line="851"/>
         <source>This build of the application does not support self-updating.</source>
-        <translation>Cette version de l'application ne prend pas en charge l'auto-mise à jour.</translation>
+        <translation>Cette version de l&apos;application ne prend pas en charge l&apos;auto-mise à jour.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="908"/>
+        <location filename="../setup/updater.cpp" line="911"/>
         <source>Downloading %1</source>
         <translation>Téléchargement de %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="927"/>
+        <location filename="../setup/updater.cpp" line="930"/>
         <source>Waiting for signature download …</source>
         <translation>Attente du téléchargement de la signature …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="958"/>
+        <location filename="../setup/updater.cpp" line="961"/>
         <source>Unable to download signature: </source>
         <translation>Impossible de télécharger la signature : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="966"/>
+        <location filename="../setup/updater.cpp" line="969"/>
         <source>Extracting …</source>
         <translation>Extraction …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="982"/>
+        <location filename="../setup/updater.cpp" line="985"/>
         <source>Unable to download update: </source>
         <translation>Impossible de télécharger la mise à jour : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="999"/>
+        <location filename="../setup/updater.cpp" line="1002"/>
         <source>Unable to determine application path.</source>
-        <translation>Impossible de déterminer le chemin de l'application.</translation>
+        <translation>Impossible de déterminer le chemin de l&apos;application.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1006"/>
+        <location filename="../setup/updater.cpp" line="1009"/>
         <source>Extraction was cancelled.</source>
-        <translation>L'extraction a été annulée.</translation>
+        <translation>L&apos;extraction a été annulée.</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1055"/>
+        <location filename="../setup/updater.cpp" line="1058"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
         <translation>Impossible de créer le nouvel exécutable sous &quot;%1&quot; : %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1060"/>
+        <location filename="../setup/updater.cpp" line="1063"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
-        <translation>Impossible d'écrire le nouvel exécutable sous &quot;%1&quot; : %2</translation>
+        <translation>Impossible d&apos;écrire le nouvel exécutable sous &quot;%1&quot; : %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1065"/>
+        <location filename="../setup/updater.cpp" line="1068"/>
+        <source>Unable to make new binary under &quot;%1&quot; executable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1077"/>
+        <source>Unable to open downloaded archive: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1087"/>
+        <source>Unable to verify whether downloaded binary is valid: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1105"/>
+        <source>Unable to move current executable to &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1113"/>
+        <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1119"/>
+        <source>Unable to find executable in downloaded archive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setup/updater.cpp" line="1137"/>
+        <source>Update stored under: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Unable to make new binary under &quot;%1&quot; executable</source>
-        <translation>Impossible de rendre le nouveau binaire sous &quot;%1&quot; exécutable</translation>
+        <translation type="vanished">Impossible de rendre le nouveau binaire sous &quot;%1&quot; exécutable</translation>
+    </message>
+</context>
+<context>
+    <name>QtUtilities::VerificationErrorMessageBox</name>
+    <message>
+        <location filename="../setup/updater.cpp" line="1562"/>
+        <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Utilities::windowTitle</name>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="36"/>
+        <source>Unsaved - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="39"/>
+        <source>%1 - %2 - %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="44"/>
+        <source>*Unsaved - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../misc/dialogutils.cpp" line="47"/>
+        <source>*%1 - %2 - %3</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
