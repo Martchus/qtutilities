@@ -897,7 +897,10 @@ void Updater::startDownload(const QString &downloadUrl, const QString &signature
 
     if (const auto fakeDownloadPath = qEnvironmentVariable(PROJECT_VARNAME_UPPER "_UPDATER_FAKE_DOWNLOAD"); !fakeDownloadPath.isEmpty()) {
         m_p->fakeDownload = new QFile(fakeDownloadPath);
-        m_p->fakeDownload->open(QFile::ReadOnly);
+        if (!m_p->fakeDownload->open(QFile::ReadOnly)) {
+            qWarning() << "Unable to open fake download file from:" << m_p->fakeDownload->errorString();
+            qDebug() << PROJECT_VARNAME_UPPER "_UPDATER_FAKE_DOWNLOAD was set to:" << fakeDownloadPath;
+        }
         emit inProgressChanged(true);
         storeExecutable();
         return;
