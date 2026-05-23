@@ -111,6 +111,14 @@ using VersionSuffixIndex = int;
 #endif
 
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
+static QNetworkRequest makeNetworkRequest(const QUrl &url, QNetworkRequest::CacheLoadControl cacheLoadControl)
+{
+    auto request = QNetworkRequest(url);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, cacheLoadControl);
+    return request;
+}
+
 struct VersionAndSuffix {
     operator bool() const
     {
@@ -155,6 +163,11 @@ struct VersionAndSuffix {
 };
 
 struct UpdateNotifierPrivate {
+    QNetworkRequest makeRequest(const QUrl &url) const
+    {
+        return makeNetworkRequest(url, cacheLoadControl);
+    }
+
     QNetworkAccessManager *nm = nullptr;
     CppUtilities::DateTime lastCheck;
     UpdateCheckFlags flags = UpdateCheckFlags::Default;
@@ -494,9 +507,7 @@ void UpdateNotifier::checkForUpdate()
         return;
     }
     emit inProgressChanged(m_p->inProgress = true);
-    auto request = QNetworkRequest(m_p->releasesUrl);
-    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, m_p->cacheLoadControl);
-    auto *const reply = m_p->nm->get(request);
+    auto *const reply = m_p->nm->get(m_p->makeRequest(m_p->releasesUrl));
     connect(reply, &QNetworkReply::finished, this, &UpdateNotifier::readReleases);
 #endif
 }
@@ -632,9 +643,7 @@ void UpdateNotifier::queryRelease(const QUrl &releaseUrl, bool forUpdate, bool f
     Q_UNUSED(forUpdate)
     Q_UNUSED(forPreviousVersion)
 #else
-    auto request = QNetworkRequest(releaseUrl);
-    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, m_p->cacheLoadControl);
-    auto *const reply = m_p->nm->get(request);
+    auto *const reply = m_p->nm->get(m_p->makeRequest(releaseUrl));
     reply->setProperty("forUpdate", forUpdate);
     reply->setProperty("forPreviousVersion", forPreviousVersion);
     connect(reply, &QNetworkReply::finished, this, &UpdateNotifier::readRelease);
@@ -727,6 +736,11 @@ void UpdateNotifier::processAssets(const QJsonArray &assets, bool forUpdate, boo
 
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
 struct UpdaterPrivate {
+    QNetworkRequest makeRequest(const QUrl &url) const
+    {
+        return makeNetworkRequest(url, cacheLoadControl);
+    }
+
     QNetworkAccessManager *nm = nullptr;
     QFile *fakeDownload = nullptr;
     QNetworkReply *currentDownload = nullptr;
@@ -906,8 +920,7 @@ void Updater::startDownload(const QString &downloadUrl, const QString &signature
         return;
     }
 
-    auto request = QNetworkRequest(QUrl(downloadUrl));
-    request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, m_p->cacheLoadControl);
+    auto request = m_p->makeRequest(QUrl(downloadUrl));
     m_p->statusMessage = tr("Downloading %1").arg(downloadUrl);
     m_p->currentDownload = m_p->nm->get(request);
     emit updateStatusChanged(m_p->statusMessage);
