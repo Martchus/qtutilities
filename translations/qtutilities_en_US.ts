@@ -147,27 +147,27 @@
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
-        <source>user name</source>
+        <source>User name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
-        <source>password</source>
+        <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
-        <source>repeat password</source>
+        <source>Repeat password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
-        <source>show password</source>
+        <source>Show password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
-        <source>don&apos;t use a password</source>
+        <source>Don&apos;t use a password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -181,7 +181,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="253"/>
         <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>

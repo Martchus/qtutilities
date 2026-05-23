@@ -164,28 +164,48 @@
         <translation>Passwort eingeben</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
         <source>user name</source>
+        <translation type="vanished">Benutzername</translation>
+    </message>
+    <message>
+        <source>password</source>
+        <translation type="vanished">Passwort</translation>
+    </message>
+    <message>
+        <source>repeat password</source>
+        <translation type="vanished">Password wiederholen</translation>
+    </message>
+    <message>
+        <source>show password</source>
+        <translation type="vanished">Passwort zeigen</translation>
+    </message>
+    <message>
+        <source>don&apos;t use a password</source>
+        <translation type="vanished">Kein Passwort verwenden</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
+        <source>User name</source>
         <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
-        <source>password</source>
+        <source>Password</source>
         <translation>Passwort</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
-        <source>repeat password</source>
+        <source>Repeat password</source>
         <translation>Password wiederholen</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
-        <source>show password</source>
+        <source>Show password</source>
         <translation>Passwort zeigen</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
-        <source>don&apos;t use a password</source>
+        <source>Don&apos;t use a password</source>
         <translation>Kein Passwort verwenden</translation>
     </message>
     <message>
@@ -199,7 +219,7 @@
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="253"/>
         <source>Confirm</source>
         <translation>Bestätigen</translation>
     </message>
@@ -717,7 +737,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     <message>
         <location filename="../setup/updateoptionpage.ui" line="80"/>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="104"/>

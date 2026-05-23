@@ -155,28 +155,48 @@
         <translation>Введите пароль</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
         <source>user name</source>
+        <translation type="vanished">имя пользователя</translation>
+    </message>
+    <message>
+        <source>password</source>
+        <translation type="vanished">пароль</translation>
+    </message>
+    <message>
+        <source>repeat password</source>
+        <translation type="vanished">Повторите пароль</translation>
+    </message>
+    <message>
+        <source>show password</source>
+        <translation type="vanished">показать пароль</translation>
+    </message>
+    <message>
+        <source>don&apos;t use a password</source>
+        <translation type="vanished">не используйте пароль</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
+        <source>User name</source>
         <translation>имя пользователя</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
-        <source>password</source>
+        <source>Password</source>
         <translation>пароль</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
-        <source>repeat password</source>
+        <source>Repeat password</source>
         <translation>Повторите пароль</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
-        <source>show password</source>
+        <source>Show password</source>
         <translation>показать пароль</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
-        <source>don&apos;t use a password</source>
+        <source>Don&apos;t use a password</source>
         <translation>не используйте пароль</translation>
     </message>
     <message>
@@ -190,7 +210,7 @@
         <translation>Прервать</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="253"/>
         <source>Confirm</source>
         <translation>Подтверждать</translation>
     </message>

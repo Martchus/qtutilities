@@ -156,28 +156,48 @@
         <translation>パスワードの入力</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
         <source>user name</source>
+        <translation type="vanished">ユーザー名</translation>
+    </message>
+    <message>
+        <source>password</source>
+        <translation type="vanished">パスワード</translation>
+    </message>
+    <message>
+        <source>repeat password</source>
+        <translation type="vanished">パスワードの確認</translation>
+    </message>
+    <message>
+        <source>show password</source>
+        <translation type="vanished">パスワードを表示</translation>
+    </message>
+    <message>
+        <source>don&apos;t use a password</source>
+        <translation type="vanished">パスワードを使用しない</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
+        <source>User name</source>
         <translation>ユーザー名</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
-        <source>password</source>
+        <source>Password</source>
         <translation>パスワード</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
-        <source>repeat password</source>
+        <source>Repeat password</source>
         <translation>パスワードの確認</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
-        <source>show password</source>
+        <source>Show password</source>
         <translation>パスワードを表示</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
-        <source>don&apos;t use a password</source>
+        <source>Don&apos;t use a password</source>
         <translation>パスワードを使用しない</translation>
     </message>
     <message>
@@ -191,7 +211,7 @@
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="253"/>
         <source>Confirm</source>
         <translation>確認</translation>
     </message>

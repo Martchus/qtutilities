@@ -158,28 +158,48 @@
         <translation>输入密码</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
         <source>user name</source>
+        <translation type="vanished">用户名</translation>
+    </message>
+    <message>
+        <source>password</source>
+        <translation type="vanished">密码</translation>
+    </message>
+    <message>
+        <source>repeat password</source>
+        <translation type="vanished">重复密码</translation>
+    </message>
+    <message>
+        <source>show password</source>
+        <translation type="vanished">显示密码</translation>
+    </message>
+    <message>
+        <source>don&apos;t use a password</source>
+        <translation type="vanished">不使用密码</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
+        <source>User name</source>
         <translation>用户名</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
-        <source>password</source>
+        <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
-        <source>repeat password</source>
+        <source>Repeat password</source>
         <translation>重复密码</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
-        <source>show password</source>
+        <source>Show password</source>
         <translation>显示密码</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
-        <source>don&apos;t use a password</source>
+        <source>Don&apos;t use a password</source>
         <translation>不使用密码</translation>
     </message>
     <message>
@@ -193,7 +213,7 @@
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="253"/>
         <source>Confirm</source>
         <translation>确认</translation>
     </message>

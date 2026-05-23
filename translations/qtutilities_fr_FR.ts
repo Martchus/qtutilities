@@ -148,29 +148,49 @@
         <translation>Saisissez le mot de passe</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
         <source>user name</source>
-        <translation>nom d&apos;utilisateur</translation>
+        <translation type="vanished">nom d&apos;utilisateur</translation>
+    </message>
+    <message>
+        <source>password</source>
+        <translation type="vanished">mot de passe</translation>
+    </message>
+    <message>
+        <source>repeat password</source>
+        <translation type="vanished">répétez le mot de passe</translation>
+    </message>
+    <message>
+        <source>show password</source>
+        <translation type="vanished">afficher le mot de passe</translation>
+    </message>
+    <message>
+        <source>don&apos;t use a password</source>
+        <translation type="vanished">ne pas utiliser de mot de passe</translation>
+    </message>
+    <message>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="64"/>
+        <source>User name</source>
+        <translation>Nom d&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="86"/>
-        <source>password</source>
-        <translation>mot de passe</translation>
+        <source>Password</source>
+        <translation>Mot de passe</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="102"/>
-        <source>repeat password</source>
-        <translation>répétez le mot de passe</translation>
+        <source>Repeat password</source>
+        <translation>Répétez le mot de passe</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="130"/>
-        <source>show password</source>
-        <translation>afficher le mot de passe</translation>
+        <source>Show password</source>
+        <translation>Afficher le mot de passe</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="137"/>
-        <source>don&apos;t use a password</source>
-        <translation>ne pas utiliser de mot de passe</translation>
+        <source>Don&apos;t use a password</source>
+        <translation>Ne pas utiliser de mot de passe</translation>
     </message>
     <message>
         <location filename="../enterpassworddialog/enterpassworddialog.ui" line="213"/>
@@ -183,7 +203,7 @@
         <translation>Abandonner</translation>
     </message>
     <message>
-        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="254"/>
+        <location filename="../enterpassworddialog/enterpassworddialog.ui" line="253"/>
         <source>Confirm</source>
         <translation>Confirmer</translation>
     </message>
