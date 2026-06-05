@@ -102,7 +102,7 @@ if (WIN32)
         set(BUILD_CLI_WRAPPER_DEFAULT OFF)
         set(${META_PROJECT_VARNAME_UPPER}_WINDOWS_CONSOLE_ALLOCATION_POLICY
             "detached"
-            CACHE STRING "sets the console allocation policy for ${META_PROJECT_NAME}")
+            CACHE STRING "sets the console allocation policy for ${META_PROJECT_NAME}" FORCE)
     endif ()
     # add option for building CLI-wrapper
     option(BUILD_CLI_WRAPPER "whether to build a CLI wrapper" "${BUILD_CLI_WRAPPER_DEFAULT}")
