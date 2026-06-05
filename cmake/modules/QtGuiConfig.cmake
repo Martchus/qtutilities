@@ -94,8 +94,18 @@ endif ()
 if (WIN32)
     # set "GUI-type" to WIN32 to hide console under Windows
     set(GUI_TYPE WIN32)
+    set(BUILD_CLI_WRAPPER_DEFAULT ON)
+    # add option to use console application with detached console instead of creating a GUI app
+    option(USE_DETACHED_CONSOLE "use console app with detached console instead of creating a GUI app" OFF)
+    if (USE_DETACHED_CONSOLE)
+        unset(GUI_TYPE)
+        set(BUILD_CLI_WRAPPER_DEFAULT OFF)
+        set(${META_PROJECT_VARNAME_UPPER}_WINDOWS_CONSOLE_ALLOCATION_POLICY
+            "detached"
+            CACHE STRING "sets the console allocation policy for ${META_PROJECT_NAME}")
+    endif ()
     # add option for building CLI-wrapper
-    option(BUILD_CLI_WRAPPER "whether to build a CLI wrapper" ON)
+    option(BUILD_CLI_WRAPPER "whether to build a CLI wrapper" "${BUILD_CLI_WRAPPER_DEFAULT}")
 elseif (APPLE)
     # make the GUI application a "bundle" under MacOSX
     set(GUI_TYPE MACOSX_BUNDLE)
