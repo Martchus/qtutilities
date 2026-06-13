@@ -22,7 +22,6 @@
 
 #ifdef Q_OS_ANDROID
 #include <QDebug>
-#include <QStandardPaths>
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -508,22 +507,16 @@ QString errorMessageForSettings(const QSettings &settings)
 }
 
 /*!
- * \brief Deletes the Qt Quick pipeline cache on platforms where this is needed to workaround issues with the cache.
+ * \brief Disables the Qt Quick pipeline cache on platforms where this is needed to workaround issues with the cache.
+ * \remarks
+ * This function is called "delete…" because it previously deleted the cache. However, it is actually possible to just
+ * disable it so that is preferable.
  */
 void deletePipelineCacheIfNeeded()
 {
 #ifdef Q_OS_ANDROID
-    // delete OpenGL pipeline cache under Android as it seems to break loading the app in certain cases
-    const auto cachePaths = QStandardPaths::standardLocations(QStandardPaths::CacheLocation);
-    for (const auto &cachePath : cachePaths) {
-        const auto cacheDir = QDir(cachePath);
-        const auto subdirs = cacheDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        for (const auto &subdir : subdirs) {
-            if (subdir.startsWith(QLatin1String("qtpipelinecache"))) {
-                QFile::remove(cachePath % QChar('/') % subdir % QStringLiteral("/qqpc_opengl"));
-            }
-        }
-    }
+    // disable OpenGL pipeline cache under Android as it seems to break loading the app in certain cases
+    qputenv("QSG_RHI_DISABLE_DISK_CACHE", "1");
 #endif
 }
 
