@@ -294,12 +294,12 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
     # link against QML plugins if Qt Quick GUI is enabled
     if (QT_MAJOR_VERSION GREATER_EQUAL 6 AND Quick IN_LIST QT_MODULES)
         if (NOT DEFINED QT_QML_PLUGINS)
-            set(QT_QML_PLUGINS qtquick2plugin qquicklayoutsplugin qtquickdialogsplugin)
+            set(QT_QML_PLUGINS qtquick2plugin qquicklayoutsplugin qtquickdialogsplugin qmlshapesplugin effectsplugin)
             if (TARGET "${QT_PACKAGE_PREFIX}::labsmodelsplugin")
                 list(APPEND QT_QML_PLUGINS labsmodelsplugin)
             endif ()
             if (QuickControls2 IN_LIST QT_MODULES)
-                list(APPEND QT_QML_PLUGINS qtquickcontrols2plugin qmlshapesplugin effectsplugin)
+                list(APPEND QT_QML_PLUGINS qtquickcontrols2plugin)
             endif ()
             foreach (
                 CONTROLS_STYLE
