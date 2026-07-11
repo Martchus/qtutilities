@@ -355,6 +355,9 @@ bool PaletteModel::setData(const QModelIndex &index, const QVariant &value, int 
                 idxBegin = PaletteModel::index(QPalette::Base, 0);
                 break;
             case QPalette::Highlight:
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0))
+            case QPalette::Accent:
+#endif
                 break;
             default:
                 m_palette.setBrush(QPalette::Disabled, r, br);
