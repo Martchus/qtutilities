@@ -226,9 +226,7 @@ void PaletteEditor::paletteChanged(const QPalette &palette)
 
 void PaletteEditor::buildPalette()
 {
-    const QColor btn(m_ui->buildButton->color());
-    const QPalette temp(btn);
-    setPalette(temp);
+    setPalette(QPalette(m_ui->buildButton->color()));
 }
 
 void PaletteEditor::updateStyledButton()
@@ -238,8 +236,8 @@ void PaletteEditor::updateStyledButton()
 
 QPalette PaletteEditor::getPalette(QWidget *parent, const QPalette &init, const QPalette &parentPal, int *ok)
 {
-    PaletteEditor dlg(parent);
-    auto parentPalette(parentPal);
+    auto dlg = PaletteEditor(parent);
+    auto parentPalette = parentPal;
     const auto mask = init.
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
                       resolveMask()
