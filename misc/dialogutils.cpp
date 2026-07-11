@@ -79,7 +79,13 @@ QColor windowFrameColor()
  */
 QColor instructionTextColorForPalette(const QPalette &palette)
 {
-    return isPaletteDark(palette) ? palette.text().color() : QColor(0x00, 0x33, 0x99);
+    return isPaletteDark(palette) ? palette.text().color() :
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+                                  palette.accent().color()
+#else
+                                  QColor(0x00, 0x33, 0x99)
+#endif
+        ;
 }
 
 /*!
