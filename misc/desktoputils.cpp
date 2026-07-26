@@ -21,6 +21,33 @@
 
 namespace QtUtilities {
 
+#ifdef QT_UTILITIES_GUI_QTQUICK
+/*!
+ * \macro QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME
+ * \brief Allows configuring dark mode depending on the platform.
+ * \remarks
+ * 1. Some platforms just provide a "dark mode flag", e.g. Windows and Android. Qt can read this flag and
+ *    provide a Qt::ColorScheme value. Qt will only populate an appropriate QPalette on some platforms, e.g.
+ *    it does on Windows but not on Android. On platforms where Qt does not populate an appropriate palette
+ *    one therefore need to go by the Qt::ColorScheme value and populate the QPalette manually from the colors
+ *    used by the Qt Quick Controls 2 style if needed. This behavior is supposed to be implemented if
+ *    QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME is defined.
+ *    Note that some applications render e.g. custom icons (Syncthing icons, ForkAwesome icons) using the text
+ *    color from the application QPalette. This is the reason why e.g. Syncthing Tray still needs to populate
+ *    the QPalette on platforms like Android even though only Qt Quick is used.
+ * 2. Some platforms allow the user to configure a custom palette but do *not* provide a "dark mode flag", e.g.
+ *    KDE. In this case reading the Qt::ColorScheme value from Qt is useless but QPalette will be populated. We
+ *    therefore need to determine whether the current color scheme is dark from the QPalette and set the Qt
+ *    Quick Controls 2 style based on that.
+ */
+
+/*!
+ * \macro QT_UTILITIES_IS_PALETTE_DARK
+ * \brief Determines whether the palette is dark depending on the platform.
+ * \remarks No-op if QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME is defined.
+ */
+#endif
+
 /*!
  * \brief Shows the specified file or directory using the default file browser.
  * \remarks

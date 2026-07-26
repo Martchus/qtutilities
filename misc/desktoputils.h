@@ -12,6 +12,17 @@
 QT_FORWARD_DECLARE_CLASS(QObject)
 QT_FORWARD_DECLARE_CLASS(QString)
 
+#ifdef QT_UTILITIES_GUI_QTQUICK
+#ifdef Q_OS_ANDROID
+#define QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME
+#endif
+#ifdef QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME
+#define QT_UTILITIES_IS_PALETTE_DARK(palette) false
+#else
+#define QT_UTILITIES_IS_PALETTE_DARK(palette) QtUtilities::isPaletteDark(palette)
+#endif
+#endif
+
 namespace QtUtilities {
 
 QT_UTILITIES_EXPORT bool openLocalFileOrDir(const QString &path);
