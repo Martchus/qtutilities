@@ -21,7 +21,6 @@
 
 namespace QtUtilities {
 
-#ifdef QT_UTILITIES_GUI_QTQUICK
 /*!
  * \macro QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME
  * \brief Allows configuring dark mode depending on the platform.
@@ -46,7 +45,6 @@ namespace QtUtilities {
  * \brief Determines whether the palette is dark depending on the platform.
  * \remarks No-op if QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME is defined.
  */
-#endif
 
 /*!
  * \brief Shows the specified file or directory using the default file browser.
