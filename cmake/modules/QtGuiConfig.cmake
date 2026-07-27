@@ -66,6 +66,9 @@ if (QUICK_GUI)
     if (QML_FILES OR META_HAS_QUICK_GUI)
         list(APPEND ADDITIONAL_QT_MODULES Qml Quick)
         list(APPEND ADDITIONAL_QT_REPOS "declarative")
+        set(QUICK_GUI_CONTROLS_STYLE
+            ""
+            CACHE STRING "sets the Qt Quick Controls style")
         message(STATUS "Building with Qt Quick GUI.")
 
         # enable QML debugging
@@ -73,7 +76,7 @@ if (QUICK_GUI)
             list(APPEND META_PRIVATE_COMPILE_DEFINITIONS QT_QML_DEBUG)
         endif ()
 
-        # enable Qt Quick Controls 2
+        # enable Qt Quick Controls 2 (only useful if runtime style selection is wanted)
         if (META_USE_QQC2)
             list(APPEND ADDITIONAL_QT_MODULES QuickControls2)
         endif ()
@@ -89,6 +92,90 @@ if (META_QUICK_GUI_MODES)
              ${QML_RES_FILES_${MODE_UPPER}})
     endforeach ()
 endif ()
+
+# allow selecting Qt Quick Controls style at build time
+set(QT_QUICK_STYLE_EXPERIMENTAL_NOTICE
+    "It is considered experimental and might be replaced by a different helper using \"import QtQuick.Controls.Native\" and file selectors in the next minor release."
+)
+function (qt_utilities_change_qt_quick_controls_style QML_FILES_VARIABLE)
+    message(
+        WARNING
+            "The CMake function qt_utilities_change_qt_quick_controls_style() is used. ${QT_QUICK_STYLE_EXPERIMENTAL_NOTICE}"
+    )
+    if (NOT QUICK_GUI_CONTROLS_STYLE)
+        return()
+    endif ()
+    find_program(PERL_BIN perl)
+    if (NOT PERL_BIN)
+        message(FATAL_ERROR "Unable to find Perl, set PERL_BIN to the path of Perl's executable.")
+    endif ()
+    if (QUICK_GUI_CONTROLS_STYLE STREQUAL "dynamic")
+        set(OVERRIDE "QtQuick.Controls")
+    else ()
+        set(OVERRIDE "QtQuick.Controls.${QUICK_GUI_CONTROLS_STYLE}")
+    endif ()
+    set(CHANGED_QML_FILES "")
+    foreach (QML_FILE ${${QML_FILES_VARIABLE}})
+        if (CMAKE_SYSTEM_NAME MATCHES "Windows.*")
+            set(CHANGED_QML_FILE "${CMAKE_CURRENT_SOURCE_DIR}/qmltmp/${QML_FILE}")
+        else ()
+            set(CHANGED_QML_FILE "${CMAKE_CURRENT_BINARY_DIR}/qmltmp/${QML_FILE}")
+        endif ()
+        add_custom_command(
+            DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${QML_FILE}"
+            OUTPUT "${CHANGED_QML_FILE}"
+            COMMAND
+                "${PERL_BIN}" ARGS -p -e "s|QtQuick.Controls.Material|${OVERRIDE}|g;" -e
+                "s|Material.accent(?!\\:)|palette.accent|g;" -e "s|.*Material\\..*||g;"
+                "${CMAKE_CURRENT_SOURCE_DIR}/${QML_FILE}" > "${CHANGED_QML_FILE}"
+            COMMENT "Changing Qt Quick Controls style to ${QUICK_GUI_CONTROLS_STYLE}"
+            VERBATIM)
+        set_source_files_properties("${CHANGED_QML_FILE}" PROPERTIES QT_RESOURCE_ALIAS "${QML_FILE}")
+        if ("${QML_FILE}" IN_LIST QML_SINGLETON_FILES)
+            set_source_files_properties("${CHANGED_QML_FILE}" PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+        endif ()
+        list(APPEND CHANGED_QML_FILES "${CHANGED_QML_FILE}")
+    endforeach ()
+
+    set_source_files_properties(${${QML_FILES_VARIABLE}} PROPERTIES HEADER_FILE_ONLY TRUE)
+    source_group("Unprocessed QML" FILES ${${QML_FILES_VARIABLE}})
+    source_group("Generated QML (DO NOT EDIT)" FILES ${CHANGED_QML_FILES})
+
+    set(UNPROCESSED_QML_FILES
+        "${UNPROCESSED_QML_FILES};${${QML_FILES_VARIABLE}}"
+        PARENT_SCOPE)
+    set("${QML_FILES_VARIABLE}"
+        "${CHANGED_QML_FILES}"
+        PARENT_SCOPE)
+endfunction ()
+
+# allow linking against the concrete Qt Quick Controls 2 module for the selected style
+macro (qt_utilities_configure_qt_quick_controls DEFAULT_STYLE RELEVANT_SOURCES)
+    message(
+        WARNING "The CMake macro qt_utilities_configure_qt_quick_controls() is used. ${QT_QUICK_STYLE_EXPERIMENTAL_NOTICE}")
+    if (QUICK_GUI_CONTROLS_STYLE)
+        set(QUICK_GUI_CONTROLS_SELECTED_STYLE "${QUICK_GUI_CONTROLS_STYLE}")
+    else ()
+        set(QUICK_GUI_CONTROLS_SELECTED_STYLE "${DEFAULT_STYLE}")
+    endif ()
+    if (QUICK_GUI_CONTROLS_SELECTED_STYLE STREQUAL "dynamic")
+        set(QUICK_GUI_CONTROLS_COMPILE_TIME_STYLE "")
+    else ()
+        set(QUICK_GUI_CONTROLS_COMPILE_TIME_STYLE "${QUICK_GUI_CONTROLS_STYLE}")
+    endif ()
+    if (QUICK_GUI_CONTROLS_SELECTED_STYLE STREQUAL "dynamic" OR QUICK_GUI_CONTROLS_SELECTED_STYLE STREQUAL "FluentWinUI3")
+        list(APPEND ADDITIONAL_QT_MODULES "QuickControls2")
+    else ()
+        list(APPEND ADDITIONAL_QT_MODULES "QuickControls2${QUICK_GUI_CONTROLS_SELECTED_STYLE}")
+    endif ()
+    if (QUICK_GUI_CONTROLS_COMPILE_TIME_STYLE AND RELEVANT_SOURCES)
+        set_property(
+            SOURCE ${RELEVANT_SOURCES}
+            APPEND
+            PROPERTY COMPILE_DEFINITIONS
+                     ${META_PROJECT_VARNAME_UPPER}_QUICK_GUI_CONTROLS_STYLE="${QUICK_GUI_CONTROLS_COMPILE_TIME_STYLE}")
+    endif ()
+endmacro ()
 
 # set platform-specific GUI-type
 if (WIN32)
