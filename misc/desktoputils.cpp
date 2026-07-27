@@ -24,20 +24,25 @@ namespace QtUtilities {
 /*!
  * \macro QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME
  * \brief Allows configuring dark mode depending on the platform.
- * \remarks
+ * \remarks Dark mode is handled differently on different platforms:
  * 1. Some platforms just provide a "dark mode flag", e.g. Windows and Android. Qt can read this flag and
  *    provide a Qt::ColorScheme value. Qt will only populate an appropriate QPalette on some platforms, e.g.
  *    it does on Windows but not on Android. On platforms where Qt does not populate an appropriate palette
- *    one therefore need to go by the Qt::ColorScheme value and populate the QPalette manually from the colors
+ *    one therefore needs to go by the Qt::ColorScheme value and populate the QPalette manually from the colors
  *    used by the Qt Quick Controls 2 style if needed. This behavior is supposed to be implemented if
  *    QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME is defined.
  *    Note that some applications render e.g. custom icons (Syncthing icons, ForkAwesome icons) using the text
  *    color from the application QPalette. This is the reason why e.g. Syncthing Tray still needs to populate
  *    the QPalette on platforms like Android even though only Qt Quick is used.
  * 2. Some platforms allow the user to configure a custom palette but do *not* provide a "dark mode flag", e.g.
- *    KDE. In this case reading the Qt::ColorScheme value from Qt is useless but QPalette will be populated. We
- *    therefore need to determine whether the current color scheme is dark from the QPalette and set the Qt
- *    Quick Controls 2 style based on that.
+ *    KDE. In this case reading the Qt::ColorScheme value from Qt is useless but QPalette will be populated. One
+ *    therefore needs to determine whether the current color scheme is dark from the QPalette and set the Qt
+ *    Quick Controls 2 style based on that. This behavior is supposed to be implemented if
+ *    QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME is *not* defined.
+ *
+ * So far QT_UTILITIES_DARK_MODE_FROM_COLOR_SCHEME is only defined on Android as this QPalette is popupated on
+ * all other platforms I tested. So relying on QPalette is probably the better default. (I have not tested this
+ * under macOS/iOS.)
  */
 
 /*!
