@@ -94,6 +94,22 @@ bool openLocalFileOrDir(const QString &path)
     return QDesktopServices::openUrl(url);
 }
 
+bool showToast(const QString &message, ToastDuration duration)
+{
+#ifdef Q_OS_ANDROID
+    if (const auto context = QNativeInterface::QAndroidApplication::context(); context.isValid()) {
+        auto env = QJniEnvironment();
+        if (auto showToastMethod = env.findMethod(context.objectClass(), "showToast", "(Ljava/lang/String;I)Z")) {
+            return env->CallBooleanMethod(context.object(), showToastMethod, QJniObject::fromString(message).object(), duration) == JNI_TRUE;
+        }
+    }
+#else
+    Q_UNUSED(message)
+    Q_UNUSED(duration)
+#endif
+    return false;
+}
+
 /*!
  * \brief Returns whether \a palette is dark.
  */

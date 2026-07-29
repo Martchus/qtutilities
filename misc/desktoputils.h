@@ -23,7 +23,10 @@ QT_FORWARD_DECLARE_CLASS(QString)
 
 namespace QtUtilities {
 
+enum class ToastDuration { Short, Long };
+
 QT_UTILITIES_EXPORT bool openLocalFileOrDir(const QString &path);
+QT_UTILITIES_EXPORT bool showToast(const QString &message, ToastDuration duration = ToastDuration::Long);
 QT_UTILITIES_EXPORT bool isPaletteDark(const QPalette &palette = QPalette());
 QT_UTILITIES_EXPORT std::optional<bool> isDarkModeEnabled();
 QT_UTILITIES_EXPORT QMetaObject::Connection onDarkModeChanged(
