@@ -110,6 +110,19 @@ bool showToast(const QString &message, ToastDuration duration)
     return false;
 }
 
+bool performHapticFeedback()
+{
+#ifdef Q_OS_ANDROID
+    if (const auto context = QNativeInterface::QAndroidApplication::context(); context.isValid()) {
+        auto env = QJniEnvironment();
+        if (auto hapticFeedbackMethod = env.findMethod(context.objectClass(), "performHapticFeedback", "()Z")) {
+            return env->CallBooleanMethod(context.object(), hapticFeedbackMethod) == JNI_TRUE;
+        }
+    }
+#endif
+    return false;
+}
+
 /*!
  * \brief Returns whether \a palette is dark.
  */
