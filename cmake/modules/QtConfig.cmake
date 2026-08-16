@@ -294,10 +294,15 @@ if (STATIC_LINKAGE OR QT_TARGET_TYPE STREQUAL STATIC_LIBRARY)
     # link against QML plugins if Qt Quick GUI is enabled
     if (QT_MAJOR_VERSION GREATER_EQUAL 6 AND Quick IN_LIST QT_MODULES)
         if (NOT DEFINED QT_QML_PLUGINS)
-            set(QT_QML_PLUGINS qtquick2plugin qquicklayoutsplugin qtquickdialogsplugin qmlshapesplugin effectsplugin)
+            # bundle plugins for Qt Quick, Qt Quick Layouts, Qt Quick Dialogs (which requires qmlfolderlistmodelplugin for
+            # non-native folder dialog) and some further plugins required by certain Qt Quick Controls styles
+            set(QT_QML_PLUGINS qtquick2plugin qquicklayoutsplugin qtquickdialogsplugin qmlfolderlistmodelplugin
+                               qmlshapesplugin effectsplugin)
+            # bundle plugin for Qt Labs Platform if needed
             if (TARGET "${QT_PACKAGE_PREFIX}::labsmodelsplugin")
                 list(APPEND QT_QML_PLUGINS labsmodelsplugin)
             endif ()
+            # bundle plugin for configured Qt Quick Controls style
             if (QuickControls2 IN_LIST QT_MODULES)
                 list(APPEND QT_QML_PLUGINS qtquickcontrols2plugin)
             endif ()
