@@ -9,17 +9,21 @@ endif ()
 # include required modules
 include(QtLinkage)
 
+# allow selecting provider
+set(WEBVIEW_PROVIDER
+    "auto"
+    CACHE STRING "specifies the web view provider: auto, webengine, webkit or none")
+
 # check whether Qt WebEngine is present
-find_package("${QT_PACKAGE_PREFIX}WebEngineWidgets" "${META_QT_VERSION}")
-set(WEBVIEW_PROVIDER_DEFAULT "none")
-if ("${${QT_PACKAGE_PREFIX}WebEngineWidgets_FOUND}")
-    set(WEBVIEW_PROVIDER_DEFAULT "webengine")
+if (WEBVIEW_PROVIDER STREQUAL "auto")
+    set(WEBVIEW_PROVIDER "none")
+    find_package("${QT_PACKAGE_PREFIX}WebEngineWidgets" "${META_QT_VERSION}")
+    if ("${${QT_PACKAGE_PREFIX}WebEngineWidgets_FOUND}")
+        set(WEBVIEW_PROVIDER "webengine")
+    endif ()
 endif ()
 
 # configure the specified web view provider
-set(WEBVIEW_PROVIDER
-    "${WEBVIEW_PROVIDER_DEFAULT}"
-    CACHE STRING "specifies the web view provider: webengine (default), webkit or none")
 if (WEBVIEW_PROVIDER STREQUAL "webkit")
     set(WEBVIEW_PROVIDER WebKitWidgets)
     set(WEBVIEW_DEFINITION "${META_PROJECT_VARNAME_UPPER}_USE_WEBKIT")
