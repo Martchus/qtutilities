@@ -601,7 +601,7 @@ Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme 
     <message>
         <location filename="../setup/updater.cpp" line="634"/>
         <source>Unable to request releases: </source>
-        <translation>Impossible de requêter les publications : </translation>
+        <translation>Impossible de récupérer les publications : </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="665"/>
@@ -611,7 +611,7 @@ Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme 
     <message>
         <location filename="../setup/updater.cpp" line="681"/>
         <source>Unable to request release: </source>
-        <translation>Impossible de requêter la publication : </translation>
+        <translation>Impossible de récupérer la publication : </translation>
     </message>
 </context>
 <context>
@@ -624,7 +624,7 @@ Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme 
     <message>
         <location filename="../setup/updater.cpp" line="1502"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
-        <translation>Cette version de %1 a les mises à jour automatiques désactivées. Vous pouvez cependant mettre à jour l&apos;application via votre gestionnaire de paquets.</translation>
+        <translation>Cette version de %1 a les mises à jour automatiques désactivées. Vous pouvez cependant mettre à jour l&apos;application de manière automatisée via votre gestionnaire de paquets.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1523"/>
@@ -755,7 +755,7 @@ Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme 
     <message>
         <location filename="../setup/updater.cpp" line="805"/>
         <source>Update failed</source>
-        <translation>Mise à jour échouée</translation>
+        <translation>Échec de la mise à jour</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="865"/>
@@ -810,37 +810,37 @@ Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme 
     <message>
         <location filename="../setup/updater.cpp" line="1081"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de rendre le nouveau binaire sous &quot;%1&quot; exécutable.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1090"/>
         <source>Unable to open downloaded archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir l&apos;archive téléchargée : %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1100"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de vérifier si le binaire téléchargé est valide : %1</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1118"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de déplacer l&apos;exécutable actuel vers &quot;%1&quot; : %2</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1126"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de renommer le nouvel exécutable &quot;%1&quot; en &quot;%2&quot; : %3</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1132"/>
         <source>Unable to find executable in downloaded archive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver l&apos;exécutable dans l&apos;archive téléchargée.</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1150"/>
         <source>Update stored under: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mise à jour stockée sous : %1</translation>
     </message>
     <message>
         <source>Unable to make new binary under &quot;%1&quot; executable</source>
@@ -852,7 +852,7 @@ Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme 
     <message>
         <location filename="../setup/updater.cpp" line="1575"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;La signature de l&apos;exécutable téléchargé n&apos;a pas pu être vérifiée : %1&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -860,22 +860,22 @@ Ils peuvent être écrasés par votre plug-in d&apos;intégration de plateforme 
     <message>
         <location filename="../misc/dialogutils.cpp" line="36"/>
         <source>Unsaved - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Non enregistré - %1</translation>
     </message>
     <message>
         <location filename="../misc/dialogutils.cpp" line="39"/>
         <source>%1 - %2 - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - %2 - %3</translation>
     </message>
     <message>
         <location filename="../misc/dialogutils.cpp" line="44"/>
         <source>*Unsaved - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>*Non enregistré - %1</translation>
     </message>
     <message>
         <location filename="../misc/dialogutils.cpp" line="47"/>
         <source>*%1 - %2 - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>*%1 - %2 - %3</translation>
     </message>
 </context>
 </TS>
