@@ -121,9 +121,11 @@ function (qt_utilities_change_qt_quick_controls_style QML_FILES_VARIABLE)
         else ()
             set(CHANGED_QML_FILE "${CMAKE_CURRENT_BINARY_DIR}/qmltmp/${QML_FILE}")
         endif ()
+        get_filename_component(CHANGED_QML_DIR "${CHANGED_QML_FILE}" DIRECTORY)
         add_custom_command(
             DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${QML_FILE}"
             OUTPUT "${CHANGED_QML_FILE}"
+            COMMAND "${CMAKE_COMMAND}" -E make_directory "${CHANGED_QML_DIR}"
             COMMAND
                 "${PERL_BIN}" ARGS -p -e "s|QtQuick.Controls.Material|${OVERRIDE}|g;" -e
                 "s|Material.accent(?!\\:)|palette.accent|g;" -e "s|.*Material\\..*||g;"
