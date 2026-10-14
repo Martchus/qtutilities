@@ -6,7 +6,7 @@
    <string>Updating</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="system-software-update"/>
+   <iconset theme="system-software-update-symbolic"/>
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox { font-weight: bold };</string>
