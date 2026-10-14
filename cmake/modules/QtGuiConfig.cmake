@@ -201,7 +201,7 @@ elseif (APPLE)
 endif ()
 
 # add source files required by both GUI variants
-list(APPEND SRC_FILES ${GUI_SRC_FILES})
+list(APPEND SRC_FILES ${GUI_SRC_FILES} ${GUI_RES_FILES})
 list(APPEND ADDITIONAL_HEADER_FILES ${GUI_HEADER_FILES})
 
 # add option for enabling/disabling static Qt plugins
