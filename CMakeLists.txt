@@ -44,7 +44,6 @@ set(SRC_FILES
     models/checklistmodel.cpp
     resources/qtconfigarguments.cpp
     resources/resources.cpp)
-set(RES_FILES resources/qtutilsicons.qrc)
 
 set(WIDGETS_HEADER_FILES
     aboutdialog/aboutdialog.h
@@ -90,6 +89,7 @@ set(WIDGETS_UI_FILES
     settingsdialog/qtlanguageoptionpage.ui
     settingsdialog/qtenvoptionpage.ui
     paletteeditor/paletteeditor.ui)
+set(WIDGETS_RES_FILES resources/qtutilsicons.qrc)
 set(QT_TESTS)
 set(CMAKE_MODULE_FILES cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake cmake/modules/QtLinkage.cmake
                        cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
