@@ -7,7 +7,7 @@
   </property>
   <property name="windowIcon">
    <iconset theme="preferences-desktop-icons">
-    <normaloff>.</normaloff>.</iconset>
+    </iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox { font-weight: bold };</string>

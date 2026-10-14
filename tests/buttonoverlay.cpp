@@ -56,7 +56,7 @@ void ButtonOverlayTests::testClearLineEdit()
     changeBasicConfiguration(clearWidget);
     clearWidget.setText(QStringLiteral("not cleared anymore"));
     QVERIFY2(!clearWidget.isCleared(), "widget not considered cleared anymore");
-    auto customAction = QAction(QIcon::fromTheme(QStringLiteral("edit-copy")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Copy"));
+    auto customAction = QAction(QIcon::fromTheme(QStringLiteral("edit-copy-symbolic")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Copy"));
     clearWidget.addCustomAction(&customAction);
     QVERIFY2(!clearWidget.isUsingCustomLayout(), "not resorted to using custom layout so far");
     QCOMPARE(clearWidget.actions().size(), 2); // more an implementation detail but the QLineEdit should have 2 actions right now
@@ -98,7 +98,7 @@ void ButtonOverlayTests::testClearComboBox()
     clearWidget.setClearButtonEnabled(true);
     clearWidget.setCurrentText(QStringLiteral("not cleared anymore"));
     QVERIFY2(!clearWidget.isCleared(), "widget not considered cleared anymore");
-    auto customAction = QAction(QIcon::fromTheme(QStringLiteral("edit-copy")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Copy"));
+    auto customAction = QAction(QIcon::fromTheme(QStringLiteral("edit-copy-symbolic")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Copy"));
     clearWidget.addCustomAction(&customAction);
     QVERIFY2(!clearWidget.isUsingCustomLayout(), "not resorted to using custom layout so far");
 
@@ -118,7 +118,7 @@ void ButtonOverlayTests::testClearSpinBox()
     clearWidget.setClearButtonEnabled(true);
     clearWidget.setValue(1);
     QVERIFY2(!clearWidget.isCleared(), "widget not considered cleared anymore");
-    auto customAction = QAction(QIcon::fromTheme(QStringLiteral("edit-copy")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Copy"));
+    auto customAction = QAction(QIcon::fromTheme(QStringLiteral("edit-copy-symbolic")).pixmap(IconButton::defaultPixmapSize), QStringLiteral("Copy"));
     clearWidget.addCustomAction(&customAction);
     QVERIFY2(!clearWidget.isUsingCustomLayout(), "not resorted to using custom layout so far");
 

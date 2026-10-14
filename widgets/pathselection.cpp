@@ -84,15 +84,15 @@ bool PathSelection::eventFilter(QObject *obj, QEvent *event)
         case QEvent::ContextMenu: {
             unique_ptr<QMenu> menu(m_lineEdit->createStandardContextMenu());
             menu->addSeparator();
-            connect(menu->addAction(QIcon::fromTheme(QStringLiteral("document-open")), tr("Select ...")), &QAction::triggered, this,
+            connect(menu->addAction(QIcon::fromTheme(QStringLiteral("document-open-symbolic")), tr("Select ...")), &QAction::triggered, this,
                 &PathSelection::showFileDialog);
             QFileInfo fileInfo(m_lineEdit->text());
             if (fileInfo.exists()) {
                 if (fileInfo.isFile()) {
-                    connect(menu->addAction(QIcon::fromTheme(QStringLiteral("system-run")), tr("Open")), &QAction::triggered,
+                    connect(menu->addAction(QIcon::fromTheme(QStringLiteral("system-run-symbolic")), tr("Open")), &QAction::triggered,
                         bind(&openLocalFileOrDir, m_lineEdit->text()));
                 } else if (fileInfo.isDir()) {
-                    connect(menu->addAction(QIcon::fromTheme(QStringLiteral("system-file-manager")), tr("Explore")), &QAction::triggered,
+                    connect(menu->addAction(QIcon::fromTheme(QStringLiteral("system-file-manager-symbolic")), tr("Explore")), &QAction::triggered,
                         bind(&openLocalFileOrDir, m_lineEdit->text()));
                 }
             }

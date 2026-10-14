@@ -6,7 +6,7 @@
    <string>Updating</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="system-software-update-symbolic"/>
+   <iconset theme="system-software-update"/>
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox { font-weight: bold };</string>
@@ -134,7 +134,7 @@
           <string>Check for new version</string>
          </property>
          <property name="icon">
-          <iconset theme="view-refresh"/>
+          <iconset theme="view-refresh-symbolic"/>
          </property>
         </widget>
        </item>
@@ -144,7 +144,7 @@
           <string>Show release notes</string>
          </property>
          <property name="icon">
-          <iconset theme="info"/>
+          <iconset theme="info-symbolic"/>
          </property>
         </widget>
        </item>
@@ -154,7 +154,7 @@
           <string>Update to latest version</string>
          </property>
          <property name="icon">
-          <iconset theme="install"/>
+          <iconset theme="install-symbolic"/>
          </property>
         </widget>
        </item>
@@ -285,7 +285,7 @@
            <string>Abort</string>
           </property>
           <property name="icon">
-           <iconset theme="dialog-cancel"/>
+           <iconset theme="dialog-cancel-symbolic"/>
           </property>
          </widget>
         </item>
@@ -295,7 +295,7 @@
            <string>Restart to apply</string>
           </property>
           <property name="icon">
-           <iconset theme="dialog-ok-apply"/>
+           <iconset theme="dialog-ok-apply-symbolic"/>
           </property>
          </widget>
         </item>

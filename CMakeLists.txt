@@ -104,20 +104,20 @@ set(TS_FILES
 set(DOC_FILES README.md)
 
 set(REQUIRED_ICONS
-    dialog-cancel
-    dialog-ok
-    dialog-ok-apply
-    document-open
-    document-open-recent
-    edit-clear
-    go-next
+    dialog-cancel-symbolic
+    dialog-ok-symbolic
+    dialog-ok-apply-symbolic
+    document-open-symbolic
+    document-open-recent-symbolic
+    edit-clear-symbolic
+    go-next-symbolic
     preferences-desktop-icons
     preferences-desktop-locale
     qtcreator
-    system-file-manager
-    system-run
+    system-file-manager-symbolic
+    system-run-symbolic
     system-search
-    window-close)
+    window-close-symbolic)
 
 set(SCRIPT_FILES scripts/required_icons.sh)
 
@@ -201,7 +201,7 @@ if (SETUP_TOOLS)
         SOURCE setup/updater.cpp setup/signature.cpp tests/setup.cpp
         APPEND
         PROPERTY COMPILE_DEFINITIONS ${META_PROJECT_VARNAME}_SETUP_TOOLS_ENABLED)
-    list(APPEND REQUIRED_ICONS install info)
+    list(APPEND REQUIRED_ICONS install-symbolic info-symbolic system-software-update)
     list(APPEND WIDGETS_UI_FILES setup/updateoptionpage.ui)
     list(APPEND QT_TESTS setup)
     list(APPEND ADDITIONAL_QT_MODULES Network Concurrent)
