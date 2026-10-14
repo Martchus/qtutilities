@@ -761,6 +761,37 @@ if (REQUIRED_ICONS)
                                 GLOB_RECURSE GLOBBED_ICON_THEME_FILES
                                 LIST_DIRECTORIES false
                                 ${GLOB_PATTERNS})
+                            # fall back to less specific icons, e.g. fall back to folder-open if folder-open-recent does not exist
+                            foreach (REQUIRED_ICON ${REQUIRED_ICONS})
+                                set(ICON_FOUND FALSE)
+                                foreach (ICON_FILE ${GLOBBED_ICON_THEME_FILES})
+                                    get_filename_component(ICON_FILE_NAME "${ICON_FILE}" NAME)
+                                    if (ICON_FILE_NAME MATCHES "^${REQUIRED_ICON}(\\..+)?$")
+                                        set(ICON_FOUND TRUE)
+                                        break()
+                                    endif ()
+                                endforeach ()
+                                if (NOT ICON_FOUND)
+                                    set(FALLBACK_ICON "${REQUIRED_ICON}")
+                                    while (FALLBACK_ICON MATCHES "-")
+                                        string(REGEX REPLACE "-[^-]+$" "" FALLBACK_ICON "${FALLBACK_ICON}")
+                                        file(
+                                            GLOB_RECURSE FALLBACK_FILES
+                                            LIST_DIRECTORIES false
+                                            "${ICON_THEME_PATH}/${FALLBACK_ICON}"
+                                            "${ICON_THEME_PATH}/${FALLBACK_ICON}.*"
+                                            "${ICON_THEME_PATH}/*/${FALLBACK_ICON}"
+                                            "${ICON_THEME_PATH}/*/${FALLBACK_ICON}.*")
+                                        if (FALLBACK_FILES)
+                                            list(APPEND GLOBBED_ICON_THEME_FILES ${FALLBACK_FILES})
+                                            break()
+                                        endif ()
+                                    endwhile ()
+                                endif ()
+                            endforeach ()
+                            if (GLOBBED_ICON_THEME_FILES)
+                                list(REMOVE_DUPLICATES GLOBBED_ICON_THEME_FILES)
+                            endif ()
                         else ()
                             message(
                                 STATUS
