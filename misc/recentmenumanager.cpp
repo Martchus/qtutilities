@@ -35,7 +35,8 @@ RecentMenuManager::RecentMenuManager(QMenu *menu, QObject *parent)
     m_menu->setTitle(tr("&Recent"));
     m_menu->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent-symbolic")));
     m_sep = m_menu->addSeparator();
-    m_clearAction = m_menu->addAction(QIcon::fromTheme(QStringLiteral("edit-clear-symbolic")), tr("&Clear list"), this, &RecentMenuManager::clearEntries);
+    m_clearAction
+        = m_menu->addAction(QIcon::fromTheme(QStringLiteral("edit-clear-symbolic")), tr("&Clear list"), this, &RecentMenuManager::clearEntries);
 }
 
 /*!

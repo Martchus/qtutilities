@@ -761,7 +761,8 @@ if (REQUIRED_ICONS)
                                 GLOB_RECURSE GLOBBED_ICON_THEME_FILES
                                 LIST_DIRECTORIES false
                                 ${GLOB_PATTERNS})
-                            # fall back to less specific icons, e.g. fall back to folder-open if folder-open-recent does not exist
+                            # fall back to less specific icons, e.g. fall back to folder-open if folder-open-recent does not
+                            # exist
                             foreach (REQUIRED_ICON ${REQUIRED_ICONS})
                                 set(ICON_FOUND FALSE)
                                 foreach (ICON_FILE ${GLOBBED_ICON_THEME_FILES})
@@ -778,8 +779,7 @@ if (REQUIRED_ICONS)
                                         file(
                                             GLOB_RECURSE FALLBACK_FILES
                                             LIST_DIRECTORIES false
-                                            "${ICON_THEME_PATH}/${FALLBACK_ICON}"
-                                            "${ICON_THEME_PATH}/${FALLBACK_ICON}.*"
+                                            "${ICON_THEME_PATH}/${FALLBACK_ICON}" "${ICON_THEME_PATH}/${FALLBACK_ICON}.*"
                                             "${ICON_THEME_PATH}/*/${FALLBACK_ICON}"
                                             "${ICON_THEME_PATH}/*/${FALLBACK_ICON}.*")
                                         if (FALLBACK_FILES)
