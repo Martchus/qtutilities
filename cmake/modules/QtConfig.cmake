@@ -886,7 +886,7 @@ if (REQUIRED_ICONS)
 endif ()
 
 # export Qt resources from specified RES_FILES
-foreach (RES_FILE ${RES_FILES})
+foreach (RES_FILE ${RES_FILES} ${GUI_RES_FILES} ${WIDGETS_RES_FILES} ${QML_RES_FILES})
     get_filename_component(RES_EXT ${RES_FILE} EXT)
     if (RES_EXT STREQUAL ".qrc")
         get_filename_component(RES_NAME ${RES_FILE} NAME_WE)
