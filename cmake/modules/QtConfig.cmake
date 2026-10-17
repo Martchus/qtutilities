@@ -679,7 +679,7 @@ if (REQUIRED_ICONS)
         CACHE PATH "specifies the search path for icon themes to be built-in")
     set(ICONTOOL_PATH
         "${QT_UTILITIES_LIBEXEC_DIR}/icontool"
-        CACHE PATH "specifies the path of icontool")
+        CACHE FILEPATH "specifies the path of icontool")
     option(BUILTIN_ICON_THEMES_IN_LIBRARIES "specifies whether icon themes should also be built-in when building libraries"
            OFF)
     if (BUILTIN_ICON_THEMES AND (BUILTIN_ICON_THEMES_IN_LIBRARIES OR (NOT "${META_PROJECT_TYPE}" STREQUAL "library")))
