@@ -677,32 +677,60 @@ if (REQUIRED_ICONS)
     set(BUILTIN_ICON_THEMES_SEARCH_PATH
         ""
         CACHE PATH "specifies the search path for icon themes to be built-in")
+    set(ICONTOOL_PATH
+        "${QT_UTILITIES_LIBEXEC_DIR}/icontool"
+        CACHE PATH "specifies the path of icontool")
     option(BUILTIN_ICON_THEMES_IN_LIBRARIES "specifies whether icon themes should also be built-in when building libraries"
            OFF)
     if (BUILTIN_ICON_THEMES AND (BUILTIN_ICON_THEMES_IN_LIBRARIES OR (NOT "${META_PROJECT_TYPE}" STREQUAL "library")))
-        set(BUILTIN_ICON_THEMES_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/icons/${META_PROJECT_NAME}_builtinicons.qrc")
+        set(BUILTIN_ICON_THEMES_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
+        set(BUILTIN_ICON_THEMES_QRC_FILE_NAME "${META_PROJECT_NAME}_builtinicons.qrc")
+        set(BUILTIN_ICON_THEMES_QRC_FILE "${BUILTIN_ICON_THEMES_OUTPUT_DIR}/${BUILTIN_ICON_THEMES_QRC_FILE_NAME}")
         list(APPEND RES_FILES "${BUILTIN_ICON_THEMES_QRC_FILE}")
+        set(ICON_SEARCH_PATHS ${BUILTIN_ICON_THEMES_SEARCH_PATH})
+        if (CMAKE_FIND_ROOT_PATH)
+            foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
+                list(APPEND ICON_SEARCH_PATHS "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
+            endforeach ()
+        endif ()
+        list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
+        list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when
+                                                                                 # cross- compiling
+        list(APPEND ICON_SEARCH_PATHS "/usr/share/icons") # the project might change CMAKE_…_DATAROOTDIR to something
+                                                          # custom so let's add one hardcoded fallback
+        list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
 
         if (EXISTS "${BUILTIN_ICON_THEMES_QRC_FILE}")
             message(
                 STATUS "Using existing \"${BUILTIN_ICON_THEMES_QRC_FILE}\" to bundle icon themes for ${META_PROJECT_NAME}. "
                        "Remove this file to force re-generation of the resource file.")
-        else ()
-            set(ICON_THEME_FILES)
-            set(ICON_SEARCH_PATHS ${BUILTIN_ICON_THEMES_SEARCH_PATH})
-
-            if (CMAKE_FIND_ROOT_PATH)
-                foreach (ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
-                    list(APPEND ICON_SEARCH_PATHS "${ROOT_PATH}/${CMAKE_INSTALL_DATAROOTDIR}/icons")
-                endforeach ()
+        elseif (EXISTS "${ICONTOOL_PATH}")
+            message(STATUS "Using '${ICONTOOL_PATH}' to bundle icon themes")
+            set(ICONTOOL_ARGS
+                bundle
+                --output-path "${BUILTIN_ICON_THEMES_OUTPUT_DIR}"
+                --output-qrc-path "${BUILTIN_ICON_THEMES_QRC_FILE_NAME}")
+            foreach (ICON_SEARCH_PATH ${ICON_SEARCH_PATHS})
+                list(APPEND ICONTOOL_ARGS --search-path "${ICON_SEARCH_PATH}")
+            endforeach ()
+            foreach (ICON_THEME ${BUILTIN_ICON_THEMES})
+                list(APPEND ICONTOOL_ARGS --icon-theme "${ICON_THEME}")
+            endforeach ()
+            foreach (REQUIRED_ICON ${REQUIRED_ICONS})
+                list(APPEND ICONTOOL_ARGS --icon "${REQUIRED_ICON}")
+            endforeach ()
+            if (FALLBACK_ICON_THEME)
+                list(APPEND ICONTOOL_ARGS --fallback-theme "${FALLBACK_ICON_THEME}")
             endif ()
-            list(APPEND ICON_SEARCH_PATHS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/icons")
-            list(APPEND ICON_SEARCH_PATHS "/usr/${CMAKE_INSTALL_DATAROOTDIR}/icons") # find icons from regular prefix when
-                                                                                     # cross- compiling
-            list(APPEND ICON_SEARCH_PATHS "/usr/share/icons") # the project might change CMAKE_…_DATAROOTDIR to something
-                                                              # custom so let's add one hardcoded fallback
-
-            list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
+            execute_process(
+                COMMAND "${ICONTOOL_PATH}" ${ICONTOOL_ARGS}
+                RESULT_VARIABLE ICONTOOL_RESULT)
+            if (NOT ICONTOOL_RESULT EQUAL 0)
+                message(FATAL_ERROR "Icon bundling failed with exit code ${ICONTOOL_RESULT}")
+            endif ()
+        else ()
+            message(STATUS "Falling back to CMake-based icon bundling as ${ICONTOOL_PATH} does not exist")
+            set(ICON_THEME_FILES)
             set(BUILTIN_ICONS_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
             set(DEFAULT_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default/index.theme")
             set(DEFAULT_DARK_THEME_INDEX_FILE "${BUILTIN_ICONS_DIR}/default-dark/index.theme")

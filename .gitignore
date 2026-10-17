@@ -46,3 +46,7 @@ Makefile*
 # clangd
 compile_commands.json
 /.cache
+
+
+# cargo
+icontool/target
