@@ -215,7 +215,7 @@ include(QtGuiConfig)
 if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.22.0)
     add_subdirectory(icontool)
 else ()
-    message(WARNING "Skipping icontool, CMake is too old (3.22.0 or newer required)")
+    message(STATUS "Skipping icontool, CMake is too old (3.22.0 or newer required)")
 endif ()
 
 # add further Qt modules (which are not automatically detected)

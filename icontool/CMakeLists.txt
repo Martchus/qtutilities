@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22.0 FATAL_ERROR)
-find_package(Corrosion 0.6)
+find_package(Corrosion 0.6 QUIET)
 if (NOT Corrosion_FOUND)
-    message(WARNING "Skipping icontool, unable to find Corrosion")
+    message(STATUS "Skipping icontool, unable to find Corrosion")
     return ()
 endif ()
 
