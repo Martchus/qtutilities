@@ -881,12 +881,13 @@ mod tests {
     fn test_bundle_theme_not_found() {
         let mut output = Vec::new();
         let mut input = Cursor::new(Vec::new());
+        let output_path = Path::new("non_existent_output");
 
         let res = bundle_themes(
             &mut output,
             &mut input,
             false,
-            Path::new("non_existent_output"),
+            output_path,
             Path::new("resources.qrc"),
             &[PathBuf::from("/non/existent/search/path")],
             &[PathBuf::from("non-existent-theme")],
@@ -898,6 +899,7 @@ mod tests {
         assert_eq!(res, 1);
         let out_str = String::from_utf8(output).unwrap();
         assert!(out_str.contains("could not be found"));
+        fs::remove_dir_all(&output_path).unwrap();
     }
 
     #[test]
