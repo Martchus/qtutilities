@@ -734,7 +734,7 @@ if (REQUIRED_ICONS)
                 DEPENDS "${ICONTOOL_PATH}"
                 OUTPUT "${BUILTIN_ICON_THEMES_QRC_FILE}"
                 COMMAND "${ICONTOOL_PATH}" ${ICONTOOL_ARGS}
-                COMMENT "Bundling icon themes")
+                COMMENT "Bundling icon themes for ${META_PROJECT_NAME}")
         else ()
             message(STATUS "Falling back to CMake-based icon bundling as ${ICONTOOL_PATH} does not exist")
             set(ICON_THEME_FILES)
