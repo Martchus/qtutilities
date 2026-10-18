@@ -687,6 +687,8 @@ if (REQUIRED_ICONS)
         CACHE FILEPATH "specifies the path of icontool")
     option(BUILTIN_ICON_THEMES_IN_LIBRARIES "specifies whether icon themes should also be built-in when building libraries"
            OFF)
+    option(BUILTIN_ICON_THEMES_ERROR_ON_MISSING_ICON
+           "specifies whether icon bundling should fail if an icon cannot be located" OFF)
     if (BUILTIN_ICON_THEMES AND (BUILTIN_ICON_THEMES_IN_LIBRARIES OR (NOT "${META_PROJECT_TYPE}" STREQUAL "library")))
         set(BUILTIN_ICON_THEMES_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/icons")
         set(BUILTIN_ICON_THEMES_QRC_FILE_NAME "${META_PROJECT_NAME}_builtinicons.qrc")
@@ -724,6 +726,9 @@ if (REQUIRED_ICONS)
             endforeach ()
             if (FALLBACK_ICON_THEME)
                 list(APPEND ICONTOOL_ARGS --fallback-theme "${FALLBACK_ICON_THEME}")
+            endif ()
+            if (BUILTIN_ICON_THEMES_ERROR_ON_MISSING_ICON)
+                list(APPEND ICONTOOL_ARGS --error-on-missing-icon)
             endif ()
             add_custom_command(
                 DEPENDS "${ICONTOOL_PATH}"
@@ -814,9 +819,16 @@ if (REQUIRED_ICONS)
                                             "${ICON_THEME_PATH}/*/${FALLBACK_ICON}.*")
                                         if (FALLBACK_FILES)
                                             list(APPEND GLOBBED_ICON_THEME_FILES ${FALLBACK_FILES})
+                                            set(ICON_FOUND TRUE)
                                             break()
                                         endif ()
                                     endwhile ()
+                                endif ()
+                                if (NOT ICON_FOUND AND BUILTIN_ICON_THEMES_ERROR_ON_MISSING_ICON)
+                                    message(
+                                        FATAL_ERROR
+                                            "The specified icon \"${REQUIRED_ICON}\" could not be located in theme \"${ICON_THEME}\"."
+                                    )
                                 endif ()
                             endforeach ()
                             if (GLOBBED_ICON_THEME_FILES)

@@ -63,6 +63,12 @@ pub enum Commands {
             help = "Fallback icon theme"
         )]
         fallback_theme: PathBuf,
+        #[arg(
+            long = "error-on-missing-icon",
+            default_value_t = false,
+            help = "Fail if an icon cannot be located"
+        )]
+        error_on_missing_icon: bool,
     },
 }
 
@@ -306,11 +312,13 @@ fn collect_files_recursive(dir: &Path, files: &mut Vec<PathBuf>) -> io::Result<(
 }
 
 /// Finds all matching icons for required icons in a theme, applying fallbacks if not found.
+/// Returns a tuple of `(matched_files, missing_icons)`.
 pub fn find_required_icons(
     all_theme_files: &[PathBuf],
     required_icons: &[PathBuf],
-) -> Vec<PathBuf> {
+) -> (Vec<PathBuf>, Vec<PathBuf>) {
     let mut matched_files = Vec::new();
+    let mut missing_icons = Vec::new();
     let mut seen_paths = HashSet::new();
 
     for req_icon in required_icons {
@@ -328,8 +336,8 @@ pub fn find_required_icons(
 
         if !found_for_icon {
             let fallbacks = get_fallback_icon_names(req_icon);
+            let mut fallback_matched = false;
             for fallback in fallbacks {
-                let mut fallback_matched = false;
                 for file in all_theme_files {
                     if let Some(file_name) = file.file_name()
                         && icon_matches(Path::new(file_name), &fallback)
@@ -344,9 +352,12 @@ pub fn find_required_icons(
                     break;
                 }
             }
+            if !fallback_matched && !missing_icons.contains(req_icon) {
+                missing_icons.push(req_icon.clone());
+            }
         }
     }
-    matched_files
+    (matched_files, missing_icons)
 }
 
 /// Processes a single file (index file or icon file) for bundling into output_path and generates a QrcEntry.
@@ -428,6 +439,7 @@ fn process_theme(
     icons: &[PathBuf],
     fallback_theme: &Path,
     output_path: &Path,
+    error_on_missing_icon: bool,
     has_default: &mut bool,
     has_default_dark: &mut bool,
     qrc_entries: &mut Vec<QrcEntry>,
@@ -496,7 +508,24 @@ fn process_theme(
 
     let matched_icon_files = if !is_fallback {
         let all_theme_files = collect_files(&theme_dir).map_err(|e| e.to_string())?;
-        find_required_icons(&all_theme_files, icons)
+        let (matched, missing) = find_required_icons(&all_theme_files, icons);
+        if error_on_missing_icon && !missing.is_empty() {
+            for m in &missing {
+                writeln!(
+                    output,
+                    "The specified icon \"{}\" could not be located in theme \"{}\".",
+                    m.display(),
+                    source_theme.display()
+                )
+                .map_err(|e| e.to_string())?;
+            }
+            return Err(format!(
+                "Failed to locate {} required icon(s) in theme \"{}\".",
+                missing.len(),
+                source_theme.display()
+            ));
+        }
+        matched
     } else {
         writeln!(
             output,
@@ -537,6 +566,7 @@ pub fn bundle_themes(
     icon_themes: &[PathBuf],
     icons: &[PathBuf],
     fallback_theme: &Path,
+    error_on_missing_icon: bool,
 ) -> i32 {
     if let Err(e) = fs::create_dir_all(output_path) {
         writeln!(output, "Failed to create output directory: {}", e).unwrap();
@@ -561,6 +591,7 @@ pub fn bundle_themes(
             icons,
             fallback_theme,
             output_path,
+            error_on_missing_icon,
             &mut has_default,
             &mut has_default_dark,
             &mut qrc_entries,
@@ -602,6 +633,7 @@ pub fn run_with_args(output: &mut dyn Write, input: &mut dyn BufRead, args: &Cli
             icon_themes,
             icons,
             fallback_theme,
+            error_on_missing_icon,
         }) => bundle_themes(
             output,
             input,
@@ -612,6 +644,7 @@ pub fn run_with_args(output: &mut dyn Write, input: &mut dyn BufRead, args: &Cli
             icon_themes,
             icons,
             fallback_theme,
+            *error_on_missing_icon,
         ),
         None => {
             writeln!(output, "No operation specified").unwrap();
@@ -802,6 +835,7 @@ mod tests {
                 PathBuf::from("folder-open-recent"), // should fall back to folder.svg
             ],
             Path::new("hicolor"),
+            false,
         );
 
         assert_eq!(res, 0);
@@ -858,11 +892,77 @@ mod tests {
             &[PathBuf::from("non-existent-theme")],
             &[],
             Path::new("hicolor"),
+            false,
         );
 
         assert_eq!(res, 1);
         let out_str = String::from_utf8(output).unwrap();
         assert!(out_str.contains("could not be found"));
+    }
+
+    #[test]
+    fn test_error_on_missing_icon() {
+        let temp_dir =
+            std::env::temp_dir().join(format!("icontool_test_missing_{}", std::process::id()));
+        let _ = fs::remove_dir_all(&temp_dir);
+
+        let search_dir = temp_dir.join("share/icons");
+        let theme_dir = search_dir.join("test-theme");
+        let output_dir = temp_dir.join("build/icons");
+
+        fs::create_dir_all(theme_dir.join("actions/16")).unwrap();
+        fs::write(theme_dir.join("index.theme"), "Test Theme Index").unwrap();
+        fs::write(
+            theme_dir.join("actions/16/existing.svg"),
+            "<svg>existing</svg>",
+        )
+        .unwrap();
+
+        // missing icon does not cause failure when error_on_missing_icon is false
+        let mut output = Vec::new();
+        let mut input = Cursor::new(Vec::new());
+        let res = bundle_themes(
+            &mut output,
+            &mut input,
+            false,
+            &output_dir,
+            Path::new("test.qrc"),
+            &[search_dir.clone()],
+            &[PathBuf::from("test-theme")],
+            &[
+                PathBuf::from("existing"),
+                PathBuf::from("non-existent-icon"),
+            ],
+            Path::new("hicolor"),
+            false,
+        );
+        assert_eq!(res, 0);
+
+        // missing icon causes failure when error_on_missing_icon is true
+        let mut output = Vec::new();
+        let mut input = Cursor::new(Vec::new());
+        let res = bundle_themes(
+            &mut output,
+            &mut input,
+            false,
+            &output_dir,
+            Path::new("test.qrc"),
+            &[search_dir.clone()],
+            &[PathBuf::from("test-theme")],
+            &[
+                PathBuf::from("existing"),
+                PathBuf::from("non-existent-icon"),
+            ],
+            Path::new("hicolor"),
+            true,
+        );
+        assert_eq!(res, 1);
+        let out_str = String::from_utf8(output).unwrap();
+        assert!(out_str.contains(
+            "The specified icon \"non-existent-icon\" could not be located in theme \"test-theme\"."
+        ));
+
+        let _ = fs::remove_dir_all(&temp_dir);
     }
 
     #[test]
