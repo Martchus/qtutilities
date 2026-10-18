@@ -113,7 +113,6 @@ set(REQUIRED_ICONS
     go-next-symbolic
     preferences-desktop-icons
     preferences-desktop-locale
-    qtcreator
     system-file-manager-symbolic
     system-run-symbolic
     system-search
