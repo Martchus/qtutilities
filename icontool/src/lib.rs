@@ -382,6 +382,40 @@ pub fn find_required_icons(
     (matched_files, missing_icons)
 }
 
+/// Writes `content` to `path` only if `path` does not exist or its content differs.
+/// Returns `Ok(true)` if the file was written, or `Ok(false)` if unchanged.
+pub fn write_if_different(path: &Path, content: &[u8]) -> io::Result<bool> {
+    if path.exists()
+        && let Ok(existing) = fs::read(path)
+        && existing == content
+    {
+        return Ok(false);
+    }
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    fs::write(path, content)?;
+    Ok(true)
+}
+
+/// Copies `src` to `dst` only if `dst` does not exist or its content differs from `src`.
+/// Returns `Ok(true)` if the file was copied, or `Ok(false)` if unchanged.
+pub fn copy_if_different(src: &Path, dst: &Path) -> io::Result<bool> {
+    if dst.exists()
+        && let (Ok(meta_src), Ok(meta_dst)) = (fs::metadata(src), fs::metadata(dst))
+        && meta_src.len() == meta_dst.len()
+        && let (Ok(src_bytes), Ok(dst_bytes)) = (fs::read(src), fs::read(dst))
+        && src_bytes == dst_bytes
+    {
+        return Ok(false);
+    }
+    if let Some(parent) = dst.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    fs::copy(src, dst)?;
+    Ok(true)
+}
+
 /// Processes a single file (index file or icon file) for bundling into output_path and generates a QrcEntry.
 pub fn process_and_copy_file(
     file_path: &Path,
@@ -390,7 +424,7 @@ pub fn process_and_copy_file(
     theme_dir: &Path,
     new_theme_name: &Path,
     output_path: &Path,
-) -> io::Result<Option<QrcEntry>> {
+) -> io::Result<Option<(QrcEntry, bool)>> {
     if !file_path.exists() {
         return Ok(None);
     }
@@ -439,17 +473,15 @@ pub fn process_and_copy_file(
     };
 
     let dest_file = output_path.join(&target_rel);
-    if !dest_file.exists() {
-        if let Some(parent) = dest_file.parent() {
-            fs::create_dir_all(parent)?;
-        }
-        fs::copy(&resolved_path, &dest_file)?;
-    }
+    let changed = copy_if_different(&resolved_path, &dest_file)?;
 
-    Ok(Some(QrcEntry {
-        alias,
-        path: target_rel,
-    }))
+    Ok(Some((
+        QrcEntry {
+            alias,
+            path: target_rel,
+        },
+        changed,
+    )))
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -466,6 +498,7 @@ fn process_theme(
     has_default_dark: &mut bool,
     qrc_entries: &mut Vec<QrcEntry>,
     seen_qrc_entries: &mut HashSet<QrcEntry>,
+    any_file_changed: &mut bool,
 ) -> Result<(), String> {
     let (theme_dir, search_path) = match find_theme_dir(source_theme, search_paths) {
         Some(pair) => pair,
@@ -490,15 +523,15 @@ fn process_theme(
     let is_dark = new_theme_name.to_string_lossy().ends_with("-dark");
     if is_dark && !*has_default_dark {
         let dir = output_path.join("default-dark");
-        fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-        fs::write(
-            dir.join("index.theme"),
-            format!(
-                "[Icon Theme]\nInherits={}\n",
-                new_theme_name.to_string_lossy()
-            ),
-        )
-        .map_err(|e| e.to_string())?;
+        let content = format!(
+            "[Icon Theme]\nInherits={}\n",
+            new_theme_name.to_string_lossy()
+        );
+        if write_if_different(&dir.join("index.theme"), content.as_bytes())
+            .map_err(|e| e.to_string())?
+        {
+            *any_file_changed = true;
+        }
         *has_default_dark = true;
         let entry = QrcEntry {
             alias: None,
@@ -509,15 +542,15 @@ fn process_theme(
         }
     } else if !*has_default {
         let dir = output_path.join("default");
-        fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-        fs::write(
-            dir.join("index.theme"),
-            format!(
-                "[Icon Theme]\nInherits={}\n",
-                new_theme_name.to_string_lossy()
-            ),
-        )
-        .map_err(|e| e.to_string())?;
+        let content = format!(
+            "[Icon Theme]\nInherits={}\n",
+            new_theme_name.to_string_lossy()
+        );
+        if write_if_different(&dir.join("index.theme"), content.as_bytes())
+            .map_err(|e| e.to_string())?
+        {
+            *any_file_changed = true;
+        }
         *has_default = true;
         let entry = QrcEntry {
             alias: None,
@@ -559,7 +592,7 @@ fn process_theme(
     };
 
     for file_path in index_files.iter().chain(matched_icon_files.iter()) {
-        if let Some(entry) = process_and_copy_file(
+        if let Some((entry, changed)) = process_and_copy_file(
             file_path,
             &search_path,
             search_paths,
@@ -568,9 +601,13 @@ fn process_theme(
             output_path,
         )
         .map_err(|e| e.to_string())?
-            && seen_qrc_entries.insert(entry.clone())
         {
-            qrc_entries.push(entry);
+            if changed {
+                *any_file_changed = true;
+            }
+            if seen_qrc_entries.insert(entry.clone()) {
+                qrc_entries.push(entry);
+            }
         }
     }
 
@@ -600,6 +637,7 @@ pub fn bundle_themes(
 
     let mut has_default = false;
     let mut has_default_dark = false;
+    let mut any_file_changed = false;
     let mut qrc_entries = Vec::new();
     let mut seen_qrc_entries = HashSet::new();
 
@@ -618,6 +656,7 @@ pub fn bundle_themes(
             &mut has_default_dark,
             &mut qrc_entries,
             &mut seen_qrc_entries,
+            &mut any_file_changed,
         ) {
             writeln!(output, "{}", err_msg).unwrap();
             return 1;
@@ -630,15 +669,19 @@ pub fn bundle_themes(
         output_path.join(output_qrc_path)
     };
 
-    if let Some(parent) = qrc_file_path.parent()
-        && let Err(e) = fs::create_dir_all(parent)
-    {
-        writeln!(output, "Failed to create qrc directory: {}", e).unwrap();
-        return 1;
-    }
-
     let qrc_content = generate_qrc_content(&qrc_entries, pretty);
-    if let Err(e) = fs::write(&qrc_file_path, qrc_content) {
+    if any_file_changed {
+        if let Some(parent) = qrc_file_path.parent()
+            && let Err(e) = fs::create_dir_all(parent)
+        {
+            writeln!(output, "Failed to create qrc directory: {}", e).unwrap();
+            return 1;
+        }
+        if let Err(e) = fs::write(&qrc_file_path, qrc_content) {
+            writeln!(output, "Failed to write qrc file: {}", e).unwrap();
+            return 1;
+        }
+    } else if let Err(e) = write_if_different(&qrc_file_path, qrc_content.as_bytes()) {
         writeln!(output, "Failed to write qrc file: {}", e).unwrap();
         return 1;
     }
@@ -1271,7 +1314,65 @@ mod tests {
         ));
         assert!(qrc_content.contains("<file>test-theme/actions/16/folder.svg</file>"));
 
+        let qrc_mtime = fs::metadata(output_dir.join("test_resources.qrc")).unwrap().modified().unwrap();
+        let ok_svg_mtime = fs::metadata(output_dir.join("test-theme/actions/16/dialog-ok.svg")).unwrap().modified().unwrap();
+        let default_index_mtime = fs::metadata(output_dir.join("default/index.theme")).unwrap().modified().unwrap();
+
+        // Second run with identical inputs must be a complete no-op (no files modified, mtimes preserved)
+        std::thread::sleep(std::time::Duration::from_millis(50));
+        let res2 = bundle_themes(
+            &mut output,
+            &mut input,
+            true,
+            &output_dir,
+            Path::new("test_resources.qrc"),
+            &[search_dir.clone()],
+            &[
+                PathBuf::from("test-theme"),
+                PathBuf::from("test-theme-dark"),
+            ],
+            &[
+                PathBuf::from("dialog-accept"),
+                PathBuf::from("folder-open-recent"),
+            ],
+            Path::new("hicolor"),
+            false,
+        );
+        assert_eq!(res2, 0);
+
+        let qrc_mtime_after = fs::metadata(output_dir.join("test_resources.qrc")).unwrap().modified().unwrap();
+        let ok_svg_mtime_after = fs::metadata(output_dir.join("test-theme/actions/16/dialog-ok.svg")).unwrap().modified().unwrap();
+        let default_index_mtime_after = fs::metadata(output_dir.join("default/index.theme")).unwrap().modified().unwrap();
+
+        assert_eq!(qrc_mtime, qrc_mtime_after);
+        assert_eq!(ok_svg_mtime, ok_svg_mtime_after);
+        assert_eq!(default_index_mtime, default_index_mtime_after);
+
         // clean up
+        let _ = fs::remove_dir_all(&temp_dir);
+    }
+
+    #[test]
+    fn test_write_and_copy_if_different() {
+        let temp_dir = std::env::temp_dir().join(format!("icontool_test_diff_{}", std::process::id()));
+        let _ = fs::remove_dir_all(&temp_dir);
+        fs::create_dir_all(&temp_dir).unwrap();
+
+        let file_a = temp_dir.join("file_a.txt");
+        let file_b = temp_dir.join("file_b.txt");
+
+        // Initial write
+        assert!(write_if_different(&file_a, b"hello").unwrap());
+        // Same content -> no write
+        assert!(!write_if_different(&file_a, b"hello").unwrap());
+        // Different content -> write
+        assert!(write_if_different(&file_a, b"hello world").unwrap());
+
+        // Copy
+        assert!(copy_if_different(&file_a, &file_b).unwrap());
+        // Same content -> no copy
+        assert!(!copy_if_different(&file_a, &file_b).unwrap());
+
         let _ = fs::remove_dir_all(&temp_dir);
     }
 

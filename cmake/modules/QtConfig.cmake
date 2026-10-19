@@ -707,11 +707,7 @@ if (REQUIRED_ICONS)
                                                           # so let's add one hardcoded fallback
         list(REMOVE_DUPLICATES ICON_SEARCH_PATHS)
 
-        if (EXISTS "${BUILTIN_ICON_THEMES_QRC_FILE}")
-            message(
-                STATUS "Using existing \"${BUILTIN_ICON_THEMES_QRC_FILE}\" to bundle icon themes for ${META_PROJECT_NAME}. "
-                       "Remove this file to force re-generation of the resource file.")
-        elseif ((TARGET "${ICONTOOL_PATH}" AND NOT CMAKE_CROSSCOMPILING) OR EXISTS "${ICONTOOL_PATH}")
+        if ((TARGET "${ICONTOOL_PATH}" AND NOT CMAKE_CROSSCOMPILING) OR EXISTS "${ICONTOOL_PATH}")
             message(STATUS "Using '${ICONTOOL_PATH}' to bundle icon themes")
             set(ICONTOOL_ARGS bundle --output-path "${BUILTIN_ICON_THEMES_OUTPUT_DIR}" --output-qrc-path
                               "${BUILTIN_ICON_THEMES_QRC_FILE_NAME}")
@@ -735,6 +731,10 @@ if (REQUIRED_ICONS)
                 OUTPUT "${BUILTIN_ICON_THEMES_QRC_FILE}"
                 COMMAND "${ICONTOOL_PATH}" ${ICONTOOL_ARGS}
                 COMMENT "Bundling icon themes for ${META_PROJECT_NAME}")
+        elseif (EXISTS "${BUILTIN_ICON_THEMES_QRC_FILE}")
+            message(
+                STATUS "Using existing \"${BUILTIN_ICON_THEMES_QRC_FILE}\" to bundle icon themes for ${META_PROJECT_NAME}. "
+                       "Remove this file to force re-generation of the resource file.")
         else ()
             message(STATUS "Falling back to CMake-based icon bundling as ${ICONTOOL_PATH} does not exist")
             set(ICON_THEME_FILES)
