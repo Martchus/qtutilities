@@ -7,7 +7,7 @@ use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about = "Tool that helps with bundling icons", long_about = None)]
-pub struct Cli {
+struct Cli {
     #[arg(long, default_value_t = false, help = "Prints formatted output")]
     pub pretty: bool,
     #[command(subcommand)]
@@ -15,7 +15,7 @@ pub struct Cli {
 }
 
 #[derive(Subcommand, Debug)]
-pub enum Commands {
+enum Commands {
     #[command(
         about = "Prepare Qt resources for bundling the specified icon themes",
         long_about = None
@@ -87,7 +87,7 @@ pub enum Commands {
     },
 }
 
-pub fn run_with_args(output: &mut dyn Write, input: &mut dyn BufRead, args: &Cli) -> i32 {
+fn run_with_args(output: &mut dyn Write, input: &mut dyn BufRead, args: &Cli) -> i32 {
     match &args.command {
         Some(Commands::Bundle {
             output_path,

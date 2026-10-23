@@ -291,7 +291,7 @@ fn collect_source_files(dir: &Path, files: &mut Vec<PathBuf>) -> io::Result<()> 
     Ok(())
 }
 
-pub fn find_icons(
+pub(crate) fn find_icons(
     output: &mut dyn Write,
     pretty: bool,
     directories: &[PathBuf],

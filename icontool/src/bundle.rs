@@ -661,7 +661,7 @@ fn process_theme(
 }
 
 #[allow(clippy::too_many_arguments)]
-pub fn bundle_themes(
+pub(crate) fn bundle_themes(
     output: &mut dyn Write,
     _: &mut dyn BufRead,
     pretty: bool,
