@@ -10,6 +10,66 @@ struct QrcEntry {
     pub path: PathBuf,
 }
 
+/// Specification for a required icon: how it should be named when bundled,
+/// and a prioritized list of icon names to look for in the theme.
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct IconSpec {
+    pub bundled_name: PathBuf,
+    pub options: Vec<PathBuf>,
+    pub is_explicit_alias: bool,
+}
+
+/// Parses an icon specification, which can be `icon_name` or `bundled_name:option1,option2,...`.
+fn parse_icon_spec(spec: &Path) -> IconSpec {
+    let bytes = spec.as_os_str().as_encoded_bytes();
+    if let Some(pos) = bytes.iter().position(|&b| b == b':') {
+        #[cfg(windows)]
+        let is_drive_letter =
+            pos == 1 && (bytes.get(2) == Some(&b'\\') || bytes.get(2) == Some(&b'/'));
+        #[cfg(not(windows))]
+        let is_drive_letter = false;
+
+        if !is_drive_letter {
+            let bundled_bytes = &bytes[..pos];
+            let options_bytes = &bytes[pos + 1..];
+
+            #[cfg(unix)]
+            use std::os::unix::ffi::OsStrExt;
+
+            #[cfg(unix)]
+            let bundled_name = PathBuf::from(std::ffi::OsStr::from_bytes(bundled_bytes));
+            #[cfg(not(unix))]
+            let bundled_name = PathBuf::from(String::from_utf8_lossy(bundled_bytes).as_ref());
+
+            let mut options = Vec::new();
+            for part in options_bytes.split(|&b| b == b',') {
+                if !part.is_empty() {
+                    #[cfg(unix)]
+                    options.push(PathBuf::from(std::ffi::OsStr::from_bytes(part)));
+                    #[cfg(not(unix))]
+                    options.push(PathBuf::from(String::from_utf8_lossy(part).as_ref()));
+                }
+            }
+
+            if options.is_empty() {
+                options.push(bundled_name.clone());
+            }
+
+            return IconSpec {
+                bundled_name,
+                options,
+                is_explicit_alias: true,
+            };
+        }
+    }
+
+    IconSpec {
+        bundled_name: spec.to_path_buf(),
+        options: vec![spec.to_path_buf()],
+        is_explicit_alias: false,
+    }
+}
+
 /// Parses a theme specification, which can be `theme_name` or `source_theme:new_theme_name`.
 fn parse_theme_spec(theme_spec: &Path) -> (PathBuf, PathBuf) {
     let bytes = theme_spec.as_os_str().as_encoded_bytes();
@@ -249,50 +309,73 @@ fn collect_files_recursive(dir: &Path, files: &mut Vec<PathBuf>) -> io::Result<(
     Ok(())
 }
 
-/// Finds all matching icons for required icons in a theme, applying fallbacks if not found.
+/// Finds all matching icons for required icons in a theme, applying candidate options and fallbacks.
 /// Returns a tuple of `(matched_files, missing_icons)`.
+/// Each matched file is paired with an optional target bundled icon name (if explicitly aliased).
 fn find_required_icons(
     all_theme_files: &[PathBuf],
-    required_icons: &[PathBuf],
-) -> (Vec<PathBuf>, Vec<PathBuf>) {
+    icon_specs: &[IconSpec],
+) -> (Vec<(PathBuf, Option<PathBuf>)>, Vec<PathBuf>) {
     let mut matched_files = Vec::new();
     let mut missing_icons = Vec::new();
-    let mut seen_paths = HashSet::new();
+    let mut seen_entries = HashSet::new();
 
-    for req_icon in required_icons {
+    for spec in icon_specs {
         let mut found_for_icon = false;
-        for file in all_theme_files {
-            if let Some(file_name) = file.file_name()
-                && icon_matches(Path::new(file_name), req_icon)
-            {
+        let target_name = if spec.is_explicit_alias {
+            Some(spec.bundled_name.clone())
+        } else {
+            None
+        };
+
+        // try exact match for candidate options in priority order
+        for option in &spec.options {
+            let mut matched_for_option = false;
+            for file in all_theme_files {
+                if let Some(file_name) = file.file_name()
+                    && icon_matches(Path::new(file_name), option)
+                {
+                    matched_for_option = true;
+                    if seen_entries.insert((file.clone(), target_name.clone())) {
+                        matched_files.push((file.clone(), target_name.clone()));
+                    }
+                }
+            }
+            if matched_for_option {
                 found_for_icon = true;
-                if seen_paths.insert(file.clone()) {
-                    matched_files.push(file.clone());
+                break;
+            }
+        }
+
+        // try fallbacks (stripping -suffix) in priority order if no candidate option matched directly
+        if !found_for_icon {
+            for option in &spec.options {
+                let fallbacks = get_fallback_icon_names(option);
+                let mut fallback_matched = false;
+                for fallback in fallbacks {
+                    for file in all_theme_files {
+                        if let Some(file_name) = file.file_name()
+                            && icon_matches(Path::new(file_name), &fallback)
+                        {
+                            fallback_matched = true;
+                            if seen_entries.insert((file.clone(), target_name.clone())) {
+                                matched_files.push((file.clone(), target_name.clone()));
+                            }
+                        }
+                    }
+                    if fallback_matched {
+                        break;
+                    }
+                }
+                if fallback_matched {
+                    found_for_icon = true;
+                    break;
                 }
             }
         }
 
-        if !found_for_icon {
-            let fallbacks = get_fallback_icon_names(req_icon);
-            let mut fallback_matched = false;
-            for fallback in fallbacks {
-                for file in all_theme_files {
-                    if let Some(file_name) = file.file_name()
-                        && icon_matches(Path::new(file_name), &fallback)
-                    {
-                        fallback_matched = true;
-                        if seen_paths.insert(file.clone()) {
-                            matched_files.push(file.clone());
-                        }
-                    }
-                }
-                if fallback_matched {
-                    break;
-                }
-            }
-            if !fallback_matched && !missing_icons.contains(req_icon) {
-                missing_icons.push(req_icon.clone());
-            }
+        if !found_for_icon && !missing_icons.contains(&spec.bundled_name) {
+            missing_icons.push(spec.bundled_name.clone());
         }
     }
     (matched_files, missing_icons)
@@ -335,6 +418,7 @@ fn copy_if_different(src: &Path, dst: &Path) -> io::Result<bool> {
 /// Processes a single file (index file or icon file) for bundling into output_path and generates a QrcEntry.
 fn process_and_copy_file(
     file_path: &Path,
+    bundled_name: Option<&Path>,
     search_path: &Path,
     search_paths: &[PathBuf],
     theme_dir: &Path,
@@ -356,8 +440,26 @@ fn process_and_copy_file(
         },
     };
 
-    let (alias, resolved_path, target_rel) = if is_symlink {
-        let alias = Some(rel_from_search);
+    let alias_path = match bundled_name {
+        Some(bundled) => {
+            let new_file_name = match file_path.extension() {
+                Some(ext) if bundled.extension().is_none() => {
+                    let mut name = bundled.as_os_str().to_os_string();
+                    name.push(".");
+                    name.push(ext);
+                    PathBuf::from(name)
+                }
+                _ => bundled.to_path_buf(),
+            };
+            rel_from_search
+                .parent()
+                .unwrap_or(Path::new(""))
+                .join(new_file_name)
+        }
+        None => rel_from_search.clone(),
+    };
+
+    let (resolved_path, target_rel) = if is_symlink {
         let resolved = resolve_symlink(file_path.to_path_buf())?;
         if !resolved.exists() {
             return Ok(None);
@@ -383,9 +485,15 @@ fn process_and_copy_file(
             }
         };
 
-        (alias, resolved, target_rel)
+        (resolved, target_rel)
     } else {
-        (None, file_path.to_path_buf(), rel_from_search)
+        (file_path.to_path_buf(), rel_from_search)
+    };
+
+    let alias = if alias_path != target_rel {
+        Some(alias_path)
+    } else {
+        None
     };
 
     let dest_file = output_path.join(&target_rel);
@@ -406,7 +514,7 @@ fn process_theme(
     source_theme: &Path,
     new_theme_name: &Path,
     search_paths: &[PathBuf],
-    icons: &[PathBuf],
+    icon_specs: &[IconSpec],
     fallback_theme: &Path,
     output_path: &Path,
     error_on_missing_icon: bool,
@@ -479,7 +587,7 @@ fn process_theme(
 
     let matched_icon_files = if !is_fallback {
         let all_theme_files = collect_files(&theme_dir).map_err(|e| e.to_string())?;
-        let (matched, missing) = find_required_icons(&all_theme_files, icons);
+        let (matched, missing) = find_required_icons(&all_theme_files, icon_specs);
         if error_on_missing_icon && !missing.is_empty() {
             for m in &missing {
                 writeln!(
@@ -507,9 +615,31 @@ fn process_theme(
         Vec::new()
     };
 
-    for file_path in index_files.iter().chain(matched_icon_files.iter()) {
+    for file_path in &index_files {
         if let Some((entry, changed)) = process_and_copy_file(
             file_path,
+            None,
+            &search_path,
+            search_paths,
+            &theme_dir,
+            new_theme_name,
+            output_path,
+        )
+        .map_err(|e| e.to_string())?
+        {
+            if changed {
+                *any_file_changed = true;
+            }
+            if seen_qrc_entries.insert(entry.clone()) {
+                qrc_entries.push(entry);
+            }
+        }
+    }
+
+    for (file_path, bundled_name) in &matched_icon_files {
+        if let Some((entry, changed)) = process_and_copy_file(
+            file_path,
+            bundled_name.as_deref(),
             &search_path,
             search_paths,
             &theme_dir,
@@ -551,6 +681,8 @@ pub fn bundle_themes(
     let normalized_search_paths: Vec<PathBuf> =
         search_paths.iter().map(|p| normalize_path(p)).collect();
 
+    let icon_specs: Vec<IconSpec> = icons.iter().map(|i| parse_icon_spec(i)).collect();
+
     let mut has_default = false;
     let mut has_default_dark = false;
     let mut any_file_changed = false;
@@ -564,7 +696,7 @@ pub fn bundle_themes(
             &source_theme,
             &new_theme_name,
             &normalized_search_paths,
-            icons,
+            &icon_specs,
             fallback_theme,
             output_path,
             error_on_missing_icon,
@@ -609,6 +741,51 @@ pub fn bundle_themes(
 mod tests {
     use super::*;
     use std::io::Cursor;
+
+    #[test]
+    fn test_parse_icon_spec() {
+        assert_eq!(
+            parse_icon_spec(Path::new("simple-icon")),
+            IconSpec {
+                bundled_name: PathBuf::from("simple-icon"),
+                options: vec![PathBuf::from("simple-icon")],
+                is_explicit_alias: false,
+            }
+        );
+        assert_eq!(
+            parse_icon_spec(Path::new(
+                "sidebar-show-symbolic:sidebar-show-symbolic,view-sidebar-symbolic"
+            )),
+            IconSpec {
+                bundled_name: PathBuf::from("sidebar-show-symbolic"),
+                options: vec![
+                    PathBuf::from("sidebar-show-symbolic"),
+                    PathBuf::from("view-sidebar-symbolic")
+                ],
+                is_explicit_alias: true,
+            }
+        );
+        assert_eq!(
+            parse_icon_spec(Path::new("target:first,second,third")),
+            IconSpec {
+                bundled_name: PathBuf::from("target"),
+                options: vec![
+                    PathBuf::from("first"),
+                    PathBuf::from("second"),
+                    PathBuf::from("third")
+                ],
+                is_explicit_alias: true,
+            }
+        );
+        assert_eq!(
+            parse_icon_spec(Path::new("target:")),
+            IconSpec {
+                bundled_name: PathBuf::from("target"),
+                options: vec![PathBuf::from("target")],
+                is_explicit_alias: true,
+            }
+        );
+    }
 
     #[test]
     fn test_parse_theme_spec() {
@@ -989,6 +1166,92 @@ mod tests {
         assert!(out_str.contains(
             "The specified icon \"non-existent-icon\" could not be located in theme \"test-theme\"."
         ));
+
+        let _ = fs::remove_dir_all(&temp_dir);
+    }
+
+    #[test]
+    fn test_bundle_icon_with_options() {
+        let temp_dir =
+            std::env::temp_dir().join(format!("icontool_test_options_{}", std::process::id()));
+        let _ = fs::remove_dir_all(&temp_dir);
+
+        let search_dir = temp_dir.join("share/icons");
+        let theme_dir = search_dir.join("test-theme");
+        let output_dir = temp_dir.join("build/icons");
+
+        // write theme that has only has view-sidebar-symbolic.svg, NOT sidebar-show-symbolic.svg
+        fs::create_dir_all(theme_dir.join("actions/16")).unwrap();
+        fs::write(theme_dir.join("index.theme"), "Test Theme Index").unwrap();
+        fs::write(
+            theme_dir.join("actions/16/view-sidebar-symbolic.svg"),
+            "<svg>sidebar</svg>",
+        )
+        .unwrap();
+
+        let mut output = Vec::new();
+        let mut input = Cursor::new(Vec::new());
+
+        let res = bundle_themes(
+            &mut output,
+            &mut input,
+            true,
+            &output_dir,
+            Path::new("test.qrc"),
+            &[search_dir.clone()],
+            &[PathBuf::from("test-theme")],
+            &[PathBuf::from(
+                "sidebar-show-symbolic:sidebar-show-symbolic,view-sidebar-symbolic",
+            )],
+            Path::new("hicolor"),
+            true,
+        );
+        assert_eq!(res, 0);
+
+        // verify copied file on disk is view-sidebar-symbolic.svg
+        assert!(
+            output_dir
+                .join("test-theme/actions/16/view-sidebar-symbolic.svg")
+                .is_file()
+        );
+
+        // verify qrc has alias from sidebar-show-symbolic.svg to view-sidebar-symbolic.svg
+        let qrc_content = fs::read_to_string(output_dir.join("test.qrc")).unwrap();
+        assert!(qrc_content.contains(
+            "<file alias=\"test-theme/actions/16/sidebar-show-symbolic.svg\">test-theme/actions/16/view-sidebar-symbolic.svg</file>"
+        ));
+
+        // write theme that has the preferred icon
+        fs::write(
+            theme_dir.join("actions/16/sidebar-show-symbolic.svg"),
+            "<svg>preferred sidebar</svg>",
+        )
+        .unwrap();
+
+        let mut output2 = Vec::new();
+        let mut input2 = Cursor::new(Vec::new());
+
+        let res2 = bundle_themes(
+            &mut output2,
+            &mut input2,
+            true,
+            &output_dir,
+            Path::new("test.qrc"),
+            &[search_dir.clone()],
+            &[PathBuf::from("test-theme")],
+            &[PathBuf::from(
+                "sidebar-show-symbolic:sidebar-show-symbolic,view-sidebar-symbolic",
+            )],
+            Path::new("hicolor"),
+            true,
+        );
+        assert_eq!(res2, 0);
+
+        // verify that the icon (preferred sidebar-show-symbolic) is bundled directly without alias (as it is present)
+        let qrc_content2 = fs::read_to_string(output_dir.join("test.qrc")).unwrap();
+        assert!(
+            qrc_content2.contains("<file>test-theme/actions/16/sidebar-show-symbolic.svg</file>")
+        );
 
         let _ = fs::remove_dir_all(&temp_dir);
     }

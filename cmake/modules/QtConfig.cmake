@@ -788,72 +788,132 @@ if (REQUIRED_ICONS)
                         if (NOT ICON_THEME STREQUAL FALLBACK_ICON_THEME)
                             set(GLOB_PATTERNS)
                             foreach (REQUIRED_ICON ${REQUIRED_ICONS})
-                                list(APPEND GLOB_PATTERNS "${ICON_THEME_PATH}/${REQUIRED_ICON}"
-                                     "${ICON_THEME_PATH}/${REQUIRED_ICON}.*" "${ICON_THEME_PATH}/*/${REQUIRED_ICON}"
-                                     "${ICON_THEME_PATH}/*/${REQUIRED_ICON}.*")
+                                string(FIND "${REQUIRED_ICON}" ":" COLON_POS)
+                                if (NOT COLON_POS EQUAL -1)
+                                    math(EXPR OPTIONS_POS "${COLON_POS} + 1")
+                                    string(SUBSTRING "${REQUIRED_ICON}" ${OPTIONS_POS} -1 OPTIONS_STR)
+                                    string(REPLACE "," ";" ICON_OPTIONS "${OPTIONS_STR}")
+                                else ()
+                                    set(ICON_OPTIONS "${REQUIRED_ICON}")
+                                endif ()
+                                foreach (ICON_OPTION ${ICON_OPTIONS})
+                                    list(APPEND GLOB_PATTERNS "${ICON_THEME_PATH}/${ICON_OPTION}"
+                                         "${ICON_THEME_PATH}/${ICON_OPTION}.*" "${ICON_THEME_PATH}/*/${ICON_OPTION}"
+                                         "${ICON_THEME_PATH}/*/${ICON_OPTION}.*")
+                                endforeach ()
                             endforeach ()
                             file(
                                 GLOB_RECURSE GLOBBED_ICON_THEME_FILES
                                 LIST_DIRECTORIES false
                                 ${GLOB_PATTERNS})
-                            # fall back to less specific icons, e.g. fall back to folder-open if folder-open-recent does not
-                            # exist
+
+                            set(SELECTED_ICON_THEME_FILES)
                             foreach (REQUIRED_ICON ${REQUIRED_ICONS})
+                                string(FIND "${REQUIRED_ICON}" ":" COLON_POS)
+                                if (NOT COLON_POS EQUAL -1)
+                                    string(SUBSTRING "${REQUIRED_ICON}" 0 ${COLON_POS} BUNDLED_ICON_NAME)
+                                    math(EXPR OPTIONS_POS "${COLON_POS} + 1")
+                                    string(SUBSTRING "${REQUIRED_ICON}" ${OPTIONS_POS} -1 OPTIONS_STR)
+                                    string(REPLACE "," ";" ICON_OPTIONS "${OPTIONS_STR}")
+                                    set(IS_EXPLICIT_ALIAS TRUE)
+                                else ()
+                                    set(BUNDLED_ICON_NAME "${REQUIRED_ICON}")
+                                    set(ICON_OPTIONS "${REQUIRED_ICON}")
+                                    set(IS_EXPLICIT_ALIAS FALSE)
+                                endif ()
+
                                 set(ICON_FOUND FALSE)
-                                foreach (ICON_FILE ${GLOBBED_ICON_THEME_FILES})
-                                    get_filename_component(ICON_FILE_NAME "${ICON_FILE}" NAME)
-                                    if (ICON_FILE_NAME MATCHES "^${REQUIRED_ICON}(\\..+)?$")
+                                # try exact matches on options in priority order
+                                foreach (ICON_OPTION ${ICON_OPTIONS})
+                                    set(OPTION_FILES)
+                                    foreach (ICON_FILE ${GLOBBED_ICON_THEME_FILES})
+                                        get_filename_component(ICON_FILE_NAME "${ICON_FILE}" NAME)
+                                        if (ICON_FILE_NAME MATCHES "^${ICON_OPTION}(\\..+)?$")
+                                            list(APPEND OPTION_FILES "${ICON_FILE}")
+                                        endif ()
+                                    endforeach ()
+                                    if (OPTION_FILES)
                                         set(ICON_FOUND TRUE)
+                                        foreach (MATCHED_FILE ${OPTION_FILES})
+                                            list(APPEND SELECTED_ICON_THEME_FILES "${MATCHED_FILE}")
+                                            if (IS_EXPLICIT_ALIAS)
+                                                set("ICON_TARGET_NAME_${MATCHED_FILE}" "${BUNDLED_ICON_NAME}")
+                                            endif ()
+                                        endforeach ()
                                         break()
                                     endif ()
                                 endforeach ()
+                                # try fallbacks on options in priority order
                                 if (NOT ICON_FOUND)
-                                    set(FALLBACK_ICON "${REQUIRED_ICON}")
-                                    while (FALLBACK_ICON MATCHES "-")
-                                        string(REGEX REPLACE "-[^-]+$" "" FALLBACK_ICON "${FALLBACK_ICON}")
-                                        file(
-                                            GLOB_RECURSE FALLBACK_FILES
-                                            LIST_DIRECTORIES false
-                                            "${ICON_THEME_PATH}/${FALLBACK_ICON}" "${ICON_THEME_PATH}/${FALLBACK_ICON}.*"
-                                            "${ICON_THEME_PATH}/*/${FALLBACK_ICON}"
-                                            "${ICON_THEME_PATH}/*/${FALLBACK_ICON}.*")
-                                        if (FALLBACK_FILES)
-                                            list(APPEND GLOBBED_ICON_THEME_FILES ${FALLBACK_FILES})
-                                            set(ICON_FOUND TRUE)
+                                    foreach (ICON_OPTION ${ICON_OPTIONS})
+                                        set(FALLBACK_ICON "${ICON_OPTION}")
+                                        while (FALLBACK_ICON MATCHES "-")
+                                            string(REGEX REPLACE "-[^-]+$" "" FALLBACK_ICON "${FALLBACK_ICON}")
+                                            file(
+                                                GLOB_RECURSE FALLBACK_FILES
+                                                LIST_DIRECTORIES false
+                                                "${ICON_THEME_PATH}/${FALLBACK_ICON}" "${ICON_THEME_PATH}/${FALLBACK_ICON}.*"
+                                                "${ICON_THEME_PATH}/*/${FALLBACK_ICON}"
+                                                "${ICON_THEME_PATH}/*/${FALLBACK_ICON}.*")
+                                            if (FALLBACK_FILES)
+                                                set(ICON_FOUND TRUE)
+                                                foreach (MATCHED_FILE ${FALLBACK_FILES})
+                                                    list(APPEND SELECTED_ICON_THEME_FILES "${MATCHED_FILE}")
+                                                    if (IS_EXPLICIT_ALIAS)
+                                                        set("ICON_TARGET_NAME_${MATCHED_FILE}" "${BUNDLED_ICON_NAME}")
+                                                    endif ()
+                                                endforeach ()
+                                                break()
+                                            endif ()
+                                        endwhile ()
+                                        if (ICON_FOUND)
                                             break()
                                         endif ()
-                                    endwhile ()
+                                    endforeach ()
                                 endif ()
                                 if (NOT ICON_FOUND AND BUILTIN_ICON_THEMES_ERROR_ON_MISSING_ICON)
                                     message(
                                         FATAL_ERROR
-                                            "The specified icon \"${REQUIRED_ICON}\" could not be located in theme \"${ICON_THEME}\"."
+                                            "The specified icon \"${BUNDLED_ICON_NAME}\" could not be located in theme \"${ICON_THEME}\"."
                                     )
                                 endif ()
                             endforeach ()
-                            if (GLOBBED_ICON_THEME_FILES)
-                                list(REMOVE_DUPLICATES GLOBBED_ICON_THEME_FILES)
+                            if (SELECTED_ICON_THEME_FILES)
+                                list(REMOVE_DUPLICATES SELECTED_ICON_THEME_FILES)
                             endif ()
                         else ()
                             message(
                                 STATUS
                                     "Icon files for specified theme \"${ICON_THEME}\" are skipped because these are provided as fallback anyways."
                             )
-                            set(GLOBBED_ICON_THEME_FILES)
+                            set(SELECTED_ICON_THEME_FILES)
                         endif ()
                         # make temporary copy of required icons and create resource list for Qt
-                        foreach (ICON_THEME_FILE ${GLOBBED_ICON_THEME_INDEX_FILES} ${GLOBBED_ICON_THEME_FILES})
+                        foreach (ICON_THEME_FILE ${GLOBBED_ICON_THEME_INDEX_FILES} ${SELECTED_ICON_THEME_FILES})
                             # skip non-existent files
                             if (NOT EXISTS "${ICON_THEME_FILE}")
                                 continue()
                             endif ()
+                            string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH
+                                                 "${ICON_THEME_FILE}")
+                            string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH
+                                                 "${ICON_THEME_FILE_RELATIVE_PATH}")
+
+                            if (DEFINED "ICON_TARGET_NAME_${ICON_THEME_FILE}")
+                                set(TARGET_ICON_NAME "${ICON_TARGET_NAME_${ICON_THEME_FILE}}")
+                                get_filename_component(ICON_FILE_EXT "${ICON_THEME_FILE}" EXT)
+                                get_filename_component(ICON_REL_DIR "${NEW_ICON_THEME_FILE_RELATIVE_PATH}" DIRECTORY)
+                                if (ICON_REL_DIR)
+                                    set(ALIASED_REL_PATH "${ICON_REL_DIR}/${TARGET_ICON_NAME}${ICON_FILE_EXT}")
+                                else ()
+                                    set(ALIASED_REL_PATH "${TARGET_ICON_NAME}${ICON_FILE_EXT}")
+                                endif ()
+                            else ()
+                                set(ALIASED_REL_PATH "${NEW_ICON_THEME_FILE_RELATIVE_PATH}")
+                            endif ()
+
                             # resolve symlinks
                             if (IS_SYMLINK "${ICON_THEME_FILE}")
-                                string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH
-                                                     "${ICON_THEME_FILE}")
-                                string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH
-                                                     "${ICON_THEME_FILE_RELATIVE_PATH}")
-                                set(ICON_THEME_FILE_ALIAS " alias=\"${NEW_ICON_THEME_FILE_RELATIVE_PATH}\"")
                                 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
                                     if (CMAKE_VERSION VERSION_LESS "3.14")
                                         message(FATAL_ERROR "Need at least CMake 3.14 on Windows to read symlinks of"
@@ -868,18 +928,21 @@ if (REQUIRED_ICONS)
                                     endwhile ()
                                 endif ()
                                 get_filename_component(ICON_THEME_FILE "${ICON_THEME_FILE}" REALPATH)
-                            else ()
-                                unset(ICON_THEME_FILE_ALIAS)
                             endif ()
                             string(REGEX REPLACE "^${ICON_SEARCH_PATH}/" "" ICON_THEME_FILE_RELATIVE_PATH
                                                  "${ICON_THEME_FILE}")
                             string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_RELATIVE_PATH
                                                  "${ICON_THEME_FILE_RELATIVE_PATH}")
-                            get_filename_component(ICON_THEME_FILE_DIR "${ICON_THEME_FILE_RELATIVE_PATH}" DIRECTORY)
-                            string(REGEX REPLACE "(^[^/\\]+)" "${NEW_ICON_THEME_NAME}" NEW_ICON_THEME_FILE_DIR
-                                                 "${ICON_THEME_FILE_DIR}")
-                            file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
-                            file(COPY "${ICON_THEME_FILE}" DESTINATION "${BUILTIN_ICONS_DIR}/${NEW_ICON_THEME_FILE_DIR}")
+
+                            if (NOT ALIASED_REL_PATH STREQUAL NEW_ICON_THEME_FILE_RELATIVE_PATH)
+                                set(ICON_THEME_FILE_ALIAS " alias=\"${ALIASED_REL_PATH}\"")
+                            else ()
+                                unset(ICON_THEME_FILE_ALIAS)
+                            endif ()
+
+                            get_filename_component(ICON_THEME_FILE_DIR "${NEW_ICON_THEME_FILE_RELATIVE_PATH}" DIRECTORY)
+                            file(MAKE_DIRECTORY "${BUILTIN_ICONS_DIR}/${ICON_THEME_FILE_DIR}")
+                            file(COPY "${ICON_THEME_FILE}" DESTINATION "${BUILTIN_ICONS_DIR}/${ICON_THEME_FILE_DIR}")
                             list(APPEND ICON_THEME_FILES
                                  "<file${ICON_THEME_FILE_ALIAS}>${NEW_ICON_THEME_FILE_RELATIVE_PATH}</file>")
                         endforeach ()
