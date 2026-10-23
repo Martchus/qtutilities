@@ -11,6 +11,8 @@ core, gui, widgets
 
 Some header files also require further Qt modules.
 
+The optional `icontool` for bundling icon themes requires Corrosion 0.6, CMake 3.22 and Rust.
+
 ## Copyright notice and license
 Copyright © 2015-2026 Marius Kittler
 
