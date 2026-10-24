@@ -852,7 +852,8 @@ if (REQUIRED_ICONS)
                                             file(
                                                 GLOB_RECURSE FALLBACK_FILES
                                                 LIST_DIRECTORIES false
-                                                "${ICON_THEME_PATH}/${FALLBACK_ICON}" "${ICON_THEME_PATH}/${FALLBACK_ICON}.*"
+                                                "${ICON_THEME_PATH}/${FALLBACK_ICON}"
+                                                "${ICON_THEME_PATH}/${FALLBACK_ICON}.*"
                                                 "${ICON_THEME_PATH}/*/${FALLBACK_ICON}"
                                                 "${ICON_THEME_PATH}/*/${FALLBACK_ICON}.*")
                                             if (FALLBACK_FILES)
