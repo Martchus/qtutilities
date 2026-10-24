@@ -91,8 +91,9 @@ set(WIDGETS_UI_FILES
     paletteeditor/paletteeditor.ui)
 set(WIDGETS_RES_FILES resources/qtutilsicons.qrc)
 set(QT_TESTS)
-set(CMAKE_MODULE_FILES cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake cmake/modules/QtLinkage.cmake
-                       cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake)
+set(CMAKE_MODULE_FILES
+    cmake/modules/QtConfig.cmake cmake/modules/QtGuiConfig.cmake cmake/modules/QtLinkage.cmake
+    cmake/modules/QtWebViewProviderConfig.cmake cmake/modules/QtJsProviderConfig.cmake cmake/modules/QtUtilitiesIcons.cmake)
 set(CMAKE_TEMPLATE_FILES cmake/templates/qtconfig.h.in cmake/templates/webviewdefs.h.in cmake/templates/webviewincludes.h.in
                          cmake/templates/jsdefs.h.in cmake/templates/jsincludes.h.in)
 
@@ -103,24 +104,9 @@ set(TS_FILES
 
 set(DOC_FILES README.md)
 
-set(REQUIRED_ICONS
-    dialog-cancel-symbolic
-    dialog-ok-symbolic
-    dialog-ok-apply-symbolic
-    document-open-symbolic
-    document-open-recent-symbolic
-    edit-clear-symbolic
-    go-next-symbolic
-    preferences-desktop-icons
-    preferences-desktop-locale
-    system-file-manager-symbolic
-    system-run-symbolic
-    system-search
-    window-close-symbolic)
-
 set(SCRIPT_FILES scripts/required_icons.sh)
 
-# required to include CMake modules from own project directory
+# allow including CMake modules from own project directory
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${CMAKE_MODULE_PATH}")
 
 # configure whether setup tools are enabled
@@ -209,6 +195,18 @@ endif ()
 # include modules to apply configuration
 include(BasicConfig)
 include(QtGuiConfig)
+
+# configure required icons
+include(QtUtilitiesIcons)
+set(REQUIRED_ICONS)
+if (WIDGETS_GUI)
+    list(APPEND REQUIRED_ICONS ${QT_ICONS_SETTINGS} ${QT_ICONS_RECENTMANAGER} ${QT_ICONS_PASSWORD_DIALOG}
+         ${QT_ICONS_WIDGETS})
+endif ()
+if (SETUP_TOOLS)
+    list(APPEND REQUIRED_ICONS ${QT_ICONS_SETUP_TOOLS})
+endif ()
+list(REMOVE_DUPLICATES REQUIRED_ICONS)
 
 # add tool for bundling icons
 if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.22.0)
