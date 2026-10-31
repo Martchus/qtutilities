@@ -101,27 +101,27 @@
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="127"/>
         <source>application name</source>
-        <translation></translation>
+        <translation>Anwendungsname</translation>
     </message>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="137"/>
         <source>version</source>
-        <translation></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="163"/>
         <source>description</source>
-        <translation></translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="185"/>
         <source>website link</source>
-        <translation></translation>
+        <translation>Website-Link</translation>
     </message>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="226"/>
         <source>creators</source>
-        <translation></translation>
+        <translation>Entwickler</translation>
     </message>
     <message>
         <location filename="../aboutdialog/aboutdialog.ui" line="253"/>
@@ -411,7 +411,7 @@
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="162"/>
         <source>Palette</source>
-        <translation></translation>
+        <translation>Palette</translation>
     </message>
     <message>
         <location filename="../settingsdialog/qtappearanceoptionpage.ui" line="175"/>
@@ -543,7 +543,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="93"/>
         <source>Filter</source>
-        <translation></translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="134"/>
@@ -558,7 +558,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     <message>
         <location filename="../settingsdialog/settingsdialog.ui" line="159"/>
         <source>OK</source>
-        <translation></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../settingsdialog/settingsdialog.cpp" line="320"/>
@@ -737,7 +737,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     <message>
         <location filename="../setup/updateoptionpage.ui" line="80"/>
         <source>Download</source>
-        <translation></translation>
+        <translation>Herunterladen</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="104"/>
@@ -901,7 +901,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     <message>
         <location filename="../misc/dialogutils.cpp" line="39"/>
         <source>%1 - %2 - %3</source>
-        <translation></translation>
+        <translation>%1 - %2 - %3</translation>
     </message>
     <message>
         <location filename="../misc/dialogutils.cpp" line="44"/>
@@ -911,7 +911,7 @@ Außerdem werden sie vielleicht vom QPA plugin überschrieben und funktionieren 
     <message>
         <location filename="../misc/dialogutils.cpp" line="47"/>
         <source>*%1 - %2 - %3</source>
-        <translation></translation>
+        <translation>*%1 - %2 - %3</translation>
     </message>
 </context>
 </TS>

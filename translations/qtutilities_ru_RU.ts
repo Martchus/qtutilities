@@ -34,7 +34,7 @@
     <message>
         <location filename="../settingsdialog/qtsettings.cpp" line="479"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательский интерфейс</translation>
     </message>
 </context>
 <context>
@@ -640,7 +640,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1524"/>
         <source>latest version provides no build for the current platform yet</source>
-        <translation type="unfinished"></translation>
+        <translation>в последней версии пока нет сборки для текущей платформы</translation>
     </message>
     <message>
         <source>new version available but no build for the current platform present yet</source>
@@ -649,12 +649,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1528"/>
         <source>for latest build: </source>
-        <translation type="unfinished"></translation>
+        <translation>для последней сборки: </translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1534"/>
         <source>Update to latest available build</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновить до последней доступной сборки</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="6"/>

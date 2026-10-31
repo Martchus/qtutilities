@@ -34,7 +34,7 @@
     <message>
         <location filename="../settingsdialog/qtsettings.cpp" line="479"/>
         <source>User interface</source>
-        <translation type="unfinished"></translation>
+        <translation>用户界面</translation>
     </message>
 </context>
 <context>
@@ -49,7 +49,9 @@
         <source>**Release notes of version %1:**
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>**版本 %1 的发行说明：**
+
+</translation>
     </message>
     <message>
         <source>&lt;strong&gt;Release notes of version %1:&lt;/strong&gt;&lt;br&gt;</source>
@@ -644,7 +646,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1524"/>
         <source>latest version provides no build for the current platform yet</source>
-        <translation type="unfinished"></translation>
+        <translation>最新版本尚未提供适用于当前平台的构建</translation>
     </message>
     <message>
         <source>new version available but no build for the current platform present yet</source>
@@ -653,12 +655,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updater.cpp" line="1528"/>
         <source>for latest build: </source>
-        <translation type="unfinished"></translation>
+        <translation>对于最新构建：</translation>
     </message>
     <message>
         <location filename="../setup/updater.cpp" line="1534"/>
         <source>Update to latest available build</source>
-        <translation type="unfinished"></translation>
+        <translation>更新到最新可用构建</translation>
     </message>
     <message>
         <location filename="../setup/updateoptionpage.ui" line="6"/>
