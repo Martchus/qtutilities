@@ -278,7 +278,7 @@ private:
 /// \brief The UpdateOptionPage class provides a settings page to manage automatic updates for applications using Qt Widgets.
 /// \remarks This class is experimental and might be changed in incompatible ways (API and ABI wise) or completely removed
 /// in further minor/patch releases.
-BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(UpdateOptionPage)
+BEGIN_DECLARE_EXPORTED_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QT_UTILITIES_EXPORT, UpdateOptionPage)
 public:
 explicit UpdateOptionPage(UpdateHandler *updateHandler, QWidget *parentWidget = nullptr);
 

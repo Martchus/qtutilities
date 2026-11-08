@@ -20,7 +20,7 @@ class OptionCategory;
 struct QtSettingsData;
 
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
-BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtAppearanceOptionPage)
+BEGIN_DECLARE_EXPORTED_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QT_UTILITIES_EXPORT, QtAppearanceOptionPage)
 public:
 explicit QtAppearanceOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
 
@@ -30,7 +30,7 @@ QtSettingsData & m_settings;
 QFontDialog *m_fontDialog;
 END_DECLARE_OPTION_PAGE
 
-BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtLanguageOptionPage)
+BEGIN_DECLARE_EXPORTED_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QT_UTILITIES_EXPORT, QtLanguageOptionPage)
 public:
 explicit QtLanguageOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
 
@@ -39,7 +39,7 @@ DECLARE_SETUP_WIDGETS
 QtSettingsData & m_settings;
 END_DECLARE_OPTION_PAGE
 
-BEGIN_DECLARE_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QtEnvOptionPage)
+BEGIN_DECLARE_EXPORTED_UI_FILE_BASED_OPTION_PAGE_CUSTOM_CTOR(QT_UTILITIES_EXPORT, QtEnvOptionPage)
 public:
 explicit QtEnvOptionPage(QtSettingsData &settings, QWidget *parentWidget = nullptr);
 
