@@ -19,9 +19,9 @@ public:
     explicit OptionCategoryModel(const QList<OptionCategory *> &categories, QObject *parent = nullptr);
     ~OptionCategoryModel() override;
 
-    const QList<OptionCategory *> &categories() const;
-    OptionCategory *category(const QModelIndex &index) const;
-    OptionCategory *category(int row) const;
+    inline const QList<OptionCategory *> &categories() const;
+    inline OptionCategory *category(const QModelIndex &index) const;
+    inline OptionCategory *category(int row) const;
     void setCategories(const QList<OptionCategory *> &categories);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
