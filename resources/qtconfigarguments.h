@@ -48,7 +48,7 @@ public:
     inline bool areQtGuiArgsPresent() const;
     void applySettings(bool preventApplyingDefaultFont = false) const;
 #ifdef QT_UTILITIES_GUI_QTQUICK
-    void applySettingsForQuickGui() const;
+    inline void applySettingsForQuickGui() const;
 #endif
 
 private:

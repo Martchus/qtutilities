@@ -80,7 +80,7 @@ public:
     QMap<int, QVariant> itemData(const QModelIndex &index) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole) override;
     bool setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles) override;
-    bool setChecked(int row, bool checked);
+    inline bool setChecked(int row, bool checked);
     bool setChecked(int row, Qt::CheckState checked);
     virtual QString labelForId(const QVariant &id) const;
     Qt::DropActions supportedDropActions() const override;

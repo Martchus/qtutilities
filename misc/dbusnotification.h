@@ -43,10 +43,10 @@ public:
         inline bool supportsImages() const;
         inline bool supportsIcon() const;
         inline bool supportsActions() const;
-        bool supportsAnimatedIcon() const;
-        bool supportsActionIcons() const;
-        bool supportsSound() const;
-        bool supportsPercistence() const;
+        inline bool supportsAnimatedIcon() const;
+        inline bool supportsActionIcons() const;
+        inline bool supportsSound() const;
+        inline bool supportsPercistence() const;
 
     private:
         bool m_valid;
