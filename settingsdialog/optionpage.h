@@ -16,7 +16,7 @@ class QT_UTILITIES_EXPORT OptionPageWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit OptionPageWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    inline explicit OptionPageWidget(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
 Q_SIGNALS:
     void paletteChanged();
@@ -40,7 +40,7 @@ public:
 
     QWidget *parentWindow() const;
     QWidget *widget();
-    bool hasBeenShown() const;
+    inline bool hasBeenShown() const;
     virtual bool apply() = 0;
     virtual void reset() = 0;
     bool matches(const QString &searchKeyWord);

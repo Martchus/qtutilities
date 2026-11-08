@@ -214,7 +214,7 @@ public:
     void setConsideringSeparateSignature(bool consideringSeparateSignature);
     QString preCheck() const;
     static UpdateHandler *mainInstance();
-    static void setMainInstance(UpdateHandler *mainInstance);
+    inline static void setMainInstance(UpdateHandler *mainInstance);
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
     void setCacheLoadControl(QNetworkRequest::CacheLoadControl cacheLoadControl);
 #endif

@@ -25,9 +25,9 @@ class QT_UTILITIES_EXPORT SettingsDialog : public QDialog {
 public:
     explicit SettingsDialog(QWidget *parent = nullptr);
     ~SettingsDialog() override;
-    bool isTabBarAlwaysVisible() const;
+    inline bool isTabBarAlwaysVisible() const;
     void setTabBarAlwaysVisible(bool value);
-    OptionCategoryModel *categoryModel();
+    inline OptionCategoryModel *categoryModel();
     OptionCategory *category(int categoryIndex) const;
     OptionPage *page(int categoryIndex, int pageIndex) const;
     void showCategory(OptionCategory *category);

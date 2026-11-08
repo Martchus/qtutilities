@@ -21,8 +21,8 @@ public:
     ~IconButton() override;
 
     static IconButton *fromAction(QAction *action, std::uintptr_t id = 0);
-    const QPixmap &pixmap() const;
-    void setPixmap(const QPixmap &pixmap);
+    inline const QPixmap &pixmap() const;
+    inline void setPixmap(const QPixmap &pixmap);
     QSize sizeHint() const override;
 
     static constexpr auto defaultPixmapSize = QSize(16, 16);

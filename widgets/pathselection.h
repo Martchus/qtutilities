@@ -18,10 +18,10 @@ class QT_UTILITIES_EXPORT PathSelection : public QWidget {
 public:
     explicit PathSelection(QWidget *parent = nullptr);
 
-    ClearLineEdit *lineEdit();
-    const ClearLineEdit *lineEdit() const;
-    void provideCustomFileMode(QFileDialog::FileMode customFileMode);
-    void provideCustomFileDialog(QFileDialog *customFileDialog);
+    inline ClearLineEdit *lineEdit();
+    inline const ClearLineEdit *lineEdit() const;
+    inline void provideCustomFileMode(QFileDialog::FileMode customFileMode);
+    inline void provideCustomFileDialog(QFileDialog *customFileDialog);
 
 protected:
     bool event(QEvent *event) override;

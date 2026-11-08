@@ -21,10 +21,10 @@ class QT_UTILITIES_EXPORT ClearSpinBox : public QSpinBox, public ButtonOverlay {
 public:
     explicit ClearSpinBox(QWidget *parent = nullptr);
     ~ClearSpinBox() override;
-    bool minimumHidden() const;
-    void setMinimumHidden(bool value);
-    QString placeholderText() const;
-    void setPlaceholderText(const QString &placeholderText);
+    inline bool minimumHidden() const;
+    inline void setMinimumHidden(bool value);
+    inline QString placeholderText() const;
+    inline void setPlaceholderText(const QString &placeholderText);
     bool isCleared() const override;
 
 protected:

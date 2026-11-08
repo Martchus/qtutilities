@@ -25,18 +25,18 @@ public:
     explicit OptionCategory(QObject *parent = nullptr);
     ~OptionCategory() override;
 
-    const QString &displayName() const;
-    void setDisplayName(const QString &displayName);
-    const QIcon &icon() const;
-    void setIcon(const QIcon &icon);
-    const QList<OptionPage *> &pages() const;
+    inline const QString &displayName() const;
+    inline void setDisplayName(const QString &displayName);
+    inline const QIcon &icon() const;
+    inline void setIcon(const QIcon &icon);
+    inline const QList<OptionPage *> &pages() const;
     void assignPages(const QList<OptionPage *> &pages);
     bool applyAllPages();
     void resetAllPages();
     void retranslateAllPages();
     bool matches(const QString &searchKeyWord) const;
-    int currentIndex() const;
-    void setCurrentIndex(int currentIndex);
+    inline int currentIndex() const;
+    inline void setCurrentIndex(int currentIndex);
 
 Q_SIGNALS:
     void displayNameChanged(const QString &displayName);

@@ -27,8 +27,8 @@ class QT_UTILITIES_EXPORT EnterPasswordDialog : public QDialog {
 public:
     explicit EnterPasswordDialog(QWidget *parent = nullptr);
     ~EnterPasswordDialog() override;
-    const QString &userName() const;
-    const QString &password() const;
+    inline const QString &userName() const;
+    inline const QString &password() const;
     QString description() const;
     void setDescription(const QString &description = QString());
     bool promtForUserName() const;
@@ -37,7 +37,7 @@ public:
     void setVerificationRequired(bool value);
     bool isPasswordRequired() const;
     void setPasswordRequired(bool value);
-    const QString &instruction() const;
+    inline const QString &instruction() const;
     void setInstruction(const QString &value);
     static bool isCapslockPressed();
 
@@ -48,7 +48,7 @@ protected:
 private Q_SLOTS:
     void updateShowPassword();
     void confirm();
-    void abort();
+    inline void abort();
 
 private:
     std::unique_ptr<Ui::EnterPasswordDialog> m_ui;

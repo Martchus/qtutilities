@@ -41,11 +41,11 @@ class QT_UTILITIES_EXPORT QtConfigArguments {
 public:
     QtConfigArguments();
 
-    Argument &qtWidgetsGuiArg();
-    Argument &qtQuickGuiArg();
-    Argument &languageArg();
+    inline Argument &qtWidgetsGuiArg();
+    inline Argument &qtQuickGuiArg();
+    inline Argument &languageArg();
 
-    bool areQtGuiArgsPresent() const;
+    inline bool areQtGuiArgsPresent() const;
     void applySettings(bool preventApplyingDefaultFont = false) const;
 #ifdef QT_UTILITIES_GUI_QTQUICK
     void applySettingsForQuickGui() const;

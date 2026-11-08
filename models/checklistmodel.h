@@ -16,12 +16,12 @@ class QT_UTILITIES_EXPORT ChecklistItem {
     friend class ChecklistModel;
 
 public:
-    ChecklistItem(const QVariant &id = QVariant(), const QString &label = QString(), Qt::CheckState checked = Qt::Unchecked);
+    inline ChecklistItem(const QVariant &id = QVariant(), const QString &label = QString(), Qt::CheckState checked = Qt::Unchecked);
 
-    const QVariant &id() const;
-    const QString &label() const;
-    Qt::CheckState checkState() const;
-    bool isChecked() const;
+    inline const QVariant &id() const;
+    inline const QString &label() const;
+    inline Qt::CheckState checkState() const;
+    inline bool isChecked() const;
 
 private:
     QVariant m_id;
@@ -86,7 +86,7 @@ public:
     Qt::DropActions supportedDropActions() const override;
     bool insertRows(int row, int count, const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
-    const QList<ChecklistItem> &items() const;
+    inline const QList<ChecklistItem> &items() const;
     void setItems(const QList<ChecklistItem> &items);
     void restore(QSettings &settings, const QString &name);
     void save(QSettings &settings, const QString &name) const;
