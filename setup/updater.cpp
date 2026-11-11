@@ -9,8 +9,13 @@
 #include <QSettings>
 #include <QTimer>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+#include <QChronoTimer>
+#endif
+
 #include <c++utilities/application/argumentparser.h>
 
+#include <algorithm>
 #include <optional>
 
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
@@ -1161,12 +1166,33 @@ struct UpdateHandlerPrivate {
         : updater(executableName.isEmpty() ? notifier.executableName() : executableName, signatureExtension)
     {
     }
+    struct CheckIntervalSettings : public UpdateHandler::CheckInterval {
+        explicit CheckIntervalSettings()
+        {
+        }
+        explicit CheckIntervalSettings(UpdateHandler::CheckInterval interval, UpdateHandler::CheckIntervalUnit unit)
+            : UpdateHandler::CheckInterval(interval)
+            , unit(unit)
+        {
+        }
+        UpdateHandler::CheckIntervalUnit unit;
+    };
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    using Timer = QChronoTimer;
+    using Interval = std::chrono::milliseconds;
+    using IntervalRep = Interval::rep;
+#else
+    using Timer = QTimer;
+    using Interval = int;
+    using IntervalRep = Interval;
+#endif
 
     UpdateNotifier notifier;
     Updater updater;
-    QTimer timer;
+    Timer timer;
     QSettings *settings;
-    std::optional<UpdateHandler::CheckInterval> checkInterval;
+    std::optional<CheckIntervalSettings> checkInterval;
     bool hasCheckedOnceSinceStartup = false;
     bool considerSeparateSignature = false;
 };
@@ -1194,7 +1220,7 @@ UpdateHandler::UpdateHandler(
     m_p->timer.setSingleShot(true);
     m_p->timer.setTimerType(Qt::VeryCoarseTimer);
     m_p->settings = settings;
-    connect(&m_p->timer, &QTimer::timeout, &m_p->notifier, &UpdateNotifier::checkForUpdate);
+    connect(&m_p->timer, &UpdateHandlerPrivate::Timer::timeout, &m_p->notifier, &UpdateNotifier::checkForUpdate);
     connect(&m_p->notifier, &UpdateNotifier::checkedForUpdate, this, &UpdateHandler::handleUpdateCheckDone);
 }
 
@@ -1220,6 +1246,7 @@ const UpdateHandler::CheckInterval &UpdateHandler::checkInterval() const
     m_p->settings->beginGroup(QStringLiteral("updating"));
     auto &checkInterval = m_p->checkInterval.emplace();
     checkInterval.duration = CppUtilities::TimeSpan::fromMilliseconds(m_p->settings->value("checkIntervalMs", 60 * 60 * 1000).toInt());
+    checkInterval.unit = static_cast<CheckIntervalUnit>(m_p->settings->value("checkIntervalUnit").toInt());
     checkInterval.enabled = m_p->settings->value("automaticChecksEnabled", false).toBool();
     m_p->settings->endGroup();
     return checkInterval;
@@ -1227,14 +1254,28 @@ const UpdateHandler::CheckInterval &UpdateHandler::checkInterval() const
 
 void UpdateHandler::setCheckInterval(CheckInterval checkInterval)
 {
-    m_p->checkInterval = checkInterval;
+    setCheckIntervalWithUnit(checkInterval, CheckIntervalUnit::Minutes);
+}
+
+void UpdateHandler::setCheckIntervalWithUnit(CheckInterval checkInterval, CheckIntervalUnit unit)
+{
+    const auto &interval = m_p->checkInterval.emplace(checkInterval, unit);
     m_p->settings->beginGroup(QStringLiteral("updating"));
-    m_p->settings->setValue("checkIntervalMs", checkInterval.duration.totalMilliseconds());
-    m_p->settings->setValue("automaticChecksEnabled", checkInterval.enabled);
+    m_p->settings->setValue("checkIntervalMs", interval.duration.totalMilliseconds());
+    m_p->settings->setValue("checkIntervalUnit", static_cast<std::underlying_type_t<CheckIntervalUnit>>(interval.unit));
+    m_p->settings->setValue("automaticChecksEnabled", interval.enabled);
     m_p->settings->endGroup();
 #ifdef QT_UTILITIES_SETUP_TOOLS_ENABLED
     scheduleNextUpdateCheck();
 #endif
+}
+
+UpdateHandler::CheckIntervalUnit UpdateHandler::checkIntervalUnit() const
+{
+    if (!m_p->checkInterval.has_value()) {
+        checkInterval();
+    }
+    return m_p->checkInterval.value().unit;
 }
 
 bool UpdateHandler::isConsideringSeparateSignature() const
@@ -1318,7 +1359,11 @@ void UpdateHandler::scheduleNextUpdateCheck()
               << "Check for updates due in: " << timeLeft.toString(CppUtilities::TimeSpanOutputFormat::WithMeasures)
               << CppUtilities::EscapeCodes::Phrases::End;
     m_p->hasCheckedOnceSinceStartup = true; // the attempt counts
-    m_p->timer.start(std::max(1000, static_cast<int>(timeLeft.totalMilliseconds())));
+
+    const auto milliseconds = std::clamp<std::int64_t>(
+        static_cast<std::int64_t>(timeLeft.totalMilliseconds()), 1000, std::numeric_limits<UpdateHandlerPrivate::IntervalRep>::max());
+    m_p->timer.setInterval(UpdateHandlerPrivate::Interval(milliseconds));
+    m_p->timer.start();
 }
 #endif
 
@@ -1386,8 +1431,23 @@ bool UpdateOptionPage::apply()
     if (!m_p->updateHandler) {
         return true;
     }
-    m_p->updateHandler->setCheckInterval(UpdateHandler::CheckInterval{
-        .duration = CppUtilities::TimeSpan::fromMinutes(ui()->checkIntervalSpinBox->value()), .enabled = ui()->enabledCheckBox->isChecked() });
+    auto interval = UpdateHandler::CheckInterval();
+    auto unit = UpdateHandler::CheckIntervalUnit();
+    interval.enabled = ui()->enabledCheckBox->isChecked();
+    switch (ui()->checkIntervalUnitComboBox->currentIndex()) {
+    case 1:
+        interval.duration = CppUtilities::TimeSpan::fromHours(ui()->checkIntervalSpinBox->value());
+        unit = UpdateHandler::CheckIntervalUnit::Hours;
+        break;
+    case 2:
+        interval.duration = CppUtilities::TimeSpan::fromDays(ui()->checkIntervalSpinBox->value());
+        unit = UpdateHandler::CheckIntervalUnit::Days;
+        break;
+    default:
+        interval.duration = CppUtilities::TimeSpan::fromMinutes(ui()->checkIntervalSpinBox->value());
+        unit = UpdateHandler::CheckIntervalUnit::Minutes;
+    }
+    m_p->updateHandler->setCheckIntervalWithUnit(interval, unit);
     auto flags = UpdateCheckFlags::None;
     CppUtilities::modFlagEnum(flags, UpdateCheckFlags::IncludePreReleases, ui()->preReleasesCheckBox->isChecked());
     CppUtilities::modFlagEnum(flags, UpdateCheckFlags::IncludeDrafts, ui()->draftsCheckBox->isChecked());
@@ -1404,7 +1464,19 @@ void UpdateOptionPage::reset()
         return;
     }
     const auto &checkInterval = m_p->updateHandler->checkInterval();
-    ui()->checkIntervalSpinBox->setValue(static_cast<int>(checkInterval.duration.totalMinutes()));
+    switch (m_p->updateHandler->checkIntervalUnit()) {
+    case UpdateHandler::CheckIntervalUnit::Hours:
+        ui()->checkIntervalSpinBox->setValue(static_cast<int>(checkInterval.duration.totalHours()));
+        ui()->checkIntervalUnitComboBox->setCurrentIndex(1);
+        break;
+    case UpdateHandler::CheckIntervalUnit::Days:
+        ui()->checkIntervalSpinBox->setValue(static_cast<int>(checkInterval.duration.totalDays()));
+        ui()->checkIntervalUnitComboBox->setCurrentIndex(2);
+        break;
+    default:
+        ui()->checkIntervalSpinBox->setValue(static_cast<int>(checkInterval.duration.totalMinutes()));
+        ui()->checkIntervalUnitComboBox->setCurrentIndex(0);
+    }
     ui()->enabledCheckBox->setChecked(checkInterval.enabled);
     const auto flags = m_p->updateHandler->notifier()->flags();
     ui()->preReleasesCheckBox->setChecked(flags && UpdateCheckFlags::IncludePreReleases);
@@ -1468,6 +1540,8 @@ QWidget *UpdateOptionPage::setupWidget()
 #endif
             infobox.exec();
         });
+        QObject::connect(ui()->checkIntervalSpinBox, &QSpinBox::valueChanged, ui()->checkIntervalUnitComboBox,
+            [comboBox = ui()->checkIntervalUnitComboBox](int value) { comboBox->setHidden(value <= 0); });
         QObject::connect(
             m_p->updateHandler->notifier(), &UpdateNotifier::inProgressChanged, widget, [this](bool inProgress) { updateLatestVersion(inProgress); });
         QObject::connect(m_p->updateHandler->updater(), &Updater::inProgressChanged, widget, [this](bool inProgress) {

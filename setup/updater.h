@@ -192,6 +192,9 @@ class QT_UTILITIES_EXPORT UpdateHandler : public QObject {
     Q_PROPERTY(Updater *updater READ updater CONSTANT)
 
 public:
+    /// \brief The CheckIntervalUnit enum specifies what unit was used to configure the check interval.
+    enum class CheckIntervalUnit : int { Minutes, Hours, Days };
+
     /// \brief The CheckInterval struct specifies whether automatic checks for updates are enabled and of often they should be done.
     struct CheckInterval {
         /// \brief The duration of the interval. Only durations up to around 24 days are supported. Only full-second accuracy is supported.
@@ -210,6 +213,9 @@ public:
     Updater *updater();
     const CheckInterval &checkInterval() const;
     void setCheckInterval(CheckInterval checkInterval);
+    void setCheckIntervalWithUnit(CheckInterval checkInterval, CheckIntervalUnit unit);
+    CheckIntervalUnit checkIntervalUnit() const;
+    void setCheckIntervalUnit(CheckIntervalUnit unit);
     bool isConsideringSeparateSignature() const;
     void setConsideringSeparateSignature(bool consideringSeparateSignature);
     QString preCheck() const;
