@@ -1477,6 +1477,7 @@ void UpdateOptionPage::reset()
         ui()->checkIntervalSpinBox->setValue(static_cast<int>(checkInterval.duration.totalMinutes()));
         ui()->checkIntervalUnitComboBox->setCurrentIndex(0);
     }
+    ui()->checkIntervalUnitComboBox->setHidden(ui()->checkIntervalSpinBox->value() <= 0);
     ui()->enabledCheckBox->setChecked(checkInterval.enabled);
     const auto flags = m_p->updateHandler->notifier()->flags();
     ui()->preReleasesCheckBox->setChecked(flags && UpdateCheckFlags::IncludePreReleases);
