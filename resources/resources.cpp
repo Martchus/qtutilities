@@ -507,7 +507,7 @@ QString errorMessageForSettings(const QSettings &settings)
 }
 
 /*!
- * \brief Disables the Qt Quick pipeline cache on platforms where this is needed to workaround issues with the cache.
+ * \brief Disables the Qt Quick pipeline cache on platforms where this is needed to work around issues with the cache.
  * \remarks
  * This function is called "delete…" because it previously deleted the cache. However, it is actually possible to just
  * disable it so that is preferable.
