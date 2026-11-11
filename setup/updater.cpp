@@ -1541,7 +1541,7 @@ QWidget *UpdateOptionPage::setupWidget()
 #endif
             infobox.exec();
         });
-        QObject::connect(ui()->checkIntervalSpinBox, &QSpinBox::valueChanged, ui()->checkIntervalUnitComboBox,
+        QObject::connect(ui()->checkIntervalSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), ui()->checkIntervalUnitComboBox,
             [comboBox = ui()->checkIntervalUnitComboBox](int value) { comboBox->setHidden(value <= 0); });
         QObject::connect(
             m_p->updateHandler->notifier(), &UpdateNotifier::inProgressChanged, widget, [this](bool inProgress) { updateLatestVersion(inProgress); });
