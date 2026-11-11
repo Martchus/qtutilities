@@ -1245,8 +1245,13 @@ const UpdateHandler::CheckInterval &UpdateHandler::checkInterval() const
     }
     m_p->settings->beginGroup(QStringLiteral("updating"));
     auto &checkInterval = m_p->checkInterval.emplace();
-    checkInterval.duration = CppUtilities::TimeSpan::fromMilliseconds(m_p->settings->value("checkIntervalMs", 60 * 60 * 1000).toInt());
-    checkInterval.unit = static_cast<CheckIntervalUnit>(m_p->settings->value("checkIntervalUnit").toInt());
+    if (const auto intervalMs = m_p->settings->value("checkIntervalMs"); intervalMs.canConvert<int>()) {
+        checkInterval.duration = CppUtilities::TimeSpan::fromMilliseconds(intervalMs.toInt());
+        checkInterval.unit = static_cast<CheckIntervalUnit>(m_p->settings->value("checkIntervalUnit").toInt());
+    } else {
+        checkInterval.duration = CppUtilities::TimeSpan::fromDays(1.0);
+        checkInterval.unit = UpdateHandler::CheckIntervalUnit::Days;
+    }
     checkInterval.enabled = m_p->settings->value("automaticChecksEnabled", false).toBool();
     m_p->settings->endGroup();
     return checkInterval;
