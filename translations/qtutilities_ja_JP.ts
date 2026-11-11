@@ -40,12 +40,12 @@
 <context>
     <name>QtGui::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1447"/>
+        <location filename="../setup/updater.cpp" line="1519"/>
         <source>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Try the update nevertheless?&lt;/strong&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;%1&lt;/p&gt;&lt;p&gt;&lt;strong&gt;更新を続行しますか?&lt;/strong&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1418"/>
+        <location filename="../setup/updater.cpp" line="1490"/>
         <source>**Release notes of version %1:**
 
 </source>
@@ -54,7 +54,7 @@
 </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1496"/>
+        <location filename="../setup/updater.cpp" line="1570"/>
         <source>Updating</source>
         <translation>更新中</translation>
     </message>
@@ -482,27 +482,27 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation>最近使ったファイル(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="38"/>
+        <location filename="../misc/recentmenumanager.cpp" line="39"/>
         <source>&amp;Clear list</source>
         <translation>リストを消去(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="144"/>
+        <location filename="../misc/recentmenumanager.cpp" line="145"/>
         <source>Recently opened files - </source>
         <translation>最近開いたファイル - </translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="145"/>
+        <location filename="../misc/recentmenumanager.cpp" line="146"/>
         <source>The selected file can&apos;t be found anymore. Do you want to delete the obsolete entry from the list?</source>
         <translation>選択したファイルは見つかりません。リストから古いエントリを削除しますか?</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="148"/>
+        <location filename="../misc/recentmenumanager.cpp" line="149"/>
         <source>keep entry</source>
         <translation>エントリを保持</translation>
     </message>
     <message>
-        <location filename="../misc/recentmenumanager.cpp" line="149"/>
+        <location filename="../misc/recentmenumanager.cpp" line="150"/>
         <source>delete entry</source>
         <translation>エントリを削除</translation>
     </message>
@@ -554,12 +554,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateHandler</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1256"/>
+        <location filename="../setup/updater.cpp" line="1297"/>
         <source>Unable to determine the application directory.</source>
         <translation>アプリケーションディレクトリを特定できません。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1263"/>
+        <location filename="../setup/updater.cpp" line="1304"/>
         <source>The directory where the executable is stored (%1) is not writable.</source>
         <translation>実行可能ファイルが保存されているディレクトリ (%1) は書き込み可能ではありません。</translation>
     </message>
@@ -567,57 +567,57 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateNotifier</name>
     <message>
-        <location filename="../setup/updater.cpp" line="438"/>
+        <location filename="../setup/updater.cpp" line="443"/>
         <source>checking …</source>
         <translation>確認中 …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="442"/>
+        <location filename="../setup/updater.cpp" line="447"/>
         <source>unable to check: %1</source>
         <translation>確認できません : %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="446"/>
+        <location filename="../setup/updater.cpp" line="451"/>
         <source>new version available: %1 (last checked: %2)</source>
         <translation>新しいバージョンが利用可能です : %1 (最終確認日: %2)</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="448"/>
+        <location filename="../setup/updater.cpp" line="453"/>
         <source>no new version available, latest release is: %1 (last checked: %2)</source>
         <translation>新しいバージョンはありません。最新リリースは : %1 です。 (最終確認 : %2)</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="452"/>
+        <location filename="../setup/updater.cpp" line="457"/>
         <source>unknown</source>
         <translation>不明</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="490"/>
+        <location filename="../setup/updater.cpp" line="495"/>
         <source>at offset %1</source>
         <translation>オフセット %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="502"/>
+        <location filename="../setup/updater.cpp" line="507"/>
         <source>This build of the application does not support checking for updates.</source>
         <translation>このアプリケーションのビルドでは、更新の確認はサポートされていません。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="554"/>
+        <location filename="../setup/updater.cpp" line="559"/>
         <source>Unable to parse releases: </source>
         <translation>リリースを解析できません : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="634"/>
+        <location filename="../setup/updater.cpp" line="639"/>
         <source>Unable to request releases: </source>
         <translation>リリースをリクエストできません : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="665"/>
+        <location filename="../setup/updater.cpp" line="670"/>
         <source>Unable to parse release: </source>
         <translation>リリースを解析できません : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="681"/>
+        <location filename="../setup/updater.cpp" line="686"/>
         <source>Unable to request release: </source>
         <translation>リリースをリクエストできません : </translation>
     </message>
@@ -625,22 +625,22 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::UpdateOptionPage</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1500"/>
+        <location filename="../setup/updater.cpp" line="1574"/>
         <source>Checking for updates is not supported on this platform.</source>
         <translation>このプラットフォームでは更新の確認はサポートされていません。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1502"/>
+        <location filename="../setup/updater.cpp" line="1576"/>
         <source>This build of %1 has automatic updates disabled. You may update the application in an automated way via your package manager, though.</source>
         <translation>このビルドの %1 では自動更新が無効になっています。ただし、パッケージマネージャーを使用してアプリケーションを自動的に更新することは可能です。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1523"/>
+        <location filename="../setup/updater.cpp" line="1597"/>
         <source>no new version available for download</source>
         <translation>ダウンロードできる新しいバージョンはありません</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1524"/>
+        <location filename="../setup/updater.cpp" line="1598"/>
         <source>latest version provides no build for the current platform yet</source>
         <translation>最新バージョンでは、現在のプラットフォーム用のビルドはまだ提供されていません</translation>
     </message>
@@ -649,12 +649,12 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation type="vanished">新しいバージョンが利用可能ですが、現在のプラットフォーム用のビルドはまだ存在しません</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1528"/>
+        <location filename="../setup/updater.cpp" line="1602"/>
         <source>for latest build: </source>
         <translation>最新ビルド : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1534"/>
+        <location filename="../setup/updater.cpp" line="1608"/>
         <source>Update to latest available build</source>
         <translation>最新ビルドに更新</translation>
     </message>
@@ -671,7 +671,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
     <message>
         <location filename="../setup/updateoptionpage.ui" line="38"/>
         <location filename="../setup/updateoptionpage.ui" line="58"/>
-        <location filename="../setup/updateoptionpage.ui" line="206"/>
+        <location filename="../setup/updateoptionpage.ui" line="216"/>
         <source>unknown</source>
         <translation>不明</translation>
     </message>
@@ -686,68 +686,82 @@ These settings might be overwritten by your Qt platform integration plugin and h
         <translation>ダウンロード</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="101"/>
+        <location filename="../setup/updateoptionpage.ui" line="95"/>
         <source>only on startup</source>
         <translation>起動時のみ</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="104"/>
         <source> minutes</source>
-        <translation> 分</translation>
+        <translation type="vanished"> 分</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="107"/>
+        <location filename="../setup/updateoptionpage.ui" line="98"/>
         <source>every </source>
         <translation>毎 </translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="134"/>
+        <location filename="../setup/updateoptionpage.ui" line="109"/>
+        <source>minutes</source>
+        <translation>分</translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="114"/>
+        <source>hours</source>
+        <translation>時間</translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="119"/>
+        <source>days</source>
+        <translation>日</translation>
+    </message>
+    <message>
+        <location filename="../setup/updateoptionpage.ui" line="144"/>
         <source>Check for new version</source>
         <translation>新しいバージョンの確認</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="144"/>
+        <location filename="../setup/updateoptionpage.ui" line="154"/>
         <source>Show release notes</source>
         <translation>リリースノートを表示</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="154"/>
-        <location filename="../setup/updater.cpp" line="1533"/>
+        <location filename="../setup/updateoptionpage.ui" line="164"/>
+        <location filename="../setup/updater.cpp" line="1607"/>
         <source>Update to latest version</source>
         <translation>最新バージョンに更新</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="179"/>
+        <location filename="../setup/updateoptionpage.ui" line="189"/>
         <source>Version in use</source>
         <translation>使用中のバージョン</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="189"/>
+        <location filename="../setup/updateoptionpage.ui" line="199"/>
         <source>Consider pre-releases</source>
         <translation>プレリリース版を含める</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="196"/>
+        <location filename="../setup/updateoptionpage.ui" line="206"/>
         <source>Latest version</source>
         <translation>最新バージョン</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="222"/>
+        <location filename="../setup/updateoptionpage.ui" line="232"/>
         <source>Pre-releases</source>
         <translation>プレリリース</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="232"/>
+        <location filename="../setup/updateoptionpage.ui" line="242"/>
         <source>Consider drafts</source>
         <translation>ベータ版を含める</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="285"/>
+        <location filename="../setup/updateoptionpage.ui" line="295"/>
         <source>Abort</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../setup/updateoptionpage.ui" line="295"/>
+        <location filename="../setup/updateoptionpage.ui" line="305"/>
         <source>Restart to apply</source>
         <translation>再起動して適用</translation>
     </message>
@@ -755,102 +769,102 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::Updater</name>
     <message>
-        <location filename="../setup/updater.cpp" line="805"/>
+        <location filename="../setup/updater.cpp" line="810"/>
         <source>Update in progress …</source>
         <translation>更新の進捗状況 …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="805"/>
+        <location filename="../setup/updater.cpp" line="810"/>
         <source>Update done</source>
         <translation>更新完了</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="805"/>
+        <location filename="../setup/updater.cpp" line="810"/>
         <source>Update failed</source>
         <translation>更新失敗</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="865"/>
+        <location filename="../setup/updater.cpp" line="870"/>
         <source>This build of the application does not support self-updating.</source>
         <translation>このアプリケーションのビルドでは、自己更新はサポートされていません。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="924"/>
+        <location filename="../setup/updater.cpp" line="929"/>
         <source>Downloading %1</source>
         <translation>ダウンロード中 %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="943"/>
+        <location filename="../setup/updater.cpp" line="948"/>
         <source>Waiting for signature download …</source>
         <translation>署名のダウンロードを待っています...</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="974"/>
+        <location filename="../setup/updater.cpp" line="979"/>
         <source>Unable to download signature: </source>
         <translation>署名をダウンロードできません : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="982"/>
+        <location filename="../setup/updater.cpp" line="987"/>
         <source>Extracting …</source>
         <translation>抽出中 …</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="998"/>
+        <location filename="../setup/updater.cpp" line="1003"/>
         <source>Unable to download update: </source>
         <translation>更新をダウンロードできません : </translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1015"/>
+        <location filename="../setup/updater.cpp" line="1020"/>
         <source>Unable to determine application path.</source>
         <translation>アプリケーション パスを判別できません。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1022"/>
+        <location filename="../setup/updater.cpp" line="1027"/>
         <source>Extraction was cancelled.</source>
         <translation>抽出はキャンセルされました。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1071"/>
+        <location filename="../setup/updater.cpp" line="1076"/>
         <source>Unable to create new executable under &quot;%1&quot;: %2</source>
         <translation>&quot;%1&quot; の下に新しい実行ファイルを作成できません : %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1076"/>
+        <location filename="../setup/updater.cpp" line="1081"/>
         <source>Unable to write new executable under &quot;%1&quot;: %2</source>
         <translation>&quot;%1&quot; の下に新しい実行ファイルを書き込めません : %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1081"/>
+        <location filename="../setup/updater.cpp" line="1086"/>
         <source>Unable to make new binary under &quot;%1&quot; executable.</source>
         <translation>&quot;%1&quot; の下に新しいバイナリを実行可能ファイルとして作成できません。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1090"/>
+        <location filename="../setup/updater.cpp" line="1095"/>
         <source>Unable to open downloaded archive: %1</source>
         <translation>ダウンロードしたアーカイブを開けません : %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1100"/>
+        <location filename="../setup/updater.cpp" line="1105"/>
         <source>Unable to verify whether downloaded binary is valid: %1</source>
         <translation>ダウンロードしたバイナリが有効かどうかを確認できません : %1</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1118"/>
+        <location filename="../setup/updater.cpp" line="1123"/>
         <source>Unable to move current executable to &quot;%1&quot;: %2</source>
         <translation>現在の実行ファイルを &quot;%1&quot; に移動できません : %2</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1126"/>
+        <location filename="../setup/updater.cpp" line="1131"/>
         <source>Unable to rename new executable &quot;%1&quot; to &quot;%2&quot;: %3</source>
         <translation>新しい実行ファイル &quot;%1&quot; の名前を &quot;%2&quot; に変更できません : %3</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1132"/>
+        <location filename="../setup/updater.cpp" line="1137"/>
         <source>Unable to find executable in downloaded archive.</source>
         <translation>ダウンロードしたアーカイブ内に実行ファイルが見つかりません。</translation>
     </message>
     <message>
-        <location filename="../setup/updater.cpp" line="1150"/>
+        <location filename="../setup/updater.cpp" line="1155"/>
         <source>Update stored under: %1</source>
         <translation>更新の保存先 : %1</translation>
     </message>
@@ -858,7 +872,7 @@ These settings might be overwritten by your Qt platform integration plugin and h
 <context>
     <name>QtUtilities::VerificationErrorMessageBox</name>
     <message>
-        <location filename="../setup/updater.cpp" line="1575"/>
+        <location filename="../setup/updater.cpp" line="1649"/>
         <source>&lt;p&gt;The signature of the downloaded executable could not be verified: %1&lt;/p&gt;</source>
         <translation>&lt;p&gt;ダウンロードした実行ファイルの署名を検証できませんでした : %1&lt;/p&gt;</translation>
     </message>
