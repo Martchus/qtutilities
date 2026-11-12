@@ -54,6 +54,7 @@ namespace QtUtilities {
 struct QtSettingsData {
     QtSettingsData();
 
+    QString path;
     QFont font;
     std::optional<QFont> initialFont;
     QPalette palette; // the currently applied palette (only in use if customPalette is true, though)
@@ -176,6 +177,7 @@ bool QtSettings::hasCustomFont() const
 void QtSettings::restore(QSettings &settings)
 {
     settings.beginGroup(QStringLiteral("qt"));
+    m_d->path = settings.fileName();
     m_d->font.fromString(settings.value(QStringLiteral("font")).toString());
     m_d->customFont = settings.value(QStringLiteral("customfont"), false).toBool();
     m_d->palette = settings.value(QStringLiteral("palette")).value<QPalette>();
@@ -651,6 +653,9 @@ void QtEnvOptionPage::reset()
     ui()->pluginPathSelection->lineEdit()->setText(m_settings.additionalPluginDirectory);
     ui()->iconThemeSearchPathSelection->lineEdit()->setText(m_settings.additionalIconThemeSearchPath);
     ui()->translationPathSelection->lineEdit()->setText(TranslationFiles::additionalTranslationFilePath());
+    ui()->appPathValueLabel->setText(QCoreApplication::applicationFilePath());
+    ui()->settingsPathValueLabel->setText(m_settings.path);
+    ui()->platformPluginValueLabel->setText(QGuiApplication::platformName());
 }
 
 QWidget *QtEnvOptionPage::setupWidget()

@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>QtUtilities::QtEnvOptionPage</class>
  <widget class="QWidget" name="QtUtilities::QtEnvOptionPage">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>515</width>
-    <height>243</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Environment/paths</string>
   </property>
@@ -22,10 +14,10 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="pluginDirLabel">
+     <item row="2" column="0">
+      <widget class="QLabel" name="translationsSearchPathLabel">
        <property name="text">
-        <string>Additional plugin directory</string>
+        <string>Additional translation search path</string>
        </property>
       </widget>
      </item>
@@ -39,15 +31,15 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QtUtilities::PathSelection" name="iconThemeSearchPathSelection" native="true"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="translationsSearchPathLabel">
+     <item row="0" column="0">
+      <widget class="QLabel" name="pluginDirLabel">
        <property name="text">
-        <string>Additional translation search path</string>
+        <string>Additional plugin directory</string>
        </property>
       </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QtUtilities::PathSelection" name="iconThemeSearchPathSelection" native="true"/>
      </item>
      <item row="2" column="1">
       <widget class="QtUtilities::PathSelection" name="translationPathSelection" native="true"/>
@@ -55,9 +47,108 @@
     </layout>
    </item>
    <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="furtherInfoLabel">
+     <property name="text">
+      <string>Further information:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="infoGridLayout">
+     <property name="horizontalSpacing">
+      <number>16</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="appPathLabel">
+       <property name="text">
+        <string>Application path</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="appPathValueLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="settingsPathLabel">
+       <property name="text">
+        <string>Settings file path</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="settingsPathValueLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="platformPluginLabel">
+       <property name="text">
+        <string>Platform</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="platformPluginValueLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -79,7 +170,7 @@
       <string>These settings take effect after restarting the application.</string>
      </property>
      <property name="textFormat">
-      <enum>Qt::PlainText</enum>
+      <enum>Qt::TextFormat::PlainText</enum>
      </property>
     </widget>
    </item>
