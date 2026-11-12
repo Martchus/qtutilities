@@ -1,3 +1,5 @@
+#define CHRONO_UTILITIES_TIMESPAN_INTEGER_SCALE_OVERLOADS
+
 #include "./updater.h"
 
 #if defined(QT_UTILITIES_GUI_QTWIDGETS)
@@ -1245,8 +1247,8 @@ const UpdateHandler::CheckInterval &UpdateHandler::checkInterval() const
     }
     m_p->settings->beginGroup(QStringLiteral("updating"));
     auto &checkInterval = m_p->checkInterval.emplace();
-    if (const auto intervalMs = m_p->settings->value("checkIntervalMs"); intervalMs.canConvert<int>()) {
-        checkInterval.duration = CppUtilities::TimeSpan::fromMilliseconds(intervalMs.toInt());
+    if (const auto intervalMs = m_p->settings->value("checkIntervalMs"); intervalMs.canConvert<qlonglong>()) {
+        checkInterval.duration = CppUtilities::TimeSpan::fromMilliseconds(static_cast<CppUtilities::TimeSpan::TickType>(intervalMs.toLongLong()));
         checkInterval.unit = static_cast<CheckIntervalUnit>(m_p->settings->value("checkIntervalUnit").toInt());
     } else {
         checkInterval.duration = CppUtilities::TimeSpan::fromDays(1.0);
@@ -1266,7 +1268,7 @@ void UpdateHandler::setCheckIntervalWithUnit(CheckInterval checkInterval, CheckI
 {
     const auto &interval = m_p->checkInterval.emplace(checkInterval, unit);
     m_p->settings->beginGroup(QStringLiteral("updating"));
-    m_p->settings->setValue("checkIntervalMs", interval.duration.totalMilliseconds());
+    m_p->settings->setValue("checkIntervalMs", static_cast<qlonglong>(interval.duration.totalTicks() / CppUtilities::TimeSpan::ticksPerMillisecond));
     m_p->settings->setValue("checkIntervalUnit", static_cast<std::underlying_type_t<CheckIntervalUnit>>(interval.unit));
     m_p->settings->setValue("automaticChecksEnabled", interval.enabled);
     m_p->settings->endGroup();
@@ -1441,15 +1443,15 @@ bool UpdateOptionPage::apply()
     interval.enabled = ui()->enabledCheckBox->isChecked();
     switch (ui()->checkIntervalUnitComboBox->currentIndex()) {
     case 1:
-        interval.duration = CppUtilities::TimeSpan::fromHours(ui()->checkIntervalSpinBox->value());
+        interval.duration = CppUtilities::TimeSpan::fromHours(static_cast<CppUtilities::TimeSpan::TickType>(ui()->checkIntervalSpinBox->value()));
         unit = UpdateHandler::CheckIntervalUnit::Hours;
         break;
     case 2:
-        interval.duration = CppUtilities::TimeSpan::fromDays(ui()->checkIntervalSpinBox->value());
+        interval.duration = CppUtilities::TimeSpan::fromDays(static_cast<CppUtilities::TimeSpan::TickType>(ui()->checkIntervalSpinBox->value()));
         unit = UpdateHandler::CheckIntervalUnit::Days;
         break;
     default:
-        interval.duration = CppUtilities::TimeSpan::fromMinutes(ui()->checkIntervalSpinBox->value());
+        interval.duration = CppUtilities::TimeSpan::fromMinutes(static_cast<CppUtilities::TimeSpan::TickType>(ui()->checkIntervalSpinBox->value()));
         unit = UpdateHandler::CheckIntervalUnit::Minutes;
     }
     m_p->updateHandler->setCheckIntervalWithUnit(interval, unit);
