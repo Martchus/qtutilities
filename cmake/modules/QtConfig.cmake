@@ -626,6 +626,65 @@ if (ENABLE_QT_TRANSLATIONS AND TS_FILES)
         endif ()
     endif ()
 
+    # add target for automatic translation
+    if ((NOT TARGET translator OR CMAKE_CROSSCOMPILING) AND EXISTS "${QT_UTILITIES_LIBEXEC_DIR}/translator")
+        set(TRANSLATOR_DEFAULT_PATH "${QT_UTILITIES_LIBEXEC_DIR}/translator")
+    else ()
+        set(TRANSLATOR_DEFAULT_PATH "translator")
+    endif ()
+    set(TRANSLATOR_PATH
+        "${TRANSLATOR_DEFAULT_PATH}"
+        CACHE FILEPATH "specifies the path of translator")
+    set(TRANSLATOR_URL
+        ""
+        CACHE STRING "specifies API URL passed to translator")
+    set(TRANSLATOR_MODEL
+        ""
+        CACHE STRING "specifies model name passed to translator")
+    set(TRANSLATOR_TIMEOUT
+        ""
+        CACHE STRING "specifies timeout passed to translator")
+    set(TRANSLATOR_OPTIONS
+        ""
+        CACHE STRING "specifies options passed to translator")
+
+    if ((TARGET "${TRANSLATOR_PATH}" AND NOT CMAKE_CROSSCOMPILING) OR EXISTS "${TRANSLATOR_PATH}")
+        set(TRANSLATE_FILES "")
+        foreach (TS_FILE ${TS_FILES})
+            if (IS_ABSOLUTE "${TS_FILE}")
+                list(APPEND TRANSLATE_FILES "${TS_FILE}")
+            else ()
+                list(APPEND TRANSLATE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${TS_FILE}")
+            endif ()
+        endforeach ()
+        set(TRANSLATOR_ARGS "")
+        if (TRANSLATOR_URL)
+            list(APPEND TRANSLATOR_ARGS --url "${TRANSLATOR_URL}")
+        endif ()
+        if (TRANSLATOR_MODEL)
+            list(APPEND TRANSLATOR_ARGS --model "${TRANSLATOR_MODEL}")
+        endif ()
+        if (TRANSLATOR_TIMEOUT)
+            list(APPEND TRANSLATOR_ARGS --timeout "${TRANSLATOR_TIMEOUT}")
+        endif ()
+        if (TRANSLATOR_OPTIONS)
+            list(APPEND TRANSLATOR_ARGS ${TRANSLATOR_OPTIONS})
+        endif ()
+        add_custom_target(
+            ${META_PROJECT_NAME}_translate
+            COMMAND "${TRANSLATOR_PATH}" ${TRANSLATOR_ARGS} ${TRANSLATE_FILES}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+            COMMENT "Translating ${META_PROJECT_NAME}")
+        if (TARGET "${TRANSLATOR_PATH}")
+            add_dependencies(${META_PROJECT_NAME}_translate "${TRANSLATOR_PATH}")
+        endif ()
+        if (NOT TARGET translate)
+            add_custom_target(translate DEPENDS ${META_PROJECT_NAME}_translate)
+        else ()
+            add_dependencies(translate ${META_PROJECT_NAME}_translate)
+        endif ()
+    endif ()
+
     list(APPEND APP_SPECIFIC_QT_TRANSLATION_FILES "${META_PROJECT_NAME}")
 endif ()
 

@@ -215,6 +215,13 @@ else ()
     message(STATUS "Skipping icontool, CMake is too old (3.22.0 or newer required)")
 endif ()
 
+# add tool for translating
+if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.22.0)
+    add_subdirectory(translator)
+else ()
+    message(STATUS "Skipping translator, CMake is too old (3.22.0 or newer required)")
+endif ()
+
 # add further Qt modules (which are not automatically detected)
 set(META_PUBLIC_QT_MODULES Core ${ADDITIONAL_QT_MODULES})
 
