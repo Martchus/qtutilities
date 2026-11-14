@@ -4,7 +4,7 @@ pub use translate::{Results, format_error, process_ts, process_ts_file, translat
 
 use clap::Parser;
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 #[derive(Parser, Debug, Clone)]
@@ -14,7 +14,7 @@ use std::time::Duration;
     about = "Translate Qt .ts files using a local llama.cpp server"
 )]
 pub struct Args {
-    /// One or more Qt .ts files to translate
+    /// One or more Qt .ts files or directories to translate
     #[arg(required = true, num_args = 1..)]
     pub files: Vec<PathBuf>,
 
@@ -35,6 +35,41 @@ pub struct Args {
     pub timeout: u64,
 }
 
+/// Recursively searches a directory for `*.ts` files.
+fn find_ts_files_in_dir(dir: &Path, files: &mut Vec<PathBuf>) -> std::io::Result<()> {
+    for entry in std::fs::read_dir(dir)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_dir() {
+            find_ts_files_in_dir(&path, files)?;
+        } else if path.is_file()
+            && path
+                .extension()
+                .and_then(|ext| ext.to_str())
+                .is_some_and(|ext| ext.eq_ignore_ascii_case("ts"))
+        {
+            files.push(path);
+        }
+    }
+    Ok(())
+}
+
+/// Expands directory paths into recursively discovered `*.ts` files, preserving non-directory paths.
+pub fn collect_ts_files(paths: &[PathBuf]) -> std::io::Result<Vec<PathBuf>> {
+    let mut files = Vec::new();
+    for path in paths {
+        if path.is_dir() {
+            let mut dir_files = Vec::new();
+            find_ts_files_in_dir(path, &mut dir_files)?;
+            dir_files.sort();
+            files.extend(dir_files);
+        } else {
+            files.push(path.clone());
+        }
+    }
+    Ok(files)
+}
+
 pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
     let mut builder = reqwest::Client::builder();
     if args.timeout > 0 {
@@ -48,8 +83,16 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
         }
     };
 
+    let files = match collect_ts_files(&args.files) {
+        Ok(f) => f,
+        Err(e) => {
+            let _ = writeln!(output, "Failed to collect files: {e}");
+            return 1;
+        }
+    };
+
     let mut has_error = false;
-    for file in &args.files {
+    for file in &files {
         match process_ts_file(file, &client, &args.url, args.model.as_deref(), output).await {
             Ok(results) => {
                 if results.error_count > 0 {
@@ -132,5 +175,37 @@ mod tests {
         assert_eq!(run_with_args(&mut output, &args).await, 1);
         let out_str = String::from_utf8(output).unwrap();
         assert!(out_str.contains("Error processing"));
+    }
+
+    #[test]
+    fn test_collect_ts_files_recursive() {
+        let temp_dir =
+            std::env::temp_dir().join(format!("translator_collect_test_{}", std::process::id()));
+        let sub_dir = temp_dir.join("sub");
+        std::fs::create_dir_all(&sub_dir).unwrap();
+
+        let file_root_ts = temp_dir.join("root.ts");
+        let file_root_txt = temp_dir.join("root.txt");
+        let file_sub_ts = sub_dir.join("nested.ts");
+        let file_sub_other = sub_dir.join("nested.cpp");
+
+        std::fs::write(&file_root_ts, "").unwrap();
+        std::fs::write(&file_root_txt, "").unwrap();
+        std::fs::write(&file_sub_ts, "").unwrap();
+        std::fs::write(&file_sub_other, "").unwrap();
+
+        let collected = collect_ts_files(&[temp_dir.clone()]).unwrap();
+        assert_eq!(collected.len(), 2);
+        assert!(collected.contains(&file_root_ts));
+        assert!(collected.contains(&file_sub_ts));
+        assert!(!collected.contains(&file_root_txt));
+        assert!(!collected.contains(&file_sub_other));
+
+        // Direct file path should be preserved as-is
+        let direct_file = temp_dir.join("direct.ts");
+        let collected_direct = collect_ts_files(&[direct_file.clone()]).unwrap();
+        assert_eq!(collected_direct, vec![direct_file]);
+
+        let _ = std::fs::remove_dir_all(&temp_dir);
     }
 }
