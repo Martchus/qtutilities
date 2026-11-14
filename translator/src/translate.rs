@@ -5,6 +5,8 @@ use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{BufRead, BufReader, Write};
 use std::path::Path;
+use std::sync::Arc;
+use tokio::sync::Semaphore;
 
 #[derive(Serialize)]
 struct Message {
@@ -124,55 +126,6 @@ fn write_unfinished_translation<W: Write>(
     Ok(())
 }
 
-async fn handle_unfinished_translation<W: Write>(
-    writer: &mut Writer<W>,
-    client: &reqwest::Client,
-    api_url: &str,
-    model: Option<&str>,
-    output: &mut dyn Write,
-    current_source: &str,
-    language: &str,
-    attributes: &[(String, String)],
-    fallback_text: Option<&str>,
-    results: &mut Results,
-) -> Result<()> {
-    let translation_result = if !current_source.is_empty() {
-        let _ = write!(
-            output,
-            "  Translating '{current_source}' into '{language}' …"
-        );
-        let _ = output.flush();
-        Some(translate_text(client, api_url, current_source, language, model).await)
-    } else {
-        None
-    };
-
-    match translation_result {
-        Some(Ok(translated)) => {
-            let _ = writeln!(output, " Done -> {translated}");
-            let mut start = BytesStart::new("translation");
-            for (k, v) in attributes {
-                start.push_attribute((k.as_str(), v.as_str()));
-            }
-            writer.write_event(Event::Start(start))?;
-            let escaped = quick_xml::escape::escape(&translated);
-            writer.write_event(Event::Text(BytesText::from_escaped(escaped)))?;
-            writer.write_event(Event::End(BytesEnd::new("translation")))?;
-            results.translation_count += 1;
-        }
-        Some(Err(err)) => {
-            let _ = writeln!(output, " Failed: {}", format_error(&err));
-            write_unfinished_translation(writer, attributes, fallback_text)?;
-            results.error_count += 1;
-        }
-        None => {
-            write_unfinished_translation(writer, attributes, fallback_text)?;
-        }
-    }
-
-    Ok(())
-}
-
 /// Submits the source text to the llama-server using an OpenAI-compatible request payload.
 pub async fn translate_text(
     client: &reqwest::Client,
@@ -231,6 +184,17 @@ pub async fn translate_text(
     Ok(sanitized.trim().to_string())
 }
 
+struct UnfinishedItem {
+    source: String,
+    attributes: Vec<(String, String)>,
+    fallback_text: Option<String>,
+}
+
+enum Chunk {
+    Raw(Vec<u8>),
+    Unfinished(usize),
+}
+
 /// Processes TS XML from a reader and writes the modified XML to a writer.
 pub async fn process_ts<R: BufRead, W: Write>(
     reader: &mut Reader<R>,
@@ -238,7 +202,20 @@ pub async fn process_ts<R: BufRead, W: Write>(
     client: &reqwest::Client,
     api_url: &str,
     model: Option<&str>,
-    output: &mut dyn Write,
+    output: &mut (dyn Write + Send),
+) -> Result<Results> {
+    process_ts_with_semaphore(reader, writer, client, api_url, model, output, None).await
+}
+
+/// Processes TS XML from a reader with an optional concurrency semaphore and writes the modified XML to a writer.
+pub async fn process_ts_with_semaphore<R: BufRead, W: Write>(
+    reader: &mut Reader<R>,
+    writer: &mut Writer<W>,
+    client: &reqwest::Client,
+    api_url: &str,
+    model: Option<&str>,
+    output: &mut (dyn Write + Send),
+    semaphore: Option<Arc<Semaphore>>,
 ) -> Result<Results> {
     let mut buf = Vec::new();
     let mut language = String::new();
@@ -254,6 +231,10 @@ pub async fn process_ts<R: BufRead, W: Write>(
     let mut current_translation_attributes: Vec<(String, String)> = Vec::new();
     let mut unfinished_translation_text = String::new();
 
+    let mut unfinished_items = Vec::new();
+    let mut chunks = Vec::new();
+    let mut chunk_writer = Writer::new(Vec::new());
+
     loop {
         match reader.read_event_into(&mut buf)? {
             Event::Eof => break,
@@ -266,11 +247,11 @@ pub async fn process_ts<R: BufRead, W: Write>(
                             language = attr.unescape_value()?.to_string();
                         }
                     }
-                    writer.write_event(Event::Start(e))?;
+                    chunk_writer.write_event(Event::Start(e))?;
                 } else if name.as_ref() == b"source" {
                     inside_source = true;
                     current_source.clear();
-                    writer.write_event(Event::Start(e))?;
+                    chunk_writer.write_event(Event::Start(e))?;
                 } else if name.as_ref() == b"translation" {
                     let (is_unfinished, attrs) = parse_translation_attributes(&e)?;
                     current_translation_attributes = attrs;
@@ -279,10 +260,10 @@ pub async fn process_ts<R: BufRead, W: Write>(
                     if is_unfinished && !language.starts_with("en") {
                         inside_unfinished_translation = true;
                     } else {
-                        writer.write_event(Event::Start(e))?;
+                        chunk_writer.write_event(Event::Start(e))?;
                     }
                 } else {
-                    writer.write_event(Event::Start(e))?;
+                    chunk_writer.write_event(Event::Start(e))?;
                 }
             }
 
@@ -298,24 +279,23 @@ pub async fn process_ts<R: BufRead, W: Write>(
                             ));
                         }
 
-                        handle_unfinished_translation(
-                            writer,
-                            client,
-                            api_url,
-                            model,
-                            output,
-                            &current_source,
-                            &language,
-                            &current_attrs,
-                            None,
-                            &mut results,
-                        )
-                        .await?;
+                        let raw_bytes = std::mem::take(chunk_writer.get_mut());
+                        if !raw_bytes.is_empty() {
+                            chunks.push(Chunk::Raw(raw_bytes));
+                        }
+
+                        let idx = unfinished_items.len();
+                        unfinished_items.push(UnfinishedItem {
+                            source: current_source.clone(),
+                            attributes: current_attrs,
+                            fallback_text: None,
+                        });
+                        chunks.push(Chunk::Unfinished(idx));
                     } else {
-                        writer.write_event(Event::Empty(e))?;
+                        chunk_writer.write_event(Event::Empty(e))?;
                     }
                 } else {
-                    writer.write_event(Event::Empty(e))?;
+                    chunk_writer.write_event(Event::Empty(e))?;
                 }
             }
 
@@ -326,7 +306,7 @@ pub async fn process_ts<R: BufRead, W: Write>(
                     if inside_source {
                         current_source.push_str(&e.unescape()?);
                     }
-                    writer.write_event(Event::Text(e))?;
+                    chunk_writer.write_event(Event::Text(e))?;
                 }
             }
 
@@ -337,7 +317,7 @@ pub async fn process_ts<R: BufRead, W: Write>(
                     if inside_source {
                         current_source.push_str(&String::from_utf8_lossy(e.as_ref()));
                     }
-                    writer.write_event(Event::CData(e))?;
+                    chunk_writer.write_event(Event::CData(e))?;
                 }
             }
 
@@ -345,7 +325,7 @@ pub async fn process_ts<R: BufRead, W: Write>(
                 let name = e.name();
                 if name.as_ref() == b"source" {
                     inside_source = false;
-                    writer.write_event(Event::End(e))?;
+                    chunk_writer.write_event(Event::End(e))?;
                 } else if name.as_ref() == b"translation" && inside_unfinished_translation {
                     if language.is_empty() {
                         return Err(anyhow!(
@@ -353,34 +333,140 @@ pub async fn process_ts<R: BufRead, W: Write>(
                         ));
                     }
 
-                    handle_unfinished_translation(
-                        writer,
-                        client,
-                        api_url,
-                        model,
-                        output,
-                        &current_source,
-                        &language,
-                        &current_translation_attributes,
-                        Some(&unfinished_translation_text),
-                        &mut results,
-                    )
-                    .await?;
+                    let raw_bytes = std::mem::take(chunk_writer.get_mut());
+                    if !raw_bytes.is_empty() {
+                        chunks.push(Chunk::Raw(raw_bytes));
+                    }
+
+                    let idx = unfinished_items.len();
+                    unfinished_items.push(UnfinishedItem {
+                        source: current_source.clone(),
+                        attributes: current_translation_attributes.clone(),
+                        fallback_text: Some(unfinished_translation_text.clone()),
+                    });
+                    chunks.push(Chunk::Unfinished(idx));
 
                     inside_unfinished_translation = false;
                 } else {
                     if name.as_ref() == b"message" {
                         current_source.clear();
                     }
-                    writer.write_event(Event::End(e))?;
+                    chunk_writer.write_event(Event::End(e))?;
                 }
             }
 
             other => {
-                writer.write_event(other)?;
+                chunk_writer.write_event(other)?;
             }
         }
         buf.clear();
+    }
+
+    let raw_bytes = std::mem::take(chunk_writer.get_mut());
+    if !raw_bytes.is_empty() {
+        chunks.push(Chunk::Raw(raw_bytes));
+    }
+
+    if !unfinished_items.is_empty() {
+        let mut set = tokio::task::JoinSet::new();
+        for (idx, item) in unfinished_items.iter().enumerate() {
+            let client = client.clone();
+            let sem = semaphore.clone();
+            let url = api_url.to_string();
+            let model = model.map(str::to_string);
+            let source = item.source.clone();
+            let lang = language.clone();
+            set.spawn(async move {
+                if source.is_empty() {
+                    return (idx, None);
+                }
+                let res = match sem {
+                    Some(s) => {
+                        let _permit = s.acquire().await;
+                        translate_text(&client, &url, &source, &lang, model.as_deref()).await
+                    }
+                    None => translate_text(&client, &url, &source, &lang, model.as_deref()).await,
+                };
+                (idx, Some(res))
+            });
+        }
+
+        let mut translated_results: Vec<Option<Option<Result<String>>>> =
+            (0..unfinished_items.len()).map(|_| None).collect();
+
+        while let Some(res) = set.join_next().await {
+            let (idx, trans_res) = res?;
+            let item = &unfinished_items[idx];
+            match &trans_res {
+                Some(Ok(translated)) => {
+                    let _ = writeln!(
+                        output,
+                        "  Translating '{}' into '{}' … Done -> {}",
+                        item.source, language, translated
+                    );
+                }
+                Some(Err(err)) => {
+                    let _ = writeln!(
+                        output,
+                        "  Translating '{}' into '{}' … Failed: {}",
+                        item.source,
+                        language,
+                        format_error(err)
+                    );
+                }
+                None => {
+                    let _ = writeln!(output, "  Empty source string cannot be translated");
+                }
+            }
+            translated_results[idx] = Some(trans_res);
+        }
+
+        for chunk in chunks {
+            match chunk {
+                Chunk::Raw(bytes) => {
+                    writer.get_mut().write_all(&bytes)?;
+                }
+                Chunk::Unfinished(idx) => {
+                    let item = &unfinished_items[idx];
+                    let res = translated_results[idx].take();
+                    match res {
+                        Some(Some(Ok(translated))) => {
+                            let mut start = BytesStart::new("translation");
+                            for (k, v) in &item.attributes {
+                                start.push_attribute((k.as_str(), v.as_str()));
+                            }
+                            writer.write_event(Event::Start(start))?;
+                            let escaped = quick_xml::escape::escape(&translated);
+                            writer.write_event(Event::Text(BytesText::from_escaped(escaped)))?;
+                            writer.write_event(Event::End(BytesEnd::new("translation")))?;
+                            results.translation_count += 1;
+                        }
+                        Some(Some(Err(_err))) => {
+                            write_unfinished_translation(
+                                writer,
+                                &item.attributes,
+                                item.fallback_text.as_deref(),
+                            )?;
+                            results.error_count += 1;
+                        }
+                        _ => {
+                            write_unfinished_translation(
+                                writer,
+                                &item.attributes,
+                                item.fallback_text.as_deref(),
+                            )?;
+                            results.error_count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        for chunk in chunks {
+            if let Chunk::Raw(bytes) = chunk {
+                writer.get_mut().write_all(&bytes)?;
+            }
+        }
     }
 
     Ok(results)
@@ -392,7 +478,19 @@ pub async fn process_ts_file(
     client: &reqwest::Client,
     api_url: &str,
     model: Option<&str>,
-    output: &mut dyn Write,
+    output: &mut (dyn Write + Send),
+) -> Result<Results> {
+    process_ts_file_with_semaphore(file_path, client, api_url, model, output, None).await
+}
+
+/// Parses and modifies a Qt TS file with an optional concurrency semaphore.
+pub async fn process_ts_file_with_semaphore(
+    file_path: &Path,
+    client: &reqwest::Client,
+    api_url: &str,
+    model: Option<&str>,
+    output: &mut (dyn Write + Send),
+    semaphore: Option<Arc<Semaphore>>,
 ) -> Result<Results> {
     let _ = writeln!(output, "Processing: {}", file_path.display());
 
@@ -402,7 +500,16 @@ pub async fn process_ts_file(
     let mut out_data = Vec::new();
     let mut writer = Writer::new(&mut out_data);
 
-    let results = process_ts(&mut reader, &mut writer, client, api_url, model, output).await?;
+    let results = process_ts_with_semaphore(
+        &mut reader,
+        &mut writer,
+        client,
+        api_url,
+        model,
+        output,
+        semaphore,
+    )
+    .await?;
 
     if results.translation_count > 0 {
         let message = if results.error_count == 0 {
@@ -749,6 +856,125 @@ mod tests {
         assert!(
             formatted.contains("HTTP error 500"),
             "Expected HTTP 500 error message, got: {formatted}"
+        );
+    }
+
+    async fn spawn_mock_server_concurrent<F, Fut>(
+        handler: F,
+    ) -> (String, tokio::task::JoinHandle<()>)
+    where
+        F: Fn(String) -> Fut + Send + Sync + 'static,
+        Fut: std::future::Future<Output = (u16, String)> + Send + 'static,
+    {
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let url = format!("http://127.0.0.1:{port}/v1/chat/completions");
+        let handler = Arc::new(handler);
+
+        let handle = tokio::spawn(async move {
+            while let Ok((mut socket, _)) = listener.accept().await {
+                let handler = handler.clone();
+                tokio::spawn(async move {
+                    let mut buf = vec![0u8; 8192];
+                    let n = match socket.read(&mut buf).await {
+                        Ok(n) if n > 0 => n,
+                        _ => return,
+                    };
+                    let req_str = String::from_utf8_lossy(&buf[..n]).to_string();
+                    let (status, body) = handler(req_str).await;
+                    let status_line = if status == 200 {
+                        "HTTP/1.1 200 OK"
+                    } else {
+                        "HTTP/1.1 500 Internal Server Error"
+                    };
+                    let resp = format!(
+                        "{status_line}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                        body.len()
+                    );
+                    let _ = socket.write_all(resp.as_bytes()).await;
+                    let _ = socket.flush().await;
+                });
+            }
+        });
+
+        (url, handle)
+    }
+
+    #[tokio::test]
+    async fn test_concurrency_limit() {
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        let active = Arc::new(AtomicUsize::new(0));
+        let max_active = Arc::new(AtomicUsize::new(0));
+
+        let active_clone = active.clone();
+        let max_clone = max_active.clone();
+
+        let (url, _handle) = spawn_mock_server_concurrent(move |_req| {
+            let active = active_clone.clone();
+            let max_active = max_clone.clone();
+            async move {
+                let cur = active.fetch_add(1, Ordering::SeqCst) + 1;
+                max_active.fetch_max(cur, Ordering::SeqCst);
+                tokio::time::sleep(tokio::time::Duration::from_millis(50)).await;
+                active.fetch_sub(1, Ordering::SeqCst);
+                (
+                    200,
+                    serde_json::json!({
+                        "choices": [{
+                            "message": {
+                                "content": "Übersetzt"
+                            }
+                        }]
+                    })
+                    .to_string(),
+                )
+            }
+        })
+        .await;
+
+        let input_xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <name>QObject</name>
+    <message><source>S1</source><translation type="unfinished"></translation></message>
+    <message><source>S2</source><translation type="unfinished"></translation></message>
+    <message><source>S3</source><translation type="unfinished"></translation></message>
+    <message><source>S4</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+
+        let client = reqwest::Client::new();
+        let sem = Arc::new(Semaphore::new(2));
+
+        let mut reader = Reader::from_reader(Cursor::new(input_xml));
+        let mut out_buf = Vec::new();
+        let mut writer = Writer::new(&mut out_buf);
+        let mut out_log = Vec::new();
+
+        let results = process_ts_with_semaphore(
+            &mut reader,
+            &mut writer,
+            &client,
+            &url,
+            None,
+            &mut out_log,
+            Some(sem),
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(results.translation_count, 4);
+        assert_eq!(results.error_count, 0);
+
+        let observed_max = max_active.load(Ordering::SeqCst);
+        assert!(
+            observed_max <= 2,
+            "Expected max concurrent requests <= 2, got {observed_max}"
+        );
+        assert!(
+            observed_max >= 2,
+            "Expected concurrent execution with 2 requests, got {observed_max}"
         );
     }
 }

@@ -1,10 +1,14 @@
 mod translate;
 
-pub use translate::{Results, format_error, process_ts, process_ts_file, translate_text};
+pub use translate::{
+    Results, format_error, process_ts, process_ts_file, process_ts_file_with_semaphore,
+    process_ts_with_semaphore, translate_text,
+};
 
 use clap::Parser;
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::sync::Arc;
 use std::time::Duration;
 
 #[derive(Parser, Debug, Clone)]
@@ -33,6 +37,10 @@ pub struct Args {
     /// Request timeout in seconds (0 to disable)
     #[arg(long, short = 't', default_value = "60")]
     pub timeout: u64,
+
+    /// Maximum number of concurrent translation requests to the API
+    #[arg(long, short = 'c', default_value = "1")]
+    pub concurrency: usize,
 }
 
 /// Recursively searches a directory for `*.ts` files.
@@ -71,6 +79,11 @@ pub fn collect_ts_files(paths: &[PathBuf]) -> std::io::Result<Vec<PathBuf>> {
 }
 
 pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
+    if args.concurrency == 0 {
+        let _ = writeln!(output, "Concurrency limit must be greater than 0");
+        return 1;
+    }
+
     let mut builder = reqwest::Client::builder();
     if args.timeout > 0 {
         builder = builder.timeout(Duration::from_secs(args.timeout));
@@ -91,16 +104,58 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
         }
     };
 
+    let semaphore = Arc::new(tokio::sync::Semaphore::new(args.concurrency));
+
+    struct FileTaskResult {
+        file: PathBuf,
+        result: anyhow::Result<Results>,
+        log: Vec<u8>,
+    }
+
+    let mut tasks = tokio::task::JoinSet::new();
+    for file in files {
+        let client = client.clone();
+        let url = args.url.clone();
+        let model = args.model.clone();
+        let sem = Some(semaphore.clone());
+        tasks.spawn(async move {
+            let mut log = Vec::new();
+            let res = process_ts_file_with_semaphore(
+                &file,
+                &client,
+                &url,
+                model.as_deref(),
+                &mut log,
+                sem,
+            )
+            .await;
+            FileTaskResult {
+                file,
+                result: res,
+                log,
+            }
+        });
+    }
+
     let mut has_error = false;
-    for file in &files {
-        match process_ts_file(file, &client, &args.url, args.model.as_deref(), output).await {
+    while let Some(task_res) = tasks.join_next().await {
+        let task = match task_res {
+            Ok(t) => t,
+            Err(e) => {
+                let _ = writeln!(output, "Task join error: {e}");
+                has_error = true;
+                continue;
+            }
+        };
+        let _ = output.write_all(&task.log);
+        match task.result {
             Ok(results) => {
                 if results.error_count > 0 {
                     has_error = true;
                 }
             }
             Err(e) => {
-                let _ = writeln!(output, "Error processing {:?}: {e:#}", file);
+                let _ = writeln!(output, "Error processing {:?}: {e:#}", task.file);
                 has_error = true;
             }
         }
@@ -129,6 +184,8 @@ mod tests {
             "45",
             "--model",
             "qwen",
+            "--concurrency",
+            "4",
         ])
         .unwrap();
 
@@ -139,6 +196,7 @@ mod tests {
         assert_eq!(args.url, "http://example.com/v1");
         assert_eq!(args.timeout, 45);
         assert_eq!(args.model.as_deref(), Some("qwen"));
+        assert_eq!(args.concurrency, 4);
 
         let args_short = Args::try_parse_from([
             "translator",
@@ -149,10 +207,13 @@ mod tests {
             "http://other:8080/v1",
             "-m",
             "mistral",
+            "-c",
+            "8",
         ])
         .unwrap();
         assert_eq!(args_short.timeout, 60);
         assert_eq!(args_short.url, "http://other:8080/v1");
+        assert_eq!(args_short.concurrency, 8);
         let args_default = Args::try_parse_from(["translator", "file1.ts"]).unwrap();
         assert_eq!(args_default.timeout, 60);
         assert_eq!(
@@ -160,6 +221,7 @@ mod tests {
             "http://localhost:8080/v1/chat/completions"
         );
         assert_eq!(args_default.model, None);
+        assert_eq!(args_default.concurrency, 1);
     }
 
     #[tokio::test]
@@ -170,6 +232,7 @@ mod tests {
             url: "http://localhost:8080".to_string(),
             model: None,
             timeout: 5,
+            concurrency: 1,
         };
 
         assert_eq!(run_with_args(&mut output, &args).await, 1);
@@ -205,6 +268,103 @@ mod tests {
         let direct_file = temp_dir.join("direct.ts");
         let collected_direct = collect_ts_files(&[direct_file.clone()]).unwrap();
         assert_eq!(collected_direct, vec![direct_file]);
+
+        let _ = std::fs::remove_dir_all(&temp_dir);
+    }
+
+    #[tokio::test]
+    async fn test_run_with_args_zero_concurrency() {
+        let mut output = Vec::new();
+        let args = Args {
+            files: vec![PathBuf::from("dummy.ts")],
+            url: "http://localhost:8080".to_string(),
+            model: None,
+            timeout: 5,
+            concurrency: 0,
+        };
+
+        assert_eq!(run_with_args(&mut output, &args).await, 1);
+        let out_str = String::from_utf8(output).unwrap();
+        assert!(out_str.contains("Concurrency limit must be greater than 0"));
+    }
+
+    #[tokio::test]
+    async fn test_run_with_args_concurrent_multiple_files() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        use tokio::net::TcpListener;
+
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let url = format!("http://127.0.0.1:{port}/v1/chat/completions");
+
+        tokio::spawn(async move {
+            while let Ok((mut socket, _)) = listener.accept().await {
+                tokio::spawn(async move {
+                    let mut buf = vec![0u8; 8192];
+                    let n = match socket.read(&mut buf).await {
+                        Ok(n) if n > 0 => n,
+                        _ => return,
+                    };
+                    let req_str = String::from_utf8_lossy(&buf[..n]).to_string();
+                    let translated = if req_str.contains("FileOne") {
+                        "DateiEins"
+                    } else {
+                        "DateiZwei"
+                    };
+                    let body = serde_json::json!({
+                        "choices": [{
+                            "message": {
+                                "content": translated
+                            }
+                        }]
+                    })
+                    .to_string();
+                    let resp = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                        body.len()
+                    );
+                    let _ = socket.write_all(resp.as_bytes()).await;
+                    let _ = socket.flush().await;
+                });
+            }
+        });
+
+        let temp_dir =
+            std::env::temp_dir().join(format!("translator_multi_test_{}", std::process::id()));
+        std::fs::create_dir_all(&temp_dir).unwrap();
+        let file1 = temp_dir.join("file1_de_DE.ts");
+        let file2 = temp_dir.join("file2_de_DE.ts");
+
+        let xml1 = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message><source>FileOne</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+        let xml2 = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message><source>FileTwo</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+        std::fs::write(&file1, xml1).unwrap();
+        std::fs::write(&file2, xml2).unwrap();
+
+        let mut output = Vec::new();
+        let args = Args {
+            files: vec![temp_dir.clone()],
+            url,
+            model: None,
+            timeout: 5,
+            concurrency: 2,
+        };
+
+        assert_eq!(run_with_args(&mut output, &args).await, 0);
+
+        let content1 = std::fs::read_to_string(&file1).unwrap();
+        assert!(content1.contains("<translation>DateiEins</translation>"));
+        let content2 = std::fs::read_to_string(&file2).unwrap();
+        assert!(content2.contains("<translation>DateiZwei</translation>"));
 
         let _ = std::fs::remove_dir_all(&temp_dir);
     }
