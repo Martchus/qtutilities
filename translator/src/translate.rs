@@ -144,7 +144,7 @@ pub async fn translate_text(
         messages: vec![
             Message {
                 role: "system".to_string(),
-                content: "You are a professional software localization translator. Preserve all variable placeholders like %1, %2, {name}, or HTML tags exactly as they appear.".to_string(),
+                content: "You are a professional software localization translator. Preserve all variable placeholders like %1, %2, {name}, or HTML tags exactly as they appear. Preserve preceding or trailing white-space characters.".to_string(),
             },
             Message {
                 role: "user".to_string(),
@@ -165,7 +165,7 @@ pub async fn translate_text(
     let content = json_res
         .choices
         .first()
-        .map(|c| c.message.content.trim().to_string())
+        .map(|c| c.message.content.to_string())
         .ok_or_else(|| anyhow!("No text returned in llama.cpp response"))?;
 
     // Quick sanitization of spurious generation output often found in models (like wrapper quotation or code blocks)
@@ -181,13 +181,12 @@ pub async fn translate_text(
         }
     }
 
-    let res = sanitized.trim().to_string();
-    if res.is_empty() {
+    if sanitized.is_empty() {
         Err(anyhow!(
             "The returned text of the llama.cpp response is empty, maybe the context window is too small"
         ))
     } else {
-        Ok(res)
+        Ok(sanitized.to_string())
     }
 }
 
@@ -801,7 +800,7 @@ mod tests {
         let result = translate_text(&client, &url, "Original", "de_DE", Some("test-model"))
             .await
             .unwrap();
-        assert_eq!(result, "Translated Code");
+        assert_eq!(result, "Translated Code\n");
     }
 
     #[tokio::test]
