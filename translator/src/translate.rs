@@ -111,7 +111,7 @@ fn write_unfinished_translation<W: Write>(
         None => {
             writer.write_event(Event::Empty(start))?;
         }
-        Some(text) if text.is_empty() => {
+        Some("") => {
             writer.write_event(Event::Start(start))?;
             writer.write_event(Event::End(BytesEnd::new("translation")))?;
         }
@@ -216,6 +216,24 @@ pub async fn process_ts_with_semaphore<R: BufRead, W: Write>(
     model: Option<&str>,
     output: &mut (dyn Write + Send),
     semaphore: Option<Arc<Semaphore>>,
+) -> Result<Results> {
+    process_ts_with_semaphore_and_cancel(
+        reader, writer, client, api_url, model, output, semaphore, None,
+    )
+    .await
+}
+
+/// Processes TS XML from a reader with an optional concurrency semaphore and cancellation receiver.
+#[allow(clippy::too_many_arguments)]
+pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
+    reader: &mut Reader<R>,
+    writer: &mut Writer<W>,
+    client: &reqwest::Client,
+    api_url: &str,
+    model: Option<&str>,
+    output: &mut (dyn Write + Send),
+    semaphore: Option<Arc<Semaphore>>,
+    cancel: Option<tokio::sync::watch::Receiver<bool>>,
 ) -> Result<Results> {
     let mut buf = Vec::new();
     let mut language = String::new();
@@ -386,17 +404,44 @@ pub async fn process_ts_with_semaphore<R: BufRead, W: Write>(
             let source = item.source.clone();
             let lang = language.clone();
             let tx = event_tx.clone();
+            let mut cancel_item = cancel.clone();
             set.spawn(async move {
                 if source.is_empty() {
                     let _ = tx.send(ItemEvent::Empty { idx });
                     return (idx, None);
                 }
+                if cancel_item.as_ref().is_some_and(|c| *c.borrow()) {
+                    return (idx, None);
+                }
                 let permit = match &sem {
-                    Some(s) => s.acquire().await.ok(),
+                    Some(s) => {
+                        if let Some(c) = &mut cancel_item {
+                            tokio::select! {
+                                p = s.acquire() => p.ok(),
+                                _ = c.changed() => return (idx, None),
+                            }
+                        } else {
+                            s.acquire().await.ok()
+                        }
+                    }
                     None => None,
                 };
+                if cancel_item.as_ref().is_some_and(|c| *c.borrow()) {
+                    drop(permit);
+                    return (idx, None);
+                }
                 let _ = tx.send(ItemEvent::Started { idx });
-                let res = translate_text(&client, &url, &source, &lang, model.as_deref()).await;
+                let res = if let Some(c) = &mut cancel_item {
+                    tokio::select! {
+                        r = translate_text(&client, &url, &source, &lang, model.as_deref()) => r,
+                        _ = c.changed() => {
+                            drop(permit);
+                            return (idx, None);
+                        }
+                    }
+                } else {
+                    translate_text(&client, &url, &source, &lang, model.as_deref()).await
+                };
                 drop(permit);
                 let _ = tx.send(ItemEvent::Finished { idx, res });
                 (idx, Some(()))
@@ -547,6 +592,22 @@ pub async fn process_ts_file_with_semaphore(
     output: &mut (dyn Write + Send),
     semaphore: Option<Arc<Semaphore>>,
 ) -> Result<Results> {
+    process_ts_file_with_semaphore_and_cancel(
+        file_path, client, api_url, model, output, semaphore, None,
+    )
+    .await
+}
+
+/// Parses and modifies a Qt TS file with an optional concurrency semaphore and cancellation receiver.
+pub async fn process_ts_file_with_semaphore_and_cancel(
+    file_path: &Path,
+    client: &reqwest::Client,
+    api_url: &str,
+    model: Option<&str>,
+    output: &mut (dyn Write + Send),
+    semaphore: Option<Arc<Semaphore>>,
+    cancel: Option<tokio::sync::watch::Receiver<bool>>,
+) -> Result<Results> {
     let _ = writeln!(output, "Processing: {}", file_path.display());
     let _ = output.flush();
 
@@ -556,7 +617,7 @@ pub async fn process_ts_file_with_semaphore(
     let mut out_data = Vec::new();
     let mut writer = Writer::new(&mut out_data);
 
-    let results = process_ts_with_semaphore(
+    let results = process_ts_with_semaphore_and_cancel(
         &mut reader,
         &mut writer,
         client,
@@ -564,12 +625,13 @@ pub async fn process_ts_file_with_semaphore(
         model,
         output,
         semaphore,
+        cancel,
     )
     .await?;
 
     if results.translation_count > 0 {
         let message = if results.error_count == 0 {
-            format!("All unfinished translations have been translated.")
+            "All unfinished translations have been translated.".to_string()
         } else {
             format!(
                 "{} translations failed and are still unfinished.",

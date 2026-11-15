@@ -2,7 +2,8 @@ mod translate;
 
 pub use translate::{
     Results, format_error, process_ts, process_ts_file, process_ts_file_with_semaphore,
-    process_ts_with_semaphore, translate_text,
+    process_ts_file_with_semaphore_and_cancel, process_ts_with_semaphore,
+    process_ts_with_semaphore_and_cancel, translate_text,
 };
 
 use clap::Parser;
@@ -79,6 +80,24 @@ pub fn collect_ts_files(paths: &[PathBuf]) -> std::io::Result<Vec<PathBuf>> {
 }
 
 pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
+    let (cancel_tx, cancel_rx) = tokio::sync::watch::channel(false);
+    let cancel_tx_clone = cancel_tx.clone();
+    tokio::spawn(async move {
+        if tokio::signal::ctrl_c().await.is_ok() {
+            let _ = cancel_tx_clone.send(true);
+            if tokio::signal::ctrl_c().await.is_ok() {
+                std::process::exit(130);
+            }
+        }
+    });
+    run_with_args_and_cancel(output, args, cancel_rx).await
+}
+
+pub async fn run_with_args_and_cancel(
+    output: &mut dyn Write,
+    args: &Args,
+    mut cancel_rx: tokio::sync::watch::Receiver<bool>,
+) -> i32 {
     if args.concurrency == 0 {
         let _ = writeln!(output, "Concurrency limit must be greater than 0");
         return 1;
@@ -120,20 +139,33 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
         }
 
         let mut has_error = false;
+        let mut canceled = false;
         for file in &files {
+            if *cancel_rx.borrow() {
+                canceled = true;
+                break;
+            }
             let mut writer = SimpleWriter(tx.clone());
-            let file_future = process_ts_file_with_semaphore(
+            let file_future = process_ts_file_with_semaphore_and_cancel(
                 file,
                 &client,
                 &args.url,
                 args.model.as_deref(),
                 &mut writer,
                 Some(semaphore.clone()),
+                Some(cancel_rx.clone()),
             );
             tokio::pin!(file_future);
 
             let res = loop {
                 tokio::select! {
+                    _ = cancel_rx.changed(), if !canceled => {
+                        if *cancel_rx.borrow() {
+                            canceled = true;
+                            let _ = writeln!(output, "\nWriting finished translations to disk …");
+                            let _ = output.flush();
+                        }
+                    }
                     msg = rx.recv() => {
                         if let Some(data) = msg {
                             let _ = output.write_all(&data);
@@ -151,6 +183,12 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
                 let _ = output.flush();
             }
 
+            if *cancel_rx.borrow() && !canceled {
+                canceled = true;
+                let _ = writeln!(output, "\nWriting finished translations to disk …");
+                let _ = output.flush();
+            }
+
             match res {
                 Ok(results) => {
                     if results.error_count > 0 {
@@ -163,6 +201,14 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
                     has_error = true;
                 }
             }
+
+            if canceled || *cancel_rx.borrow() {
+                canceled = true;
+                break;
+            }
+        }
+        if canceled {
+            return 130;
         }
         return if has_error { 1 } else { 0 };
     }
@@ -191,18 +237,20 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
         let model = args.model.clone();
         let sem = Some(semaphore.clone());
         let file_tx = tx.clone();
+        let file_cancel = cancel_rx.clone();
         tasks.spawn(async move {
             let mut writer = ChannelWriter {
                 id: file_id,
                 tx: file_tx,
             };
-            let res = process_ts_file_with_semaphore(
+            let res = process_ts_file_with_semaphore_and_cancel(
                 &file,
                 &client,
                 &url,
                 model.as_deref(),
                 &mut writer,
                 sem,
+                Some(file_cancel),
             )
             .await;
             (file, res)
@@ -211,11 +259,23 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
     drop(tx);
 
     let mut has_error = false;
+    let mut canceled = false;
     let mut last_writer: Option<usize> = None;
     let mut last_ended_with_newline = true;
 
     loop {
         tokio::select! {
+            _ = cancel_rx.changed(), if !canceled => {
+                if *cancel_rx.borrow() {
+                    canceled = true;
+                    if !last_ended_with_newline {
+                        let _ = output.write_all(b"\n");
+                        last_ended_with_newline = true;
+                    }
+                    let _ = writeln!(output, "Writing finished translations to disk …");
+                    let _ = output.flush();
+                }
+            }
             chunk = rx.recv() => {
                 match chunk {
                     Some((id, data)) => {
@@ -304,6 +364,18 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
         }
     }
 
+    if *cancel_rx.borrow() && !canceled {
+        canceled = true;
+        if !last_ended_with_newline {
+            let _ = output.write_all(b"\n");
+        }
+        let _ = writeln!(output, "Writing finished translations to disk …");
+        let _ = output.flush();
+    }
+
+    if canceled {
+        return 130;
+    }
     if has_error { 1 } else { 0 }
 }
 
@@ -588,6 +660,187 @@ mod tests {
 
         let content = std::fs::read_to_string(&file).unwrap();
         assert!(content.contains("<translation>EinzelDatei</translation>"));
+
+        let _ = std::fs::remove_dir_all(&temp_dir);
+    }
+
+    #[tokio::test]
+    async fn test_cancellation_writes_partial_translations() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        use tokio::net::TcpListener;
+
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let url = format!("http://127.0.0.1:{port}/v1/chat/completions");
+
+        let (cancel_tx, cancel_rx) = tokio::sync::watch::channel(false);
+        let cancel_tx_clone = cancel_tx.clone();
+
+        tokio::spawn(async move {
+            while let Ok((mut socket, _)) = listener.accept().await {
+                let cancel_tx = cancel_tx_clone.clone();
+                tokio::spawn(async move {
+                    let mut buf = vec![0u8; 8192];
+                    let n = match socket.read(&mut buf).await {
+                        Ok(n) if n > 0 => n,
+                        _ => return,
+                    };
+                    let req_str = String::from_utf8_lossy(&buf[..n]).to_string();
+                    let translated = if req_str.contains("FirstMsg") {
+                        "ErsteNachricht"
+                    } else {
+                        // FirstMsg is already completely finished. Now cancel during SecondMsg!
+                        let _ = cancel_tx.send(true);
+                        tokio::time::sleep(tokio::time::Duration::from_millis(1000)).await;
+                        "ZweiteNachricht"
+                    };
+                    let body = serde_json::json!({
+                        "choices": [{
+                            "message": {
+                                "content": translated
+                            }
+                        }]
+                    })
+                    .to_string();
+                    let resp = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                        body.len()
+                    );
+                    let _ = socket.write_all(resp.as_bytes()).await;
+                    let _ = socket.flush().await;
+                });
+            }
+        });
+
+        let temp_dir =
+            std::env::temp_dir().join(format!("translator_cancel_test_{}", std::process::id()));
+        std::fs::create_dir_all(&temp_dir).unwrap();
+        let file = temp_dir.join("partial_de_DE.ts");
+
+        let xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message><source>FirstMsg</source><translation type="unfinished"></translation></message>
+    <message><source>SecondMsg</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+        std::fs::write(&file, xml).unwrap();
+
+        let mut output = Vec::new();
+        let args = Args {
+            files: vec![file.clone()],
+            url,
+            model: None,
+            timeout: 5,
+            concurrency: 1,
+        };
+
+        let exit_code = run_with_args_and_cancel(&mut output, &args, cancel_rx).await;
+        assert_eq!(exit_code, 130);
+
+        let out_str = String::from_utf8(output).unwrap();
+        assert!(out_str.contains("Writing finished translations to disk …"));
+
+        let content = std::fs::read_to_string(&file).unwrap();
+        // FirstMsg was finished before cancellation -> saved
+        assert!(content.contains("<translation>ErsteNachricht</translation>"));
+        // SecondMsg was canceled -> remains unfinished
+        assert!(content.contains(r#"<source>SecondMsg</source><translation type="unfinished"></translation>"#));
+
+        let _ = std::fs::remove_dir_all(&temp_dir);
+    }
+
+    #[tokio::test]
+    async fn test_cancellation_concurrent_writes_partial_translations() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        use tokio::net::TcpListener;
+
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let url = format!("http://127.0.0.1:{port}/v1/chat/completions");
+
+        let (cancel_tx, cancel_rx) = tokio::sync::watch::channel(false);
+        let cancel_tx_clone = cancel_tx.clone();
+
+        let first_done = std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false));
+        let first_done_clone = first_done.clone();
+
+        tokio::spawn(async move {
+            while let Ok((mut socket, _)) = listener.accept().await {
+                let cancel_tx = cancel_tx_clone.clone();
+                let first_done = first_done_clone.clone();
+                tokio::spawn(async move {
+                    let mut buf = vec![0u8; 8192];
+                    let n = match socket.read(&mut buf).await {
+                        Ok(n) if n > 0 => n,
+                        _ => return,
+                    };
+                    let req_str = String::from_utf8_lossy(&buf[..n]).to_string();
+                    let translated = if req_str.contains("FirstMsg") {
+                        "ErsteNachricht"
+                    } else {
+                        // Wait until FirstMsg has responded, then cancel
+                        while !first_done.load(std::sync::atomic::Ordering::SeqCst) {
+                            tokio::time::sleep(tokio::time::Duration::from_millis(5)).await;
+                        }
+                        tokio::time::sleep(tokio::time::Duration::from_millis(20)).await;
+                        let _ = cancel_tx.send(true);
+                        tokio::time::sleep(tokio::time::Duration::from_millis(1000)).await;
+                        "ZweiteNachricht"
+                    };
+                    let body = serde_json::json!({
+                        "choices": [{
+                            "message": {
+                                "content": translated
+                            }
+                        }]
+                    })
+                    .to_string();
+                    let resp = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                        body.len()
+                    );
+                    let _ = socket.write_all(resp.as_bytes()).await;
+                    let _ = socket.flush().await;
+                    if req_str.contains("FirstMsg") {
+                        first_done.store(true, std::sync::atomic::Ordering::SeqCst);
+                    }
+                });
+            }
+        });
+
+        let temp_dir =
+            std::env::temp_dir().join(format!("translator_cancel_multi_{}", std::process::id()));
+        std::fs::create_dir_all(&temp_dir).unwrap();
+        let file = temp_dir.join("partial_multi_de_DE.ts");
+
+        let xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message><source>FirstMsg</source><translation type="unfinished"></translation></message>
+    <message><source>SecondMsg</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+        std::fs::write(&file, xml).unwrap();
+
+        let mut output = Vec::new();
+        let args = Args {
+            files: vec![file.clone()],
+            url,
+            model: None,
+            timeout: 5,
+            concurrency: 2,
+        };
+
+        let exit_code = run_with_args_and_cancel(&mut output, &args, cancel_rx).await;
+        assert_eq!(exit_code, 130);
+
+        let out_str = String::from_utf8(output).unwrap();
+        assert!(out_str.contains("Writing finished translations to disk …"));
+
+        let content = std::fs::read_to_string(&file).unwrap();
+        assert!(content.contains("<translation>ErsteNachricht</translation>"));
+        assert!(content.contains(r#"<source>SecondMsg</source><translation type="unfinished"></translation>"#));
 
         let _ = std::fs::remove_dir_all(&temp_dir);
     }
