@@ -106,56 +106,199 @@ pub async fn run_with_args(output: &mut dyn Write, args: &Args) -> i32 {
 
     let semaphore = Arc::new(tokio::sync::Semaphore::new(args.concurrency));
 
-    struct FileTaskResult {
-        file: PathBuf,
-        result: anyhow::Result<Results>,
-        log: Vec<u8>,
+    if args.concurrency == 1 {
+        let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel::<Vec<u8>>();
+        struct SimpleWriter(tokio::sync::mpsc::UnboundedSender<Vec<u8>>);
+        impl Write for SimpleWriter {
+            fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+                let _ = self.0.send(buf.to_vec());
+                Ok(buf.len())
+            }
+            fn flush(&mut self) -> std::io::Result<()> {
+                Ok(())
+            }
+        }
+
+        let mut has_error = false;
+        for file in &files {
+            let mut writer = SimpleWriter(tx.clone());
+            let file_future = process_ts_file_with_semaphore(
+                file,
+                &client,
+                &args.url,
+                args.model.as_deref(),
+                &mut writer,
+                Some(semaphore.clone()),
+            );
+            tokio::pin!(file_future);
+
+            let res = loop {
+                tokio::select! {
+                    msg = rx.recv() => {
+                        if let Some(data) = msg {
+                            let _ = output.write_all(&data);
+                            let _ = output.flush();
+                        }
+                    }
+                    res = &mut file_future => {
+                        break res;
+                    }
+                }
+            };
+
+            while let Ok(data) = rx.try_recv() {
+                let _ = output.write_all(&data);
+                let _ = output.flush();
+            }
+
+            match res {
+                Ok(results) => {
+                    if results.error_count > 0 {
+                        has_error = true;
+                    }
+                }
+                Err(e) => {
+                    let _ = writeln!(output, "Error processing {:?}: {e:#}", file);
+                    let _ = output.flush();
+                    has_error = true;
+                }
+            }
+        }
+        return if has_error { 1 } else { 0 };
     }
 
+    struct ChannelWriter {
+        id: usize,
+        tx: tokio::sync::mpsc::UnboundedSender<(usize, Vec<u8>)>,
+    }
+
+    impl Write for ChannelWriter {
+        fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+            let _ = self.tx.send((self.id, buf.to_vec()));
+            Ok(buf.len())
+        }
+        fn flush(&mut self) -> std::io::Result<()> {
+            Ok(())
+        }
+    }
+
+    let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel::<(usize, Vec<u8>)>();
     let mut tasks = tokio::task::JoinSet::new();
-    for file in files {
+
+    for (file_id, file) in files.into_iter().enumerate() {
         let client = client.clone();
         let url = args.url.clone();
         let model = args.model.clone();
         let sem = Some(semaphore.clone());
+        let file_tx = tx.clone();
         tasks.spawn(async move {
-            let mut log = Vec::new();
+            let mut writer = ChannelWriter {
+                id: file_id,
+                tx: file_tx,
+            };
             let res = process_ts_file_with_semaphore(
                 &file,
                 &client,
                 &url,
                 model.as_deref(),
-                &mut log,
+                &mut writer,
                 sem,
             )
             .await;
-            FileTaskResult {
-                file,
-                result: res,
-                log,
-            }
+            (file, res)
         });
     }
+    drop(tx);
 
     let mut has_error = false;
-    while let Some(task_res) = tasks.join_next().await {
-        let task = match task_res {
-            Ok(t) => t,
-            Err(e) => {
-                let _ = writeln!(output, "Task join error: {e}");
-                has_error = true;
-                continue;
+    let mut last_writer: Option<usize> = None;
+    let mut last_ended_with_newline = true;
+
+    loop {
+        tokio::select! {
+            chunk = rx.recv() => {
+                match chunk {
+                    Some((id, data)) => {
+                        if !data.is_empty() {
+                            if last_writer.is_some_and(|prev| prev != id) && !last_ended_with_newline {
+                                let _ = output.write_all(b"\n");
+                            }
+                            let _ = output.write_all(&data);
+                            let _ = output.flush();
+                            last_writer = Some(id);
+                            last_ended_with_newline = data.ends_with(b"\n");
+                        }
+                    }
+                    None => break,
+                }
             }
-        };
-        let _ = output.write_all(&task.log);
-        match task.result {
-            Ok(results) => {
+            task_res = tasks.join_next(), if !tasks.is_empty() => {
+                if let Some(task_res) = task_res {
+                    match task_res {
+                        Ok((_file, Ok(results))) => {
+                            if results.error_count > 0 {
+                                has_error = true;
+                            }
+                        }
+                        Ok((file, Err(e))) => {
+                            if !last_ended_with_newline {
+                                let _ = output.write_all(b"\n");
+                                last_ended_with_newline = true;
+                            }
+                            let _ = writeln!(output, "Error processing {:?}: {e:#}", file);
+                            let _ = output.flush();
+                            has_error = true;
+                        }
+                        Err(e) => {
+                            if !last_ended_with_newline {
+                                let _ = output.write_all(b"\n");
+                                last_ended_with_newline = true;
+                            }
+                            let _ = writeln!(output, "Task join error: {e}");
+                            let _ = output.flush();
+                            has_error = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    while let Ok((id, data)) = rx.try_recv() {
+        if !data.is_empty() {
+            if last_writer.is_some_and(|prev| prev != id) && !last_ended_with_newline {
+                let _ = output.write_all(b"\n");
+            }
+            let _ = output.write_all(&data);
+            let _ = output.flush();
+            last_writer = Some(id);
+            last_ended_with_newline = data.ends_with(b"\n");
+        }
+    }
+
+    while let Some(task_res) = tasks.join_next().await {
+        match task_res {
+            Ok((_file, Ok(results))) => {
                 if results.error_count > 0 {
                     has_error = true;
                 }
             }
+            Ok((file, Err(e))) => {
+                if !last_ended_with_newline {
+                    let _ = output.write_all(b"\n");
+                    last_ended_with_newline = true;
+                }
+                let _ = writeln!(output, "Error processing {:?}: {e:#}", file);
+                let _ = output.flush();
+                has_error = true;
+            }
             Err(e) => {
-                let _ = writeln!(output, "Error processing {:?}: {e:#}", task.file);
+                if !last_ended_with_newline {
+                    let _ = output.write_all(b"\n");
+                    last_ended_with_newline = true;
+                }
+                let _ = writeln!(output, "Task join error: {e}");
+                let _ = output.flush();
                 has_error = true;
             }
         }
@@ -361,10 +504,90 @@ mod tests {
 
         assert_eq!(run_with_args(&mut output, &args).await, 0);
 
+        let out_str = String::from_utf8(output).unwrap();
+        assert!(out_str.contains("Translating 'FileOne' into 'de_DE' …"));
+        assert!(out_str.contains("Translating 'FileTwo' into 'de_DE' …"));
+        assert!(out_str.contains("DateiEins"));
+        assert!(out_str.contains("DateiZwei"));
+
         let content1 = std::fs::read_to_string(&file1).unwrap();
         assert!(content1.contains("<translation>DateiEins</translation>"));
         let content2 = std::fs::read_to_string(&file2).unwrap();
         assert!(content2.contains("<translation>DateiZwei</translation>"));
+
+        let _ = std::fs::remove_dir_all(&temp_dir);
+    }
+
+    #[tokio::test]
+    async fn test_run_with_args_sequential_logging() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        use tokio::net::TcpListener;
+
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let url = format!("http://127.0.0.1:{port}/v1/chat/completions");
+
+        tokio::spawn(async move {
+            while let Ok((mut socket, _)) = listener.accept().await {
+                tokio::spawn(async move {
+                    let mut buf = vec![0u8; 8192];
+                    let n = match socket.read(&mut buf).await {
+                        Ok(n) if n > 0 => n,
+                        _ => return,
+                    };
+                    let req_str = String::from_utf8_lossy(&buf[..n]).to_string();
+                    let translated = if req_str.contains("SingleFile") {
+                        "EinzelDatei"
+                    } else {
+                        "Unbekannt"
+                    };
+                    let body = serde_json::json!({
+                        "choices": [{
+                            "message": {
+                                "content": translated
+                            }
+                        }]
+                    })
+                    .to_string();
+                    let resp = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                        body.len()
+                    );
+                    let _ = socket.write_all(resp.as_bytes()).await;
+                    let _ = socket.flush().await;
+                });
+            }
+        });
+
+        let temp_dir =
+            std::env::temp_dir().join(format!("translator_seq_test_{}", std::process::id()));
+        std::fs::create_dir_all(&temp_dir).unwrap();
+        let file = temp_dir.join("single_de_DE.ts");
+
+        let xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message><source>SingleFile</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+        std::fs::write(&file, xml).unwrap();
+
+        let mut output = Vec::new();
+        let args = Args {
+            files: vec![file.clone()],
+            url,
+            model: None,
+            timeout: 5,
+            concurrency: 1,
+        };
+
+        assert_eq!(run_with_args(&mut output, &args).await, 0);
+
+        let out_str = String::from_utf8(output).unwrap();
+        assert!(out_str.contains("  Translating 'SingleFile' into 'de_DE' … Done -> EinzelDatei\n"));
+
+        let content = std::fs::read_to_string(&file).unwrap();
+        assert!(content.contains("<translation>EinzelDatei</translation>"));
 
         let _ = std::fs::remove_dir_all(&temp_dir);
     }

@@ -369,6 +369,15 @@ pub async fn process_ts_with_semaphore<R: BufRead, W: Write>(
 
     if !unfinished_items.is_empty() {
         let mut set = tokio::task::JoinSet::new();
+
+        enum ItemEvent {
+            Started { idx: usize },
+            Finished { idx: usize, res: Result<String> },
+            Empty { idx: usize },
+        }
+
+        let (event_tx, mut event_rx) = tokio::sync::mpsc::unbounded_channel();
+
         for (idx, item) in unfinished_items.iter().enumerate() {
             let client = client.clone();
             let sem = semaphore.clone();
@@ -376,49 +385,95 @@ pub async fn process_ts_with_semaphore<R: BufRead, W: Write>(
             let model = model.map(str::to_string);
             let source = item.source.clone();
             let lang = language.clone();
+            let tx = event_tx.clone();
             set.spawn(async move {
                 if source.is_empty() {
+                    let _ = tx.send(ItemEvent::Empty { idx });
                     return (idx, None);
                 }
-                let res = match sem {
-                    Some(s) => {
-                        let _permit = s.acquire().await;
-                        translate_text(&client, &url, &source, &lang, model.as_deref()).await
-                    }
-                    None => translate_text(&client, &url, &source, &lang, model.as_deref()).await,
+                let permit = match &sem {
+                    Some(s) => s.acquire().await.ok(),
+                    None => None,
                 };
-                (idx, Some(res))
+                let _ = tx.send(ItemEvent::Started { idx });
+                let res = translate_text(&client, &url, &source, &lang, model.as_deref()).await;
+                drop(permit);
+                let _ = tx.send(ItemEvent::Finished { idx, res });
+                (idx, Some(()))
             });
         }
+        drop(event_tx);
 
         let mut translated_results: Vec<Option<Option<Result<String>>>> =
             (0..unfinished_items.len()).map(|_| None).collect();
+        let mut open_item: Option<usize> = None;
 
-        while let Some(res) = set.join_next().await {
-            let (idx, trans_res) = res?;
-            let item = &unfinished_items[idx];
-            match &trans_res {
-                Some(Ok(translated)) => {
-                    let _ = writeln!(
+        while let Some(event) = event_rx.recv().await {
+            match event {
+                ItemEvent::Started { idx } => {
+                    if open_item.take().is_some() {
+                        let _ = writeln!(output);
+                    }
+                    let item = &unfinished_items[idx];
+                    let _ = write!(
                         output,
-                        "  Translating '{}' into '{}' … Done -> {}",
-                        item.source, language, translated
+                        "  Translating '{}' into '{}' …",
+                        item.source, language
                     );
+                    let _ = output.flush();
+                    open_item = Some(idx);
                 }
-                Some(Err(err)) => {
-                    let _ = writeln!(
-                        output,
-                        "  Translating '{}' into '{}' … Failed: {}",
-                        item.source,
-                        language,
-                        format_error(err)
-                    );
+                ItemEvent::Finished { idx, res } => {
+                    let item = &unfinished_items[idx];
+                    if open_item == Some(idx) {
+                        match &res {
+                            Ok(translated) => {
+                                let _ = writeln!(output, " Done -> {translated}");
+                            }
+                            Err(err) => {
+                                let _ = writeln!(output, " Failed: {}", format_error(err));
+                            }
+                        }
+                        open_item = None;
+                    } else {
+                        if open_item.take().is_some() {
+                            let _ = writeln!(output);
+                        }
+                        match &res {
+                            Ok(translated) => {
+                                let _ = writeln!(output, "  Done '{}' -> {translated}", item.source);
+                            }
+                            Err(err) => {
+                                let _ = writeln!(
+                                    output,
+                                    "  Failed '{}': {}",
+                                    item.source,
+                                    format_error(err)
+                                );
+                            }
+                        }
+                    }
+                    let _ = output.flush();
+                    translated_results[idx] = Some(Some(res));
                 }
-                None => {
+                ItemEvent::Empty { idx } => {
+                    if open_item.take().is_some() {
+                        let _ = writeln!(output);
+                    }
                     let _ = writeln!(output, "  Empty source string cannot be translated");
+                    let _ = output.flush();
+                    translated_results[idx] = Some(None);
                 }
             }
-            translated_results[idx] = Some(trans_res);
+        }
+
+        if open_item.take().is_some() {
+            let _ = writeln!(output);
+            let _ = output.flush();
+        }
+
+        while let Some(join_res) = set.join_next().await {
+            join_res?;
         }
 
         for chunk in chunks {
@@ -493,6 +548,7 @@ pub async fn process_ts_file_with_semaphore(
     semaphore: Option<Arc<Semaphore>>,
 ) -> Result<Results> {
     let _ = writeln!(output, "Processing: {}", file_path.display());
+    let _ = output.flush();
 
     let file = File::open(file_path)?;
     let mut reader = Reader::from_reader(BufReader::new(file));
@@ -976,5 +1032,106 @@ mod tests {
             observed_max >= 2,
             "Expected concurrent execution with 2 requests, got {observed_max}"
         );
+    }
+
+    #[tokio::test]
+    async fn test_logging_sequential_no_repetition() {
+        let (url, _handle) = spawn_mock_server(|_req| {
+            (
+                200,
+                serde_json::json!({
+                    "choices": [{
+                        "message": {
+                            "content": "Fertig"
+                        }
+                    }]
+                })
+                .to_string(),
+            )
+        })
+        .await;
+
+        let input_xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message><source>Msg1</source><translation type="unfinished"></translation></message>
+    <message><source>Msg2</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+
+        let client = reqwest::Client::new();
+        let sem = Arc::new(Semaphore::new(1));
+        let mut reader = Reader::from_reader(Cursor::new(input_xml));
+        let mut out_buf = Vec::new();
+        let mut writer = Writer::new(&mut out_buf);
+        let mut out_log = Vec::new();
+
+        process_ts_with_semaphore(
+            &mut reader,
+            &mut writer,
+            &client,
+            &url,
+            None,
+            &mut out_log,
+            Some(sem),
+        )
+        .await
+        .unwrap();
+
+        let log_str = String::from_utf8(out_log).unwrap();
+        assert!(log_str.contains("  Translating 'Msg1' into 'de_DE' … Done -> Fertig\n"));
+        assert!(log_str.contains("  Translating 'Msg2' into 'de_DE' … Done -> Fertig\n"));
+    }
+
+    #[tokio::test]
+    async fn test_logging_concurrent_no_repetition() {
+        let (url, _handle) = spawn_mock_server_concurrent(|_req| async {
+            tokio::time::sleep(tokio::time::Duration::from_millis(50)).await;
+            (
+                200,
+                serde_json::json!({
+                    "choices": [{
+                        "message": {
+                            "content": "Übersetzt"
+                        }
+                    }]
+                })
+                .to_string(),
+            )
+        })
+        .await;
+
+        let input_xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message><source>Con1</source><translation type="unfinished"></translation></message>
+    <message><source>Con2</source><translation type="unfinished"></translation></message>
+</context>
+</TS>"#;
+
+        let client = reqwest::Client::new();
+        let sem = Arc::new(Semaphore::new(2));
+        let mut reader = Reader::from_reader(Cursor::new(input_xml));
+        let mut out_buf = Vec::new();
+        let mut writer = Writer::new(&mut out_buf);
+        let mut out_log = Vec::new();
+
+        process_ts_with_semaphore(
+            &mut reader,
+            &mut writer,
+            &client,
+            &url,
+            None,
+            &mut out_log,
+            Some(sem),
+        )
+        .await
+        .unwrap();
+
+        let log_str = String::from_utf8(out_log).unwrap();
+        assert!(log_str.contains("  Translating 'Con1' into 'de_DE' …\n"));
+        assert!(log_str.contains("  Translating 'Con2' into 'de_DE' …\n"));
+        assert!(log_str.contains("  Done 'Con1' -> Übersetzt\n"));
+        assert!(log_str.contains("  Done 'Con2' -> Übersetzt\n"));
     }
 }
