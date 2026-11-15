@@ -245,6 +245,7 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
     let mut inside_source = false;
     let mut current_source = String::new();
 
+    let mut inside_numerus_message = false;
     let mut inside_unfinished_translation = false;
     let mut current_translation_attributes: Vec<(String, String)> = Vec::new();
     let mut unfinished_translation_text = String::new();
@@ -259,7 +260,15 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
 
             Event::Start(e) => {
                 let name = e.name();
-                if name.as_ref() == b"TS" {
+                if name.as_ref() == b"message" {
+                    inside_numerus_message = false;
+                    for attr in e.attributes().filter_map(|a| a.ok()) {
+                        if attr.key.as_ref() == b"numerus" && attr.value.as_ref() == b"yes" {
+                            inside_numerus_message = true;
+                        }
+                    }
+                    chunk_writer.write_event(Event::Start(e))?;
+                } else if name.as_ref() == b"TS" {
                     for attr in e.attributes().filter_map(|a| a.ok()) {
                         if attr.key.as_ref() == b"language" {
                             language = attr.unescape_value()?.to_string();
@@ -275,11 +284,27 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
                     current_translation_attributes = attrs;
                     unfinished_translation_text.clear();
 
-                    if is_unfinished && !language.starts_with("en") {
+                    if is_unfinished && !inside_numerus_message && !language.starts_with("en") {
                         inside_unfinished_translation = true;
                     } else {
                         chunk_writer.write_event(Event::Start(e))?;
                     }
+                } else if inside_unfinished_translation {
+                    // Child element (e.g. <numerusform>) inside an unfinished translation.
+                    // Cancel treating it as a plain-text translation and preserve it directly in chunk_writer.
+                    let mut start = BytesStart::new("translation");
+                    start.push_attribute(("type", "unfinished"));
+                    for (k, v) in &current_translation_attributes {
+                        start.push_attribute((k.as_str(), v.as_str()));
+                    }
+                    chunk_writer.write_event(Event::Start(start))?;
+                    if !unfinished_translation_text.is_empty() {
+                        let escaped = quick_xml::escape::escape(&unfinished_translation_text);
+                        chunk_writer.write_event(Event::Text(BytesText::from_escaped(escaped)))?;
+                        unfinished_translation_text.clear();
+                    }
+                    chunk_writer.write_event(Event::Start(e))?;
+                    inside_unfinished_translation = false;
                 } else {
                     chunk_writer.write_event(Event::Start(e))?;
                 }
@@ -287,10 +312,13 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
 
             Event::Empty(e) => {
                 let name = e.name();
-                if name.as_ref() == b"translation" {
+                if name.as_ref() == b"message" {
+                    inside_numerus_message = false;
+                    chunk_writer.write_event(Event::Empty(e))?;
+                } else if name.as_ref() == b"translation" {
                     let (is_unfinished, current_attrs) = parse_translation_attributes(&e)?;
 
-                    if is_unfinished && !language.starts_with("en") {
+                    if is_unfinished && !inside_numerus_message && !language.starts_with("en") {
                         if language.is_empty() {
                             return Err(anyhow!(
                                 "Could not auto-determine the 'language' attribute from <TS> node before hitting a translation!"
@@ -312,6 +340,20 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
                     } else {
                         chunk_writer.write_event(Event::Empty(e))?;
                     }
+                } else if inside_unfinished_translation {
+                    let mut start = BytesStart::new("translation");
+                    start.push_attribute(("type", "unfinished"));
+                    for (k, v) in &current_translation_attributes {
+                        start.push_attribute((k.as_str(), v.as_str()));
+                    }
+                    chunk_writer.write_event(Event::Start(start))?;
+                    if !unfinished_translation_text.is_empty() {
+                        let escaped = quick_xml::escape::escape(&unfinished_translation_text);
+                        chunk_writer.write_event(Event::Text(BytesText::from_escaped(escaped)))?;
+                        unfinished_translation_text.clear();
+                    }
+                    chunk_writer.write_event(Event::Empty(e))?;
+                    inside_unfinished_translation = false;
                 } else {
                     chunk_writer.write_event(Event::Empty(e))?;
                 }
@@ -368,6 +410,7 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
                 } else {
                     if name.as_ref() == b"message" {
                         current_source.clear();
+                        inside_numerus_message = false;
                     }
                     chunk_writer.write_event(Event::End(e))?;
                 }
@@ -1195,5 +1238,124 @@ mod tests {
         assert!(log_str.contains("  Translating 'Con2' into 'de_DE' …\n"));
         assert!(log_str.contains("  Done 'Con1' -> Übersetzt\n"));
         assert!(log_str.contains("  Done 'Con2' -> Übersetzt\n"));
+    }
+
+    #[tokio::test]
+    async fn test_process_ts_numerusform_preserved_inside_translation() {
+        let (url, _handle) = spawn_mock_server(|_req| {
+            (
+                200,
+                serde_json::json!({
+                    "choices": [{
+                        "message": {
+                            "content": "Einzeltext"
+                        }
+                    }]
+                })
+                .to_string(),
+            )
+        })
+        .await;
+
+        let input_xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message>
+        <source>NormalMsg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../misc/htmlinfo.cpp" line="844"/>
+        <source>%1 notification(s) available</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+</TS>"#;
+
+        let client = reqwest::Client::new();
+        let mut reader = Reader::from_reader(Cursor::new(input_xml));
+        let mut out_buf = Vec::new();
+        let mut writer = Writer::new(&mut out_buf);
+        let mut out_log = Vec::new();
+
+        let results = process_ts(
+            &mut reader,
+            &mut writer,
+            &client,
+            &url,
+            None,
+            &mut out_log,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(results.translation_count, 1);
+        assert_eq!(results.error_count, 0);
+
+        let output_xml = String::from_utf8(out_buf).unwrap();
+
+        // Normal message was translated
+        assert!(output_xml.contains("<source>NormalMsg</source>\n        <translation>Einzeltext</translation>"));
+
+        // Numerusform elements must remain inside their <translation> element, never moved outside
+        assert!(!output_xml.contains("<numerusform></numerusform><numerusform></numerusform><translation"));
+        assert!(output_xml.contains("<translation type=\"unfinished\">\n            <numerusform></numerusform>\n            <numerusform></numerusform>\n        </translation>"));
+    }
+
+    #[tokio::test]
+    async fn test_process_ts_numerusform_without_numerus_attribute_preserved() {
+        let (url, _handle) = spawn_mock_server(|_req| {
+            (
+                200,
+                serde_json::json!({
+                    "choices": [{
+                        "message": {
+                            "content": "Ignored"
+                        }
+                    }]
+                })
+                .to_string(),
+            )
+        })
+        .await;
+
+        let input_xml = r#"<?xml version="1.0" encoding="utf-8"?>
+<TS version="2.1" language="de_DE">
+<context>
+    <message>
+        <source>%1 notification(s) available</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+</TS>"#;
+
+        let client = reqwest::Client::new();
+        let mut reader = Reader::from_reader(Cursor::new(input_xml));
+        let mut out_buf = Vec::new();
+        let mut writer = Writer::new(&mut out_buf);
+        let mut out_log = Vec::new();
+
+        let results = process_ts(
+            &mut reader,
+            &mut writer,
+            &client,
+            &url,
+            None,
+            &mut out_log,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(results.translation_count, 0);
+
+        let output_xml = String::from_utf8(out_buf).unwrap();
+        assert!(!output_xml.contains("<numerusform></numerusform><numerusform></numerusform><translation"));
+        assert!(output_xml.contains("<translation type=\"unfinished\">\n            <numerusform></numerusform>\n            <numerusform></numerusform>\n        </translation>"));
     }
 }
