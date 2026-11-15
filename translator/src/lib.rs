@@ -657,7 +657,7 @@ mod tests {
 
         let out_str = String::from_utf8(output).unwrap();
         assert!(
-            out_str.contains("  Translating 'SingleFile' into 'de_DE' … Done -> EinzelDatei\n")
+            out_str.contains("  Translating 'SingleFile' into 'de_DE' … Done -> 'EinzelDatei'\n")
         );
 
         let content = std::fs::read_to_string(&file).unwrap();

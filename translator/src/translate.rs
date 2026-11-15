@@ -523,7 +523,7 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
                     if open_item == Some(idx) {
                         match &res {
                             Ok(translated) => {
-                                let _ = writeln!(output, " Done -> {translated}");
+                                let _ = writeln!(output, " Done -> '{translated}'");
                             }
                             Err(err) => {
                                 let _ = writeln!(output, " Failed: {}", format_error(err));
@@ -537,7 +537,7 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
                         match &res {
                             Ok(translated) => {
                                 let _ =
-                                    writeln!(output, "  Done '{}' -> {translated}", item.source);
+                                    writeln!(output, "  Done '{}' -> '{translated}'", item.source);
                             }
                             Err(err) => {
                                 let _ = writeln!(
@@ -1192,8 +1192,8 @@ mod tests {
         .unwrap();
 
         let log_str = String::from_utf8(out_log).unwrap();
-        assert!(log_str.contains("  Translating 'Msg1' into 'de_DE' … Done -> Fertig\n"));
-        assert!(log_str.contains("  Translating 'Msg2' into 'de_DE' … Done -> Fertig\n"));
+        assert!(log_str.contains("  Translating 'Msg1' into 'de_DE' … Done -> 'Fertig'\n"));
+        assert!(log_str.contains("  Translating 'Msg2' into 'de_DE' … Done -> 'Fertig'\n"));
     }
 
     #[tokio::test]
@@ -1244,8 +1244,8 @@ mod tests {
         let log_str = String::from_utf8(out_log).unwrap();
         assert!(log_str.contains("  Translating 'Con1' into 'de_DE' …\n"));
         assert!(log_str.contains("  Translating 'Con2' into 'de_DE' …\n"));
-        assert!(log_str.contains("  Done 'Con1' -> Übersetzt\n"));
-        assert!(log_str.contains("  Done 'Con2' -> Übersetzt\n"));
+        assert!(log_str.contains("  Done 'Con1' -> 'Übersetzt'\n"));
+        assert!(log_str.contains("  Done 'Con2' -> 'Übersetzt'\n"));
     }
 
     #[tokio::test]
