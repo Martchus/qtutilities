@@ -656,7 +656,9 @@ mod tests {
         assert_eq!(run_with_args(&mut output, &args).await, 0);
 
         let out_str = String::from_utf8(output).unwrap();
-        assert!(out_str.contains("  Translating 'SingleFile' into 'de_DE' … Done -> EinzelDatei\n"));
+        assert!(
+            out_str.contains("  Translating 'SingleFile' into 'de_DE' … Done -> EinzelDatei\n")
+        );
 
         let content = std::fs::read_to_string(&file).unwrap();
         assert!(content.contains("<translation>EinzelDatei</translation>"));
@@ -745,7 +747,9 @@ mod tests {
         // FirstMsg was finished before cancellation -> saved
         assert!(content.contains("<translation>ErsteNachricht</translation>"));
         // SecondMsg was canceled -> remains unfinished
-        assert!(content.contains(r#"<source>SecondMsg</source><translation type="unfinished"></translation>"#));
+        assert!(content.contains(
+            r#"<source>SecondMsg</source><translation type="unfinished"></translation>"#
+        ));
 
         let _ = std::fs::remove_dir_all(&temp_dir);
     }
@@ -840,7 +844,9 @@ mod tests {
 
         let content = std::fs::read_to_string(&file).unwrap();
         assert!(content.contains("<translation>ErsteNachricht</translation>"));
-        assert!(content.contains(r#"<source>SecondMsg</source><translation type="unfinished"></translation>"#));
+        assert!(content.contains(
+            r#"<source>SecondMsg</source><translation type="unfinished"></translation>"#
+        ));
 
         let _ = std::fs::remove_dir_all(&temp_dir);
     }

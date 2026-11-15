@@ -529,7 +529,8 @@ pub async fn process_ts_with_semaphore_and_cancel<R: BufRead, W: Write>(
                         }
                         match &res {
                             Ok(translated) => {
-                                let _ = writeln!(output, "  Done '{}' -> {translated}", item.source);
+                                let _ =
+                                    writeln!(output, "  Done '{}' -> {translated}", item.source);
                             }
                             Err(err) => {
                                 let _ = writeln!(
@@ -1281,16 +1282,9 @@ mod tests {
         let mut writer = Writer::new(&mut out_buf);
         let mut out_log = Vec::new();
 
-        let results = process_ts(
-            &mut reader,
-            &mut writer,
-            &client,
-            &url,
-            None,
-            &mut out_log,
-        )
-        .await
-        .unwrap();
+        let results = process_ts(&mut reader, &mut writer, &client, &url, None, &mut out_log)
+            .await
+            .unwrap();
 
         assert_eq!(results.translation_count, 1);
         assert_eq!(results.error_count, 0);
@@ -1298,10 +1292,17 @@ mod tests {
         let output_xml = String::from_utf8(out_buf).unwrap();
 
         // Normal message was translated
-        assert!(output_xml.contains("<source>NormalMsg</source>\n        <translation>Einzeltext</translation>"));
+        assert!(
+            output_xml.contains(
+                "<source>NormalMsg</source>\n        <translation>Einzeltext</translation>"
+            )
+        );
 
         // Numerusform elements must remain inside their <translation> element, never moved outside
-        assert!(!output_xml.contains("<numerusform></numerusform><numerusform></numerusform><translation"));
+        assert!(
+            !output_xml
+                .contains("<numerusform></numerusform><numerusform></numerusform><translation")
+        );
         assert!(output_xml.contains("<translation type=\"unfinished\">\n            <numerusform></numerusform>\n            <numerusform></numerusform>\n        </translation>"));
     }
 
@@ -1341,21 +1342,17 @@ mod tests {
         let mut writer = Writer::new(&mut out_buf);
         let mut out_log = Vec::new();
 
-        let results = process_ts(
-            &mut reader,
-            &mut writer,
-            &client,
-            &url,
-            None,
-            &mut out_log,
-        )
-        .await
-        .unwrap();
+        let results = process_ts(&mut reader, &mut writer, &client, &url, None, &mut out_log)
+            .await
+            .unwrap();
 
         assert_eq!(results.translation_count, 0);
 
         let output_xml = String::from_utf8(out_buf).unwrap();
-        assert!(!output_xml.contains("<numerusform></numerusform><numerusform></numerusform><translation"));
+        assert!(
+            !output_xml
+                .contains("<numerusform></numerusform><numerusform></numerusform><translation")
+        );
         assert!(output_xml.contains("<translation type=\"unfinished\">\n            <numerusform></numerusform>\n            <numerusform></numerusform>\n        </translation>"));
     }
 }
