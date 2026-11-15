@@ -181,7 +181,14 @@ pub async fn translate_text(
         }
     }
 
-    Ok(sanitized.trim().to_string())
+    let res = sanitized.trim().to_string();
+    if res.is_empty() {
+        Err(anyhow!(
+            "The returned text of the llama.cpp response is empty, maybe the context window is too small"
+        ))
+    } else {
+        Ok(res)
+    }
 }
 
 struct UnfinishedItem {
