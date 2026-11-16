@@ -5,7 +5,7 @@ if (NOT Corrosion_FOUND)
     return ()
 endif ()
 
-corrosion_import_crate(MANIFEST_PATH Cargo.toml IMPORTED_CRATES ICONTOOL_CRATES)
+corrosion_import_crate(MANIFEST_PATH Cargo.toml IMPORTED_CRATES ICONTOOL_CRATES LOCKED)
 message(STATUS "Building the following crates for icontool: ${ICONTOOL_CRATES}")
 
 corrosion_set_hostbuild(icontool)
