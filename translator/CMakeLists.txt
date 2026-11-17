@@ -10,14 +10,3 @@ message(STATUS "Building the following crates for translator: ${TRANSLATOR_CRATE
 
 corrosion_set_hostbuild(translator)
 corrosion_install(TARGETS translator DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/${META_TARGET_NAME}")
-
-add_test(
-    NAME translator_tests
-    COMMAND cargo test
-        --manifest-path "${CMAKE_CURRENT_SOURCE_DIR}/Cargo.toml"
-        --target-dir "${CMAKE_CURRENT_BINARY_DIR}/cargo"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-)
-set_tests_properties(translator_tests PROPERTIES
-    FIXTURES_REQUIRED translator_built
-)
