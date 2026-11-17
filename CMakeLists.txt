@@ -208,18 +208,12 @@ if (SETUP_TOOLS)
 endif ()
 list(REMOVE_DUPLICATES REQUIRED_ICONS)
 
-# add tool for bundling icons
+# add tools for bundling icons and translating
 if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.22.0)
     add_subdirectory(icontool)
-else ()
-    message(STATUS "Skipping icontool, CMake is too old (3.22.0 or newer required)")
-endif ()
-
-# add tool for translating
-if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.22.0)
     add_subdirectory(translator)
 else ()
-    message(STATUS "Skipping translator, CMake is too old (3.22.0 or newer required)")
+    message(STATUS "Skipping icontool and translator, CMake is too old (3.22.0 or newer required)")
 endif ()
 
 # add further Qt modules (which are not automatically detected)
