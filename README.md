@@ -11,8 +11,18 @@ core, gui, widgets
 
 Some header files also require further Qt modules.
 
-The optional `icontool` for bundling icon themes and `translator` for automatic translations require
-Corrosion 0.6, CMake 3.22 and Rust.
+### Rust-based tools
+The optional `icontool` for bundling icon themes and `translator` for automatic translations require Rust.
+
+Pass `-DRUST_BASED_TOOLS=ON` to build them as part of the CMake project. This requires Corrosion 0.6 and
+CMake 3.22 and will download locked Rust dependencies as part of the CMake build. Tests will *not* be
+executed via CTest as this is
+[not supported by Corrosion](https://github.com/corrosion-rs/corrosion/issues/13).
+
+Due to these limitations, you might prefer building these tools directly via Cargo. Check out the
+[`qtutilities-git` PKGBUILD](https://github.com/Martchus/PKGBUILDs/blob/master/qtutilities/git/PKGBUILD)
+for an example following the
+[Arch Linux Rust package guidelines](https://manual.archlinux.page/package-guidelines/rust).
 
 ## Copyright notice and license
 Copyright © 2015-2026 Marius Kittler
